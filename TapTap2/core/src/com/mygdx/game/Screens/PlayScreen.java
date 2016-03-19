@@ -38,6 +38,7 @@ public class PlayScreen implements Screen {
     private TapTapController buttons;
     private boolean leftLeg, rightLeg;
 
+
     public PlayScreen(MyGdxGame game) {
         this.game = game;
         // create cam used to follow mario through cam world
@@ -110,6 +111,7 @@ public class PlayScreen implements Screen {
         debugRenderer.render(world, gamecam.combined);
         hud.stage.draw();
         buttons.draw();
+
     }
 
     @Override
