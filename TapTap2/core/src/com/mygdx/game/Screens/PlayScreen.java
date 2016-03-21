@@ -1,9 +1,13 @@
 package com.mygdx.game.Screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -16,8 +20,12 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.MyGdxGame;
+import com.mygdx.game.Networking.Networking;
 import com.mygdx.game.Scenes.Hud;
 import com.mygdx.game.Scenes.TapTapController;
+import com.mygdx.game.Sprites.Starship;
+
+import java.util.HashMap;
 
 /**
  * Created by Wei Sheng on 10/3/2016.
@@ -38,8 +46,12 @@ public class PlayScreen implements Screen {
     private TapTapController buttons;
     private boolean leftLeg, rightLeg;
 
+    public Networking network;
+    public Starship player;
+    public SpriteBatch batch;
 
     public PlayScreen(MyGdxGame game) {
+        Gdx.app.log("GameScreen", "Attached");
         this.game = game;
         // create cam used to follow mario through cam world
         gamecam = new OrthographicCamera();
@@ -65,7 +77,15 @@ public class PlayScreen implements Screen {
         // buttons logic
         leftLeg = false;
         rightLeg = false;
+
+        //initialize network
+
+        batch = new SpriteBatch();
+        network = new Networking();
+		network.connectToServer();
+		network.configSocketEvents();
     }
+
 
     protected void handleInput() {
         if (buttons.isLeftPressed()) {
@@ -82,6 +102,14 @@ public class PlayScreen implements Screen {
                 rightLeg = true;
             }
         }
+        if (player != null) {
+			if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+				player.setPosition(player.getX() + (-20f), player.getY());
+			}
+			else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+				player.setPosition(player.getX() + (20f), player.getY());
+			}
+		}
     }
 
     public void update(float dt) {
@@ -98,11 +126,11 @@ public class PlayScreen implements Screen {
 
     @Override
     public void show() {
-
     }
 
     @Override
     public void render(float delta) {
+//        Gdx.app.log("GameScreen FPS", (1/delta) + "");
         // separate update logic from render
         update(delta);
         // clear the game screen with black
@@ -111,6 +139,17 @@ public class PlayScreen implements Screen {
         debugRenderer.render(world, gamecam.combined);
         hud.stage.draw();
         buttons.draw();
+
+        player = network.getPlayerStarship();
+        batch.begin();
+        if ((player ) != null) {
+            player.draw(batch);
+        }
+        //draws every player's starship in the hashmap
+        for (HashMap.Entry<String, Starship> entry: network.friendlyPlayers.entrySet()) {
+            entry.getValue().draw(batch);
+        }
+        batch.end();
 
     }
 
@@ -210,5 +249,6 @@ public class PlayScreen implements Screen {
     public void dispose() {
         world.dispose();
         hud.dispose();
+        network.dispose();
     }
 }
