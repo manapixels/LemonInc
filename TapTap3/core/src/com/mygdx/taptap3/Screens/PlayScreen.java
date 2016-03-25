@@ -13,9 +13,13 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.taptap3.Networking.Networking;
 import com.mygdx.taptap3.Sprites.Ground;
 import com.mygdx.taptap3.Sprites.Player;
+import com.mygdx.taptap3.Sprites.Starship;
 import com.mygdx.taptap3.TapTap3;
+
+import java.util.HashMap;
 
 public class PlayScreen implements Screen {
 
@@ -30,6 +34,10 @@ public class PlayScreen implements Screen {
 
     private SpriteBatch batch;
     private Sprite aspectRatio;
+
+    private Networking network;
+    private Starship player;
+
 
     public PlayScreen(TapTap3 game){
         this.game = game;
@@ -47,6 +55,10 @@ public class PlayScreen implements Screen {
         player1 = new Player(this, 32, 100);
         player2 = new Player(this, 32, 200);
         ground = new Ground(this);
+
+        network = new Networking();
+        network.connectToServer();
+        network.configSocketEvents();
     }
 
     protected void handleInput() {
@@ -66,8 +78,23 @@ public class PlayScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.setProjectionMatrix(gamecam.combined);
+
+        player = network.getPlayerStarship();
+
         batch.begin();
         aspectRatio.draw(batch);
+
+        //draws player's character
+        if ((player ) != null) {
+            Gdx.app.log("Networking", "player drawn");
+            player.draw(batch);
+        }
+        //draws every other player's character in the hashmap
+        for (HashMap.Entry<String, Starship> entry: network.friendlyPlayers.entrySet()) {
+            entry.getValue().draw(batch);
+        }
+
+
         batch.end();
 
         b2dr.render(world, gamecam.combined);
@@ -111,5 +138,6 @@ public class PlayScreen implements Screen {
     public void dispose() {
         world.dispose();
         aspectRatio.getTexture().dispose();
+        network.dispose();
     }
 }

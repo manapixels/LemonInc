@@ -12,14 +12,14 @@ public class TapTap3 extends Game {
 
 	@Override
 	public void create () {
-		batch = new SpriteBatch();
+//		batch = new SpriteBatch();
 		setScreen(new PlayScreen(this));
 	}
 
-	@Override
-	public void render () {
-		super.render();
-	}
+//	@Override
+//	public void render () {
+//		super.render();
+//	}
 }
 
 //TODO double jump, upper bounds, fill screen with background, HUD
