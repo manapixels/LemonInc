@@ -62,17 +62,27 @@ public class PlayScreen implements Screen {
     }
 
     protected void handleInput() {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.UP))
-            player1.jump();
-        if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT))
-            player1.speed();
-        if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT))
-            player1.slow();
+//        if (Gdx.input.isKeyJustPressed(Input.Keys.UP))
+//            player1.jump();
+//        if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT))
+//            player1.speed();
+//        if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT))
+//            player1.slow();
+
+        if (player != null) {
+            if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+                player.setPosition(player.getX() + (-20f), player.getY());
+            }
+            else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+                player.setPosition(player.getX() + (20f), player.getY());
+            }
+        }
     }
 
     @Override
     public void render(float delta) {
         update(delta);
+        network.updateServer(Gdx.graphics.getDeltaTime());
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
