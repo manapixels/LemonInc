@@ -11,8 +11,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.taptap3.Sprites.Ceiling;
 import com.mygdx.taptap3.Sprites.Ground;
 import com.mygdx.taptap3.Sprites.Player;
 import com.mygdx.taptap3.TapTap3;
@@ -27,6 +29,7 @@ public class PlayScreen implements Screen {
     private Box2DDebugRenderer b2dr;
     private Player player1, player2;
     private Ground ground;
+    private Ceiling ceiling;
 
     private SpriteBatch batch;
     private Sprite aspectRatio;
@@ -34,7 +37,7 @@ public class PlayScreen implements Screen {
     public PlayScreen(TapTap3 game){
         this.game = game;
         gamecam = new OrthographicCamera();
-        gameport = new FitViewport(game.V_WIDTH / game.PPM, game.V_HEIGHT / game.PPM, gamecam);
+        gameport = new FillViewport(game.V_WIDTH / game.PPM, game.V_HEIGHT / game.PPM, gamecam);
 
         batch = new SpriteBatch();
         aspectRatio = new Sprite(new Texture("TapTap_BGseamless.png"));
@@ -47,6 +50,7 @@ public class PlayScreen implements Screen {
         player1 = new Player(this, 32, 100);
         player2 = new Player(this, 32, 200);
         ground = new Ground(this);
+        ceiling = new Ceiling(this);
     }
 
     protected void handleInput() {
