@@ -23,7 +23,7 @@ public class Ground {
 
         FixtureDef fdef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(screen.getGamePort().getWorldWidth(), screen.getGamePort().getWorldHeight()/8);
+        shape.setAsBox(screen.getGamePort().getWorldWidth()*2, screen.getGamePort().getWorldHeight()/20);
 
         fdef.shape = shape;
         b2body.createFixture(fdef);
