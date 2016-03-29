@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.taptap3.Sprites.Ceiling;
@@ -25,30 +24,32 @@ public class PlayScreen implements Screen {
     private OrthographicCamera gamecam;
     private Viewport gameport;
 
+    private SpriteBatch batch;
+    private Sprite background;
+
     private World world;
     private Box2DDebugRenderer b2dr;
-    private Player player1, player2;
+    private Player player1, player2, player3, player4;
     private Ground ground;
     private Ceiling ceiling;
-
-    private SpriteBatch batch;
-    private Sprite aspectRatio;
 
     public PlayScreen(TapTap3 game){
         this.game = game;
         gamecam = new OrthographicCamera();
-        gameport = new FillViewport(game.V_WIDTH / game.PPM, game.V_HEIGHT / game.PPM, gamecam);
+        gameport = new FitViewport(game.V_WIDTH / game.PPM, game.V_HEIGHT / game.PPM, gamecam);
 
         batch = new SpriteBatch();
-        aspectRatio = new Sprite(new Texture("TapTap_BGseamless.png"));
-        aspectRatio.setPosition(0, 0);
-        aspectRatio.setSize(game.V_WIDTH / game.PPM, game.V_HEIGHT / game.PPM);
+        background = new Sprite(new Texture("TapTap_BGseamless_withFloor.png"));
+        background.setPosition(0, 0);
+        background.setSize(game.V_WIDTH / game.PPM, game.V_HEIGHT / game.PPM);
 
-        world = new World(new Vector2(0, -15), true);
+        world = new World(new Vector2(0, -10), true);
         b2dr = new Box2DDebugRenderer();
 
-        player1 = new Player(this, 32, 100);
-        player2 = new Player(this, 32, 200);
+        player1 = new Player(this, "LaughingBuddha.png", 32, 200);
+        player2 = new Player(this, "Foxy.png", 150, 200);
+        player3 = new Player(this, "Sheshnag&Krishna.png", -150, 200);
+        player4 = new Player(this, "Madam White Snake.png", 250, 200);
         ground = new Ground(this);
         ceiling = new Ceiling(this);
     }
@@ -56,10 +57,13 @@ public class PlayScreen implements Screen {
     protected void handleInput() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP))
             player1.jump();
-        if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT))
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
             player1.speed();
-        if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT))
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
             player1.slow();
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
+            gameOver();
+        }
     }
 
     @Override
@@ -68,22 +72,40 @@ public class PlayScreen implements Screen {
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        b2dr.render(world, gamecam.combined);
 
         batch.setProjectionMatrix(gamecam.combined);
         batch.begin();
-        aspectRatio.draw(batch);
+//        draw(TextureRegion region, float x, float y, float width, float height)
+//        batch.draw(background,0,0, gameport.getScreenWidth(), gameport.getScreenHeight());
+//        batch.draw(background, gamecam.position.x - (gamecam.viewportWidth / 2), 0);
+        background.draw(batch);
+        player1.draw(batch);
+        player1.draw(batch);
+        player2.draw(batch);
+        player3.draw(batch);
+        player4.draw(batch);
+
         batch.end();
 
-        b2dr.render(world, gamecam.combined);
     }
 
     public void update(float dt) {
         handleInput();
         player1.update(dt);
+        if (player1.b2body.getPosition().y <= 0){
+            gameOver();
+        }
         player2.update(dt);
+        player3.update(dt);
+        player4.update(dt);
         world.step(1 / 60f, 6, 2);
         gamecam.position.set(player1.getX(), gamecam.viewportHeight / 2, 0);
         gamecam.update();
+    }
+
+    public void gameOver(){
+        game.setScreen(new EndScreen(game));
     }
 
     @Override
@@ -114,6 +136,6 @@ public class PlayScreen implements Screen {
     @Override
     public void dispose() {
         world.dispose();
-        aspectRatio.getTexture().dispose();
+        background.getTexture().dispose();
     }
 }
