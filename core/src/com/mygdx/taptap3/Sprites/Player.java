@@ -80,11 +80,11 @@ public class Player extends Sprite {
         else if (currentState == State.JUMPING){
             previousState = State.JUMPING;
             currentState = State.DOUBLEJUMPING;
-            b2body.applyLinearImpulse(new Vector2(0, 5f), b2body.getWorldCenter(), true);
+            b2body.applyLinearImpulse(new Vector2(0, 4f), b2body.getWorldCenter(), true);
         }
         else {
             currentState = State.JUMPING;
-            b2body.applyLinearImpulse(new Vector2(0, 5f), b2body.getWorldCenter(), true);
+            b2body.applyLinearImpulse(new Vector2(0, 4f), b2body.getWorldCenter(), true);
         }
     }
 
@@ -92,7 +92,7 @@ public class Player extends Sprite {
 //        b2body.setLinearVelocity(new Vector2(3f, 0));
 //    }
         if (b2body.getLinearVelocity().x <= 3) {
-            b2body.applyLinearImpulse(new Vector2(2f, 0), b2body.getWorldCenter(), true);
+            b2body.applyLinearImpulse(new Vector2(1f, 0), b2body.getWorldCenter(), true);
         }
     }
     public void slow() {

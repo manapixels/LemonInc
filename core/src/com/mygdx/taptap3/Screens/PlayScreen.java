@@ -14,8 +14,10 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.taptap3.Sprites.Ceiling;
+import com.mygdx.taptap3.Sprites.EndWall;
 import com.mygdx.taptap3.Sprites.Ground;
 import com.mygdx.taptap3.Sprites.Player;
+import com.mygdx.taptap3.Sprites.StartWall;
 import com.mygdx.taptap3.TapTap3;
 
 public class PlayScreen implements Screen {
@@ -32,6 +34,8 @@ public class PlayScreen implements Screen {
     private Player player1, player2, player3, player4;
     private Ground ground;
     private Ceiling ceiling;
+    private StartWall startWall;
+    private EndWall endWall;
 
     public PlayScreen(TapTap3 game){
         this.game = game;
@@ -39,19 +43,21 @@ public class PlayScreen implements Screen {
         gameport = new FitViewport(game.V_WIDTH / game.PPM, game.V_HEIGHT / game.PPM, gamecam);
 
         batch = new SpriteBatch();
-        background = new Sprite(new Texture("TapTap_BGseamless_withFloor.png"));
-        background.setPosition(0, 0);
-        background.setSize(game.V_WIDTH / game.PPM, game.V_HEIGHT / game.PPM);
+        background = new Sprite(new Texture("TapTap_BGseamless_long.png"));
+        background.setPosition(-gameport.getWorldWidth(), 0);
+        background.setSize(background.getWidth() / game.PPM, background.getHeight() / game.PPM);
 
         world = new World(new Vector2(0, -10), true);
         b2dr = new Box2DDebugRenderer();
 
         player1 = new Player(this, "LaughingBuddha.png", 32, 200);
         player2 = new Player(this, "Foxy.png", 150, 200);
-        player3 = new Player(this, "Sheshnag&Krishna.png", -150, 200);
+        player3 = new Player(this, "Sheshnag_Krishna.png", -150, 200);
         player4 = new Player(this, "Madam White Snake.png", 250, 200);
         ground = new Ground(this);
         ceiling = new Ceiling(this);
+        startWall = new StartWall(this);
+        endWall = new EndWall(this);
     }
 
     protected void handleInput() {
@@ -72,7 +78,6 @@ public class PlayScreen implements Screen {
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        b2dr.render(world, gamecam.combined);
 
         batch.setProjectionMatrix(gamecam.combined);
         batch.begin();
@@ -85,6 +90,8 @@ public class PlayScreen implements Screen {
         player2.draw(batch);
         player3.draw(batch);
         player4.draw(batch);
+
+        b2dr.render(world, gamecam.combined);
 
         batch.end();
 

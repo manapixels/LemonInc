@@ -23,7 +23,7 @@ public class Ceiling {
 
         FixtureDef fdef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(screen.getGamePort().getWorldWidth(), 0);
+        shape.setAsBox(screen.getGamePort().getWorldWidth()*4, 0);
 
         fdef.shape = shape;
         b2body.createFixture(fdef);
