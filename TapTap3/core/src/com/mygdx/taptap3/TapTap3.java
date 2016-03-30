@@ -3,6 +3,7 @@ package com.mygdx.taptap3;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.taptap3.Screens.PlayScreen;
+import com.mygdx.taptap3.Screens.WaitScreen;
 
 public class TapTap3 extends Game {
 	public static final int V_HEIGHT = 480;
@@ -13,7 +14,7 @@ public class TapTap3 extends Game {
 	@Override()
 	public void create () {
 		batch = new SpriteBatch();
-		setScreen(new PlayScreen(this));
+		setScreen(new WaitScreen(this));
 	}
 
 	@Override
