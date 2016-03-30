@@ -25,22 +25,24 @@ import io.socket.emitter.Emitter;
 public class Networking {
     private Socket socket;
     //stores other players' id and starship sprite
-//    public HashMap<String, Player> friendlyPlayers;
-    public HashMap<String, Starship> friendlyPlayers;
+    public HashMap<String, Player> friendlyPlayers;
+//    public HashMap<String, Starship> friendlyPlayers;
 
-    public Starship coopPlayer;
-    public Texture playerShip;
-    public Texture friendlyShip;
-    public Starship player;
+    public Player coopPlayer;
+//    public Texture playerShip;
+//    public Texture friendlyShip;
+//    public Starship player;
+    public String clientID;
 
     private final float UPDATE_TIME = 1/60f;
     float timer;
 
     public Networking() {
-        playerShip = new Texture("playerShip2.png");
-        friendlyShip = new Texture("playerShip.png");
-//        friendlyPlayers = new HashMap<String, Player>();
-        friendlyPlayers = new HashMap<String, Starship>();
+//        playerShip = new Texture("playerShip2.png");
+//        friendlyShip = new Texture("playerShip.png");
+        clientID = "empty";
+        friendlyPlayers = new HashMap<String, Player>();
+//        friendlyPlayers = new HashMap<String, Starship>();
     }
 
     public void connectToServer() {
@@ -60,19 +62,18 @@ public class Networking {
             @Override
             public void call(Object... args) {
                 Gdx.app.log("SocketIO", "Connected");
-                //create player starship
 //                player = new Player(playerShip);
-                player = new Starship(playerShip);
-                System.out.println("player sprite created");
+//                player = new Starship(playerShip);
+//                System.out.println("player sprite created");
             }
-            //receive client ID from server
+            //receives client ID from server when connection is set
         }).on("socketID", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
                 JSONObject data = (JSONObject) args[0];
                 try {
-                    String id = data.getString("id");
-                    Gdx.app.log("SocketIO", "ID: " + id);
+                    clientID = data.getString("id");
+                    Gdx.app.log("SocketIO", "ID: " + clientID);
                 } catch (JSONException e) {
                     Gdx.app.log("SocketIO", "Error from getting ID");
                 }
@@ -85,8 +86,9 @@ public class Networking {
                 try {
                     String playerId = data.getString("id");
                     Gdx.app.log("SocketIO", "New Player Connected: " + playerId);
-                    //make other players' ships
-                    friendlyPlayers.put(playerId, new Starship(friendlyShip));
+//TODO:put the new player's ID and an empty Player object into the hashmap (Player is specified in PlayScreen)?
+//                    friendlyPlayers.put(playerId, new Starship(friendlyShip));
+                    friendlyPlayers.put(playerId, new Player());
                 } catch (JSONException e) {
                     Gdx.app.log("SocketIO", "Error from getting New Player's ID");
                 }
@@ -109,10 +111,13 @@ public class Networking {
             //called when player first joins the game to update the location of all other players
             @Override
             public void call(Object... args) {
-                JSONArray objects = (JSONArray) args[0]; //first element that gets sent
+                JSONArray objects = (JSONArray) args[0]; //receive players array
                 try {
+                    //TODO: put empty Player object for the other players
+
+                    //this goes into PlayScreen?
                     for (int i = 0;i<objects.length();i++) {
-                        coopPlayer = new Starship(friendlyShip);
+                        coopPlayer = new Player();
                         Vector2 position = new Vector2();
                         position.x = ((Double) objects.getJSONObject(i).getDouble("x")).floatValue();
                         position.y = ((Double) objects.getJSONObject(i).getDouble("y")).floatValue();
@@ -133,7 +138,7 @@ public class Networking {
                     Double x = data.getDouble("x");
                     Double y = data.getDouble("y");
                     if (friendlyPlayers.get(playerID) != null) {
-                        friendlyPlayers.get(playerID).setPosition(x.floatValue(), y.floatValue());
+                        friendlyPlayers.get(playerID).setBodyPosition(x.floatValue(), y.floatValue()); //need to set b2body's position as this
 
                     }
                 } catch (JSONException e) {
@@ -145,13 +150,14 @@ public class Networking {
     }
 
     //update server of client's new player position
-    public void updateServer(float dt) {
+    //called during gameplay
+    public void updateServer(float dt, Player player) {
         timer += dt;
         if (timer >= UPDATE_TIME && player != null && player.hasMoved()) {
             JSONObject data = new JSONObject();
             try {
-                data.put("x", player.getX());
-                data.put("y", player.getY());
+                data.put("x", player.b2body.getPosition().x); //Player.java
+                data.put("y", player.b2body.getPosition().y);
                 socket.emit("playerMoved", data);
             } catch (JSONException e) {
                 Gdx.app.log("Socket.IO", "Error sending update data");
@@ -159,16 +165,16 @@ public class Networking {
         }
     }
 
-    public Starship getPlayerStarship() {
-        return player;
-    }
-
-    public Starship getCoopPlayerStarship() {
-        return coopPlayer;
-    }
+//    public Starship getPlayerStarship() {
+//        return player;
+//    }
+//
+//    public Starship getCoopPlayerStarship() {
+//        return coopPlayer;
+//    }
 
     public void dispose() {
-        playerShip.dispose();
-        friendlyShip.dispose();
+//        playerShip.dispose();
+//        friendlyShip.dispose();
     }
 }

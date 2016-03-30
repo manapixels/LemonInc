@@ -11,12 +11,16 @@ server.listen(8080, function() {
 //socket.io do this when connection happens
 io.on('connection', function(socket){
 	console.log("Player Connected!");
+
 	//server emits a 'socketID' event to the client with the data socket.id
 	socket.emit('socketID', { id: socket.id});
+
 	//socket sends the players array to the current client 
 	socket.emit('getPlayers', players)
+
 	//server sends to everyone else except this socket
 	socket.broadcast.emit('newPlayer', { id: socket.id});
+
 	socket.on('playerMoved', function(data){
 		data.id=socket.id;
 		socket.broadcast.emit('playerMoved', data);
@@ -36,8 +40,10 @@ io.on('connection', function(socket){
 	//disconnection?
 	socket.on('disconnect', function(){
 		console.log("Player Disconnected");
+
 		//server sends the disconnected player's id to all players 
 		socket.broadcast.emit('playerDisconnected', {id: socket.id});
+		
 		//server deletes the disconnected player from the player array 
 		for (var i = 0;i < players.length;i ++) {
 			if (players[i].id = socket.id){
