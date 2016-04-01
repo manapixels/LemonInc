@@ -17,13 +17,13 @@ public class Ground {
         this.world = screen.getWorld();
 
         BodyDef bdef = new BodyDef();
-        bdef.position.set(screen.getGamePort().getWorldWidth()/2, 0);
+        bdef.position.set(0, 0);
         bdef.type = BodyDef.BodyType.StaticBody;
         b2body = world.createBody(bdef);
 
         FixtureDef fdef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(screen.getGamePort().getWorldWidth()*2, screen.getGamePort().getWorldHeight()/20);
+        shape.setAsBox(screen.getGamePort().getWorldWidth()*4, screen.getGamePort().getWorldHeight()/20);
 
         fdef.shape = shape;
         b2body.createFixture(fdef);
