@@ -1,9 +1,12 @@
 [
     {
+<<<<<<< HEAD
         "merged": "C:\\Users\\Wei Sheng\\Documents\\GitHub\\LemonInc\\TapTap3\\android\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi-v4\\ic_launcher.png",
         "source": "C:\\Users\\Wei Sheng\\Documents\\GitHub\\LemonInc\\TapTap3\\android\\res\\drawable-xxhdpi\\ic_launcher.png"
     },
     {
+=======
+>>>>>>> master
         "merged": "C:\\AndroidStudioProjects\\TapTap3\\android\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi-v4\\ic_launcher.png",
         "source": "C:\\AndroidStudioProjects\\TapTap3\\android\\res\\drawable-xxhdpi\\ic_launcher.png"
     },

@@ -13,18 +13,21 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.mygdx.taptap3.Networking.Networking;
 import com.mygdx.taptap3.Sprites.Ceiling;
 import com.mygdx.taptap3.Sprites.EndWall;
 import com.mygdx.taptap3.Sprites.Ground;
 import com.mygdx.taptap3.Sprites.Player;
 import com.mygdx.taptap3.Sprites.StartWall;
 import com.mygdx.taptap3.TapTap3;
+<<<<<<< HEAD
 import java.util.*;
 
 /*
 There is a connection between client and server at this stage
  */
+=======
+
+>>>>>>> master
 public class PlayScreen implements Screen {
 
     private TapTap3 game;
@@ -36,15 +39,13 @@ public class PlayScreen implements Screen {
 
     private World world;
     private Box2DDebugRenderer b2dr;
-    private Player player, player2, player3, player4;
+    private Player player1, player2, player3, player4;
     private Ground ground;
     private Ceiling ceiling;
     private StartWall startWall;
     private EndWall endWall;
 
-    private Networking network;
-
-    public PlayScreen(TapTap3 game, Networking network){
+    public PlayScreen(TapTap3 game){
         this.game = game;
         gamecam = new OrthographicCamera();
         gameport = new FitViewport(game.V_WIDTH / game.PPM, game.V_HEIGHT / game.PPM, gamecam);
@@ -57,6 +58,7 @@ public class PlayScreen implements Screen {
         world = new World(new Vector2(0, -10), true);
         b2dr = new Box2DDebugRenderer();
 
+<<<<<<< HEAD
         //create user's character
         player = new Player(this, "LaughingBuddha.png", 32, 200);
 
@@ -66,10 +68,17 @@ public class PlayScreen implements Screen {
 //        player4 = new Player(this, "Madam White Snake.png", 250, 200);
 
         //initialise walls and ceilings
+=======
+        player1 = new Player(this, "LaughingBuddha.png", 32, 200);
+        player2 = new Player(this, "Foxy.png", 150, 200);
+        player3 = new Player(this, "Sheshnag_Krishna.png", -150, 200);
+        player4 = new Player(this, "Madam White Snake.png", 250, 200);
+>>>>>>> master
         ground = new Ground(this);
         ceiling = new Ceiling(this);
         startWall = new StartWall(this);
         endWall = new EndWall(this);
+<<<<<<< HEAD
 
         //TODO: initialise all the other players here
         int i=0;
@@ -80,15 +89,17 @@ public class PlayScreen implements Screen {
 
         //waitscreen passed network to playscreen
         this.network = network;
+=======
+>>>>>>> master
     }
 
     protected void handleInput() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP))
-            player.jump();
+            player1.jump();
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
-            player.speed();
+            player1.speed();
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
-            player.slow();
+            player1.slow();
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
             gameOver();
         }
@@ -96,11 +107,10 @@ public class PlayScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        //update the player's coordinates to server realtime
-        network.updateServer(delta, player);
         update(delta);
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
+<<<<<<< HEAD
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);   //clear the screen to black
         b2dr.render(world, gamecam.combined);   //render box2d world lines
 
@@ -108,36 +118,52 @@ public class PlayScreen implements Screen {
         batch.begin();  //start batch stuff
         background.draw(batch); //draw the background file
         player.draw(batch);
+=======
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        batch.setProjectionMatrix(gamecam.combined);
+        batch.begin();
+//        draw(TextureRegion region, float x, float y, float width, float height)
+//        batch.draw(background,0,0, gameport.getScreenWidth(), gameport.getScreenHeight());
+//        batch.draw(background, gamecam.position.x - (gamecam.viewportWidth / 2), 0);
+        background.draw(batch);
+        player1.draw(batch);
+        player1.draw(batch);
+>>>>>>> master
         player2.draw(batch);
         player3.draw(batch);
         player4.draw(batch);
 
+<<<<<<< HEAD
         //TODO: batch draws the other players instead of drawing 4 other dead characters
         for (Map.Entry<String, Player> entry: network.friendlyPlayers.entrySet()) {
             entry.getValue().draw(batch);
         }
+=======
+        b2dr.render(world, gamecam.combined);
+>>>>>>> master
 
         batch.end();    //stop batch stuff
 
     }
 
-    //TODO: when disconnected, the ball doesn't terminate
     public void update(float dt) {
         handleInput();
-
-        //set the x y coordinate of the player
-        player.update(dt);
-        if (player.b2body.getPosition().y <= 0){
+        player1.update(dt);
+        if (player1.b2body.getPosition().y <= 0){
             gameOver();
         }
         player2.update(dt);
         player3.update(dt);
         player4.update(dt);
+<<<<<<< HEAD
         for (Map.Entry<String, Player> entry: network.friendlyPlayers.entrySet()) {
             entry.getValue().update(dt);
         }
+=======
+>>>>>>> master
         world.step(1 / 60f, 6, 2);
-        gamecam.position.set(player.getX(), gamecam.viewportHeight / 2, 0);
+        gamecam.position.set(player1.getX(), gamecam.viewportHeight / 2, 0);
         gamecam.update();
     }
 
