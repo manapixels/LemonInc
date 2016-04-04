@@ -43,7 +43,7 @@ io.on('connection', function(socket){
 
 		//server sends the disconnected player's id to all players 
 		socket.broadcast.emit('playerDisconnected', {id: socket.id});
-		
+
 		//server deletes the disconnected player from the player array 
 		for (var i = 0;i < players.length;i ++) {
 			if (players[i].id = socket.id){

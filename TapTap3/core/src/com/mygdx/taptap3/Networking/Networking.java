@@ -20,29 +20,21 @@ import io.socket.emitter.Emitter;
  * Created by kevin on 3/25/2016.
  */
 
-//TODO: Starship should be replaced by the actual game characters
-
 public class Networking {
     private Socket socket;
-    //stores other players' id and starship sprite
     public HashMap<String, Player> friendlyPlayers;
-//    public HashMap<String, Starship> friendlyPlayers;
 
-    public Player coopPlayer;
-//    public Texture playerShip;
-//    public Texture friendlyShip;
-//    public Starship player;
     public String clientID;
+    public Player coopPlayer;
 
     private final float UPDATE_TIME = 1/60f;
-    float timer;
+    private float timer;
 
     public Networking() {
-//        playerShip = new Texture("playerShip2.png");
-//        friendlyShip = new Texture("playerShip.png");
+        //create an empty clientID; clientID is issued by the server upon connection
         clientID = "empty";
+        //stores other players' id and empty Player objects
         friendlyPlayers = new HashMap<String, Player>();
-//        friendlyPlayers = new HashMap<String, Starship>();
     }
 
     public void connectToServer() {
@@ -58,15 +50,11 @@ public class Networking {
     public void configSocketEvents() {
 
         socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
-            //connection event
             @Override
             public void call(Object... args) {
                 Gdx.app.log("SocketIO", "Connected");
-//                player = new Player(playerShip);
-//                player = new Starship(playerShip);
-//                System.out.println("player sprite created");
             }
-            //receives client ID from server when connection is set
+            //receives client ID from server when connection is established
         }).on("socketID", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
@@ -78,7 +66,10 @@ public class Networking {
                     Gdx.app.log("SocketIO", "Error from getting ID");
                 }
             }
-            //new player has joined
+            /**
+             * when a new player joins the game in the WaitScreen, the client receives the new player's clientID.
+             * An empty Player object is created to represent the new player and the key-value pair is stored in the friendlyPlayers HashMap
+             */
         }).on("newPlayer", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
@@ -86,14 +77,15 @@ public class Networking {
                 try {
                     String playerId = data.getString("id");
                     Gdx.app.log("SocketIO", "New Player Connected: " + playerId);
-//TODO:put the new player's ID and an empty Player object into the hashmap (Player is specified in PlayScreen)?
-//                    friendlyPlayers.put(playerId, new Starship(friendlyShip));
                     friendlyPlayers.put(playerId, new Player());
                 } catch (JSONException e) {
                     Gdx.app.log("SocketIO", "Error from getting New Player's ID");
                 }
             }
-        //other player has disconnected
+            /**
+             *When a player disconnects during any point of the game, the client receives the disconnected player's client ID.
+             * The client removes the key-value pair from the friendlyPlayers HashMap
+             */
         }).on("playerDisconnected", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
@@ -106,17 +98,18 @@ public class Networking {
                     Gdx.app.log("SocketIO", "Error from getting Disconnected Player's ID");
                 }
             }
-        //
+            /**
+             * When the client first connects to the server, the client receives the client IDs of all the players connected to the server.
+             * Client stores the client IDs into the friendlyPlayers HashMap along with empty Player objects positioned at their current positions
+             */
+        //TODO: current position necessary?
         }).on("getPlayers", new Emitter.Listener() {
             //called when player first joins the game to update the location of all other players
             @Override
             public void call(Object... args) {
                 JSONArray objects = (JSONArray) args[0]; //receive players array
                 try {
-                    //TODO: put empty Player object for the other players
-
-                    //this goes into PlayScreen?
-                    for (int i = 0;i<objects.length();i++) {
+                    for (int i = 0; i < objects.length(); i++) {
                         coopPlayer = new Player();
                         Vector2 position = new Vector2();
                         position.x = ((Double) objects.getJSONObject(i).getDouble("x")).floatValue();
@@ -129,6 +122,11 @@ public class Networking {
                     Gdx.app.log("SocketIO", "Error from getting New Player's ID");
                 }
             }
+            /**
+             * The client receives the updated coordinates of the players moved during the gameplay.
+             * The client sets the position of the box2d representing the respective players according to the coordinates received in the JSON object.
+             */
+        //TODO: is there a better way?
         }).on("playerMoved", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
@@ -138,19 +136,23 @@ public class Networking {
                     Double x = data.getDouble("x");
                     Double y = data.getDouble("y");
                     if (friendlyPlayers.get(playerID) != null) {
-                        friendlyPlayers.get(playerID).setBodyPosition(x.floatValue(), y.floatValue()); //need to set b2body's position as this
+                        friendlyPlayers.get(playerID).setBodyPosition(x.floatValue(), y.floatValue());
 
                     }
                 } catch (JSONException e) {
                     Gdx.app.log("SocketIO", "Error from getting Disconnected Player's ID");
                 }
             }
-            //
         });
     }
 
-    //update server of client's new player position
-    //called during gameplay
+    /**
+     * This method emits a "playerMoved" events to the server.
+     * It sends a JSON object to the server when the player moves in PlayScreen.
+     * The JSON object contains the x y coordinates of the box2d of the player's Player object.
+     * @param dt
+     * @param player This is the Player object representing the client
+     */
     public void updateServer(float dt, Player player) {
         timer += dt;
         if (timer >= UPDATE_TIME && player != null && player.hasMoved()) {
@@ -165,16 +167,7 @@ public class Networking {
         }
     }
 
-//    public Starship getPlayerStarship() {
-//        return player;
-//    }
-//
-//    public Starship getCoopPlayerStarship() {
-//        return coopPlayer;
-//    }
 
     public void dispose() {
-//        playerShip.dispose();
-//        friendlyShip.dispose();
     }
 }

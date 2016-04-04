@@ -21,12 +21,14 @@ public class WaitScreen implements Screen{
     private TapTap3 game;
     private OrthographicCamera gamecam;
     private Viewport gameport;
-
     private SpriteBatch batch;
     private Sprite aspectRatio;
-
     private Networking network;
 
+    /**
+     * This constructor, aside from instantiating the Sprites, Viewport, Camera, etc, also instantiates the Networking object
+     * @param game The Game object
+     */
     public WaitScreen(TapTap3 game) {
         this.game = game;
         gamecam = new OrthographicCamera();

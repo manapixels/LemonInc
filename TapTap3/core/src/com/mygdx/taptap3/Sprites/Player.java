@@ -26,7 +26,6 @@ public class Player extends Sprite {
     Vector2 previousPosition;
 
     public Player() {
-//        this.screen=null;
         CHARACTER_SIZE = 100 / TapTap3.PPM;
     }
     public Player(PlayScreen screen, String fileName, float x, float y) {

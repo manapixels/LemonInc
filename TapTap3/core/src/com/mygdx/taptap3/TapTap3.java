@@ -14,6 +14,7 @@ public class TapTap3 extends Game {
 	@Override()
 	public void create () {
 		batch = new SpriteBatch();
+		//game starts with waiting screen
 		setScreen(new WaitScreen(this));
 	}
 
@@ -34,4 +35,6 @@ public class TapTap3 extends Game {
 	7. fixed linear velocity (ws) - not happening; use linear impulse better; need to discuss
 	8. background image (ws) - needs textureAtlas; use longer background png instead
 	9. end Screen (ws)	- done
+
+	larger map, more obstacles, powerups,
  */
