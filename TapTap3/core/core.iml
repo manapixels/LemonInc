@@ -35,6 +35,7 @@
     <orderEntry type="library" exported="" name="okhttp-ws-2.5.0" level="project" />
     <orderEntry type="library" exported="" name="okhttp-2.5.0" level="project" />
     <orderEntry type="library" exported="" name="okio-1.6.0" level="project" />
+    <orderEntry type="library" exported="" name="kryonet-2.21-all" level="project" />
     <orderEntry type="library" exported="" name="core.core-1.0" level="project" />
   </component>
 </module>

@@ -51,6 +51,7 @@
     <orderEntry type="library" exported="" name="jinput-platform-2.0.5-natives-osx" level="project" />
     <orderEntry type="library" exported="" name="okhttp-2.5.0" level="project" />
     <orderEntry type="library" exported="" name="okio-1.6.0" level="project" />
+    <orderEntry type="library" exported="" name="kryonet-2.21-all" level="project" />
     <orderEntry type="library" exported="" name="desktop.desktop-1.0" level="project" />
   </component>
 </module>
