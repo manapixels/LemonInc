@@ -14,6 +14,8 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.taptap3.Networking.Networking;
 import com.mygdx.taptap3.TapTap3;
 
+import java.util.Random;
+
 /**
  * Created by kevin on 3/30/2016.
  */
@@ -25,8 +27,10 @@ public class WaitScreen implements Screen{
     private Sprite aspectRatio;
     private Networking network;
 
+    private Random random = new Random();
+
     /**
-     * This constructor, aside from instantiating the Sprites, Viewport, Camera, etc, also instantiates the Networking object
+     * This constructor instantiates the Sprites, Viewport, Camera, etc
      * @param game The Game object
      */
     public WaitScreen(TapTap3 game) {
@@ -35,23 +39,44 @@ public class WaitScreen implements Screen{
         gameport = new FitViewport(game.V_WIDTH / game.PPM, game.V_HEIGHT / game.PPM, gamecam);
 
         batch = new SpriteBatch();
-        aspectRatio = new Sprite(new Texture("playerShip.png"));
+        aspectRatio = new Sprite(new Texture("playerShip.png")); //background
         aspectRatio.setPosition(0, 0);
         aspectRatio.setSize(game.V_WIDTH / game.PPM, game.V_HEIGHT / game.PPM);
 
         //initialise network
         //connect to server and configure socket events (receive client ID, all the other player's ID when they join, half empty hashmap
-        network = new Networking();
-        network.connectToServer();
-        network.configSocketEvents();
+//        network = new Networking();
+//        network.connectToServer();
+//        network.configSocketEvents();
         Gdx.app.log("WaitScreen", "Finished connecting & configuring events");
     }
 
+    /**
+     * Play game as host for now
+     */
     private void playGame() {
-        game.setScreen(new PlayScreen(game, network));
+        hostGame();
     }
+
+    /**
+     * UI stuff to go in here
+     */
     @Override
     public void show() {
+        //create UI stuff
+        //Label gameTitle = new Label("Nimbus Run", skin);
+        //set color, x y coordinates
+
+        //Button
+
+        //Textfield
+
+        //...
+
+        //stage.addActor(UI stuff);
+
+        //Events
+        //setListeners here
 
     }
 
@@ -82,7 +107,7 @@ public class WaitScreen implements Screen{
     @Override
     public void resize(int width, int height) {
         gameport.update(width, height);
-        gamecam.position.set(gamecam.viewportWidth/2, gamecam.viewportHeight/2, 0);
+        gamecam.position.set(gamecam.viewportWidth / 2, gamecam.viewportHeight / 2, 0);
     }
 
     @Override
@@ -103,5 +128,40 @@ public class WaitScreen implements Screen{
     @Override
     public void dispose() {
         aspectRatio.getTexture().dispose();
+    }
+
+    /**
+     * join a game room
+     */
+    private void joinGame(){
+        game.setScreen(new PlayScreen(game, false, "HOSTSIPADDRESS", getName()));
+        //TODO: setscreen(new playscreen(game, host-false, the IP address you are joining, getname())
+        //save preferences
+    }
+
+    /**
+     * play game as a host
+     */
+    private void hostGame(){
+        game.setScreen(new PlayScreen(game, true, "localhost", getName()));
+        //TODO: setscreen(new playscreen(game, host-true, the IP address you are hosting from - localhost, getname())
+        //save preferences
+    }
+
+    /**
+     * This method gets the name of the player from the name textfield.
+     * If the name is empty, the player is assigned a random name. This random name is then saved in the textfield.
+     *
+     * @return player's name
+     */
+    //TODO: textfield
+    private String getName(){
+        String name = "";
+//        String name = get text from the textfield in the waiting screen
+        if (name.isEmpty()) {
+            name = "Player" + random.nextInt(10000);
+        }
+        //textfieldname.settext(name);
+        return name;
     }
 }

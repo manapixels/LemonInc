@@ -2,6 +2,7 @@ package com.mygdx.taptap3.Networking.Client;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
+import com.esotericsoftware.minlog.Log;
 import com.mygdx.taptap3.Networking.Network;
 import com.mygdx.taptap3.Networking.Packet;
 
@@ -30,20 +31,27 @@ public class TapTapClient {
         Network.registerPackets(client);
         client.addListener(cnl);
 
-//        client.start();
-        new Thread(client).start();
+        client.start();
+//        new Thread(client).start();
 
-        try {
-            //client connects with server
-            client.connect(9999, ipAddress, portSocket);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            //client connects with server
+//            client.connect(9999, ipAddress, portSocket);
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
+    public void connect(String host) throws IOException{
+            client.connect(5000, host, Network.PORT, Network.PORTUDP);
 
-    public static void main(String[] args) {
-        new TapTapClient();
     }
+
+//    public static void main(String[] args) {
+//        new TapTapClient();
+////    }
+private void logInfo(String string) {
+    Log.info(string);
+}
 }

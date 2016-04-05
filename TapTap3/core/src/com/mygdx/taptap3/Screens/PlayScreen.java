@@ -13,12 +13,16 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.esotericsoftware.minlog.Log;
+import com.mygdx.taptap3.Networking.Client.TapTapClient;
 import com.mygdx.taptap3.Networking.Networking;
+import com.mygdx.taptap3.Networking.Server.TapTapServer;
 import com.mygdx.taptap3.Sprites.Ceiling;
 import com.mygdx.taptap3.Sprites.Ground;
 import com.mygdx.taptap3.Sprites.Player;
 import com.mygdx.taptap3.TapTap3;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 /*
@@ -39,10 +43,24 @@ public class PlayScreen implements Screen {
     private Ground ground;
     private Ceiling ceiling;
 
-    private Networking network;
+    private final boolean isHost;
+    private final String ipAddress;
+    private String playerName;
 
-    public PlayScreen(TapTap3 game, Networking network){
+    private TapTapClient client;
+    private TapTapServer server;
+
+
+    public PlayScreen(TapTap3 game, boolean isHost, String ipAddress, String playerName){
         this.game = game;
+        this.isHost = isHost;
+        if (!ipAddress.isEmpty()) {
+            this.ipAddress = ipAddress;
+        } else {
+            this.ipAddress = "localhost";
+        }
+        this.playerName = playerName;
+
         gamecam = new OrthographicCamera();
         gameport = new FitViewport(game.V_WIDTH / game.PPM, game.V_HEIGHT / game.PPM, gamecam);
 
@@ -62,19 +80,49 @@ public class PlayScreen implements Screen {
 //        player3 = new Player(this, "Sheshnag&Krishna.png", -150, 200);
 //        player4 = new Player(this, "Madam White Snake.png", 250, 200);
 
-        //TODO: initialise all the other players here
-        int i=0;
-        for (HashMap.Entry<String, Player> entry: network.friendlyPlayers.entrySet()) {
-            i++;
-            entry.getValue().initialise(this, "Foxy.png", i*50 +50, 200 );
-        }
+//        //TODO: initialise all the other players here
+//        int i=0;
+//        for (HashMap.Entry<String, Player> entry: network.friendlyPlayers.entrySet()) {
+//            i++;
+//            entry.getValue().initialise(this, "Foxy.png", i*50 +50, 200 );
+//        }
 
 
         ground = new Ground(this);
         ceiling = new Ceiling(this);
 
-        //waitscreen passed network to playscreen
-        this.network = network;
+    }
+
+    /**
+     * when the screen appears, start TapTapClient, TODO:get the map from the client.
+     * If player is a host, start TapTapServer, connect itself to the server.
+     * If player is joining game, connect client to the ip address.
+     */
+    @Override
+    public void show() {
+        client = new TapTapClient();
+        //get map
+
+        if (isHost) {
+            //start server
+            try {
+                server = new TapTapServer();
+                client.connect("localhost");
+            } catch (IOException e) {
+                e.printStackTrace();
+                logInfo("Can't connect to localhost server");
+                game.setScreen(new WaitScreen(game));
+            }
+        }
+        else {
+            try {
+                client.connect(ipAddress);
+            } catch (IOException e) {
+                logInfo("Can't connect to server: "+ipAddress);
+                game.setScreen(new WaitScreen(game));
+            }
+        }
+
     }
 
     protected void handleInput() {
@@ -92,7 +140,7 @@ public class PlayScreen implements Screen {
     @Override
     public void render(float delta) {
         //update the player's coordinates to server realtime
-        network.updateServer(delta, player);
+//        network.updateServer(delta, player);
         update(delta);
 
 
@@ -114,10 +162,10 @@ public class PlayScreen implements Screen {
 //        player3.draw(batch);
 //        player4.draw(batch);
 
-        //TODO: batch draws the other players instead of drawing 4 other dead characters
-        for (HashMap.Entry<String, Player> entry: network.friendlyPlayers.entrySet()) {
-            entry.getValue().draw(batch);
-        }
+//        //TODO: batch draws the other players instead of drawing 4 other dead characters
+//        for (HashMap.Entry<String, Player> entry: network.friendlyPlayers.entrySet()) {
+//            entry.getValue().draw(batch);
+//        }
 
         batch.end();
 
@@ -135,9 +183,9 @@ public class PlayScreen implements Screen {
 //        player2.update(dt);
 //        player3.update(dt);
 //        player4.update(dt);
-        for (HashMap.Entry<String, Player> entry: network.friendlyPlayers.entrySet()) {
-            entry.getValue().update(dt);
-        }
+//        for (HashMap.Entry<String, Player> entry: network.friendlyPlayers.entrySet()) {
+//            entry.getValue().update(dt);
+//        }
         world.step(1 / 60f, 6, 2);
         gamecam.position.set(player.getX(), gamecam.viewportHeight / 2, 0);
         gamecam.update();
@@ -150,11 +198,10 @@ public class PlayScreen implements Screen {
     @Override
     public void resize(int width, int height) {
         gameport.update(width, height);
-        gamecam.position.set(gamecam.viewportWidth/2, gamecam.viewportHeight/2, 0);
+        gamecam.position.set(gamecam.viewportWidth / 2, gamecam.viewportHeight / 2, 0);
     }
 
-    @Override
-    public void show() {    }
+
 
     @Override
     public void pause() {    }
@@ -176,5 +223,9 @@ public class PlayScreen implements Screen {
     public void dispose() {
         world.dispose();
         background.getTexture().dispose();
+    }
+
+    private void logInfo(String string) {
+        Log.info(string);
     }
 }

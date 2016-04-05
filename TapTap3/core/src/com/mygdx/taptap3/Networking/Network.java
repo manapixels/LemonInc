@@ -7,6 +7,9 @@ import com.esotericsoftware.kryonet.EndPoint;
  * Created by kevin on 4/4/2016.
  */
 public class Network {
+
+    public static int PORT = 8080;
+    public static int PORTUDP = 8082;
     /**
      * the classes that are going to be sent over the network must be registered for both server and client
      *
