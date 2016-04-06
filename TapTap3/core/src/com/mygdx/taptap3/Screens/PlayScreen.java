@@ -65,6 +65,7 @@ public class PlayScreen implements Screen {
         }
         this.playerName = playerName;
 
+        //TODO: WEISHENG: all these under GameMap?
         gamecam = new OrthographicCamera();
         gameport = new FitViewport(game.V_WIDTH / game.PPM, game.V_HEIGHT / game.PPM, gamecam);
 
@@ -84,31 +85,24 @@ public class PlayScreen implements Screen {
 //        player3 = new Player(this, "Sheshnag&Krishna.png", -150, 200);
 //        player4 = new Player(this, "Madam White Snake.png", 250, 200);
 
-//        //TODO: initialise all the other players here
-//        int i=0;
-//        for (HashMap.Entry<String, Player> entry: network.friendlyPlayers.entrySet()) {
-//            i++;
-//            entry.getValue().initialise(this, "Foxy.png", i*50 +50, 200 );
-//        }
-
-
         ground = new Ground(this);
         ceiling = new Ceiling(this);
 
     }
 
     /**
+     * Called when this screen becomes the current screen for a Game.
      * when the screen appears, start TapTapClient, TODO:get the map from the client.
      * If player is a host, start TapTapServer, connect itself to the server.
      * If player is joining game, connect client to the ip address.
      */
     @Override
     public void show() {
-        client = new TapTapClient();
+        client = new TapTapClient(playerName);
         //get map
 
         if (isHost) {
-            //start server
+            //start my server and connect my client to my server
             try {
                 server = new TapTapServer();
                 client.connect("localhost");
@@ -119,6 +113,7 @@ public class PlayScreen implements Screen {
             }
         }
         else {
+            //client connects to ipAddress
             try {
                 client.connect(ipAddress);
             } catch (IOException e) {
@@ -127,6 +122,7 @@ public class PlayScreen implements Screen {
             }
         }
 
+        //TODO: WEISHENG: all these under GameMap?
         player1 = new Player(this, "LaughingBuddha.png", 32, 200);
         player2 = new Player(this, "Foxy.png", 150, 200);
         player3 = new Player(this, "Sheshnag_Krishna.png", -150, 200);
@@ -137,12 +133,6 @@ public class PlayScreen implements Screen {
         startWall = new StartWall(this);
         endWall = new EndWall(this);
 
-//        //TODO: initialise all the other players here
-//        int i=0;
-//        for (Map.Entry<String, Player> entry: network.friendlyPlayers.entrySet()) {
-//            i++;
-//            entry.getValue().initialise(this, "Foxy.png", i*50 +50, 200 );
-//        }
     }
 
     protected void handleInput() {
@@ -157,20 +147,29 @@ public class PlayScreen implements Screen {
         }
     }
 
+    //TODO: WEISHENG: need cleanup
     @Override
     public void render(float delta) {
 
         update(delta);
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
-//        b2dr.render(world, gamecam.combined);   //render box2d world lines
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+//        map.update(delta);
+//        map.render();
+//
+//        if(isHost){
+//            server.update(delta);
+//        }
+
+
+//       b2dr.render(world, gamecam.combined);   //render box2d world lines
 //
 //        batch.setProjectionMatrix(gamecam.combined);    //set batch to camera
 //        batch.begin();  //start batch stuff
 //        background.draw(batch); //draw the background file
 //        player.draw(batch);
-
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.setProjectionMatrix(gamecam.combined);
         batch.begin();
@@ -180,20 +179,11 @@ public class PlayScreen implements Screen {
         background.draw(batch);
 
 //        player.draw(batch);
-//        //TODO: batch draws the other players instead of drawing 4 other dead characters
-//        for (HashMap.Entry<String, Player> entry: network.friendlyPlayers.entrySet()) {
-//            entry.getValue().draw(batch);
-//        }
 
         player1.draw(batch);
         player2.draw(batch);
         player3.draw(batch);
         player4.draw(batch);
-
-//        //TODO: batch draws the other players instead of drawing 4 other dead characters
-//        for (Map.Entry<String, Player> entry: network.friendlyPlayers.entrySet()) {
-//            entry.getValue().draw(batch);
-//        }
 
         b2dr.render(world, gamecam.combined);
 
@@ -201,6 +191,7 @@ public class PlayScreen implements Screen {
 
     }
 
+    //TODO: WEISHENG: gamemap?
     public void update(float dt) {
         handleInput();
         player1.update(dt);
@@ -230,20 +221,30 @@ public class PlayScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
+        //TODO: gamemap.resize(width,height)???
+
         gameport.update(width, height);
         gamecam.position.set(gamecam.viewportWidth / 2, gamecam.viewportHeight / 2, 0);
     }
 
-
-
+    /**
+     * This method is called when this screen is no longer the current screen for a Game.
+     * We assume that when this method is called, the game is over. Close the client and server. Dispose the gamemap.
+     */
     @Override
-    public void pause() {    }
+    public void hide() {
+        client.shutdown();
+        if (server != null)
+            server.shutdown();
+//        map.dispose();
+    }
 
     @Override
     public void resume() {    }
 
     @Override
-    public void hide() {    }
+    public void pause() {    }
+
 
     public World getWorld(){
         return world;
