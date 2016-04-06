@@ -98,7 +98,7 @@ public class PlayScreen implements Screen {
      */
     @Override
     public void show() {
-        client = new TapTapClient();
+        client = new TapTapClient(playerName);
         //get map
 
         if (isHost) {

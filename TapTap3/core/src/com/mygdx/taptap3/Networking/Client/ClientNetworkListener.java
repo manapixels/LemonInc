@@ -11,9 +11,8 @@ import com.mygdx.taptap3.Networking.Packet;
 public class ClientNetworkListener extends Listener {
     private Client client;
 
-    public void init(Client client) {
+    public ClientNetworkListener(Client client) {
         this.client = client;
-
     }
 
     /**
