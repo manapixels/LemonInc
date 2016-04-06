@@ -7,6 +7,7 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
 import com.mygdx.taptap3.Networking.Network;
 import com.mygdx.taptap3.Networking.Packet;
+import com.mygdx.taptap3.Sprites.GameMap;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -19,6 +20,7 @@ public class TapTapClient {
     private String name; //Player's name
     public int id; //Player's connection ID
     public String remoteIP;
+    private GameMap map;
 
     //Coonnection info
     int portSocket = 8080;
@@ -33,7 +35,7 @@ public class TapTapClient {
      * This constructor is called in PlayScreen when the player plays game as a client
      */
     public TapTapClient(String name) {
-        //this.gameMap = new GameMap(this); //create new GameMap for Client
+        map = new GameMap(this); //create new GameMap for Client
         this.name = name;
 
         client = new Client();

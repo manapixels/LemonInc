@@ -11,13 +11,18 @@ public class GameMap {
     private TapTapClient client; // only if I'm the client
     private TapTapServer server; // only if I'm internal to the server
 
+    private boolean isClient;
+
     /**
      * This constructor is called inside TapTapClient
      */
     public GameMap(TapTapClient client) {
         this.client = client;
+        this.isClient = true;
 
         initCommon();
+
+        //instantiate HUD, GameSounds, BitmapFont, Camera, SpriteBatch ...
     }
 
     /**
@@ -25,6 +30,7 @@ public class GameMap {
      */
     public GameMap(TapTapServer server) {
         this.server = server;
+        this.isClient = false;
 
         initCommon();
     }
@@ -34,6 +40,10 @@ public class GameMap {
     }
 
     private void handleInput() {
+
+    }
+
+    public void update(float delta) {
 
     }
 
