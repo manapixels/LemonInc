@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.mygdx.taptap3.Networking.Networking;
+//import com.mygdx.taptap3.Networking.Networking;
 import com.mygdx.taptap3.TapTap3;
 
 import java.util.Random;
@@ -25,7 +25,7 @@ public class WaitScreen implements Screen{
     private Viewport gameport;
     private SpriteBatch batch;
     private Sprite aspectRatio;
-    private Networking network;
+//    private Networking network;
 
     private Random random = new Random();
 

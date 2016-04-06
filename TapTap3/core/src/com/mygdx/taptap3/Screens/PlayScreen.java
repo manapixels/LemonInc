@@ -15,7 +15,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.minlog.Log;
 import com.mygdx.taptap3.Networking.Client.TapTapClient;
-import com.mygdx.taptap3.Networking.Networking;
+//import com.mygdx.taptap3.Networking.Networking;
 import com.mygdx.taptap3.Networking.Server.TapTapServer;
 import com.mygdx.taptap3.Sprites.Ceiling;
 import com.mygdx.taptap3.Sprites.Ground;
