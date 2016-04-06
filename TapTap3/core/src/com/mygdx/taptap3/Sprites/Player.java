@@ -23,6 +23,13 @@ public class Player extends Sprite {
     private PlayScreen screen;
     private final float CHARACTER_SIZE;
 
+
+    Vector2 previousPosition;
+
+    public Player() {
+        CHARACTER_SIZE = 100 / TapTap3.PPM;
+    }
+
     public Player(PlayScreen screen, String fileName, float x, float y) {
         this.screen = screen;
         this.world = screen.getWorld();
