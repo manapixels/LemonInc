@@ -6,24 +6,25 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.taptap3.Screens.PlayScreen;
+import com.mygdx.taptap3.TapTap3;
 
-public class Ground {
+public class StartWall {
     public World world;
     public Body b2body;
     private PlayScreen screen;
 
-    public Ground(PlayScreen screen) {
+    public StartWall(PlayScreen screen) {
         this.screen = screen;
         this.world = screen.getWorld();
 
         BodyDef bdef = new BodyDef();
-        bdef.position.set(0, 0);
+        bdef.position.set(-screen.getGamePort().getWorldWidth() / 2, 0);
         bdef.type = BodyDef.BodyType.StaticBody;
         b2body = world.createBody(bdef);
 
         FixtureDef fdef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(screen.getGamePort().getWorldWidth()*4, screen.getGamePort().getWorldHeight()/20);
+        shape.setAsBox(100 / TapTap3.PPM, screen.getGamePort().getWorldHeight());
 
         fdef.shape = shape;
         b2body.createFixture(fdef);

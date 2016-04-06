@@ -1,6 +1,20 @@
 [
     {
+<<<<<<< HEAD
+=======
+        "merged": "C:\\AndroidStudioProjects\\TapTap3\\android\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ic_launcher.png",
+        "source": "C:\\AndroidStudioProjects\\TapTap3\\android\\res\\drawable-hdpi\\ic_launcher.png"
+<<<<<<< HEAD
+    },
+    {
+>>>>>>> 874695f75f4af5cb06ffa43c6061b8adac814b29
         "merged": "C:\\Users\\kevin\\Desktop\\LemonInc\\TapTap3\\android\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ic_launcher.png",
         "source": "C:\\Users\\kevin\\Desktop\\LemonInc\\TapTap3\\android\\res\\drawable-hdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\Wei Sheng\\Documents\\GitHub\\LemonInc\\TapTap3\\android\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ic_launcher.png",
+        "source": "C:\\Users\\Wei Sheng\\Documents\\GitHub\\LemonInc\\TapTap3\\android\\res\\drawable-hdpi\\ic_launcher.png"
+=======
+>>>>>>> master
     }
 ]

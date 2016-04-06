@@ -23,3 +23,4 @@ public class TapTap3 extends Game {
 		super.render();
 	}
 }
+

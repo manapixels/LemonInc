@@ -23,11 +23,13 @@ public class Player extends Sprite {
     private PlayScreen screen;
     private final float CHARACTER_SIZE;
 
+
     Vector2 previousPosition;
 
     public Player() {
         CHARACTER_SIZE = 100 / TapTap3.PPM;
     }
+
     public Player(PlayScreen screen, String fileName, float x, float y) {
         this.screen = screen;
         this.world = screen.getWorld();
@@ -51,41 +53,6 @@ public class Player extends Sprite {
 
         img = new Sprite(new Texture(fileName));
         img.setSize(CHARACTER_SIZE * 1.25f, CHARACTER_SIZE * 1.25f);
-
-        previousPosition = new Vector2(getX(), getY()); //b2body's previous position
-    }
-
-    public void setBodyPosition(float x, float y){
-        b2body.setTransform(x, y, 0);
-    }
-
-    //only called in PlayScreen for empty Player objects
-    public void initialise(PlayScreen screen, String fileName, float x, float y){
-        this.screen = screen;
-        this.world = screen.getWorld();
-        currentState = State.DEFAULT;
-        previousState = State.DEFAULT;
-//        CHARACTER_SIZE = 100 / TapTap3.PPM;
-
-        BodyDef bdef = new BodyDef();
-        bdef.position.set(x / TapTap3.PPM, y / TapTap3.PPM);
-        bdef.type = BodyDef.BodyType.DynamicBody;
-        b2body = world.createBody(bdef);
-
-        FixtureDef fdef = new FixtureDef();
-        CircleShape shape = new CircleShape();
-        shape.setRadius(CHARACTER_SIZE / 2);
-//        PolygonShape shape = new PolygonShape();
-//        shape.setAsBox(x, y);
-        fdef.shape = shape;
-        b2body.createFixture(fdef);
-        shape.dispose();
-
-        img = new Sprite(new Texture(fileName));
-        img.setSize(CHARACTER_SIZE * 1.25f, CHARACTER_SIZE * 1.25f);
-
-        previousPosition = new Vector2(getX(), getY());
-
     }
 
     public State getState(){
@@ -107,14 +74,9 @@ public class Player extends Sprite {
     public float getX(){
         return b2body.getPosition().x;
     }
-    public float getY(){
-        return b2body.getPosition().y;
-    }
-
-
 
     public void update(float dt){
-        setPosition(b2body.getPosition().x, b2body.getPosition().y); //set the player's position as the b2body's position
+        setPosition(b2body.getPosition().x, b2body.getPosition().y);
         img.setPosition(b2body.getPosition().x - CHARACTER_SIZE / 2 * 1.25f, b2body.getPosition().y - CHARACTER_SIZE / 2 * 1.25f);
     }
 
@@ -125,11 +87,11 @@ public class Player extends Sprite {
         else if (currentState == State.JUMPING){
             previousState = State.JUMPING;
             currentState = State.DOUBLEJUMPING;
-            b2body.applyLinearImpulse(new Vector2(0, 5f), b2body.getWorldCenter(), true);
+            b2body.applyLinearImpulse(new Vector2(0, 4f), b2body.getWorldCenter(), true);
         }
         else {
             currentState = State.JUMPING;
-            b2body.applyLinearImpulse(new Vector2(0, 5f), b2body.getWorldCenter(), true);
+            b2body.applyLinearImpulse(new Vector2(0, 4f), b2body.getWorldCenter(), true);
         }
     }
 
@@ -137,7 +99,7 @@ public class Player extends Sprite {
 //        b2body.setLinearVelocity(new Vector2(3f, 0));
 //    }
         if (b2body.getLinearVelocity().x <= 3) {
-            b2body.applyLinearImpulse(new Vector2(2f, 0), b2body.getWorldCenter(), true);
+            b2body.applyLinearImpulse(new Vector2(1f, 0), b2body.getWorldCenter(), true);
         }
     }
     public void slow() {
@@ -145,14 +107,5 @@ public class Player extends Sprite {
         if (b2body.getLinearVelocity().x >= -3) {
             b2body.applyLinearImpulse(new Vector2(-1f, 0), b2body.getWorldCenter(), true);
         }
-    }
-
-    public boolean hasMoved() {
-        if (previousPosition.x != getX() || previousPosition.y != getY()) {
-            previousPosition.x = getX();
-            previousPosition.y = getY();
-            return true;
-        }
-        return false;
     }
 }
