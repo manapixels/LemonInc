@@ -40,8 +40,8 @@ public class TapTapServer {
         server.start();
     }
 
-
-    public static void main(String[] args) {
-        new TapTapServer();
+    public void shutdown() {
+        server.close();
+        server.stop();
     }
 }

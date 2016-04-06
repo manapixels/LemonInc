@@ -13,6 +13,9 @@ import java.util.Scanner;
  * Created by kevin on 4/4/2016.
  */
 public class TapTapClient {
+
+    private String name; //Player's name
+
     //Coonnection info
     int portSocket = 8080;
     String ipAddress = "localhost";
@@ -22,25 +25,25 @@ public class TapTapClient {
     public Client client;
     private ClientNetworkListener cnl;
 
-    public TapTapClient() {
+    /**
+     * This constructor is called in PlayScreen when the player plays game as a client
+     */
+    public TapTapClient(String name) {
+        //this.gamemap = new gamemap(this);
+        this.name = name;
+
         client = new Client();
+        client.start();
+
         cnl = new ClientNetworkListener();
         scanner = new Scanner(System.in);
 
         cnl.init(client);
-        Network.registerPackets(client);
+        Network.registerPackets(client); //register the classes Client uses with Server
         client.addListener(cnl);
 
-        client.start();
-//        new Thread(client).start();
 
-//        try {
-//            //client connects with server
-//            client.connect(9999, ipAddress, portSocket);
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+
     }
 
     public void connect(String host) throws IOException{
@@ -51,7 +54,12 @@ public class TapTapClient {
 //    public static void main(String[] args) {
 //        new TapTapClient();
 ////    }
-private void logInfo(String string) {
-    Log.info(string);
-}
+    private void logInfo(String string) {
+        Log.info(string);
+    }
+
+    public void shutdown() {
+        client.stop();
+        client.close();
+    }
 }
