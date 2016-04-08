@@ -1,5 +1,24 @@
 package com.lemoninc.nimbusrun.Sprites;
 
+/*********************************
+ * FILENAME : Player.java
+ * DESCRIPTION :
+ * PUBLIC FUNCTIONS :
+ *       State          getState()
+ *       void           render(float delta)
+ *       void           draw(SpriteBatch batch)
+ *       float          getX()
+ *       float          getY()
+ *       void           update(float delta)
+ *       void           jump()
+ *       void           speed()
+ *       void           slow()
+ *       TextureAtlas   getTxtAtlas()
+ * NOTES :
+ * LAST UPDATED: 8/4/2016 09:00
+ *
+ * ********************************/
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -98,9 +117,12 @@ public class Player extends Sprite {
     public float getX(){
         return b2body.getPosition().x;
     }
+    public float getY(){
+        return b2body.getPosition().y;
+    }
 
-    public void update(float dt){
-        this.setPosition(b2body.getPosition().x, b2body.getPosition().y);
+    public void update(float delta){
+        this.setPosition(getX(), getY());
         this.setRegion(anim.getKeyFrame(stateTime, true));
         //img.setPosition(b2body.getPosition().x - CHARACTER_SIZE / 2 * 1.25f, b2body.getPosition().y - CHARACTER_SIZE / 2 * 1.25f);
     }

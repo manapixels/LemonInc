@@ -1,12 +1,21 @@
 package com.lemoninc.nimbusrun.Networking.Server;
 
+/*********************************
+ * FILENAME : ServerNetworkListener.java
+ * DESCRIPTION :
+ * PUBLIC FUNCTIONS :
+ *       void    connected(Connection c)
+ *       void    disconnected(Connection c)
+ *       void    received(Connection c, Object o)
+ * NOTES :
+ * LAST UPDATED: 8/4/2016 09:00
+ *
+ * ********************************/
+
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.lemoninc.nimbusrun.Networking.Packet;
 
-/**
- * Created by kevin on 4/4/2016.
- */
 public class ServerNetworkListener extends Listener {
 
     public ServerNetworkListener() {

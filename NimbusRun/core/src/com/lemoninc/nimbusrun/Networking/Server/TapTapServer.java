@@ -1,5 +1,16 @@
 package com.lemoninc.nimbusrun.Networking.Server;
 
+/*********************************
+ * FILENAME : TapTapServer.java
+ * DESCRIPTION :
+ * PUBLIC FUNCTIONS :
+ *       void    update(float delta)
+ *       void    shutdown()
+ * NOTES :
+ * LAST UPDATED: 8/4/2016 09:00
+ *
+ * ********************************/
+
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -10,9 +21,6 @@ import com.lemoninc.nimbusrun.Sprites.GameMap;
 
 import java.io.IOException;
 
-/**
- * Created by kevin on 4/4/2016.
- */
 public class TapTapServer {
     //Connection info
     String IPConnection = "localhost";

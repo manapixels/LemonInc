@@ -1,12 +1,19 @@
 package com.lemoninc.nimbusrun.Sprites;
 
+/*********************************
+ * FILENAME : Starship.java
+ * DESCRIPTION :
+ * PUBLIC FUNCTIONS :
+ *       boolean    hasMoved()
+ * NOTES :
+ * LAST UPDATED: 8/4/2016 09:00
+ *
+ * ********************************/
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 
-/**
- * Created by kevin on 3/25/2016.
- */
 public class Starship extends Sprite {
     Vector2 previousPosition;
 

@@ -1,18 +1,28 @@
 package com.lemoninc.nimbusrun.Networking.Client;
 
+/*********************************
+ * FILENAME : TapTapClient.java
+ * DESCRIPTION :
+ * PUBLIC FUNCTIONS :
+ *       void    connect(String host)
+ *       void    shutdown()
+ * NOTES :
+ * LAST UPDATED: 8/4/2016 09:00
+ *
+ * ********************************/
+
+import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
 import com.lemoninc.nimbusrun.Networking.Network;
+import com.lemoninc.nimbusrun.Networking.Packet;
 import com.lemoninc.nimbusrun.Sprites.GameMap;
 
 import java.io.IOException;
 import java.util.Scanner;
 
-/**
- * Created by kevin on 4/4/2016.
- */
 public class TapTapClient {
 
     private String name; //Player's name
@@ -102,7 +112,7 @@ public class TapTapClient {
     }
 
     public void connect(String host) throws IOException{
-            client.connect(5000, host, Network.PORT, Network.PORTUDP);
+        client.connect(5000, host, Network.PORT, Network.PORTUDP);
 
     }
 

@@ -1,11 +1,17 @@
 package com.lemoninc.nimbusrun.Networking;
 
+/*********************************
+ * FILENAME : Network.java
+ * DESCRIPTION :
+ * PUBLIC FUNCTIONS :
+ *       void    registerPackets(EndPoint endPoint)
+ * NOTES :
+ * LAST UPDATED: 8/4/2016 09:00
+ *
+ * ********************************/
+
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
-
-/**
- * Created by kevin on 4/4/2016.
- */
 
 public class Network {
 

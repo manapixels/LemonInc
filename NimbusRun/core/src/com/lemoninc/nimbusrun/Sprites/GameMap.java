@@ -1,11 +1,18 @@
 package com.lemoninc.nimbusrun.Sprites;
 
+/*********************************
+ * FILENAME : GameMap.java
+ * DESCRIPTION :
+ * PUBLIC FUNCTIONS :
+ *       void    update(float delta)
+ * NOTES :
+ * LAST UPDATED: 8/4/2016 09:00
+ *
+ * ********************************/
+
 import com.lemoninc.nimbusrun.Networking.Client.TapTapClient;
 import com.lemoninc.nimbusrun.Networking.Server.TapTapServer;
 
-/**
- * Created by kevin on 4/6/2016.
- */
 public class GameMap {
 
     private TapTapClient client; // only if I'm the client

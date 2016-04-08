@@ -1,8 +1,15 @@
 package com.lemoninc.nimbusrun.Networking;
 
-/**
- * Created by kevin on 4/4/2016.
- */
+/*********************************
+ * FILENAME : Packet
+ * DESCRIPTION :
+ * PUBLIC FUNCTIONS :
+ *       none
+ * NOTES :
+ * LAST UPDATED: 8/4/2016 09:00
+ *
+ * ********************************/
+
 public class Packet {
     public static class Packet00Request {
 

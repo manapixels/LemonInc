@@ -1,5 +1,23 @@
 package com.lemoninc.nimbusrun.Screens;
 
+/*********************************
+ * FILENAME : EndScreen.java
+ * DESCRIPTION :
+ * PUBLIC FUNCTIONS :
+ *       void       render(float delta)
+ *       void       update(float delta)
+ *       void       resize(int width, int height)
+ *       void       show()
+ *       void       pause()
+ *       void       review()
+ *       void       hide()
+ *       Viewport   getGamePort(()
+ *       void       dispose()
+ * NOTES :
+ * LAST UPDATED: 8/4/2016 09:00
+ *
+ * ********************************/
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -47,7 +65,7 @@ public class EndScreen implements Screen{
         batch.end();
 }
 
-    public void update(float dt) {
+    public void update(float delta) {
         handleInput();
         gamecam.update();
     }

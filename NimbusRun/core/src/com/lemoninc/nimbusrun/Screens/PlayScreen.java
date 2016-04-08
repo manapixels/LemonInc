@@ -1,5 +1,26 @@
 package com.lemoninc.nimbusrun.Screens;
 
+/*********************************
+ * FILENAME : PlayScreen.java
+ * DESCRIPTION :
+ * PUBLIC FUNCTIONS :
+ *       void     show()
+ *       void     handleInput()
+ *       void     render(float delta)
+ *       void     update(float delta)
+ *       void     gameOver()
+ *       void     resize(int width, int height)
+ *       void     hide()
+ *       void     resume()
+ *       void     pause()
+ *       World    getWorld()
+ *       ViewPort getGamePort()
+ *       void     dispose()
+ * NOTES :
+ * LAST UPDATED: 8/4/2016 09:00
+ *
+ * ********************************/
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;

@@ -1,5 +1,23 @@
 package com.lemoninc.nimbusrun.Screens;
 
+/*********************************
+ * FILENAME : WaitScreen.java
+ * DESCRIPTION :
+ * PUBLIC FUNCTIONS :
+ *       void    playGame()
+ *       void    show()
+ *       void    update(float delta)
+ *       void    render(float delta)
+ *       void    resize(int width, int height)
+ *       void    pause()
+ *       void    resume()
+ *       void    hide()
+ *       void    dispose()
+ * NOTES :
+ * LAST UPDATED: 8/4/2016 09:00
+ *
+ * ********************************/
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -15,9 +33,6 @@ import com.lemoninc.nimbusrun.TapTap3;
 
 import java.util.Random;
 
-/**
- * Created by kevin on 3/30/2016.
- */
 public class WaitScreen implements Screen{
     private TapTap3 game;
     private OrthographicCamera gamecam;

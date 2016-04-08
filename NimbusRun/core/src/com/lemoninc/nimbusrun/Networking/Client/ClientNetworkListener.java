@@ -1,13 +1,22 @@
 package com.lemoninc.nimbusrun.Networking.Client;
 
+/*********************************
+ * FILENAME : ClientNetworkListener.java
+ * DESCRIPTION :
+ * PUBLIC FUNCTIONS :
+ *       void    connected(Connection c)
+ *       void    disconnected(Connection c)
+ *       void    received(Connection c, Object o)
+ * NOTES :
+ * LAST UPDATED: 8/4/2016 09:00
+ *
+ * ********************************/
+
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.lemoninc.nimbusrun.Networking.Packet;
 
-/**
- * Created by kevin on 4/4/2016.
- */
 public class ClientNetworkListener extends Listener {
     private Client client;
 
@@ -18,9 +27,9 @@ public class ClientNetworkListener extends Listener {
     /**
      * This method listens for the connection between the client and the server.
      * When the connection is established, the client sends the object firstMessage, which contains a clientName and a message
-     * @param connection Connection between the client and the server
+     * @param c Connection between the client and the server
      */
-    public void connected(Connection connection) {
+    public void connected(Connection c) {
         System.out.println("Client connected!");
 
         //send a request packet to server when client and server are connected
@@ -28,7 +37,7 @@ public class ClientNetworkListener extends Listener {
         System.out.println("Sent a request packet");
     }
 
-    public void disconnected(Connection connection) {
+    public void disconnected(Connection c) {
         System.out.println("Client disconnected!");
     }
 

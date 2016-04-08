@@ -1,5 +1,15 @@
 package com.lemoninc.nimbusrun.Sprites;
 
+/*********************************
+ * FILENAME : Ceiling.java
+ * DESCRIPTION :
+ * PUBLIC FUNCTIONS :
+ *       none
+ * NOTES :
+ * LAST UPDATED: 8/4/2016 09:00
+ *
+ * ********************************/
+
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
