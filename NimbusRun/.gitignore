@@ -26,8 +26,12 @@ android/gen/
 *.ipr
 *.iws
 *.iml
-out/
 com_crashlytics_export_strings.xml
+.gradle
+/*/local.properties
+/*/out
+/*/*/build
+/*/*/production
 
 ## Eclipse
 .classpath

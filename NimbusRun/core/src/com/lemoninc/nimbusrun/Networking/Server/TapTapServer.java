@@ -46,7 +46,7 @@ public class TapTapServer {
 
         map = new GameMap(this);
 
-        Network.registerPackets(server);
+        Network.registerClasses(server);
 
 /**
  * server listens for messages from the clients.
