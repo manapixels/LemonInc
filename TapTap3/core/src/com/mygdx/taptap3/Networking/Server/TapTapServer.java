@@ -53,14 +53,29 @@ public class TapTapServer {
             public void received(Connection c, Object message) {
                 TapTapConnection connection = (TapTapConnection) c;
 
-//                if (message instanceof Login) {
-////                    Login msg = ((Login) message);
-//
-//                    //tell the new client about map state (obstacle coordinates ...)
-//                    //tell old clients about new client
-//
-//                    //tell new client about old clients
-//                }
+                if (message instanceof Network.Login) {
+                    Network.Login msg = ((Network.Login) message);
+
+                    if (connection.name != null) { //this should not happen
+                        return;
+                    }
+
+                    String name = msg.name;
+                    if (name == null) {
+                        return;
+                    }
+                    name = name.trim();
+                    if (name.length() == 0) { //if name contains no letters
+                        return;
+                    }
+                    //name this connection as the clientname
+                    connection.name = name;
+
+                    //tell the new client about map state (obstacle coordinates ...)
+                    //tell old clients about new client
+
+                    //tell new client about old clients
+                }
             }
 
             public void disconnected(Connection c) {

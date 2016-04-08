@@ -21,4 +21,16 @@ public class Network {
         kryo.register(Packet.Packet01RequestAnswer.class);
         kryo.register(Packet.Packet02Message.class);
     }
+
+    public static class Login {
+        public String name;
+
+        public Login() {
+
+        }
+
+        public Login(String name) {
+            this.name = name;
+        }
+    }
 }
