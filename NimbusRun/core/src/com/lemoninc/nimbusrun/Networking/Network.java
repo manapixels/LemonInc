@@ -12,6 +12,7 @@ package com.lemoninc.nimbusrun.Networking;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
+import com.esotericsoftware.minlog.Log;
 
 public class Network {
 
@@ -25,12 +26,13 @@ public class Network {
         Kryo kryo = endPoint.getKryo();
 
         kryo.register(Network.Login.class);
+        kryo.register(Network.PlayerJoinLeave.class);
 //        kryo.register(Packet.Packet00Request.class);
 //        kryo.register(Packet.Packet01RequestAnswer.class);
 //        kryo.register(Packet.Packet02Message.class);
     }
 
-    public static class Login {
+    static public class Login {
         public String name;
 
         public Login() {
@@ -39,7 +41,32 @@ public class Network {
 
         public Login(String name) {
             this.name = name;
+
+            Network.logInfo("Login initialised by Client "+name);
         }
     }
 
+    /**
+     * message packet that describes the player to be added to the GameMap.
+     * the 'joined' boolean variable indicates if the player is to be added to or deleted from the GameMap
+     *
+     */
+    static public class PlayerJoinLeave {
+        public int playerId;
+        public String name;
+        public boolean hasJoined;
+
+
+        public PlayerJoinLeave(int playerId, String playerName, boolean joined) {
+            this.playerId = playerId;
+            name = playerName;
+            hasJoined = joined;
+
+            Network.logInfo("PlayerJoinLeave initialised by Server for Client "+playerId+" "+playerName);
+        }
+    }
+
+    private static void logInfo(String string) {
+        Log.info(string);
+    }
 }

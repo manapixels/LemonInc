@@ -79,6 +79,10 @@ public class TapTapServer {
                     //name this connection as the clientname
                     connection.name = name;
 
+                    //add this new player to gamemap
+                    Network.PlayerJoinLeave newPlayer = new Network.PlayerJoinLeave(connection.getID(), connection.name, true);
+                    map.addPlayer(newPlayer);
+
                     //tell the new client about map state (obstacle coordinates ...)
                     //tell old clients about new client
 

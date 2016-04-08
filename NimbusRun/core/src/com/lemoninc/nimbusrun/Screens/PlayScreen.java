@@ -119,10 +119,12 @@ public class PlayScreen implements Screen {
     @Override
     public void show() {
         client = new TapTapClient(playerName);
+        logInfo("Client created!");
         //get map
 
         if (isHost) {
             //start my server and connect my client to my server
+            logInfo("Starting server...");
             try {
                 server = new TapTapServer();
                 client.connect("localhost");

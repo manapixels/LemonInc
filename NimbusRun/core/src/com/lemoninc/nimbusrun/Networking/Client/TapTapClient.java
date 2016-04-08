@@ -113,7 +113,7 @@ public class TapTapClient {
 
     public void connect(String host) throws IOException{
         client.connect(5000, host, Network.PORT, Network.PORTUDP);
-
+        logInfo("Client " + name + " of ID: " + id + " connected to server PORT " + Network.PORT);
     }
 
     public void shutdown() {
