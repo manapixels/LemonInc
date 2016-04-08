@@ -41,7 +41,7 @@ public class TapTapClient {
         client = new Client();
         client.start();
 
-        Network.registerPackets(client); //register the classes Client uses with Server
+        Network.registerClasses(client); //register the classes Client uses with Server
         client.addListener(new Listener() {//add listener for the client
             public void connected(Connection connection) {
                 handleConnect(connection);

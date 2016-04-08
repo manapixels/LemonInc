@@ -14,12 +14,13 @@ public class Network {
      * the classes that are going to be sent over the network must be registered for both server and client
      *
      */
-    public static void registerPackets(EndPoint endPoint) {
+    public static void registerClasses(EndPoint endPoint) {
         Kryo kryo = endPoint.getKryo();
 
-        kryo.register(Packet.Packet00Request.class);
-        kryo.register(Packet.Packet01RequestAnswer.class);
-        kryo.register(Packet.Packet02Message.class);
+        kryo.register(Network.Login.class);
+//        kryo.register(Packet.Packet00Request.class);
+//        kryo.register(Packet.Packet01RequestAnswer.class);
+//        kryo.register(Packet.Packet02Message.class);
     }
 
     public static class Login {
