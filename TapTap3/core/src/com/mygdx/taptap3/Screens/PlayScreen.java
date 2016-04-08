@@ -77,16 +77,16 @@ public class PlayScreen implements Screen {
         world = new World(new Vector2(0, -10), true);
         b2dr = new Box2DDebugRenderer();
 
-        //create user's character
+        //TODO: WEISHENG: all these under GameMap?
         player1 = new Player(this, "LaughingBuddha.png", 32, 200);
-
-        //pass in the parameters to the other players
-//        player2 = new Player(this, "Foxy.png", 150, 200);
-//        player3 = new Player(this, "Sheshnag&Krishna.png", -150, 200);
-//        player4 = new Player(this, "Madam White Snake.png", 250, 200);
+        player2 = new Player(this, "Foxy.png", 150, 200);
+        player3 = new Player(this, "Sheshnag_Krishna.png", -150, 200);
+        player4 = new Player(this, "Madam White Snake.png", 250, 200);
 
         ground = new Ground(this);
         ceiling = new Ceiling(this);
+        startWall = new StartWall(this);
+        endWall = new EndWall(this);
 
     }
 
@@ -121,18 +121,6 @@ public class PlayScreen implements Screen {
                 game.setScreen(new WaitScreen(game));
             }
         }
-
-        //TODO: WEISHENG: all these under GameMap?
-        player1 = new Player(this, "LaughingBuddha.png", 32, 200);
-        player2 = new Player(this, "Foxy.png", 150, 200);
-        player3 = new Player(this, "Sheshnag_Krishna.png", -150, 200);
-        player4 = new Player(this, "Madam White Snake.png", 250, 200);
-
-        ground = new Ground(this);
-        ceiling = new Ceiling(this);
-        startWall = new StartWall(this);
-        endWall = new EndWall(this);
-
     }
 
     protected void handleInput() {

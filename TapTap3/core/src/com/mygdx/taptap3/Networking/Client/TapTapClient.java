@@ -66,7 +66,9 @@ public class TapTapClient {
         id = connection.getID();
         remoteIP = connection.getRemoteAddressTCP().toString(); //Returns the IP address and port of the remote end of the TCP connection, or null if this connection is not connected.
 
-        //send some message to server, maybe its name?
+        //send Login to server
+        Network.Login clientName = new Network.Login(name);
+        client.sendTCP(clientName);
     }
 
     /**
