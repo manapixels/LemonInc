@@ -1,0 +1,705 @@
+FXspritesheet.png
+size: 2420, 2420
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Foxy Animation0001
+  rotate: false
+  xy: 1, 1
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0002
+  rotate: false
+  xy: 1, 243
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0003
+  rotate: false
+  xy: 1, 485
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0004
+  rotate: false
+  xy: 1, 727
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0005
+  rotate: false
+  xy: 1, 969
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0006
+  rotate: false
+  xy: 1, 1211
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0007
+  rotate: false
+  xy: 1, 1453
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0008
+  rotate: false
+  xy: 1, 1695
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0009
+  rotate: false
+  xy: 1, 1937
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0010
+  rotate: false
+  xy: 1, 2179
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0011
+  rotate: false
+  xy: 243, 1
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0012
+  rotate: false
+  xy: 485, 1
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0013
+  rotate: false
+  xy: 727, 1
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0014
+  rotate: false
+  xy: 969, 1
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0015
+  rotate: false
+  xy: 1211, 1
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0016
+  rotate: false
+  xy: 1453, 1
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0017
+  rotate: false
+  xy: 1695, 1
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0018
+  rotate: false
+  xy: 1937, 1
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0019
+  rotate: false
+  xy: 2179, 1
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0020
+  rotate: false
+  xy: 243, 243
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0021
+  rotate: false
+  xy: 243, 485
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0022
+  rotate: false
+  xy: 243, 727
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0023
+  rotate: false
+  xy: 243, 969
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0024
+  rotate: false
+  xy: 243, 1211
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0025
+  rotate: false
+  xy: 243, 1453
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0026
+  rotate: false
+  xy: 243, 1695
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0027
+  rotate: false
+  xy: 243, 1937
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0028
+  rotate: false
+  xy: 243, 2179
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0029
+  rotate: false
+  xy: 485, 243
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0030
+  rotate: false
+  xy: 727, 243
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0031
+  rotate: false
+  xy: 969, 243
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0032
+  rotate: false
+  xy: 1211, 243
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0033
+  rotate: false
+  xy: 1453, 243
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0034
+  rotate: false
+  xy: 1695, 243
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0035
+  rotate: false
+  xy: 1937, 243
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0036
+  rotate: false
+  xy: 2179, 243
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0037
+  rotate: false
+  xy: 485, 485
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0038
+  rotate: false
+  xy: 485, 727
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0039
+  rotate: false
+  xy: 485, 969
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0040
+  rotate: false
+  xy: 485, 1211
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0041
+  rotate: false
+  xy: 485, 1453
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0042
+  rotate: false
+  xy: 485, 1695
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0043
+  rotate: false
+  xy: 485, 1937
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0044
+  rotate: false
+  xy: 485, 2179
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0045
+  rotate: false
+  xy: 727, 485
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0046
+  rotate: false
+  xy: 969, 485
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0047
+  rotate: false
+  xy: 1211, 485
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0048
+  rotate: false
+  xy: 1453, 485
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0049
+  rotate: false
+  xy: 1695, 485
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0050
+  rotate: false
+  xy: 1937, 485
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0051
+  rotate: false
+  xy: 2179, 485
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0052
+  rotate: false
+  xy: 727, 727
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0053
+  rotate: false
+  xy: 727, 969
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0054
+  rotate: false
+  xy: 727, 1211
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0055
+  rotate: false
+  xy: 727, 1453
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0056
+  rotate: false
+  xy: 727, 1695
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0057
+  rotate: false
+  xy: 727, 1937
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0058
+  rotate: false
+  xy: 727, 2179
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0059
+  rotate: false
+  xy: 969, 727
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0060
+  rotate: false
+  xy: 1211, 727
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0061
+  rotate: false
+  xy: 1453, 727
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0062
+  rotate: false
+  xy: 1695, 727
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0063
+  rotate: false
+  xy: 1937, 727
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0064
+  rotate: false
+  xy: 2179, 727
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0065
+  rotate: false
+  xy: 969, 969
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0066
+  rotate: false
+  xy: 969, 1211
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0067
+  rotate: false
+  xy: 969, 1453
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0068
+  rotate: false
+  xy: 969, 1695
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0069
+  rotate: false
+  xy: 969, 1937
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0070
+  rotate: false
+  xy: 969, 2179
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0071
+  rotate: false
+  xy: 1211, 969
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0072
+  rotate: false
+  xy: 1453, 969
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0073
+  rotate: false
+  xy: 1695, 969
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0074
+  rotate: false
+  xy: 1937, 969
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0075
+  rotate: false
+  xy: 2179, 969
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0076
+  rotate: false
+  xy: 1211, 1211
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0077
+  rotate: false
+  xy: 1211, 1453
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0078
+  rotate: false
+  xy: 1211, 1695
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0079
+  rotate: false
+  xy: 1211, 1937
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0080
+  rotate: false
+  xy: 1211, 2179
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0081
+  rotate: false
+  xy: 1453, 1211
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0082
+  rotate: false
+  xy: 1695, 1211
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0083
+  rotate: false
+  xy: 1937, 1211
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0084
+  rotate: false
+  xy: 2179, 1211
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0085
+  rotate: false
+  xy: 1453, 1453
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0086
+  rotate: false
+  xy: 1453, 1695
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0087
+  rotate: false
+  xy: 1453, 1937
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0088
+  rotate: false
+  xy: 1453, 2179
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0089
+  rotate: false
+  xy: 1695, 1453
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0090
+  rotate: false
+  xy: 1937, 1453
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0091
+  rotate: false
+  xy: 2179, 1453
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0092
+  rotate: false
+  xy: 1695, 1695
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0093
+  rotate: false
+  xy: 1695, 1937
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0094
+  rotate: false
+  xy: 1695, 2179
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0095
+  rotate: false
+  xy: 1937, 1695
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0096
+  rotate: false
+  xy: 2179, 1695
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0097
+  rotate: false
+  xy: 1937, 1937
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0098
+  rotate: false
+  xy: 1937, 2179
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0099
+  rotate: false
+  xy: 2179, 1937
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+Foxy Animation0100
+  rotate: false
+  xy: 2179, 2179
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
