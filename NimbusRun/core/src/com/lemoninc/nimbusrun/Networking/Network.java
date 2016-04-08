@@ -40,8 +40,5 @@ public class Network {
             this.name = name;
         }
     }
-<<<<<<< HEAD:NimbusRun/core/src/com/lemoninc/nimbusrun/Networking/Network.java
+
 }
-=======
-}
->>>>>>> 2d55319255c217cea398b8e12d2634ec15197989:TapTap3/core/src/com/mygdx/taptap3/Networking/Network.java
