@@ -12,7 +12,7 @@ package com.lemoninc.nimbusrun.Sprites;
  *       Viewport   getGamePort()
  *       public synchronized void logInfo(String string)
  * NOTES :
- * LAST UPDATED: 8/4/2016 09:00
+ * LAST UPDATED: 9/4/2016 17:00
  *
  * ********************************/
 
@@ -95,9 +95,9 @@ public class GameMap {
         //player4 = new Player(this, 4, 250, 200);
 
         ground = new Ground(this);
-//        ceiling = new Ceiling(this);
-//        startWall = new StartWall(this);
-//        endWall = new EndWall(this);
+        ceiling = new Ceiling(this);
+        startWall = new StartWall(this);
+        endWall = new EndWall(this);
 
         logInfo("GameMap initialised");
     }
@@ -162,7 +162,7 @@ public class GameMap {
         //steps box2d world
         world.step(1 / 60f, 6, 2);
         //gamecam constantly to follow player1
-        gamecam.position.set(player1.getX(), gamecam.viewportHeight / 2, 0);
+        gamecam.position.set(player1.getX(), player1.getY(), 0);
         gamecam.update();
 
     }
