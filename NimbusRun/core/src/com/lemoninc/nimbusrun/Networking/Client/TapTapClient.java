@@ -49,7 +49,6 @@ public class TapTapClient {
             public void received(Connection connection, Object object) {
                 handleMessage(connection.getID(), object);
             }
-
             public void disconnected(Connection connection) {
                 handleDisonnect(connection);
             }
@@ -61,9 +60,11 @@ public class TapTapClient {
     }
 
     /**
-     * TODO:what happens here?
+     *
      * This method is called when the client establishes connection with server.
-     * Method gets connection ID, remote IP from server,
+     * Method gets connection ID between this cleint and server, remote IP from server.
+     * Method sends a Login package containing its name to server.
+     * Method calls GameMap to instantiate a character with "name"
      * @param connection
      */
     private void handleConnect(Connection connection) {
@@ -92,16 +93,16 @@ public class TapTapClient {
      * @param message
      */
     private void handleMessage(int playerID, Object message) {
-//        if (message instanceof Network.PlayerJoinLeave) {
-//            Network.PlayerJoinLeave msg = (Network.PlayerJoinLeave) message;
-//            if (msg.hasJoined) {
+        if (message instanceof Network.PlayerJoinLeave) {
+            Network.PlayerJoinLeave msg = (Network.PlayerJoinLeave) message;
+            if (msg.hasJoined) {
 //                map.setStatus(msg.name + " joined");
-//                map.addPlayer(msg);
-//            } else {
+                map.addPlayer(msg);
+            } else {
 //                map.setStatus(msg.name + " left");
 //                map.removePlayer(msg);
-//            }
-//        }
+            }
+        }
 
     }
 

@@ -73,32 +73,28 @@ public class GameMap {
         this.client = client;
         this.isClient = true;
 
-        initCommon(5);
-
         //instantiate HUD, GameSounds, BitmapFont, Camera, SpriteBatch ...
         gamecam = new OrthographicCamera();
         gameport = new FitViewport(NimbusRun.V_WIDTH / NimbusRun.PPM, NimbusRun.V_HEIGHT / NimbusRun.PPM, gamecam);
-
         batch = new SpriteBatch();
 
-        //box2d world
-//        world = new World(new Vector2(0, -10), true);
+        world = new World(new Vector2(0, -10), true);
         b2dr = new Box2DDebugRenderer();
 
-        //background
-        background = new Sprite(new Texture("TapTap_BGseamless_long.png"));
+        initCommon(5);
+
         background.setPosition(-gameport.getWorldWidth(), 0);
 //        background.setSize(background.getWidth(), background.getHeight());
         background.setSize(background.getWidth() / NimbusRun.PPM, background.getHeight() / NimbusRun.PPM);
 
         //create user's character
 //        player1 = new Player(this, 5, 32, 200);
-//
 //        //pass in the parameters to the other players
 //        player2 = new Player(this, 6, 150, 200);
 //        player3 = new Player(this, 3, -150, 200);
         //player4 = new Player(this, 4, 250, 200);
 
+        //add these sprites to the world
         ground = new Ground(this);
         ceiling = new Ceiling(this);
         startWall = new StartWall(this);
@@ -109,6 +105,7 @@ public class GameMap {
 
     /**
      * This constructor is called inside TapTapServer
+     * //TODO: make a constructor for server that does not create World, and box2d related stuff but still can store who is connected, who is where, etc
      */
     public GameMap(TapTapServer server) {
         this.server = server;
@@ -120,15 +117,39 @@ public class GameMap {
 
     }
 
+    private void initCommon(int whichCharacter){
+        // Load up all sprites into spriteMap from textureAtlas
+        switch(whichCharacter){
+            // 1. LAUGHING BUDDHA
+            // 2. SHESHNAH WITH KRISHNA
+            // 3. NINE-TAILED FOX
+            // 4. KAPPA
+            // 5. PONTIANAK
+            // 6. MADAME WHITE SNAKE
+            case 1: img = new TextureAtlas(Gdx.files.internal("spritesheets/LBspritesheet.atlas")); break;
+            case 2: img = new TextureAtlas(Gdx.files.internal("spritesheets/SKspritesheet.atlas")); break;
+            case 3: img = new TextureAtlas(Gdx.files.internal("spritesheets/FXspritesheet.atlas")); break;
+            case 4: img = new TextureAtlas(Gdx.files.internal("spritesheets/KPspritesheet.atlas")); break;
+            case 5: img = new TextureAtlas(Gdx.files.internal("spritesheets/PTspritesheet.atlas")); break;
+            case 6: img = new TextureAtlas(Gdx.files.internal("spritesheets/MWSspritesheet.atlas")); break;
+            default: img = new TextureAtlas(Gdx.files.internal("spritesheets/PTspritesheet.atlas")); break;
+        }
+
+        //background
+        background = new Sprite(new Texture("TapTap_BGseamless_long.png"));
+    }
+
     //called by server to add a new player into its GameMap
     public synchronized void addPlayer(Network.PlayerJoinLeave msg) {
         logInfo("Player added to players!");
         //create new player from msg
+        //TODO: Player takes in GameMap and GameMap's World, but Server doesn't have World. Should I create World in Server? no
+        //Need to look at spacegame
+
         Player newPlayer = new Player(this, img, 200, 200);
 //        newPlayer.setID(msg.playerId);
         newPlayer.setName(msg.name);
         players.put(msg.playerId, newPlayer);
-
     }
 
 
@@ -161,27 +182,7 @@ public class GameMap {
 
     public Viewport getGameport() { return this.gameport; }
 
-    private void initCommon(int whichCharacter){
-        // Load up all sprites into spriteMap from textureAtlas
-        switch(whichCharacter){
-            // 1. LAUGHING BUDDHA
-            // 2. SHESHNAH WITH KRISHNA
-            // 3. NINE-TAILED FOX
-            // 4. KAPPA
-            // 5. PONTIANAK
-            // 6. MADAME WHITE SNAKE
-            case 1: img = new TextureAtlas(Gdx.files.internal("spritesheets/LBspritesheet.atlas")); break;
-            case 2: img = new TextureAtlas(Gdx.files.internal("spritesheets/SKspritesheet.atlas")); break;
-            case 3: img = new TextureAtlas(Gdx.files.internal("spritesheets/FXspritesheet.atlas")); break;
-            case 4: img = new TextureAtlas(Gdx.files.internal("spritesheets/KPspritesheet.atlas")); break;
-            case 5: img = new TextureAtlas(Gdx.files.internal("spritesheets/PTspritesheet.atlas")); break;
-            case 6: img = new TextureAtlas(Gdx.files.internal("spritesheets/MWSspritesheet.atlas")); break;
-            default: img = new TextureAtlas(Gdx.files.internal("spritesheets/PTspritesheet.atlas")); break;
-        }
 
-        world = new World(new Vector2(0, -10), true);
-
-    }
 
     private void handleInput(){
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP))
@@ -208,7 +209,6 @@ public class GameMap {
 //        player2.draw(batch);
 //        player3.draw(batch);
 
-
         // Render Players
         for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {
             Player curPlayer = playerEntry.getValue();
@@ -216,9 +216,9 @@ public class GameMap {
 //            if(curPlayer != playerLocal) curPlayer.renderNameTag(spriteBatch, fontNameTag);
         }
 
-        b2dr.render(world, gamecam.combined);
-
         batch.end();
+
+        b2dr.render(world, gamecam.combined);
 
         //steps box2d world
         world.step(1 / 60f, 6, 2);
@@ -235,11 +235,17 @@ public class GameMap {
     }
 
     public synchronized void logInfo(String string) {
-        Log.info("[GameMap]: "+(isClient ? "[Client] " : "[Server] ") + string);
+        Log.info("[GameMap]: " + (isClient ? "[Client] " : "[Server] ") + string);
     }
 
     public void resize(int width, int height) {
         gameport.update(width, height);
         gamecam.position.set(gamecam.viewportWidth / 2, gamecam.viewportHeight / 2, 0);
+    }
+
+    public void dispose() {
+        world.dispose();
+        b2dr.dispose();
+
     }
 }

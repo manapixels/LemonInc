@@ -70,9 +70,10 @@ public class TapTapServer {
                     connection.name = name;
 
                     //tell the new client about map state (obstacle coordinates ...)
-                    //tell old clients about new client
                     //add this new player to gamemap
                     Network.PlayerJoinLeave newPlayer = new Network.PlayerJoinLeave(connection.getID(), connection.name, true);
+                    //tell old clients about new client
+                    server.sendToAllExceptTCP(connection.getID(), newPlayer);
                     logInfo("Adding the new Client to Server's map");
                     map.addPlayer(newPlayer);
 
@@ -96,7 +97,6 @@ public class TapTapServer {
             }
         });
 
-        //TODO: propagate exception or try-catch?
         try {
             server.bind(Network.PORT, Network.PORTUDP);
 

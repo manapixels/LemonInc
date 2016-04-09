@@ -56,6 +56,13 @@ public class Player extends Sprite {
         CHARACTER_SIZE = 150 / NimbusRun.PPM;
     }
 
+    /**
+     * TODO: this constructor should only be created by client?
+     * @param gameMap
+     * @param img
+     * @param x
+     * @param y
+     */
     public Player(GameMap gameMap, TextureAtlas img, float x, float y) {
 
         this.world = gameMap.getWorld();
@@ -64,10 +71,11 @@ public class Player extends Sprite {
         CHARACTER_SIZE = 170 / NimbusRun.PPM;
         stateTime = 0f;
 
+        //create a dynamic bodydef
         BodyDef bdef = new BodyDef();
         bdef.position.set(x / NimbusRun.PPM, y / NimbusRun.PPM);
         bdef.type = BodyDef.BodyType.DynamicBody;
-        b2body = world.createBody(bdef);
+        b2body = world.createBody(bdef); //Body of Player
 
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
@@ -75,7 +83,7 @@ public class Player extends Sprite {
 //        PolygonShape shape = new PolygonShape();
 //        shape.setAsBox(x, y);
         fdef.shape = shape;
-        b2body.createFixture(fdef);
+        b2body.createFixture(fdef); //Player is a circle
         shape.dispose();
 
 //        switch(whichCharacter){
