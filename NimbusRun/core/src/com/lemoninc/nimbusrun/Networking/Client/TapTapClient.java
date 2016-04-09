@@ -92,8 +92,8 @@ public class TapTapClient {
      * @param message
      */
     private void handleMessage(int playerID, Object message) {
-//        if (message instanceof PlayerJoinLeave) {
-//            PlayerJoinLeave msg = (PlayerJoinLeave) message;
+//        if (message instanceof Network.PlayerJoinLeave) {
+//            Network.PlayerJoinLeave msg = (Network.PlayerJoinLeave) message;
 //            if (msg.hasJoined) {
 //                map.setStatus(msg.name + " joined");
 //                map.addPlayer(msg);
@@ -120,6 +120,6 @@ public class TapTapClient {
     }
 
     private void logInfo(String string) {
-        Log.info(string);
+        Log.info("[TapTapClient]: "+string);
     }
 }

@@ -56,7 +56,7 @@ public class Player extends Sprite {
         CHARACTER_SIZE = 150 / NimbusRun.PPM;
     }
 
-    public Player(GameMap gameMap, TextureAtlas img, int whichCharacter, float x, float y) {
+    public Player(GameMap gameMap, TextureAtlas img, float x, float y) {
 
         this.world = gameMap.getWorld();
         currentState = State.DEFAULT;

@@ -120,14 +120,14 @@ public class GameMap {
 
     }
 
-    //called by client/server to add a player into its GameMap
+    //called by server to add a new player into its GameMap
     public synchronized void addPlayer(Network.PlayerJoinLeave msg) {
         logInfo("Player added to players!");
         //create new player from msg
-//        Player samplePlayer = new Player(this, 1, )
-        //newPlayer.setID(msg.playerId);
-        //newPlayer.setName(msg.name);
-        //players.put(msg.playerId, newPlayer);
+        Player newPlayer = new Player(this, img, 200, 200);
+//        newPlayer.setID(msg.playerId);
+        newPlayer.setName(msg.name);
+        players.put(msg.playerId, newPlayer);
 
     }
 
@@ -140,7 +140,7 @@ public class GameMap {
 
         if (this.playerLocal == null) {
             // TODO Server should spawn localPlayer too
-            playerLocal = new Player(this, img, 5, 32, 200);
+            playerLocal = new Player(this, img, 32, 200);
             this.playerLocal.setId(client.id);
             this.playerLocal.setName(name);
             players.put(client.id, playerLocal);
@@ -229,7 +229,7 @@ public class GameMap {
     }
 
     public synchronized void logInfo(String string) {
-        Log.info((isClient ? "[Client] " : "[Server] ") + string);
+        Log.info("[GameMap]: "+(isClient ? "[Client] " : "[Server] ") + string);
     }
 
     public void resize(int width, int height) {

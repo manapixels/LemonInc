@@ -103,6 +103,9 @@ public class WaitScreen implements Screen{
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
             playGame();
         }
+        else if (Gdx.input.isKeyPressed(Input.Keys.UP)){
+            game.setScreen(new PlayScreen(game, false, "localhost", getName()));
+        }
     }
 
     @Override
