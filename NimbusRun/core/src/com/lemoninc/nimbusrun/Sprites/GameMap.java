@@ -9,14 +9,16 @@ package com.lemoninc.nimbusrun.Sprites;
  *       private    void handleInput()
  *       void       update(float delta)
  *       World      getWorld()
+ *       Viewport   getGamePort()
  *       public synchronized void logInfo(String string)
  * NOTES :
- * LAST UPDATED: 8/4/2016 09:00
+ * LAST UPDATED: 9/4/2016 17:00
  *
  * ********************************/
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
+
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -31,6 +33,7 @@ import com.esotericsoftware.minlog.Log;
 import com.lemoninc.nimbusrun.Networking.Client.TapTapClient;
 import com.lemoninc.nimbusrun.Networking.Network;
 import com.lemoninc.nimbusrun.Networking.Server.TapTapServer;
+import com.lemoninc.nimbusrun.NimbusRun;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -45,7 +48,7 @@ public class GameMap {
     private Map<Integer, Player> players = new HashMap<Integer, Player>(); //playerId, Player
 
     private OrthographicCamera gamecam;
-//    private Viewport gameport;
+    private Viewport gameport;
 
     private SpriteBatch batch;
     private Sprite background;
@@ -71,8 +74,8 @@ public class GameMap {
         initCommon();
 
         //instantiate HUD, GameSounds, BitmapFont, Camera, SpriteBatch ...
-        gamecam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-//        gameport = new FitViewport(game.V_WIDTH / game.PPM, game.V_HEIGHT / game.PPM, gamecam);
+        gamecam = new OrthographicCamera();
+        gameport = new FitViewport(NimbusRun.V_WIDTH / NimbusRun.PPM, NimbusRun.V_HEIGHT / NimbusRun.PPM, gamecam);
 
         batch = new SpriteBatch();
 
@@ -82,9 +85,9 @@ public class GameMap {
 
         //background
         background = new Sprite(new Texture("TapTap_BGseamless_long.png"));
-        background.setPosition(0, 0);
-        background.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-//        background.setSize(background.getWidth() / game.PPM, background.getHeight() / game.PPM);
+        background.setPosition(-gameport.getWorldWidth(), 0);
+//        background.setSize(background.getWidth(), background.getHeight());
+        background.setSize(background.getWidth() / NimbusRun.PPM, background.getHeight() / NimbusRun.PPM);
 
         //create user's character
         player1 = new Player(this, 5, 32, 200);
@@ -154,8 +157,19 @@ public class GameMap {
         return this.world;
     }
 
+    public Viewport getGameport() { return this.gameport; }
+
     private void initCommon(){
         // Load up all sprites into spriteMap from textureAtlas
+    }
+
+    private void handleInput(){
+        if (Gdx.input.isKeyJustPressed(Input.Keys.UP))
+            player1.jump();
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
+            player1.speed();
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
+            player1.slow();
     }
 
     private void render() {
@@ -183,14 +197,14 @@ public class GameMap {
         //steps box2d world
         world.step(1 / 60f, 6, 2);
         //gamecam constantly to follow player1
-        gamecam.position.set(player1.getX(), gamecam.viewportHeight / 2, 0);
+        gamecam.position.set(player1.getX(), player1.getY(), 0);
         gamecam.update();
 
     }
 
     public void update(float delta) {
+        handleInput();
         render();
-
     }
 
     public synchronized void logInfo(String string) {
@@ -198,7 +212,7 @@ public class GameMap {
     }
 
     public void resize(int width, int height) {
-        gamecam.setToOrtho(false, width, height);
+        gameport.update(width, height);
         gamecam.position.set(gamecam.viewportWidth / 2, gamecam.viewportHeight / 2, 0);
     }
 }

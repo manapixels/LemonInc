@@ -43,7 +43,6 @@ public class Player extends Sprite {
 
     private TextureAtlas img;
     private Animation anim;
-    private PlayScreen screen;
     private final float CHARACTER_SIZE;
     private float stateTime;
 
@@ -100,15 +99,6 @@ public class Player extends Sprite {
         //img.setSize(CHARACTER_SIZE * 1.25f, CHARACTER_SIZE * 1.25f);
     }
 
-    protected void handleInput() {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.UP))
-            jump();
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
-            speed();
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
-            slow();
-    }
-
     public State getState(){
         if(b2body.getLinearVelocity().y != 0){
             if (previousState == State.JUMPING){
@@ -147,23 +137,20 @@ public class Player extends Sprite {
         else if (currentState == State.JUMPING){
             previousState = State.JUMPING;
             currentState = State.DOUBLEJUMPING;
-            b2body.applyLinearImpulse(new Vector2(0, 4f), b2body.getWorldCenter(), true);
+            b2body.applyLinearImpulse(new Vector2(0, 5f), b2body.getWorldCenter(), true);
         }
         else {
             currentState = State.JUMPING;
-            b2body.applyLinearImpulse(new Vector2(0, 4f), b2body.getWorldCenter(), true);
+            b2body.applyLinearImpulse(new Vector2(0, 5f), b2body.getWorldCenter(), true);
         }
     }
 
     public void speed() {
-//        b2body.setLinearVelocity(new Vector2(3f, 0));
-//    }
         if (b2body.getLinearVelocity().x <= 3) {
             b2body.applyLinearImpulse(new Vector2(1f, 0), b2body.getWorldCenter(), true);
         }
     }
     public void slow() {
-//        b2body.setLinearVelocity(new Vector2(-3f, 0));
         if (b2body.getLinearVelocity().x >= -3) {
             b2body.applyLinearImpulse(new Vector2(-1f, 0), b2body.getWorldCenter(), true);
         }
