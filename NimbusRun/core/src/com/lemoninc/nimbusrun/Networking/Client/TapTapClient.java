@@ -61,6 +61,10 @@ public class TapTapClient {
         });
     }
 
+    public GameMap getMap() {
+        return this.map;
+    }
+
     /**
      * TODO:what happens here?
      * This method is called when the client establishes connection with server.
