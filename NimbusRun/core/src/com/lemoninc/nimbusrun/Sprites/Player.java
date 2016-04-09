@@ -56,7 +56,7 @@ public class Player extends Sprite {
         CHARACTER_SIZE = 150 / NimbusRun.PPM;
     }
 
-    public Player(GameMap gameMap, int whichCharacter, float x, float y) {
+    public Player(GameMap gameMap, TextureAtlas img, int whichCharacter, float x, float y) {
 
         this.world = gameMap.getWorld();
         currentState = State.DEFAULT;
@@ -78,21 +78,23 @@ public class Player extends Sprite {
         b2body.createFixture(fdef);
         shape.dispose();
 
-        switch(whichCharacter){
-            // 1. LAUGHING BUDDHA
-            // 2. SHESHNAH WITH KRISHNA
-            // 3. NINE-TAILED FOX
-            // 4. KAPPA
-            // 5. PONTIANAK
-            // 6. MADAME WHITE SNAKE
-            case 1: img = new TextureAtlas(Gdx.files.internal("spritesheets/LBspritesheet.atlas")); break;
-            case 2: img = new TextureAtlas(Gdx.files.internal("spritesheets/SKspritesheet.atlas")); break;
-            case 3: img = new TextureAtlas(Gdx.files.internal("spritesheets/FXspritesheet.atlas")); break;
-            case 4: img = new TextureAtlas(Gdx.files.internal("spritesheets/KPspritesheet.atlas")); break;
-            case 5: img = new TextureAtlas(Gdx.files.internal("spritesheets/PTspritesheet.atlas")); break;
-            case 6: img = new TextureAtlas(Gdx.files.internal("spritesheets/MWSspritesheet.atlas")); break;
-            default: img = new TextureAtlas(Gdx.files.internal("spritesheets/PTspritesheet.atlas")); break;
-        }
+//        switch(whichCharacter){
+//            // 1. LAUGHING BUDDHA
+//            // 2. SHESHNAH WITH KRISHNA
+//            // 3. NINE-TAILED FOX
+//            // 4. KAPPA
+//            // 5. PONTIANAK
+//            // 6. MADAME WHITE SNAKE
+//            case 1: img = new TextureAtlas(Gdx.files.internal("spritesheets/LBspritesheet.atlas")); break;
+//            case 2: img = new TextureAtlas(Gdx.files.internal("spritesheets/SKspritesheet.atlas")); break;
+//            case 3: img = new TextureAtlas(Gdx.files.internal("spritesheets/FXspritesheet.atlas")); break;
+//            case 4: img = new TextureAtlas(Gdx.files.internal("spritesheets/KPspritesheet.atlas")); break;
+//            case 5: img = new TextureAtlas(Gdx.files.internal("spritesheets/PTspritesheet.atlas")); break;
+//            case 6: img = new TextureAtlas(Gdx.files.internal("spritesheets/MWSspritesheet.atlas")); break;
+//            default: img = new TextureAtlas(Gdx.files.internal("spritesheets/PTspritesheet.atlas")); break;
+//        }
+
+        this.img = img;
 
         anim = new Animation(1f/40f, img.getRegions());
         //img = new Sprite(new Texture(fileName));
@@ -115,6 +117,10 @@ public class Player extends Sprite {
         stateTime += Gdx.graphics.getDeltaTime();
         batch.draw(anim.getKeyFrame(stateTime, true), getX()-CHARACTER_SIZE/2, getY()-CHARACTER_SIZE/2, CHARACTER_SIZE, CHARACTER_SIZE);
         //img.draw(batch);
+    }
+
+    public void render(SpriteBatch spriteBatch) {
+        this.draw(spriteBatch);
     }
 
     public float getX(){
