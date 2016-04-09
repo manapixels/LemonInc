@@ -11,13 +11,11 @@ package com.lemoninc.nimbusrun.Networking.Client;
  *
  * ********************************/
 
-import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
 import com.lemoninc.nimbusrun.Networking.Network;
-import com.lemoninc.nimbusrun.Networking.Packet;
 import com.lemoninc.nimbusrun.Sprites.GameMap;
 
 import java.io.IOException;
@@ -37,7 +35,6 @@ public class TapTapClient {
 
     //Kryonet Stuff
     public Client client;
-    private ClientNetworkListener cnl;
 
     /**
      * This constructor is called in PlayScreen when the player plays game as a client
