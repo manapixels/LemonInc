@@ -20,6 +20,7 @@ package com.lemoninc.nimbusrun.Sprites;
  * ********************************/
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -31,7 +32,7 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.lemoninc.nimbusrun.Screens.PlayScreen;
-import com.lemoninc.nimbusrun.TapTap3;
+import com.lemoninc.nimbusrun.NimbusRun;
 
 public class Player extends Sprite {
     public World world;
@@ -50,19 +51,19 @@ public class Player extends Sprite {
     Vector2 previousPosition;
 
     public Player() {
-        CHARACTER_SIZE = 150 / TapTap3.PPM;
+        CHARACTER_SIZE = 150 / NimbusRun.PPM;
     }
 
-    public Player(PlayScreen screen, int whichCharacter, float x, float y) {
-        this.screen = screen;
-        this.world = screen.getWorld();
+    public Player(GameMap gameMap, int whichCharacter, float x, float y) {
+
+        this.world = gameMap.getWorld();
         currentState = State.DEFAULT;
         previousState = State.DEFAULT;
-        CHARACTER_SIZE = 170 / TapTap3.PPM;
+        CHARACTER_SIZE = 170 / NimbusRun.PPM;
         stateTime = 0f;
 
         BodyDef bdef = new BodyDef();
-        bdef.position.set(x / TapTap3.PPM, y / TapTap3.PPM);
+        bdef.position.set(x / NimbusRun.PPM, y / NimbusRun.PPM);
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bdef);
 
@@ -94,6 +95,15 @@ public class Player extends Sprite {
         anim = new Animation(1f/40f, img.getRegions());
         //img = new Sprite(new Texture(fileName));
         //img.setSize(CHARACTER_SIZE * 1.25f, CHARACTER_SIZE * 1.25f);
+    }
+
+    protected void handleInput() {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.UP))
+            jump();
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
+            speed();
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
+            slow();
     }
 
     public State getState(){

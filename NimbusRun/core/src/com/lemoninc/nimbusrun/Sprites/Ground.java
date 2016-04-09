@@ -10,6 +10,7 @@ package com.lemoninc.nimbusrun.Sprites;
  *
  * ********************************/
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -20,11 +21,11 @@ import com.lemoninc.nimbusrun.Screens.PlayScreen;
 public class Ground {
     public World world;
     public Body b2body;
-    private PlayScreen screen;
+    private GameMap gameMap;
 
-    public Ground(PlayScreen screen) {
-        this.screen = screen;
-        this.world = screen.getWorld();
+    public Ground(GameMap gameMap) {
+        this.gameMap = gameMap;
+        this.world = gameMap.getWorld();
 
         BodyDef bdef = new BodyDef();
         bdef.position.set(0, 0);
@@ -33,7 +34,7 @@ public class Ground {
 
         FixtureDef fdef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(screen.getGamePort().getWorldWidth()*4, screen.getGamePort().getWorldHeight()/20);
+        shape.setAsBox(Gdx.graphics.getWidth()*4, Gdx.graphics.getHeight()/20);
 
         fdef.shape = shape;
         b2body.createFixture(fdef);

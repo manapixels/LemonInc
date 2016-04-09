@@ -27,18 +27,18 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.lemoninc.nimbusrun.TapTap3;
+import com.lemoninc.nimbusrun.NimbusRun;
 
 public class EndScreen implements Screen{
 
-    private TapTap3 game;
+    private NimbusRun game;
     private OrthographicCamera gamecam;
     private Viewport gameport;
 
     private SpriteBatch batch;
     private Sprite aspectRatio;
 
-    public EndScreen(TapTap3 game){
+    public EndScreen(NimbusRun game){
         this.game = game;
         gamecam = new OrthographicCamera();
         gameport = new FitViewport(game.V_WIDTH / game.PPM, game.V_HEIGHT / game.PPM, gamecam);
