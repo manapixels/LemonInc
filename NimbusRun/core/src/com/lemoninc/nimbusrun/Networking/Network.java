@@ -65,6 +65,6 @@ public class Network {
     }
 
     private static void logInfo(String string) {
-        Log.info(string);
+        Log.info("[Network]: "+string);
     }
 }

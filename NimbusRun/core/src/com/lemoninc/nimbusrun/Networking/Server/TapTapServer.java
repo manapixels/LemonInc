@@ -13,6 +13,7 @@ package com.lemoninc.nimbusrun.Networking.Server;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
+import com.esotericsoftware.minlog.Log;
 import com.lemoninc.nimbusrun.Networking.Network;
 import com.lemoninc.nimbusrun.Sprites.GameMap;
 import com.lemoninc.nimbusrun.Sprites.Player;
@@ -56,6 +57,7 @@ public class TapTapServer {
                 TapTapConnection connection = (TapTapConnection) c;
 
                 if (message instanceof Network.Login) {
+                    logInfo("Login received");
                     Network.Login msg = ((Network.Login) message);
 
                     if (connection.name != null) {return;}
@@ -67,12 +69,11 @@ public class TapTapServer {
                     //name this connection as the clientname
                     connection.name = name;
 
-
-
                     //tell the new client about map state (obstacle coordinates ...)
                     //tell old clients about new client
                     //add this new player to gamemap
                     Network.PlayerJoinLeave newPlayer = new Network.PlayerJoinLeave(connection.getID(), connection.name, true);
+                    logInfo("Adding the new Client to Server's map");
                     map.addPlayer(newPlayer);
 
                     //tell new client about old clients
@@ -81,6 +82,7 @@ public class TapTapServer {
                         if (conn.getID() != connection.getID() && conn.name != null) { // Not self, Have logged in
                             Player herePlayer = map.getPlayerById(conn.getID());
                             Network.PlayerJoinLeave hereMsg = new Network.PlayerJoinLeave(conn.getID(), herePlayer.getName(), true);
+                            logInfo("Telling "+connection.name+" about old client "+herePlayer.getName());
                             connection.sendTCP(hereMsg); // basic info
 //                            connection.sendTCP(herePlayer.getMovementState()); // info about current movement
                         }
@@ -117,6 +119,10 @@ public class TapTapServer {
 
     static class TapTapConnection extends Connection {
         public String name;
+    }
+
+    private void logInfo(String string) {
+        Log.info("[TapTapServer]: " + string);
     }
 }
 

@@ -120,6 +120,6 @@ public class TapTapClient {
     }
 
     private void logInfo(String string) {
-        Log.info(string);
+        Log.info("[TapTapClient]: "+string);
     }
 }

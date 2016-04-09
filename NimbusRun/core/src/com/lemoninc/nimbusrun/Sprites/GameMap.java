@@ -229,7 +229,7 @@ public class GameMap {
     }
 
     public synchronized void logInfo(String string) {
-        Log.info((isClient ? "[Client] " : "[Server] ") + string);
+        Log.info("[GameMap]: "+(isClient ? "[Client] " : "[Server] ") + string);
     }
 
     public void resize(int width, int height) {

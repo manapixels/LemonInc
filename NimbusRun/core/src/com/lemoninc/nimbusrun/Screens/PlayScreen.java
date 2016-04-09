@@ -79,6 +79,7 @@ public class PlayScreen implements Screen {
             logInfo("Starting server...");
             try {
                 server = new TapTapServer();
+                logInfo("localClient connecting to Server");
                 client.connect("localhost");
             } catch (IOException e) {
                 e.printStackTrace();
@@ -106,6 +107,8 @@ public class PlayScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        logInfo("Rendering");
+
         handleInput();
         gamemap.update(delta);
 
@@ -147,6 +150,6 @@ public class PlayScreen implements Screen {
     public void dispose() {    }
 
     private void logInfo(String string) {
-        Log.info(string);
+        Log.info("[PlayScreen]: "+string);
     }
 }
