@@ -51,6 +51,7 @@ public class PlayScreen implements Screen {
      * @param playerName
      */
     public PlayScreen(NimbusRun game, boolean isHost, String ipAddress, String playerName){
+        logInfo("My name is "+playerName);
 
         this.game = game;
         this.isHost = isHost;
@@ -107,7 +108,7 @@ public class PlayScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        logInfo("Rendering");
+//        logInfo("Rendering");
 
         handleInput();
         gamemap.update(delta);
