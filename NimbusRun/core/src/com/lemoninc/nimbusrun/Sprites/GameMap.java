@@ -16,6 +16,7 @@ package com.lemoninc.nimbusrun.Sprites;
  * ********************************/
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -56,6 +57,8 @@ public class GameMap {
     private Ceiling ceiling;
     private StartWall startWall;
     private EndWall endWall;
+
+    private Player playerLocal;
 
     /**
      * This constructor is called inside TapTapClient
@@ -116,10 +119,35 @@ public class GameMap {
     public synchronized void addPlayer(Network.PlayerJoinLeave msg) {
         logInfo("Player added to players!");
         //create new player from msg
+//        Player samplePlayer = new Player(this, 1, )
         //newPlayer.setID(msg.playerId);
         //newPlayer.setName(msg.name);
         //players.put(msg.playerId, newPlayer);
 
+    }
+
+
+    /**
+     * Upon client-server connection, client calls map.onConnect(name) where a local Player is instantiated and stored in client's map's players
+     * @param name
+     */
+    public void onConnect(String name) {
+
+        if (this.playerLocal == null) {
+            // TODO Server should spawn localPlayer too
+            playerLocal = new Player(this, 5, 32, 200);
+            this.playerLocal.setId(client.id);
+            this.playerLocal.setName(name);
+            players.put(client.id, playerLocal);
+//            hud.setPlayerLocal(playerLocal);
+//            setStatus("Connected to " + client.remoteIP);
+        } else {
+            logInfo("setNetworkClient called twice");
+        }
+    }
+
+    public synchronized Player getPlayerById(int id){
+        return players.get(id);
     }
 
     public World getWorld(){
@@ -143,6 +171,13 @@ public class GameMap {
         player2.draw(batch);
         player3.draw(batch);
         b2dr.render(world, gamecam.combined);
+
+        // Render Players
+//        for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {
+//            Player curPlayer = playerEntry.getValue();
+//            curPlayer.render(spriteBatch);
+//            if(curPlayer != playerLocal) curPlayer.renderNameTag(spriteBatch, fontNameTag);
+//        }
         batch.end();
 
         //steps box2d world

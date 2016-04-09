@@ -47,6 +47,9 @@ public class Player extends Sprite {
     private final float CHARACTER_SIZE;
     private float stateTime;
 
+    private int id;
+    private String name;
+
 
     Vector2 previousPosition;
 
@@ -167,4 +170,16 @@ public class Player extends Sprite {
     }
 
     public TextureAtlas getTxtAtlas(){ return img;}
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
 }

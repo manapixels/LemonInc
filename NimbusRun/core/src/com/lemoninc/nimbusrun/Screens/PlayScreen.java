@@ -43,7 +43,13 @@ public class PlayScreen implements Screen {
     private TapTapClient client;
     private TapTapServer server;
 
-
+    /**
+     *
+     * @param game
+     * @param isHost
+     * @param ipAddress Server's IP address (only relevant to the Client)
+     * @param playerName
+     */
     public PlayScreen(NimbusRun game, boolean isHost, String ipAddress, String playerName){
 
         this.game = game;
@@ -102,6 +108,12 @@ public class PlayScreen implements Screen {
     public void render(float delta) {
         handleInput();
         gamemap.update(delta);
+
+//        map.render();
+//
+//        if(isHost){
+//            server.update(delta);
+//        }
     }
 
     public void gameOver() {

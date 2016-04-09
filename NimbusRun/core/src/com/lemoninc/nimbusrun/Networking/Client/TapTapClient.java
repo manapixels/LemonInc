@@ -28,11 +28,6 @@ public class TapTapClient {
     public String remoteIP;
     private GameMap map;
 
-    //Coonnection info
-    int portSocket = 8080;
-    String ipAddress = "localhost";
-    static Scanner scanner;
-
     //Kryonet Stuff
     public Client client;
 
@@ -78,6 +73,8 @@ public class TapTapClient {
         //send Login to server
         Network.Login clientName = new Network.Login(name);
         client.sendTCP(clientName);
+
+        map.onConnect(name);
     }
 
     /**
