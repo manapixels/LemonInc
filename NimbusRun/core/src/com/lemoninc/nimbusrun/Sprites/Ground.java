@@ -16,6 +16,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.lemoninc.nimbusrun.NimbusRun;
 import com.lemoninc.nimbusrun.Screens.PlayScreen;
 
 public class Ground {
@@ -34,7 +35,7 @@ public class Ground {
 
         FixtureDef fdef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(Gdx.graphics.getWidth()*4, Gdx.graphics.getHeight()/20);
+        shape.setAsBox(5000 / NimbusRun.PPM, gameMap.getGameport().getWorldHeight()/20);
 
         fdef.shape = shape;
         b2body.createFixture(fdef);

@@ -14,7 +14,7 @@ package com.lemoninc.nimbusrun.Screens;
  *       void     pause()
  *       void     dispose()
  * NOTES :
- * LAST UPDATED: 9/4/2016 12:00
+ * LAST UPDATED: 9/4/2016 14:00
  *
  * ********************************/
 
@@ -110,7 +110,7 @@ public class PlayScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        gamemap.resize(width,height);
+        gamemap.resize(width, height);
     }
 
     /**

@@ -97,15 +97,6 @@ public class Player extends Sprite {
         //img.setSize(CHARACTER_SIZE * 1.25f, CHARACTER_SIZE * 1.25f);
     }
 
-    protected void handleInput() {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.UP))
-            jump();
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
-            speed();
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
-            slow();
-    }
-
     public State getState(){
         if(b2body.getLinearVelocity().y != 0){
             if (previousState == State.JUMPING){
