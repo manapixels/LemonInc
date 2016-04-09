@@ -4,7 +4,8 @@ package com.lemoninc.nimbusrun.Networking;
  * FILENAME : Network.java
  * DESCRIPTION :
  * PUBLIC FUNCTIONS :
- *       void    registerPackets(EndPoint endPoint)
+ *       void    registerClasses(EndPoint endPoint)
+ *       private static void logInfo(String string)
  * NOTES :
  * LAST UPDATED: 8/4/2016 09:00
  *
@@ -27,9 +28,6 @@ public class Network {
 
         kryo.register(Network.Login.class);
         kryo.register(Network.PlayerJoinLeave.class);
-//        kryo.register(Packet.Packet00Request.class);
-//        kryo.register(Packet.Packet01RequestAnswer.class);
-//        kryo.register(Packet.Packet02Message.class);
     }
 
     static public class Login {

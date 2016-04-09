@@ -66,7 +66,7 @@ public class PlayScreen implements Screen {
     public void show() {
         client = new TapTapClient(playerName);
         logInfo("Client created!");
-        //get map
+        gamemap = client.getMap();
 
         if (isHost) {
             //start my server and connect my client to my server

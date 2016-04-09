@@ -11,12 +11,10 @@ package com.lemoninc.nimbusrun.Networking.Server;
  *
  * ********************************/
 
-import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.lemoninc.nimbusrun.Networking.Network;
-import com.lemoninc.nimbusrun.Networking.Packet;
 import com.lemoninc.nimbusrun.Sprites.GameMap;
 
 import java.io.IOException;
@@ -28,7 +26,6 @@ public class TapTapServer {
 
     //Kryonet Server object
     Server server;
-    ServerNetworkListener snl;
 
     private GameMap map;
 
