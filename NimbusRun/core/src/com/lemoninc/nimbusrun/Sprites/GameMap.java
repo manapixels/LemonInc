@@ -82,7 +82,7 @@ public class GameMap {
         batch = new SpriteBatch();
 
         //box2d world
-        world = new World(new Vector2(0, -10), true);
+//        world = new World(new Vector2(0, -10), true);
         b2dr = new Box2DDebugRenderer();
 
         //background
@@ -178,6 +178,9 @@ public class GameMap {
             case 6: img = new TextureAtlas(Gdx.files.internal("spritesheets/MWSspritesheet.atlas")); break;
             default: img = new TextureAtlas(Gdx.files.internal("spritesheets/PTspritesheet.atlas")); break;
         }
+
+        world = new World(new Vector2(0, -10), true);
+
     }
 
     private void handleInput(){
@@ -204,7 +207,7 @@ public class GameMap {
 //        player1.draw(batch);
 //        player2.draw(batch);
 //        player3.draw(batch);
-        b2dr.render(world, gamecam.combined);
+
 
         // Render Players
         for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {
@@ -212,6 +215,9 @@ public class GameMap {
             curPlayer.draw(batch);
 //            if(curPlayer != playerLocal) curPlayer.renderNameTag(spriteBatch, fontNameTag);
         }
+
+        b2dr.render(world, gamecam.combined);
+
         batch.end();
 
         //steps box2d world
