@@ -103,7 +103,7 @@ public class TapTapClient {
                 logInfo("A new player "+msg.playerId+" has joined.");
             } else {
 //                map.setStatus(msg.name + " left");
-//                map.removePlayer(msg);
+                map.removePlayer(msg);
             }
         }
 

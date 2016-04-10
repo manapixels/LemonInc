@@ -132,9 +132,12 @@ public class Player extends Sprite {
         this.draw(spriteBatch);
     }
 
-    public void draw(SpriteBatch batch){
-        stateTime += Gdx.graphics.getDeltaTime();
-        batch.draw(anim.getKeyFrame(stateTime, true), getX() - CHARACTER_SIZE / 2, getY() - CHARACTER_SIZE / 2, CHARACTER_SIZE, CHARACTER_SIZE);
+    public void draw(SpriteBatch batch) {
+        if (b2body != null) {
+            stateTime += Gdx.graphics.getDeltaTime();
+            batch.draw(anim.getKeyFrame(stateTime, true), getX() - CHARACTER_SIZE / 2, getY() - CHARACTER_SIZE / 2, CHARACTER_SIZE, CHARACTER_SIZE);
+        }
+
         //img.draw(batch);
     }
 

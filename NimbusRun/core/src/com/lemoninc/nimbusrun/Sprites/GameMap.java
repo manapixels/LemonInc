@@ -78,8 +78,7 @@ public class GameMap {
         gameport = new FitViewport(NimbusRun.V_WIDTH / NimbusRun.PPM, NimbusRun.V_HEIGHT / NimbusRun.PPM, gamecam);
         batch = new SpriteBatch();
 
-        world = new World(new Vector2(0, -10), true);
-        b2dr = new Box2DDebugRenderer();
+
 
         //TODO: 5 refers to the character selected at the main menu
         initCommon(5);
@@ -113,6 +112,10 @@ public class GameMap {
 
     private void initCommon(int whichCharacter){
         //TODO: server needs textureAtls for hwat?
+
+        world = new World(new Vector2(0, -10), true);
+        b2dr = new Box2DDebugRenderer();
+
         // Load up all sprites into spriteMap from textureAtlas
         switch(whichCharacter){
             // 1. LAUGHING BUDDHA
@@ -145,6 +148,16 @@ public class GameMap {
         newPlayer.setId(msg.playerId);
         newPlayer.setName(msg.name);
         players.put(msg.playerId, newPlayer);
+    }
+
+    /**
+     * Destroy the disconnected player's body from world
+     * Remove disconnected player from players
+     * @param msg
+     */
+    public synchronized void removePlayer(Network.PlayerJoinLeave msg) {
+        world.destroyBody(players.get(msg.playerId).b2body);
+        players.remove(msg.playerId);
     }
 
 
