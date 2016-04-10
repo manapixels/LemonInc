@@ -81,18 +81,12 @@ public class GameMap {
         world = new World(new Vector2(0, -10), true);
         b2dr = new Box2DDebugRenderer();
 
+        //TODO: 5 refers to the character selected at the main menu
         initCommon(5);
 
         background.setPosition(-gameport.getWorldWidth(), 0);
 //        background.setSize(background.getWidth(), background.getHeight());
         background.setSize(background.getWidth() / NimbusRun.PPM, background.getHeight() / NimbusRun.PPM);
-
-        //create user's character
-//        player1 = new Player(this, 5, 32, 200);
-//        //pass in the parameters to the other players
-//        player2 = new Player(this, 6, 150, 200);
-//        player3 = new Player(this, 3, -150, 200);
-        //player4 = new Player(this, 4, 250, 200);
 
         //add these sprites to the world
         ground = new Ground(this);
@@ -118,6 +112,7 @@ public class GameMap {
     }
 
     private void initCommon(int whichCharacter){
+        //TODO: server needs textureAtls for hwat?
         // Load up all sprites into spriteMap from textureAtlas
         switch(whichCharacter){
             // 1. LAUGHING BUDDHA
@@ -146,8 +141,8 @@ public class GameMap {
         //TODO: Player takes in GameMap and GameMap's World, but Server doesn't have World. Should I create World in Server? no
         //Need to look at spacegame
 
-        Player newPlayer = new Player(this, img, 200, 200);
-//        newPlayer.setID(msg.playerId);
+        Player newPlayer = new Player(this, img, 200, 400);
+        newPlayer.setId(msg.playerId);
         newPlayer.setName(msg.name);
         players.put(msg.playerId, newPlayer);
     }
@@ -191,7 +186,7 @@ public class GameMap {
             playerLocal.speed();
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
 //            player1.slow();
-        playerLocal.slow();
+            playerLocal.slow();
     }
 
     private void render() {
@@ -241,6 +236,10 @@ public class GameMap {
     public void dispose() {
         world.dispose();
         b2dr.dispose();
+
+        //dispose textures
+        img.dispose();
+        //TODO:friendly players textures?
 
     }
 

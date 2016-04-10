@@ -4,6 +4,8 @@ package com.lemoninc.nimbusrun.Networking.Client;
  * FILENAME : TapTapClient.java
  * DESCRIPTION :
  * PUBLIC FUNCTIONS :
+ *       private void handleConnect(Connection connection)
+ *       private void handleMessage(int playerID, Object message)
  *       void    connect(String host)
  *       void    shutdown()
  * NOTES :
@@ -97,7 +99,7 @@ public class TapTapClient {
             Network.PlayerJoinLeave msg = (Network.PlayerJoinLeave) message;
             if (msg.hasJoined) {
 //                map.setStatus(msg.name + " joined");
-//                map.addPlayer(msg);
+                map.addPlayer(msg);
                 logInfo("A new player "+msg.playerId+" has joined.");
             } else {
 //                map.setStatus(msg.name + " left");

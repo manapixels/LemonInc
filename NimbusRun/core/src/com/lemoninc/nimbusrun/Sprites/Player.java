@@ -9,11 +9,15 @@ package com.lemoninc.nimbusrun.Sprites;
  *       void           draw(SpriteBatch batch)
  *       float          getX()
  *       float          getY()
+ *       public boolean hasMoved()
  *       void           update(float delta)
  *       void           jump()
  *       void           speed()
  *       void           slow()
  *       TextureAtlas   getTxtAtlas()
+ *       public void setId(int id)
+ *       public void setName(String name)
+ *       public String getName()
  * NOTES :
  * LAST UPDATED: 8/4/2016 09:00
  *
@@ -107,6 +111,8 @@ public class Player extends Sprite {
         anim = new Animation(1f/40f, img.getRegions());
         //img = new Sprite(new Texture(fileName));
         //img.setSize(CHARACTER_SIZE * 1.25f, CHARACTER_SIZE * 1.25f);
+
+        previousPosition = new Vector2(this.getX(), this.getY()); //TODO: is this correct?
     }
 
     public State getState(){
@@ -121,14 +127,15 @@ public class Player extends Sprite {
         else
             return State.DEFAULT;
     }
-    public void draw(SpriteBatch batch){
-        stateTime += Gdx.graphics.getDeltaTime();
-        batch.draw(anim.getKeyFrame(stateTime, true), getX()-CHARACTER_SIZE/2, getY()-CHARACTER_SIZE/2, CHARACTER_SIZE, CHARACTER_SIZE);
-        //img.draw(batch);
-    }
 
     public void render(SpriteBatch spriteBatch) {
         this.draw(spriteBatch);
+    }
+
+    public void draw(SpriteBatch batch){
+        stateTime += Gdx.graphics.getDeltaTime();
+        batch.draw(anim.getKeyFrame(stateTime, true), getX() - CHARACTER_SIZE / 2, getY() - CHARACTER_SIZE / 2, CHARACTER_SIZE, CHARACTER_SIZE);
+        //img.draw(batch);
     }
 
     public float getX(){
@@ -136,6 +143,19 @@ public class Player extends Sprite {
     }
     public float getY(){
         return b2body.getPosition().y;
+    }
+
+    /**
+     * checks if the box2d body of Player has moved or not
+     * @return
+     */
+    public boolean hasMoved() {
+        if (previousPosition.x != this.getX() || previousPosition.y != getY()) {
+            previousPosition.x = this.getX();
+            previousPosition.y = this.getY();
+            return true;
+        }
+        return false;
     }
 
     public void update(float delta){

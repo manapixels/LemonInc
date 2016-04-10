@@ -34,7 +34,6 @@ public class Network {
         public String name;
 
         public Login() {
-
         }
 
         public Login(String name) {
