@@ -141,12 +141,16 @@ public class GameMap {
     public synchronized void addPlayer(Network.PlayerJoinLeave msg) {
         logInfo("Player added to players!");
         //create new player from msg
-        //TODO: Player takes in GameMap and GameMap's World, but Server doesn't have World. Should I create World in Server? no
         //Need to look at spacegame
 
-        Player newPlayer = new Player(this, img, 200, 400);
+        Player newPlayer = new Player(this, img, msg.initial_x, msg.initial_y); //TODO: this coordinate should be from the msg
+        logInfo("check1");
         newPlayer.setId(msg.playerId);
+        logInfo("check2");
+
         newPlayer.setName(msg.name);
+        logInfo("check3");
+
         players.put(msg.playerId, newPlayer);
     }
 
@@ -169,7 +173,7 @@ public class GameMap {
 
         if (this.playerLocal == null) {
             // TODO Server should spawn localPlayer too
-            playerLocal = new Player(this, img, 32, 200);
+            playerLocal = new Player(this, img, Network.SPAWN_X, Network.SPAWN_Y);
             this.playerLocal.setId(client.id);
             this.playerLocal.setName(name);
             players.put(client.id, playerLocal);

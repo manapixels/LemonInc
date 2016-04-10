@@ -86,11 +86,12 @@ public class TapTapServer {
                     connection.name = name;
 
                     //tell the new client about map state (obstacle coordinates ...)
-                    //add this new player to gamemap
-                    Network.PlayerJoinLeave newPlayer = new Network.PlayerJoinLeave(connection.getID(), connection.name, true);
+
+                    Network.PlayerJoinLeave newPlayer = new Network.PlayerJoinLeave(connection.getID(), connection.name, true, msg.initial_x, msg.initial_y);
                     //tell old clients about new client
                     server.sendToAllExceptTCP(connection.getID(), newPlayer);
                     logInfo("Adding the new Client to Server's map");
+                    //add this new player to gamemap
                     map.addPlayer(newPlayer); //server stores the new player
 //                    players.add(newPlayer);
 
@@ -99,7 +100,7 @@ public class TapTapServer {
                         TapTapConnection conn = (TapTapConnection) con;
                         if (conn.getID() != connection.getID() && conn.name != null) { // Not self, Have logged in
                             Player herePlayer = map.getPlayerById(conn.getID());
-                            Network.PlayerJoinLeave hereMsg = new Network.PlayerJoinLeave(conn.getID(), herePlayer.getName(), true);
+                            Network.PlayerJoinLeave hereMsg = new Network.PlayerJoinLeave(conn.getID(), herePlayer.getName(), true, herePlayer.getX(), herePlayer.getY()); //TODO: server's gamemap needs to be updated too
                             logInfo("Telling " + connection.name + " about old client " + herePlayer.getName());
                             connection.sendTCP(hereMsg); // basic info
 //                            connection.sendTCP(herePlayer.getMovementState()); // info about current movement
@@ -112,7 +113,7 @@ public class TapTapServer {
                 TapTapConnection connection = (TapTapConnection) c;
                 if (connection.name != null) {
                     // Announce to everyone that someone has left.
-                    Network.PlayerJoinLeave reply  = new Network.PlayerJoinLeave(connection.getID(), connection.name, false);
+                    Network.PlayerJoinLeave reply  = new Network.PlayerJoinLeave(connection.getID(), connection.name, false, 0f, 0f);
                     server.sendToAllExceptTCP(connection.getID(), reply);
                     map.removePlayer(reply);
 //                    players.remove()
