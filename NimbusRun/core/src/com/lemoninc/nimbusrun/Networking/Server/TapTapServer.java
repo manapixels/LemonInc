@@ -75,19 +75,19 @@ public class TapTapServer {
                     //tell old clients about new client
                     server.sendToAllExceptTCP(connection.getID(), newPlayer);
                     logInfo("Adding the new Client to Server's map");
-                    map.addPlayer(newPlayer);
+//                    map.addPlayer(newPlayer);
 
                     //tell new client about old clients
-                    for (Connection con : server.getConnections()) { //upon connection, every client's name is stored in Player
-                        TapTapConnection conn = (TapTapConnection) con;
-                        if (conn.getID() != connection.getID() && conn.name != null) { // Not self, Have logged in
-                            Player herePlayer = map.getPlayerById(conn.getID());
-                            Network.PlayerJoinLeave hereMsg = new Network.PlayerJoinLeave(conn.getID(), herePlayer.getName(), true);
-                            logInfo("Telling "+connection.name+" about old client "+herePlayer.getName());
-                            connection.sendTCP(hereMsg); // basic info
-//                            connection.sendTCP(herePlayer.getMovementState()); // info about current movement
-                        }
-                    }
+//                    for (Connection con : server.getConnections()) { //upon connection, every client's name is stored in Player
+//                        TapTapConnection conn = (TapTapConnection) con;
+//                        if (conn.getID() != connection.getID() && conn.name != null) { // Not self, Have logged in
+//                            Player herePlayer = map.getPlayerById(conn.getID());
+//                            Network.PlayerJoinLeave hereMsg = new Network.PlayerJoinLeave(conn.getID(), herePlayer.getName(), true);
+//                            logInfo("Telling "+connection.name+" about old client "+herePlayer.getName());
+//                            connection.sendTCP(hereMsg); // basic info
+////                            connection.sendTCP(herePlayer.getMovementState()); // info about current movement
+//                        }
+//                    }
                 }
             }
 

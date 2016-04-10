@@ -68,7 +68,7 @@ public class TapTapClient {
      * @param connection
      */
     private void handleConnect(Connection connection) {
-        id = connection.getID();
+        id = connection.getID(); //connection id between client and server
         remoteIP = connection.getRemoteAddressTCP().toString(); //Returns the IP address and port of the remote end of the TCP connection, or null if this connection is not connected.
 
         //send Login to server
@@ -97,7 +97,8 @@ public class TapTapClient {
             Network.PlayerJoinLeave msg = (Network.PlayerJoinLeave) message;
             if (msg.hasJoined) {
 //                map.setStatus(msg.name + " joined");
-                map.addPlayer(msg);
+//                map.addPlayer(msg);
+                logInfo("A new player "+msg.playerId+" has joined.");
             } else {
 //                map.setStatus(msg.name + " left");
 //                map.removePlayer(msg);

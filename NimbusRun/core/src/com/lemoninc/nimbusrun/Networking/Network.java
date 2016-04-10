@@ -54,6 +54,7 @@ public class Network {
         public String name;
         public boolean hasJoined;
 
+        public PlayerJoinLeave() {}
 
         public PlayerJoinLeave(int playerId, String playerName, boolean joined) {
             this.playerId = playerId;
