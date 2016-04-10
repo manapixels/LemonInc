@@ -182,8 +182,6 @@ public class GameMap {
 
     public Viewport getGameport() { return this.gameport; }
 
-
-
     private void handleInput(){
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP))
 //            player1.jump();
@@ -205,9 +203,6 @@ public class GameMap {
         batch.setProjectionMatrix(gamecam.combined);
         batch.begin();
         background.draw(batch);
-//        player1.draw(batch);
-//        player2.draw(batch);
-//        player3.draw(batch);
 
         // Render Players
         for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {
@@ -216,6 +211,7 @@ public class GameMap {
 //            if(curPlayer != playerLocal) curPlayer.renderNameTag(spriteBatch, fontNameTag);
         }
 
+        //end batch
         batch.end();
 
         b2dr.render(world, gamecam.combined);
@@ -223,7 +219,6 @@ public class GameMap {
         //steps box2d world
         world.step(1 / 60f, 6, 2);
         //gamecam constantly to follow player1
-//        gamecam.position.set(player1.getX(), player1.getY(), 0);
         gamecam.position.set(playerLocal.getX(), playerLocal.getY(), 0);
         gamecam.update();
 
@@ -247,5 +242,11 @@ public class GameMap {
         world.dispose();
         b2dr.dispose();
 
+    }
+
+    public void onDisconnect() {
+        this.client = null;
+        this.players.clear();
+        logInfo("on DIsconnection, clear the players Map");
     }
 }

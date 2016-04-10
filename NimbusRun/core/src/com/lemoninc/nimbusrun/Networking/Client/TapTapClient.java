@@ -107,7 +107,7 @@ public class TapTapClient {
     }
 
     private void handleDisonnect(Connection connection) {
-//        map.onDisconnect();
+        map.onDisconnect();
     }
 
     public void connect(String host) throws IOException{
