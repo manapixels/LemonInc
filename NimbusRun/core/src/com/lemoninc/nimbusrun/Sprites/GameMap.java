@@ -77,7 +77,7 @@ public class GameMap {
 
         //instantiate HUD, GameSounds, BitmapFont, Camera, SpriteBatch ...
         gamecam = new OrthographicCamera();
-        gameport = new FitViewport(NimbusRun.V_WIDTH / NimbusRun.PPM, NimbusRun.V_HEIGHT / NimbusRun.PPM, gamecam);
+        gameport = new FitViewport(NimbusRun.V_WIDTH*2 / NimbusRun.PPM, NimbusRun.V_HEIGHT*2 / NimbusRun.PPM, gamecam);
 
         batch = new SpriteBatch();
 
