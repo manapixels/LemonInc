@@ -23,6 +23,7 @@ package com.lemoninc.nimbusrun.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -36,7 +37,6 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.minlog.Log;
 import com.lemoninc.nimbusrun.Networking.Client.TapTapClient;
-//import com.lemoninc.nimbusrun.Networking.Networking;
 import com.lemoninc.nimbusrun.Networking.Server.TapTapServer;
 import com.lemoninc.nimbusrun.Sprites.Ceiling;
 import com.lemoninc.nimbusrun.Sprites.EndWall;
@@ -44,10 +44,15 @@ import com.lemoninc.nimbusrun.Sprites.Ground;
 import com.lemoninc.nimbusrun.Sprites.Player;
 import com.lemoninc.nimbusrun.Sprites.StartWall;
 import com.lemoninc.nimbusrun.TapTap3;
+import com.lemoninc.nimbusrun.scenes.HUD;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
-public class PlayScreen implements Screen {
+//import com.lemoninc.nimbusrun.Networking.Networking;
+
+public class PlayScreen implements Screen,InputProcessor {
 
     private TapTap3 game;
     private OrthographicCamera gamecam;
@@ -70,7 +75,15 @@ public class PlayScreen implements Screen {
 
     private TapTapClient client;
     private TapTapServer server;
+    private HUD hud;
 
+
+    class TouchInfo {
+        public float touchX = 0;
+        public float touchY = 0;
+        public boolean touched = false;
+    }
+    private Map<Integer,TouchInfo> touches = new HashMap<Integer,TouchInfo>();
 
     public PlayScreen(TapTap3 game, boolean isHost, String ipAddress, String playerName){
 
@@ -91,7 +104,7 @@ public class PlayScreen implements Screen {
         background = new Sprite(new Texture("TapTap_BGseamless_long.png"));
         background.setPosition(-gameport.getWorldWidth(), 0);
         background.setSize(background.getWidth() / game.PPM, background.getHeight() / game.PPM);
-
+        hud=new HUD(game.batch,playerName);
         world = new World(new Vector2(0, -10), true);
         b2dr = new Box2DDebugRenderer();
 
@@ -107,6 +120,12 @@ public class PlayScreen implements Screen {
         ceiling = new Ceiling(this);
         startWall = new StartWall(this);
         endWall = new EndWall(this);
+
+        Gdx.input.setInputProcessor(this);
+
+        for(int i = 0; i < 2; i++){
+            touches.put(i, new TouchInfo());
+        }
 
     }
 
@@ -154,6 +173,31 @@ public class PlayScreen implements Screen {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
             gameOver();
         }
+        if(Gdx.input.justTouched()) {
+            System.out.println("Points are: X=" + Gdx.input.getX() + "Y=" + Gdx.input.getY());
+            int x=Gdx.input.getX();
+            int y=Gdx.input.getY();
+            if(x>game.V_WIDTH/2){
+                player1.jump();
+            }
+            else{
+                //player1.defence;
+               // TODO: Implement method for defence
+            }
+        }
+        if(touches.get(0).touched&&touches.get(1).touched){
+            if(touches.get(0).touchX<(game.V_WIDTH/2)&&touches.get(1).touchX>(game.V_WIDTH-(game.V_WIDTH/2))){
+               // TODO: Implement method for attack
+                //player1.attack;
+            }
+            else if(touches.get(1).touchX<(game.V_WIDTH/2)&&touches.get(0).touchX>(game.V_WIDTH-(game.V_WIDTH/2))) {
+                //TODO: Implement method for attack
+                //player1.attack
+            }
+            else{
+            }
+        }
+
     }
 
     //TODO: WEISHENG: need cleanup
@@ -195,14 +239,20 @@ public class PlayScreen implements Screen {
         //player4.draw(batch);
 
         b2dr.render(world, gamecam.combined);
-
         batch.end();    //stop batch stuff
+        hud.render();
+        hud.stage.draw();
+        if(hud.worldTimer==0){
+            gameOver();
+        }
+
 
     }
 
     //TODO: WEISHENG: gamemap?
     public void update(float delta) {
         handleInput();
+        hud.update(delta);
         player1.update(delta);
         if (player1.b2body.getPosition().y <= 0){
             gameOver();
@@ -222,9 +272,13 @@ public class PlayScreen implements Screen {
         world.step(1 / 60f, 6, 2);
         gamecam.position.set(player1.getX(), gamecam.viewportHeight / 2, 0);
         gamecam.update();
+
+
     }
 
     public void gameOver(){
+
+
         game.setScreen(new EndScreen(game));
     }
 
@@ -275,5 +329,55 @@ public class PlayScreen implements Screen {
 
     private void logInfo(String string) {
         Log.info(string);
+    }
+
+    @Override
+    public boolean keyDown(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        if(pointer < 2){
+            touches.get(pointer).touchX = screenX;
+            touches.get(pointer).touchY = screenY;
+            touches.get(pointer).touched = true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        if(pointer < 2){
+            touches.get(pointer).touchX = 0;
+            touches.get(pointer).touchY = 0;
+            touches.get(pointer).touched = false;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(int amount) {
+        return false;
     }
 }

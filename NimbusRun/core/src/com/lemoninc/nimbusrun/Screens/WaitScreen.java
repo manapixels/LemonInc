@@ -28,10 +28,11 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-//import com.lemoninc.nimbusrun.Networking.Networking;
 import com.lemoninc.nimbusrun.TapTap3;
 
 import java.util.Random;
+
+//import com.lemoninc.nimbusrun.Networking.Networking;
 
 public class WaitScreen implements Screen{
     private TapTap3 game;
@@ -39,6 +40,8 @@ public class WaitScreen implements Screen{
     private Viewport gameport;
     private SpriteBatch batch;
     private Sprite aspectRatio;
+    private long startTime;
+    private int playernumber;
 //    private Networking network;
 
     private Random random = new Random();
@@ -63,12 +66,14 @@ public class WaitScreen implements Screen{
 //        network.connectToServer();
 //        network.configSocketEvents();
         Gdx.app.log("WaitScreen", "Finished connecting & configuring events");
+        playernumber=1;
     }
 
     /**
      * Play game as host for now
      */
     private void playGame() {
+
         hostGame();
     }
 
@@ -77,6 +82,7 @@ public class WaitScreen implements Screen{
      */
     @Override
     public void show() {
+
         //create UI stuff
         //Label gameTitle = new Label("Nimbus Run", skin);
         //set color, x y coordinates
@@ -93,7 +99,6 @@ public class WaitScreen implements Screen{
         //setListeners here
 
     }
-
     public void update(float dt) {
         handleInput();
         gamecam.update();
@@ -101,7 +106,13 @@ public class WaitScreen implements Screen{
 
     protected void handleInput() {
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
-            playGame();
+           // startTime = TimeUtils.millis();
+            //if (TimeUtils.millis()<(startTime+5000)){
+              //  game.setScreen(new YourCharacterScreen(game,game.V_WIDTH,game.V_HEIGHT,playernumber));
+            //}
+                playGame();
+
+
         }
     }
 
@@ -158,6 +169,7 @@ public class WaitScreen implements Screen{
      */
     private void hostGame(){
         game.setScreen(new PlayScreen(game, true, "localhost", getName()));
+
         //TODO: setscreen(new playscreen(game, host-true, the IP address you are hosting from - localhost, getname())
         //save preferences
     }
