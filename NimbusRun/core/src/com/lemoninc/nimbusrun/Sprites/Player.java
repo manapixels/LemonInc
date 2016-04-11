@@ -9,11 +9,15 @@ package com.lemoninc.nimbusrun.Sprites;
  *       void           draw(SpriteBatch batch)
  *       float          getX()
  *       float          getY()
+ *       public boolean hasMoved()
  *       void           update(float delta)
  *       void           jump()
  *       void           speed()
  *       void           slow()
  *       TextureAtlas   getTxtAtlas()
+ *       public void setId(int id)
+ *       public void setName(String name)
+ *       public String getName()
  * NOTES :
  * LAST UPDATED: 8/4/2016 09:00
  *
@@ -56,6 +60,13 @@ public class Player extends Sprite {
         CHARACTER_SIZE = 150 / NimbusRun.PPM;
     }
 
+    /**
+     * TODO: this constructor should only be created by client?
+     * @param gameMap
+     * @param img
+     * @param x
+     * @param y
+     */
     public Player(GameMap gameMap, TextureAtlas img, float x, float y) {
 
         this.world = gameMap.getWorld();
@@ -64,10 +75,11 @@ public class Player extends Sprite {
         CHARACTER_SIZE = 170 / NimbusRun.PPM;
         stateTime = 0f;
 
+        //create a dynamic bodydef
         BodyDef bdef = new BodyDef();
         bdef.position.set(x / NimbusRun.PPM, y / NimbusRun.PPM);
         bdef.type = BodyDef.BodyType.DynamicBody;
-        b2body = world.createBody(bdef);
+        b2body = world.createBody(bdef); //Body of Player
 
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
@@ -75,7 +87,7 @@ public class Player extends Sprite {
 //        PolygonShape shape = new PolygonShape();
 //        shape.setAsBox(x, y);
         fdef.shape = shape;
-        b2body.createFixture(fdef);
+        b2body.createFixture(fdef); //Player is a circle
         shape.dispose();
 
 //        switch(whichCharacter){
@@ -99,6 +111,8 @@ public class Player extends Sprite {
         anim = new Animation(1f/40f, img.getRegions());
         //img = new Sprite(new Texture(fileName));
         //img.setSize(CHARACTER_SIZE * 1.25f, CHARACTER_SIZE * 1.25f);
+
+        previousPosition = new Vector2(this.getX(), this.getY()); //TODO: is this correct?
     }
 
     public State getState(){
@@ -113,14 +127,18 @@ public class Player extends Sprite {
         else
             return State.DEFAULT;
     }
-    public void draw(SpriteBatch batch){
-        stateTime += Gdx.graphics.getDeltaTime();
-        batch.draw(anim.getKeyFrame(stateTime, true), getX()-CHARACTER_SIZE/2, getY()-CHARACTER_SIZE/2, CHARACTER_SIZE, CHARACTER_SIZE);
-        //img.draw(batch);
-    }
 
     public void render(SpriteBatch spriteBatch) {
         this.draw(spriteBatch);
+    }
+
+    public void draw(SpriteBatch batch) {
+        if (b2body != null) {
+            stateTime += Gdx.graphics.getDeltaTime();
+            batch.draw(anim.getKeyFrame(stateTime, true), getX() - CHARACTER_SIZE / 2, getY() - CHARACTER_SIZE / 2, CHARACTER_SIZE, CHARACTER_SIZE);
+        }
+
+        //img.draw(batch);
     }
 
     public float getX(){
@@ -128,6 +146,19 @@ public class Player extends Sprite {
     }
     public float getY(){
         return b2body.getPosition().y;
+    }
+
+    /**
+     * checks if the box2d body of Player has moved or not
+     * @return
+     */
+    public boolean hasMoved() {
+        if (previousPosition.x != this.getX() || previousPosition.y != getY()) {
+            previousPosition.x = this.getX();
+            previousPosition.y = this.getY();
+            return true;
+        }
+        return false;
     }
 
     public void update(float delta){
@@ -143,22 +174,22 @@ public class Player extends Sprite {
         else if (currentState == State.JUMPING){
             previousState = State.JUMPING;
             currentState = State.DOUBLEJUMPING;
-            b2body.applyLinearImpulse(new Vector2(0, 7f), b2body.getWorldCenter(), true);
+            b2body.applyLinearImpulse(new Vector2(0, 6f), b2body.getWorldCenter(), true);
         }
         else {
             currentState = State.JUMPING;
-            b2body.applyLinearImpulse(new Vector2(0, 7f), b2body.getWorldCenter(), true);
+            b2body.applyLinearImpulse(new Vector2(0, 6f), b2body.getWorldCenter(), true);
         }
     }
 
     public void speed() {
-        if (b2body.getLinearVelocity().x <= 5) {
-            b2body.applyLinearImpulse(new Vector2(1.5f, 0), b2body.getWorldCenter(), true);
+        if (b2body.getLinearVelocity().x <= 4) {
+            b2body.applyLinearImpulse(new Vector2(1.25f, 0), b2body.getWorldCenter(), true);
         }
     }
     public void slow() {
-        if (b2body.getLinearVelocity().x >= -5) {
-            b2body.applyLinearImpulse(new Vector2(-1.5f, 0), b2body.getWorldCenter(), true);
+        if (b2body.getLinearVelocity().x >= -4) {
+            b2body.applyLinearImpulse(new Vector2(-1.25f, 0), b2body.getWorldCenter(), true);
         }
     }
 

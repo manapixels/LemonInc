@@ -10,6 +10,7 @@ package com.lemoninc.nimbusrun.Networking.Server;
  * LAST UPDATED: 8/4/2016 09:00
  ********************************/
 
+import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
@@ -19,13 +20,20 @@ import com.lemoninc.nimbusrun.Sprites.GameMap;
 import com.lemoninc.nimbusrun.Sprites.Player;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
+/**
+ * Need GameMap?
+ */
 public class TapTapServer {
 
     //Kryonet Server object
     Server server;
 
     private GameMap map;
+    private List<Network.PlayerJoinLeave> players; //player's id, x and y position
 
     /**
      * Constructor starts a server on port 8080 and adds a listener to the server
@@ -42,6 +50,8 @@ public class TapTapServer {
         map = new GameMap(this);
 
         Network.registerClasses(server);
+
+//        players = new ArrayList<Network.PlayerJoinLeave>();
 
 /**
  * server listens for messages from the clients.
@@ -60,29 +70,38 @@ public class TapTapServer {
                     logInfo("Login received");
                     Network.Login msg = ((Network.Login) message);
 
-                    if (connection.name != null) {return;}
+                    if (connection.name != null) {
+                        return;
+                    }
 
                     String name = msg.name;
-                    if (name == null) {return;}
+                    if (name == null) {
+                        return;
+                    }
                     name = name.trim();
-                    if (name.length() == 0) {return;}//if name contains no letters
+                    if (name.length() == 0) {
+                        return;
+                    }//if name contains no letters
                     //name this connection as the clientname
                     connection.name = name;
 
                     //tell the new client about map state (obstacle coordinates ...)
+
+                    Network.PlayerJoinLeave newPlayer = new Network.PlayerJoinLeave(connection.getID(), connection.name, true, msg.initial_x, msg.initial_y);
                     //tell old clients about new client
-                    //add this new player to gamemap
-                    Network.PlayerJoinLeave newPlayer = new Network.PlayerJoinLeave(connection.getID(), connection.name, true);
+                    server.sendToAllExceptTCP(connection.getID(), newPlayer);
                     logInfo("Adding the new Client to Server's map");
-                    map.addPlayer(newPlayer);
+                    //add this new player to gamemap
+                    map.addPlayer(newPlayer); //server stores the new player
+//                    players.add(newPlayer);
 
                     //tell new client about old clients
                     for (Connection con : server.getConnections()) { //upon connection, every client's name is stored in Player
                         TapTapConnection conn = (TapTapConnection) con;
                         if (conn.getID() != connection.getID() && conn.name != null) { // Not self, Have logged in
                             Player herePlayer = map.getPlayerById(conn.getID());
-                            Network.PlayerJoinLeave hereMsg = new Network.PlayerJoinLeave(conn.getID(), herePlayer.getName(), true);
-                            logInfo("Telling "+connection.name+" about old client "+herePlayer.getName());
+                            Network.PlayerJoinLeave hereMsg = new Network.PlayerJoinLeave(conn.getID(), herePlayer.getName(), true, herePlayer.getX(), herePlayer.getY()); //TODO: server's gamemap needs to be updated too
+                            logInfo("Telling " + connection.name + " about old client " + herePlayer.getName());
                             connection.sendTCP(hereMsg); // basic info
 //                            connection.sendTCP(herePlayer.getMovementState()); // info about current movement
                         }
@@ -92,11 +111,17 @@ public class TapTapServer {
 
             public void disconnected(Connection c) {
                 TapTapConnection connection = (TapTapConnection) c;
-                //announce to everyone that someone got disconnected
+                if (connection.name != null) {
+                    // Announce to everyone that someone has left.
+                    Network.PlayerJoinLeave reply  = new Network.PlayerJoinLeave(connection.getID(), connection.name, false, 0f, 0f);
+                    server.sendToAllExceptTCP(connection.getID(), reply);
+                    map.removePlayer(reply);
+//                    players.remove()
+                }
+
             }
         });
 
-        //TODO: propagate exception or try-catch?
         try {
             server.bind(Network.PORT, Network.PORTUDP);
 
@@ -106,10 +131,12 @@ public class TapTapServer {
 
 
         server.start();
+
+
     }
 
     public void update(float delta) {
-        map.update(delta);
+//        map.update(delta); //TODO:make sure server's map.update doesn't contain rendering
     }
 
     public void shutdown() {

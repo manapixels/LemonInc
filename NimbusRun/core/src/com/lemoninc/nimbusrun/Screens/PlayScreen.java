@@ -65,8 +65,8 @@ public class PlayScreen implements Screen {
 
     /**
      * Called when this screen becomes the current screen for a Game.
-     * when the screen appears, start TapTapClient, TODO:get the map from the client.
-     * If player is a host, start TapTapServer, connect itself to the server.
+     * when the screen appears, create a new Client, get the map from the client.
+     * If player is a host, create a new Server, connect the newly created client to the server.
      * If player is joining game, connect client to the ip address.
      */
     @Override
@@ -138,7 +138,7 @@ public class PlayScreen implements Screen {
         client.shutdown();
         if (server != null)
             server.shutdown();
-//        map.dispose();
+        gamemap.dispose();
     }
 
     @Override

@@ -73,32 +73,23 @@ public class GameMap {
         this.client = client;
         this.isClient = true;
 
-        initCommon(5);
-
         //instantiate HUD, GameSounds, BitmapFont, Camera, SpriteBatch ...
         gamecam = new OrthographicCamera();
-        gameport = new FitViewport(NimbusRun.V_WIDTH*2 / NimbusRun.PPM, NimbusRun.V_HEIGHT*2 / NimbusRun.PPM, gamecam);
+
+        gameport = new FitViewport(NimbusRun.V_WIDTH * 1.5f / NimbusRun.PPM, NimbusRun.V_HEIGHT * 1.5f / NimbusRun.PPM, gamecam);
 
         batch = new SpriteBatch();
 
-        //box2d world
-        world = new World(new Vector2(0, -10), true);
-        b2dr = new Box2DDebugRenderer();
 
-        //background
-        background = new Sprite(new Texture("TapTap_BGseamless_long.png"));
+
+        //TODO: 5 refers to the character selected at the main menu
+        initCommon(5);
+
         background.setPosition(-gameport.getWorldWidth(), 0);
 //        background.setSize(background.getWidth(), background.getHeight());
         background.setSize(background.getWidth() / NimbusRun.PPM, background.getHeight() / NimbusRun.PPM);
 
-        //create user's character
-//        player1 = new Player(this, 5, 32, 200);
-//
-//        //pass in the parameters to the other players
-//        player2 = new Player(this, 6, 150, 200);
-//        player3 = new Player(this, 3, -150, 200);
-        //player4 = new Player(this, 4, 250, 200);
-
+        //add these sprites to the world
         ground = new Ground(this);
         ceiling = new Ceiling(this);
         startWall = new StartWall(this);
@@ -109,6 +100,7 @@ public class GameMap {
 
     /**
      * This constructor is called inside TapTapServer
+     * //TODO: make a constructor for server that does not create World, and box2d related stuff but still can store who is connected, who is where, etc
      */
     public GameMap(TapTapServer server) {
         this.server = server;
@@ -120,15 +112,58 @@ public class GameMap {
 
     }
 
+    private void initCommon(int whichCharacter){
+        //TODO: server needs textureAtls for hwat?
+
+        world = new World(new Vector2(0, -10), true);
+        b2dr = new Box2DDebugRenderer();
+
+        // Load up all sprites into spriteMap from textureAtlas
+        switch(whichCharacter){
+            // 1. LAUGHING BUDDHA
+            // 2. SHESHNAH WITH KRISHNA
+            // 3. NINE-TAILED FOX
+            // 4. KAPPA
+            // 5. PONTIANAK
+            // 6. MADAME WHITE SNAKE
+            case 1: img = new TextureAtlas(Gdx.files.internal("spritesheets/LBspritesheet.atlas")); break;
+            case 2: img = new TextureAtlas(Gdx.files.internal("spritesheets/SKspritesheet.atlas")); break;
+            case 3: img = new TextureAtlas(Gdx.files.internal("spritesheets/FXspritesheet.atlas")); break;
+            case 4: img = new TextureAtlas(Gdx.files.internal("spritesheets/KPspritesheet.atlas")); break;
+            case 5: img = new TextureAtlas(Gdx.files.internal("spritesheets/PTspritesheet.atlas")); break;
+            case 6: img = new TextureAtlas(Gdx.files.internal("spritesheets/MWSspritesheet.atlas")); break;
+            default: img = new TextureAtlas(Gdx.files.internal("spritesheets/PTspritesheet.atlas")); break;
+        }
+
+        //background
+        background = new Sprite(new Texture("TapTap_BGseamless_long.png"));
+    }
+
     //called by server to add a new player into its GameMap
     public synchronized void addPlayer(Network.PlayerJoinLeave msg) {
         logInfo("Player added to players!");
         //create new player from msg
-        Player newPlayer = new Player(this, img, 200, 200);
-//        newPlayer.setID(msg.playerId);
-        newPlayer.setName(msg.name);
-        players.put(msg.playerId, newPlayer);
+        //Need to look at spacegame
 
+        Player newPlayer = new Player(this, img, msg.initial_x, msg.initial_y); //TODO: this coordinate should be from the msg
+        logInfo("check1");
+        newPlayer.setId(msg.playerId);
+        logInfo("check2");
+
+        newPlayer.setName(msg.name);
+        logInfo("check3");
+
+        players.put(msg.playerId, newPlayer);
+    }
+
+    /**
+     * Destroy the disconnected player's body from world
+     * Remove disconnected player from players
+     * @param msg
+     */
+    public synchronized void removePlayer(Network.PlayerJoinLeave msg) {
+        world.destroyBody(players.get(msg.playerId).b2body);
+        players.remove(msg.playerId);
     }
 
 
@@ -140,7 +175,7 @@ public class GameMap {
 
         if (this.playerLocal == null) {
             // TODO Server should spawn localPlayer too
-            playerLocal = new Player(this, img, 32, 200);
+            playerLocal = new Player(this, img, Network.SPAWN_X, Network.SPAWN_Y);
             this.playerLocal.setId(client.id);
             this.playerLocal.setName(name);
             players.put(client.id, playerLocal);
@@ -161,25 +196,6 @@ public class GameMap {
 
     public Viewport getGameport() { return this.gameport; }
 
-    private void initCommon(int whichCharacter){
-        // Load up all sprites into spriteMap from textureAtlas
-        switch(whichCharacter){
-            // 1. LAUGHING BUDDHA
-            // 2. SHESHNAH WITH KRISHNA
-            // 3. NINE-TAILED FOX
-            // 4. KAPPA
-            // 5. PONTIANAK
-            // 6. MADAME WHITE SNAKE
-            case 1: img = new TextureAtlas(Gdx.files.internal("spritesheets/LBspritesheet.atlas")); break;
-            case 2: img = new TextureAtlas(Gdx.files.internal("spritesheets/SKspritesheet.atlas")); break;
-            case 3: img = new TextureAtlas(Gdx.files.internal("spritesheets/FXspritesheet.atlas")); break;
-            case 4: img = new TextureAtlas(Gdx.files.internal("spritesheets/KPspritesheet.atlas")); break;
-            case 5: img = new TextureAtlas(Gdx.files.internal("spritesheets/PTspritesheet.atlas")); break;
-            case 6: img = new TextureAtlas(Gdx.files.internal("spritesheets/MWSspritesheet.atlas")); break;
-            default: img = new TextureAtlas(Gdx.files.internal("spritesheets/PTspritesheet.atlas")); break;
-        }
-    }
-
     private void handleInput(){
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP))
 //            player1.jump();
@@ -189,7 +205,7 @@ public class GameMap {
             playerLocal.speed();
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
 //            player1.slow();
-        playerLocal.slow();
+            playerLocal.slow();
     }
 
     private void render() {
@@ -201,10 +217,6 @@ public class GameMap {
         batch.setProjectionMatrix(gamecam.combined);
         batch.begin();
         background.draw(batch);
-//        player1.draw(batch);
-//        player2.draw(batch);
-//        player3.draw(batch);
-        b2dr.render(world, gamecam.combined);
 
         // Render Players
         for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {
@@ -212,12 +224,15 @@ public class GameMap {
             curPlayer.draw(batch);
 //            if(curPlayer != playerLocal) curPlayer.renderNameTag(spriteBatch, fontNameTag);
         }
+
+        //end batch
         batch.end();
+
+        b2dr.render(world, gamecam.combined);
 
         //steps box2d world
         world.step(1 / 60f, 6, 2);
         //gamecam constantly to follow player1
-//        gamecam.position.set(player1.getX(), player1.getY(), 0);
         gamecam.position.set(playerLocal.getX(), playerLocal.getY(), 0);
         gamecam.update();
 
@@ -229,11 +244,27 @@ public class GameMap {
     }
 
     public synchronized void logInfo(String string) {
-        Log.info("[GameMap]: "+(isClient ? "[Client] " : "[Server] ") + string);
+        Log.info("[GameMap]: " + (isClient ? "[Client] " : "[Server] ") + string);
     }
 
     public void resize(int width, int height) {
         gameport.update(width, height);
         gamecam.position.set(gamecam.viewportWidth / 2, gamecam.viewportHeight / 2, 0);
+    }
+
+    public void dispose() {
+        world.dispose();
+        b2dr.dispose();
+
+        //dispose textures
+        img.dispose();
+        //TODO:friendly players textures?
+
+    }
+
+    public void onDisconnect() {
+        this.client = null;
+        this.players.clear();
+        logInfo("on DIsconnection, clear the players Map");
     }
 }
