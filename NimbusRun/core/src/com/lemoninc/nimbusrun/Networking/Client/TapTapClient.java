@@ -4,6 +4,8 @@ package com.lemoninc.nimbusrun.Networking.Client;
  * FILENAME : TapTapClient.java
  * DESCRIPTION :
  * PUBLIC FUNCTIONS :
+ *       private void handleConnect(Connection connection)
+ *       private void handleMessage(int playerID, Object message)
  *       void    connect(String host)
  *       void    shutdown()
  * NOTES :
@@ -49,7 +51,6 @@ public class TapTapClient {
             public void received(Connection connection, Object object) {
                 handleMessage(connection.getID(), object);
             }
-
             public void disconnected(Connection connection) {
                 handleDisonnect(connection);
             }
@@ -61,13 +62,15 @@ public class TapTapClient {
     }
 
     /**
-     * TODO:what happens here?
+     *
      * This method is called when the client establishes connection with server.
-     * Method gets connection ID, remote IP from server,
+     * Method gets connection ID between this cleint and server, remote IP from server.
+     * Method sends a Login package containing its name to server.
+     * Method calls GameMap to instantiate a character with "name"
      * @param connection
      */
     private void handleConnect(Connection connection) {
-        id = connection.getID();
+        id = connection.getID(); //connection id between client and server
         remoteIP = connection.getRemoteAddressTCP().toString(); //Returns the IP address and port of the remote end of the TCP connection, or null if this connection is not connected.
 
         //send Login to server
@@ -92,21 +95,22 @@ public class TapTapClient {
      * @param message
      */
     private void handleMessage(int playerID, Object message) {
-//        if (message instanceof Network.PlayerJoinLeave) {
-//            Network.PlayerJoinLeave msg = (Network.PlayerJoinLeave) message;
-//            if (msg.hasJoined) {
+        if (message instanceof Network.PlayerJoinLeave) {
+            Network.PlayerJoinLeave msg = (Network.PlayerJoinLeave) message;
+            if (msg.hasJoined) {
 //                map.setStatus(msg.name + " joined");
-//                map.addPlayer(msg);
-//            } else {
+                map.addPlayer(msg);
+                logInfo("A new player "+msg.playerId+" has joined.");
+            } else {
 //                map.setStatus(msg.name + " left");
-//                map.removePlayer(msg);
-//            }
-//        }
+                map.removePlayer(msg);
+            }
+        }
 
     }
 
     private void handleDisonnect(Connection connection) {
-//        map.onDisconnect();
+        map.onDisconnect();
     }
 
     public void connect(String host) throws IOException{

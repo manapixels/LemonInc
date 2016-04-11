@@ -102,7 +102,7 @@
 //             * When the client first connects to the server, the client receives the client IDs of all the players connected to the server.
 //             * Client stores the client IDs into the friendlyPlayers HashMap along with empty Player objects positioned at their current positions
 //             */
-//        //TODO: current position necessary?
+//
 //        }).on("getPlayers", new Emitter.Listener() {
 //            //called when player first joins the game to update the location of all other players
 //            @Override
@@ -126,7 +126,7 @@
 //             * The client receives the updated coordinates of the players moved during the gameplay.
 //             * The client sets the position of the box2d representing the respective players according to the coordinates received in the JSON object.
 //             */
-//        //TODO: is there a better way?
+//
 //        }).on("playerMoved", new Emitter.Listener() {
 //            @Override
 //            public void call(Object... args) {

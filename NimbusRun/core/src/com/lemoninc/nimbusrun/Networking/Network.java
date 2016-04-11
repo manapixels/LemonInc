@@ -19,6 +19,8 @@ public class Network {
 
     public static int PORT = 8080;
     public static int PORTUDP = 8082;
+    public static float SPAWN_X = 32;
+    public static float SPAWN_Y = 500;
     /**
      * the classes that are going to be sent over the network must be registered for both server and client
      *
@@ -32,13 +34,16 @@ public class Network {
 
     static public class Login {
         public String name;
+        public float initial_x;
+        public float initial_y;
 
         public Login() {
-
         }
 
         public Login(String name) {
             this.name = name;
+            this.initial_x = SPAWN_X;
+            this.initial_y = SPAWN_Y;
 
             Network.logInfo("Login initialised by Client "+name);
         }
@@ -53,12 +58,16 @@ public class Network {
         public int playerId;
         public String name;
         public boolean hasJoined;
+        public float initial_x, initial_y;
 
+        public PlayerJoinLeave() {}
 
-        public PlayerJoinLeave(int playerId, String playerName, boolean joined) {
+        public PlayerJoinLeave(int playerId, String playerName, boolean joined, float initial_x, float initial_y) {
             this.playerId = playerId;
             name = playerName;
             hasJoined = joined;
+            this.initial_x = initial_x;
+            this.initial_y = initial_y;
 
             Network.logInfo("PlayerJoinLeave initialised by Server for Client "+playerId+" "+playerName);
         }
