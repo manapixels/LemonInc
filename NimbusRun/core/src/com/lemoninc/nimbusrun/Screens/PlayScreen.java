@@ -110,11 +110,11 @@ public class PlayScreen implements Screen {
     public void render(float delta) {
 //        logInfo("Rendering");
 
-        handleInput();
+        handleInput(); //TODO: to be deleted later
         gamemap.update(delta);
+        gamemap.render();
 
-//        map.render();
-//
+
 //        if(isHost){
 //            server.update(delta);
 //        }

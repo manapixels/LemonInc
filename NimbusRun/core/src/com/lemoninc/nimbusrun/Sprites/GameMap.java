@@ -206,7 +206,19 @@ public class GameMap {
             playerLocal.slow();
     }
 
-    private void render() {
+    /**
+     * Update GameMap's state
+     * @param delta
+     */
+    public void update(float delta) {
+        //If client is created and local player has spawned
+        if (client != null && playerLocal != null) {
+            handleInput();
+
+        }
+    }
+
+    public void render() {
         //clears screen first, set color to black
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -236,10 +248,7 @@ public class GameMap {
 
     }
 
-    public void update(float delta) {
-        handleInput();
-        render();
-    }
+
 
     public synchronized void logInfo(String string) {
         Log.info("[GameMap]: " + (isClient ? "[Client] " : "[Server] ") + string);
