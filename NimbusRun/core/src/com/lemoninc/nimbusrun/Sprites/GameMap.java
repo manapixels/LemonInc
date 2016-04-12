@@ -12,7 +12,7 @@ package com.lemoninc.nimbusrun.Sprites;
  *       Viewport   getGamePort()
  *       public synchronized void logInfo(String string)
  * NOTES :
- * LAST UPDATED: 9/4/2016 17:00
+ * LAST UPDATED: 12/4/2016 10:00
  *
  * ********************************/
 
@@ -22,6 +22,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -53,6 +54,7 @@ public class GameMap {
 
     private SpriteBatch batch;
     private Sprite background;
+//    private Texture background;
 
     private World world;
     private Box2DDebugRenderer b2dr;
@@ -75,17 +77,15 @@ public class GameMap {
 
         //instantiate HUD, GameSounds, BitmapFont, Camera, SpriteBatch ...
         gamecam = new OrthographicCamera();
-        gameport = new FitViewport(NimbusRun.V_WIDTH / NimbusRun.PPM, NimbusRun.V_HEIGHT / NimbusRun.PPM, gamecam);
+
+        gameport = new FitViewport(NimbusRun.V_WIDTH * 1.5f / NimbusRun.PPM, NimbusRun.V_HEIGHT * 1.5f / NimbusRun.PPM, gamecam);
+
         batch = new SpriteBatch();
 
 
 
         //TODO: 5 refers to the character selected at the main menu
         initCommon(5);
-
-        background.setPosition(-gameport.getWorldWidth(), 0);
-//        background.setSize(background.getWidth(), background.getHeight());
-        background.setSize(background.getWidth() / NimbusRun.PPM, background.getHeight() / NimbusRun.PPM);
 
         //add these sprites to the world
         ground = new Ground(this);
@@ -132,9 +132,9 @@ public class GameMap {
             case 6: img = new TextureAtlas(Gdx.files.internal("spritesheets/MWSspritesheet.atlas")); break;
             default: img = new TextureAtlas(Gdx.files.internal("spritesheets/PTspritesheet.atlas")); break;
         }
-
         //background
-        background = new Sprite(new Texture("TapTap_BGseamless_long.png"));
+        background = new Sprite(new Texture("TapTap_BGseamless.png"));
+        background.setSize(background.getWidth() / NimbusRun.PPM, background.getHeight() / NimbusRun.PPM);
     }
 
     //called by server to add a new player into its GameMap
@@ -214,6 +214,8 @@ public class GameMap {
         //configure and start batch
         batch.setProjectionMatrix(gamecam.combined);
         batch.begin();
+        background.setPosition(-gameport.getWorldWidth(), -gameport.getWorldHeight());
+//        background.setPosition(gamecam.position.x - (gamecam.viewportWidth / 2), -gameport.getWorldHeight() / 2);
         background.draw(batch);
 
         // Render Players
