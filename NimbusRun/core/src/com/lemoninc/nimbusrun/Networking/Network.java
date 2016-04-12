@@ -32,7 +32,7 @@ public class Network {
         kryo.register(Network.Login.class);
         kryo.register(Network.PlayerJoinLeave.class);
         kryo.register(Network.MovementState.class);
-        kryo.register(Vector2.class);
+//        kryo.register(Vector2.class);
     }
 
     static public class Login {
@@ -78,13 +78,13 @@ public class Network {
 
     static public class MovementState {
         public int playerId;
-        public Vector2 position;
+        public int trigger;
 
         public MovementState() {}
 
-        public MovementState(int playerId, Vector2 position) {
+        public MovementState(int playerId, int trigger) {
             this.playerId = playerId;
-            this.position = position;
+            this.trigger = trigger;
         }
     }
 

@@ -65,6 +65,8 @@ public class GameMap {
     private Player playerLocal;
     private TextureAtlas img;
 
+    private int trigger;
+
     /**
      * This constructor is called inside TapTapClient
      */
@@ -219,8 +221,8 @@ public class GameMap {
     public void update(float delta) {
         //If client is created and local player has spawned
         if (client != null && playerLocal != null) {
-            if (playerLocal.handleInput()) { // (arrow key has been pressed by player)
-                client.sendMessageUDP(playerLocal.getMovementState());
+            if ((trigger = playerLocal.handleInput()) != 0) { // (arrow key has been pressed by player)
+                client.sendMessageUDP(playerLocal.getMovementState(trigger)); //this returns which key the player pressed
             }
             //send movement state to server
 
