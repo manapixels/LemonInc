@@ -19,7 +19,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.lemoninc.nimbusrun.TapTap3;
+import com.lemoninc.nimbusrun.NimbusRun;
 
 /**
  * Created by Nikki on 10/4/2016.
@@ -28,7 +28,7 @@ public class StoryLineScreen implements Screen{
     Texture background;
     private SpriteBatch batch;
     private Sprite sprite;
-    private TapTap3 game;
+    private NimbusRun game;
     private float gameWidth;
     private float gameHeight;
     private Viewport viewport;
@@ -42,7 +42,7 @@ public class StoryLineScreen implements Screen{
 
 
 
-    public StoryLineScreen(TapTap3 game,float gameWidth,float gameHeight){
+    public StoryLineScreen(NimbusRun game,float gameWidth,float gameHeight){
         this.game = game;
         this.gameWidth =gameWidth;
         this.gameHeight = gameHeight;
@@ -61,7 +61,7 @@ public class StoryLineScreen implements Screen{
         viewport=new FitViewport(gameWidth,gameHeight,camera);
         stage= new Stage(new ExtendViewport(gameWidth,gameHeight));
 
-        Continue = new TextButton("Click to Continue", style);
+        Continue = new TextButton("Click to Return", style);
         show();
     }
 

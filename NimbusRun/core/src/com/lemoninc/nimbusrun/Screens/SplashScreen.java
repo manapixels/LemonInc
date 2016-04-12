@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.lemoninc.nimbusrun.TapTap3;
+import com.lemoninc.nimbusrun.NimbusRun;
 
 /**
  * Created by Nikki on 8/4/2016.
@@ -19,14 +19,14 @@ import com.lemoninc.nimbusrun.TapTap3;
 public class SplashScreen implements Screen{
     private SpriteBatch batcher;
     private Sprite sprite;
-    private TapTap3 game;
+    private NimbusRun game;
     private float gameWidth;
     private float gameHeight;
     private Viewport viewport;
     private Camera camera;
     private long startTime;
 
-    public SplashScreen(TapTap3 game, float gameWidth, float gameHeight) {
+    public SplashScreen(NimbusRun game, float gameWidth, float gameHeight) {
         this.game = game;
         this.gameWidth = gameWidth;
         this.gameHeight = gameHeight;
@@ -54,7 +54,7 @@ public class SplashScreen implements Screen{
         batcher.begin();
         sprite.draw(batcher);
         batcher.end();
-        if (TimeUtils.millis()>(startTime+5000)) game.setScreen(new StoryLineScreen(game,gameWidth,gameHeight));
+        if (TimeUtils.millis()>(startTime+3000)) game.setScreen(new MenuScreen(game,gameWidth,gameHeight));
 
     }
 

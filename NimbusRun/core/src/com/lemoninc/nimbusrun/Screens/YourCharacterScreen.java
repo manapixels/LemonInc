@@ -14,7 +14,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.lemoninc.nimbusrun.TapTap3;
+import com.lemoninc.nimbusrun.NimbusRun;
 
 
 /**
@@ -23,7 +23,7 @@ import com.lemoninc.nimbusrun.TapTap3;
 public class YourCharacterScreen implements Screen{
     private SpriteBatch batcher;
     private Sprite sprite;
-    private TapTap3 game;
+    private NimbusRun game;
     private float gameWidth;
     private float gameHeight;
     private Viewport viewport;
@@ -48,7 +48,7 @@ public class YourCharacterScreen implements Screen{
         startTime = TimeUtils.millis();
 
     }
-    public YourCharacterScreen(TapTap3 game, float gameWidth, float gameHeight, int playernumber) {
+    public YourCharacterScreen(NimbusRun game, float gameWidth, float gameHeight, int playernumber) {
         this.playernumber=playernumber;
         this.game = game;
         this.gameWidth = gameWidth;

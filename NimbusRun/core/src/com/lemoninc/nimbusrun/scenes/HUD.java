@@ -19,7 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.lemoninc.nimbusrun.TapTap3;
+import com.lemoninc.nimbusrun.NimbusRun;
 
 
 /**
@@ -50,7 +50,7 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
         worldTimer = 60;
         timecount=0;
         camera=new PerspectiveCamera();
-        viewport=new FillViewport(TapTap3.V_WIDTH,TapTap3.V_HEIGHT,new OrthographicCamera());
+        viewport=new FillViewport(NimbusRun.V_WIDTH,NimbusRun.V_HEIGHT,new OrthographicCamera());
         shapeRenderer=new ShapeRenderer();
         progress=1f;
 

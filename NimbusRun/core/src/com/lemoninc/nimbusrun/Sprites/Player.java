@@ -24,7 +24,6 @@ package com.lemoninc.nimbusrun.Sprites;
  * ********************************/
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -35,7 +34,6 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
-import com.lemoninc.nimbusrun.Screens.PlayScreen;
 import com.lemoninc.nimbusrun.NimbusRun;
 
 public class Player extends Sprite {

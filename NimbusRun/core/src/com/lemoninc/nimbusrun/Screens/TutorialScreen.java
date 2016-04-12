@@ -19,7 +19,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.lemoninc.nimbusrun.TapTap3;
+import com.lemoninc.nimbusrun.NimbusRun;
 
 /**
  * Created by Nikki on 10/4/2016.
@@ -27,7 +27,7 @@ import com.lemoninc.nimbusrun.TapTap3;
 public class TutorialScreen implements Screen{
     private SpriteBatch batcher;
     private Sprite sprite;
-    private TapTap3 game;
+    private NimbusRun game;
     private float gameWidth;
     private float gameHeight;
     private Viewport viewport;
@@ -40,7 +40,7 @@ public class TutorialScreen implements Screen{
     private TextButton Return;
 
 
-    public TutorialScreen(TapTap3 game,float gameWidth,float gameHeight){
+    public TutorialScreen(NimbusRun game,float gameWidth,float gameHeight){
         this.game = game;
         this.gameWidth =gameWidth;
         this.gameHeight = gameHeight;

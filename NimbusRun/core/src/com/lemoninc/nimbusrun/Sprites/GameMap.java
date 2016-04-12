@@ -17,12 +17,11 @@ package com.lemoninc.nimbusrun.Sprites;
  * ********************************/
 
 import com.badlogic.gdx.Gdx;
-
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -40,7 +39,7 @@ import com.lemoninc.nimbusrun.NimbusRun;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GameMap {
+public class GameMap implements InputProcessor{
 
     private TapTapClient client; // only if I'm the client
     private TapTapServer server; // only if I'm internal to the server
@@ -66,6 +65,14 @@ public class GameMap {
 
     private Player playerLocal;
     private TextureAtlas img;
+
+
+    class TouchInfo {
+        public float touchX = 0;
+        public float touchY = 0;
+        public boolean touched = false;
+    }
+    private Map<Integer,TouchInfo> touches = new HashMap<Integer,TouchInfo>();
 
     /**
      * This constructor is called inside TapTapClient
@@ -94,6 +101,13 @@ public class GameMap {
         endWall = new EndWall(this);
 
         logInfo("GameMap initialised");
+
+        Gdx.input.setInputProcessor(this);
+
+        for(int i = 0; i < 2; i++){
+            touches.put(i, new TouchInfo());
+        }
+
     }
 
     /**
@@ -204,6 +218,27 @@ public class GameMap {
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
 //            player1.slow();
             playerLocal.slow();
+        if(Gdx.input.justTouched()) {
+            System.out.println("Points are: X=" + Gdx.input.getX() + "Y=" + Gdx.input.getY());
+            int x=Gdx.input.getX();
+            int y=Gdx.input.getY();
+            if(x>NimbusRun.V_WIDTH/2){
+                playerLocal.speed();
+            }
+            else{
+                playerLocal.jump();
+            }
+        }
+        if(touches.get(0).touched&&touches.get(1).touched){
+            if(touches.get(0).touchX<(NimbusRun.V_WIDTH/2)&&touches.get(1).touchX>(NimbusRun.V_WIDTH-(NimbusRun.V_WIDTH/2))){
+                // TODO: Implement method for attack
+                //player1.attack;
+            }
+            else if(touches.get(1).touchX<(NimbusRun.V_WIDTH/2)&&touches.get(0).touchX>(NimbusRun.V_WIDTH-(NimbusRun.V_WIDTH/2))) {
+                //TODO: Implement method for attack
+                //player1.attack
+            }
+        }
     }
 
     private void render() {
@@ -266,5 +301,54 @@ public class GameMap {
         this.client = null;
         this.players.clear();
         logInfo("on DIsconnection, clear the players Map");
+    }
+    @Override
+    public boolean keyDown(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        if(pointer < 2){
+            touches.get(pointer).touchX = screenX;
+            touches.get(pointer).touchY = screenY;
+            touches.get(pointer).touched = true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        if(pointer < 2){
+            touches.get(pointer).touchX = 0;
+            touches.get(pointer).touchY = 0;
+            touches.get(pointer).touched = false;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(int amount) {
+        return false;
     }
 }
