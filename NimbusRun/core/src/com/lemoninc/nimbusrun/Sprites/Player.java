@@ -35,6 +35,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
+import com.lemoninc.nimbusrun.Networking.Network;
 import com.lemoninc.nimbusrun.Screens.PlayScreen;
 import com.lemoninc.nimbusrun.NimbusRun;
 
@@ -210,6 +211,10 @@ public class Player extends Sprite {
             b2body.applyLinearImpulse(new Vector2(-1f, 0), b2body.getWorldCenter(), true);
         }
         return true;
+    }
+
+    public Network.MovementState getMovementState() {
+        return new Network.MovementState(b2body.getPosition());
     }
 
     public TextureAtlas getTxtAtlas(){ return img;}

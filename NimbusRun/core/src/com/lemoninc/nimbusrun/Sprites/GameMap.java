@@ -211,7 +211,7 @@ public class GameMap {
         //If client is created and local player has spawned
         if (client != null && playerLocal != null) {
             if (playerLocal.handleInput()) { // (arrow key has been pressed by player)
-
+                client.sendMessageUDP(playerLocal.getMovementState());
             }
             //send movement state to server
 

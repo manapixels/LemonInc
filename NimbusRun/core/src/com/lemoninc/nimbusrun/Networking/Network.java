@@ -11,6 +11,7 @@ package com.lemoninc.nimbusrun.Networking;
  *
  * ********************************/
 
+import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
 import com.esotericsoftware.minlog.Log;
@@ -30,6 +31,8 @@ public class Network {
 
         kryo.register(Network.Login.class);
         kryo.register(Network.PlayerJoinLeave.class);
+        kryo.register(Network.MovementState.class);
+        kryo.register(Vector2.class);
     }
 
     static public class Login {
@@ -70,6 +73,16 @@ public class Network {
             this.initial_y = initial_y;
 
             Network.logInfo("PlayerJoinLeave initialised by Server for Client "+playerId+" "+playerName);
+        }
+    }
+
+    static public class MovementState {
+        public Vector2 position;
+
+        public MovementState() {}
+
+        public MovementState(Vector2 position) {
+            this.position = position;
         }
     }
 

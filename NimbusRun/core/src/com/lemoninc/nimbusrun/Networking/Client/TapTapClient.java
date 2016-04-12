@@ -118,6 +118,20 @@ public class TapTapClient {
         logInfo("Client " + name + " of ID: " + id + " connected to server PORT " + Network.PORT);
     }
 
+    public void sendMessage(Object message) {
+        map.logInfo("SENT packet TCP");
+        if (client.isConnected()) {
+            client.sendTCP(message);
+        }
+    }
+
+    public void sendMessageUDP(Object message) {
+        map.logInfo("SENT packet UPD");
+        if (client.isConnected()) {
+            client.sendUDP(message);
+        }
+    }
+
     public void shutdown() {
         client.stop();
         client.close();
