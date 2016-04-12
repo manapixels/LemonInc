@@ -194,17 +194,14 @@ public class GameMap {
 
     public Viewport getGameport() { return this.gameport; }
 
-    private void handleInput(){
-        if (Gdx.input.isKeyJustPressed(Input.Keys.UP))
-//            player1.jump();
-            playerLocal.jump();
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
-//            player1.speed();
-            playerLocal.speed();
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
-//            player1.slow();
-            playerLocal.slow();
-    }
+//    private void handleInput(){
+//        if (Gdx.input.isKeyJustPressed(Input.Keys.UP))
+//            playerLocal.jump();
+//        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
+//            playerLocal.speed();
+//        if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
+//            playerLocal.slow();
+//    }
 
     /**
      * Update GameMap's state
@@ -213,7 +210,10 @@ public class GameMap {
     public void update(float delta) {
         //If client is created and local player has spawned
         if (client != null && playerLocal != null) {
-            handleInput();
+            if (playerLocal.handleInput()) { // (arrow key has been pressed by player)
+
+            }
+            //send movement state to server
 
         }
     }

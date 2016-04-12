@@ -161,13 +161,29 @@ public class Player extends Sprite {
         return false;
     }
 
+    /**
+     * Player's movement
+     * @return
+     */
+    public boolean handleInput(){
+        //for Desktop
+        if (Gdx.input.isKeyJustPressed(Input.Keys.UP))
+            return this.jump();
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
+            return this.speed();
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
+            return this.slow();
+
+        return false;
+    }
+
     public void update(float delta){
         this.setPosition(getX(), getY());
         this.setRegion(anim.getKeyFrame(stateTime, true));
         //img.setPosition(b2body.getPosition().x - CHARACTER_SIZE / 2 * 1.25f, b2body.getPosition().y - CHARACTER_SIZE / 2 * 1.25f);
     }
 
-    public void jump() {
+    public boolean jump() {
         if (currentState == State.DOUBLEJUMPING){
             currentState = getState();
         }
@@ -180,17 +196,20 @@ public class Player extends Sprite {
             currentState = State.JUMPING;
             b2body.applyLinearImpulse(new Vector2(0, 5f), b2body.getWorldCenter(), true);
         }
+        return true;
     }
 
-    public void speed() {
+    public boolean speed() {
         if (b2body.getLinearVelocity().x <= 3) {
             b2body.applyLinearImpulse(new Vector2(1f, 0), b2body.getWorldCenter(), true);
         }
+        return true;
     }
-    public void slow() {
+    public boolean slow() {
         if (b2body.getLinearVelocity().x >= -3) {
             b2body.applyLinearImpulse(new Vector2(-1f, 0), b2body.getWorldCenter(), true);
         }
+        return true;
     }
 
     public TextureAtlas getTxtAtlas(){ return img;}
