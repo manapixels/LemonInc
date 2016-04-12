@@ -2,11 +2,12 @@ package com.lemoninc.nimbusrun.Sprites;
 
 /*********************************
  * FILENAME : Ground.java
- * DESCRIPTION : An edgeShape (box2D line) to represent ground, will be updated soon
+ * DESCRIPTION : An edgeShape (box2D line) to represent ground,
+ *               has random map generating function of 10 screens long
  * PUBLIC FUNCTIONS :
  *       none
  * NOTES :
- * LAST UPDATED: 9/4/2016 17:00
+ * LAST UPDATED: 11/4/2016 22:00
  *
  * ********************************/
 
