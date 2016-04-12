@@ -65,8 +65,6 @@ public class GameMap {
     private Player playerLocal;
     private TextureAtlas img;
 
-    private int trigger;
-
     /**
      * This constructor is called inside TapTapClient
      */
@@ -159,9 +157,7 @@ public class GameMap {
     public synchronized void playerMoved(Network.MovementState msg) {
         Player player = players.get(msg.playerId);
         if (player != null) {
-            logInfo("player is identified");
             player.setMovementState(msg);
-//            player.setPosition(msg.position.x, msg.position.y);
         }
     }
 
@@ -221,8 +217,8 @@ public class GameMap {
     public void update(float delta) {
         //If client is created and local player has spawned
         if (client != null && playerLocal != null) {
-            if ((trigger = playerLocal.handleInput()) != 0) { // (arrow key has been pressed by player)
-                client.sendMessageUDP(playerLocal.getMovementState(trigger)); //this returns which key the player pressed
+            if (playerLocal.handleInput()) { // (arrow key has been pressed by player)
+                client.sendMessageUDP(playerLocal.getMovementState());
             }
             //send movement state to server
 
@@ -236,7 +232,6 @@ public class GameMap {
 
         //configure and start batch
         batch.setProjectionMatrix(gamecam.combined);
-
         batch.begin();
         background.draw(batch);
 

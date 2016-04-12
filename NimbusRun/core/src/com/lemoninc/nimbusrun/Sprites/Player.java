@@ -55,6 +55,8 @@ public class Player extends Sprite {
     private String name;
 
 
+    Vector2 previousPosition;
+
     public Player() {
         CHARACTER_SIZE = 150 / NimbusRun.PPM;
     }
@@ -111,6 +113,7 @@ public class Player extends Sprite {
         //img = new Sprite(new Texture(fileName));
         //img.setSize(CHARACTER_SIZE * 1.25f, CHARACTER_SIZE * 1.25f);
 
+        previousPosition = new Vector2(this.getX(), this.getY()); //TODO: is this correct?
     }
 
     public State getState(){
@@ -146,32 +149,33 @@ public class Player extends Sprite {
         return b2body.getPosition().y;
     }
 
+    /**
+     * checks if the box2d body of Player has moved or not
+     * @return
+     */
+    public boolean hasMoved() {
+        if (previousPosition.x != this.getX() || previousPosition.y != getY()) {
+            previousPosition.x = this.getX();
+            previousPosition.y = this.getY();
+            return true;
+        }
+        return false;
+    }
 
     /**
      * Player's movement
-     * 1 - JUMP
-     * 2 - SPEED
-     * 3 - SLOW
-     * 0 - NO MOVEMENT
      * @return
      */
-    public int handleInput(){
+    public boolean handleInput(){
         //for Desktop
-        if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
-            this.jump();
-            return 1;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            this.speed();
-            return 2;
+        if (Gdx.input.isKeyJustPressed(Input.Keys.UP))
+            return this.jump();
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
+            return this.speed();
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
+            return this.slow();
 
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            this.slow();
-            return 3;
-        }
-
-        return 0;
+        return false;
     }
 
     public void update(float delta){
@@ -210,28 +214,16 @@ public class Player extends Sprite {
     }
 
     /**
-     * Get the input key of the Player wrapped in MovementState
-     * 1 - JUMP
-     * 2 - SPEED
-     * 3 - SLOW
-     * 0 - NO MOVEMENT
+     * Get the box2d position of this Player wrapped in MovementState
      * @return
      */
-    public Network.MovementState getMovementState(int trigger) {
-        return new Network.MovementState(id, trigger);
+    public Network.MovementState getMovementState() {
+        return new Network.MovementState(id, b2body.getPosition());
     }
 
     public void setMovementState(Network.MovementState msg) {
-        //for Desktop
-
-        switch (msg.trigger) {
-            case 1: this.jump();
-            case 2: this.speed();
-            case 3: this.slow();
-
-                default:
-        }
-
+        b2body.setTransform(msg.position, 0f); //TODO: collision throws Runtime error 
+//        System.out.println("Changed player's x is "+msg.position.x+" y is "+msg.position.y);
     }
 
     public TextureAtlas getTxtAtlas(){ return img;}

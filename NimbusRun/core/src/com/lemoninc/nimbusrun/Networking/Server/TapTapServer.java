@@ -109,6 +109,7 @@ public class TapTapServer {
                 }
                 else if(message instanceof Network.MovementState) {
                     Network.MovementState msg = (Network.MovementState)message;
+                    logInfo("MovementState received");
                     msg.playerId = connection.getID();
                     // TODO Server updates its copy of player from what its told
                     map.playerMoved(msg);
@@ -144,7 +145,7 @@ public class TapTapServer {
     }
 
     public void update(float delta) {
-        map.update(delta); //TODO:make sure server's map.update doesn't contain rendering
+//        map.update(delta); //TODO:make sure server's map.update doesn't contain rendering
     }
 
     public void shutdown() {

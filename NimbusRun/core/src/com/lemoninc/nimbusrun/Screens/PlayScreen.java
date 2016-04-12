@@ -115,9 +115,9 @@ public class PlayScreen implements Screen {
         gamemap.render();
 
 
-        if(isHost){
-            server.update(delta);
-        }
+//        if(isHost){
+//            server.update(delta);
+//        }
     }
 
     public void gameOver() {
