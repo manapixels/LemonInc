@@ -7,17 +7,14 @@ package com.lemoninc.nimbusrun.Screens;
  *       void     show()
  *       void     handleInput()
  *       void     render(float delta)
- *       void     update(float delta)
  *       void     gameOver()
  *       void     resize(int width, int height)
  *       void     hide()
  *       void     resume()
  *       void     pause()
- *       World    getWorld()
- *       ViewPort getGamePort()
  *       void     dispose()
  * NOTES :
- * LAST UPDATED: 8/4/2016 09:00
+ * LAST UPDATED: 9/4/2016 14:00
  *
  * ********************************/
 
@@ -37,6 +34,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.minlog.Log;
 import com.lemoninc.nimbusrun.Networking.Client.TapTapClient;
+//import com.lemoninc.nimbusrun.Networking.Networking;
 import com.lemoninc.nimbusrun.Networking.Server.TapTapServer;
 import com.lemoninc.nimbusrun.Sprites.Ceiling;
 import com.lemoninc.nimbusrun.Sprites.EndWall;
@@ -45,6 +43,8 @@ import com.lemoninc.nimbusrun.Sprites.Player;
 import com.lemoninc.nimbusrun.Sprites.StartWall;
 import com.lemoninc.nimbusrun.TapTap3;
 import com.lemoninc.nimbusrun.scenes.HUD;
+import com.lemoninc.nimbusrun.Sprites.GameMap;
+import com.lemoninc.nimbusrun.NimbusRun;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -52,14 +52,14 @@ import java.util.Map;
 
 //import com.lemoninc.nimbusrun.Networking.Networking;
 
+    private NimbusRun game;
 public class PlayScreen implements Screen,InputProcessor {
 
     private TapTap3 game;
     private OrthographicCamera gamecam;
     private Viewport gameport;
 
-    private SpriteBatch batch;
-    private Sprite background;
+    private GameMap gamemap;
 
     private World world;
     private Box2DDebugRenderer b2dr;
@@ -77,6 +77,15 @@ public class PlayScreen implements Screen,InputProcessor {
     private TapTapServer server;
     private HUD hud;
 
+    /**
+     *
+     * @param game
+     * @param isHost
+     * @param ipAddress Server's IP address (only relevant to the Client)
+     * @param playerName
+     */
+    public PlayScreen(NimbusRun game, boolean isHost, String ipAddress, String playerName){
+        logInfo("My name is "+playerName);
 
     class TouchInfo {
         public float touchX = 0;
@@ -131,19 +140,22 @@ public class PlayScreen implements Screen,InputProcessor {
 
     /**
      * Called when this screen becomes the current screen for a Game.
-     * when the screen appears, start TapTapClient, TODO:get the map from the client.
-     * If player is a host, start TapTapServer, connect itself to the server.
+     * when the screen appears, create a new Client, get the map from the client.
+     * If player is a host, create a new Server, connect the newly created client to the server.
      * If player is joining game, connect client to the ip address.
      */
     @Override
     public void show() {
         client = new TapTapClient(playerName);
-        //get map
+        logInfo("Client created!");
+        gamemap = client.getMap();
 
         if (isHost) {
             //start my server and connect my client to my server
+            logInfo("Starting server...");
             try {
                 server = new TapTapServer();
+                logInfo("localClient connecting to Server");
                 client.connect("localhost");
             } catch (IOException e) {
                 e.printStackTrace();
@@ -164,12 +176,6 @@ public class PlayScreen implements Screen,InputProcessor {
     }
 
     protected void handleInput() {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.UP))
-            player1.jump();
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
-            player1.speed();
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
-            player1.slow();
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
             gameOver();
         }
@@ -200,16 +206,13 @@ public class PlayScreen implements Screen,InputProcessor {
 
     }
 
-    //TODO: WEISHENG: need cleanup
     @Override
     public void render(float delta) {
+//        logInfo("Rendering");
 
-        update(delta);
+        handleInput();
+        gamemap.update(delta);
 
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-//        map.update(delta);
 //        map.render();
 //
 //        if(isHost){
@@ -249,6 +252,7 @@ public class PlayScreen implements Screen,InputProcessor {
 
     }
 
+    public void gameOver() {
     //TODO: WEISHENG: gamemap?
     public void update(float delta) {
         handleInput();
@@ -284,10 +288,7 @@ public class PlayScreen implements Screen,InputProcessor {
 
     @Override
     public void resize(int width, int height) {
-        //TODO: gamemap.resize(width,height)???
-
-        gameport.update(width, height);
-        gamecam.position.set(gamecam.viewportWidth / 2, gamecam.viewportHeight / 2, 0);
+        gamemap.resize(width, height);
     }
 
     /**
@@ -299,7 +300,7 @@ public class PlayScreen implements Screen,InputProcessor {
         client.shutdown();
         if (server != null)
             server.shutdown();
-//        map.dispose();
+        gamemap.dispose();
     }
 
     @Override
@@ -308,26 +309,11 @@ public class PlayScreen implements Screen,InputProcessor {
     @Override
     public void pause() {    }
 
-
-    public World getWorld(){
-        return world;
-    }
-    public Viewport getGamePort(){
-        return gameport;
-    }
-
     @Override
-    public void dispose() {
-        world.dispose();
-        background.getTexture().dispose();
-        batch.dispose();
-        player1.getTxtAtlas().dispose();
-        player2.getTxtAtlas().dispose();
-        player3.getTxtAtlas().dispose();
-        //player4.getTxtAtlas().dispose();
-    }
+    public void dispose() {    }
 
     private void logInfo(String string) {
+        Log.info("[PlayScreen]: "+string);
         Log.info(string);
     }
 

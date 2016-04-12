@@ -28,14 +28,15 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.lemoninc.nimbusrun.TapTap3;
+//import com.lemoninc.nimbusrun.Networking.Networking;
+import com.lemoninc.nimbusrun.NimbusRun;
 
 import java.util.Random;
 
 //import com.lemoninc.nimbusrun.Networking.Networking;
 
 public class WaitScreen implements Screen{
-    private TapTap3 game;
+    private NimbusRun game;
     private OrthographicCamera gamecam;
     private Viewport gameport;
     private SpriteBatch batch;
@@ -50,7 +51,7 @@ public class WaitScreen implements Screen{
      * This constructor instantiates the Sprites, Viewport, Camera, etc
      * @param game The Game object
      */
-    public WaitScreen(TapTap3 game) {
+    public WaitScreen(NimbusRun game) {
         this.game = game;
         gamecam = new OrthographicCamera();
         gameport = new FitViewport(game.V_WIDTH / game.PPM, game.V_HEIGHT / game.PPM, gamecam);
@@ -113,6 +114,10 @@ public class WaitScreen implements Screen{
                 playGame();
 
 
+            playGame();
+        }
+        else if (Gdx.input.isKeyPressed(Input.Keys.UP)){
+            game.setScreen(new PlayScreen(game, false, "localhost", getName()));
         }
     }
 

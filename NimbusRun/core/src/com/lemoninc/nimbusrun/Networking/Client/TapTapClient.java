@@ -4,6 +4,8 @@ package com.lemoninc.nimbusrun.Networking.Client;
  * FILENAME : TapTapClient.java
  * DESCRIPTION :
  * PUBLIC FUNCTIONS :
+ *       private void handleConnect(Connection connection)
+ *       private void handleMessage(int playerID, Object message)
  *       void    connect(String host)
  *       void    shutdown()
  * NOTES :
@@ -11,13 +13,11 @@ package com.lemoninc.nimbusrun.Networking.Client;
  *
  * ********************************/
 
-import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
 import com.lemoninc.nimbusrun.Networking.Network;
-import com.lemoninc.nimbusrun.Networking.Packet;
 import com.lemoninc.nimbusrun.Sprites.GameMap;
 
 import java.io.IOException;
@@ -30,14 +30,8 @@ public class TapTapClient {
     public String remoteIP;
     private GameMap map;
 
-    //Coonnection info
-    int portSocket = 8080;
-    String ipAddress = "localhost";
-    static Scanner scanner;
-
     //Kryonet Stuff
     public Client client;
-    private ClientNetworkListener cnl;
 
     /**
      * This constructor is called in PlayScreen when the player plays game as a client
@@ -57,26 +51,33 @@ public class TapTapClient {
             public void received(Connection connection, Object object) {
                 handleMessage(connection.getID(), object);
             }
-
             public void disconnected(Connection connection) {
                 handleDisonnect(connection);
             }
         });
     }
 
+    public GameMap getMap() {
+        return this.map;
+    }
+
     /**
-     * TODO:what happens here?
+     *
      * This method is called when the client establishes connection with server.
-     * Method gets connection ID, remote IP from server,
+     * Method gets connection ID between this cleint and server, remote IP from server.
+     * Method sends a Login package containing its name to server.
+     * Method calls GameMap to instantiate a character with "name"
      * @param connection
      */
     private void handleConnect(Connection connection) {
-        id = connection.getID();
+        id = connection.getID(); //connection id between client and server
         remoteIP = connection.getRemoteAddressTCP().toString(); //Returns the IP address and port of the remote end of the TCP connection, or null if this connection is not connected.
 
         //send Login to server
         Network.Login clientName = new Network.Login(name);
         client.sendTCP(clientName);
+
+        map.onConnect(name);
     }
 
     /**
@@ -94,26 +95,27 @@ public class TapTapClient {
      * @param message
      */
     private void handleMessage(int playerID, Object message) {
-//        if (message instanceof PlayerJoinLeave) {
-//            PlayerJoinLeave msg = (PlayerJoinLeave) message;
-//            if (msg.hasJoined) {
+        if (message instanceof Network.PlayerJoinLeave) {
+            Network.PlayerJoinLeave msg = (Network.PlayerJoinLeave) message;
+            if (msg.hasJoined) {
 //                map.setStatus(msg.name + " joined");
-//                map.addPlayer(msg);
-//            } else {
+                map.addPlayer(msg);
+                logInfo("A new player "+msg.playerId+" has joined.");
+            } else {
 //                map.setStatus(msg.name + " left");
-//                map.removePlayer(msg);
-//            }
-//        }
+                map.removePlayer(msg);
+            }
+        }
 
     }
 
     private void handleDisonnect(Connection connection) {
-//        map.onDisconnect();
+        map.onDisconnect();
     }
 
     public void connect(String host) throws IOException{
         client.connect(5000, host, Network.PORT, Network.PORTUDP);
-
+        logInfo("Client " + name + " of ID: " + id + " connected to server PORT " + Network.PORT);
     }
 
     public void shutdown() {
@@ -122,6 +124,6 @@ public class TapTapClient {
     }
 
     private void logInfo(String string) {
-        Log.info(string);
+        Log.info("[TapTapClient]: "+string);
     }
 }

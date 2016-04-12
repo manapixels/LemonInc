@@ -9,17 +9,22 @@ package com.lemoninc.nimbusrun.Sprites;
  *       void           draw(SpriteBatch batch)
  *       float          getX()
  *       float          getY()
+ *       public boolean hasMoved()
  *       void           update(float delta)
  *       void           jump()
  *       void           speed()
  *       void           slow()
  *       TextureAtlas   getTxtAtlas()
+ *       public void setId(int id)
+ *       public void setName(String name)
+ *       public String getName()
  * NOTES :
  * LAST UPDATED: 8/4/2016 09:00
  *
  * ********************************/
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -31,7 +36,7 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.lemoninc.nimbusrun.Screens.PlayScreen;
-import com.lemoninc.nimbusrun.TapTap3;
+import com.lemoninc.nimbusrun.NimbusRun;
 
 public class Player extends Sprite {
     public World world;
@@ -42,29 +47,39 @@ public class Player extends Sprite {
 
     private TextureAtlas img;
     private Animation anim;
-    private PlayScreen screen;
     private final float CHARACTER_SIZE;
     private float stateTime;
+
+    private int id;
+    private String name;
 
 
     Vector2 previousPosition;
 
     public Player() {
-        CHARACTER_SIZE = 150 / TapTap3.PPM;
+        CHARACTER_SIZE = 150 / NimbusRun.PPM;
     }
 
-    public Player(PlayScreen screen, int whichCharacter, float x, float y) {
-        this.screen = screen;
-        this.world = screen.getWorld();
+    /**
+     * TODO: this constructor should only be created by client?
+     * @param gameMap
+     * @param img
+     * @param x
+     * @param y
+     */
+    public Player(GameMap gameMap, TextureAtlas img, float x, float y) {
+
+        this.world = gameMap.getWorld();
         currentState = State.DEFAULT;
         previousState = State.DEFAULT;
-        CHARACTER_SIZE = 170 / TapTap3.PPM;
+        CHARACTER_SIZE = 170 / NimbusRun.PPM;
         stateTime = 0f;
 
+        //create a dynamic bodydef
         BodyDef bdef = new BodyDef();
-        bdef.position.set(x / TapTap3.PPM, y / TapTap3.PPM);
+        bdef.position.set(x / NimbusRun.PPM, y / NimbusRun.PPM);
         bdef.type = BodyDef.BodyType.DynamicBody;
-        b2body = world.createBody(bdef);
+        b2body = world.createBody(bdef); //Body of Player
 
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
@@ -72,28 +87,32 @@ public class Player extends Sprite {
 //        PolygonShape shape = new PolygonShape();
 //        shape.setAsBox(x, y);
         fdef.shape = shape;
-        b2body.createFixture(fdef);
+        b2body.createFixture(fdef); //Player is a circle
         shape.dispose();
 
-        switch(whichCharacter){
-            // 1. LAUGHING BUDDHA
-            // 2. SHESHNAH WITH KRISHNA
-            // 3. NINE-TAILED FOX
-            // 4. KAPPA
-            // 5. PONTIANAK
-            // 6. MADAME WHITE SNAKE
-            case 1: img = new TextureAtlas(Gdx.files.internal("spritesheets/LBspritesheet.atlas")); break;
-            case 2: img = new TextureAtlas(Gdx.files.internal("spritesheets/SKspritesheet.atlas")); break;
-            case 3: img = new TextureAtlas(Gdx.files.internal("spritesheets/FXspritesheet.atlas")); break;
-            case 4: img = new TextureAtlas(Gdx.files.internal("spritesheets/KPspritesheet.atlas")); break;
-            case 5: img = new TextureAtlas(Gdx.files.internal("spritesheets/PTspritesheet.atlas")); break;
-            case 6: img = new TextureAtlas(Gdx.files.internal("spritesheets/MWSspritesheet.atlas")); break;
-            default: img = new TextureAtlas(Gdx.files.internal("spritesheets/PTspritesheet.atlas")); break;
-        }
+//        switch(whichCharacter){
+//            // 1. LAUGHING BUDDHA
+//            // 2. SHESHNAH WITH KRISHNA
+//            // 3. NINE-TAILED FOX
+//            // 4. KAPPA
+//            // 5. PONTIANAK
+//            // 6. MADAME WHITE SNAKE
+//            case 1: img = new TextureAtlas(Gdx.files.internal("spritesheets/LBspritesheet.atlas")); break;
+//            case 2: img = new TextureAtlas(Gdx.files.internal("spritesheets/SKspritesheet.atlas")); break;
+//            case 3: img = new TextureAtlas(Gdx.files.internal("spritesheets/FXspritesheet.atlas")); break;
+//            case 4: img = new TextureAtlas(Gdx.files.internal("spritesheets/KPspritesheet.atlas")); break;
+//            case 5: img = new TextureAtlas(Gdx.files.internal("spritesheets/PTspritesheet.atlas")); break;
+//            case 6: img = new TextureAtlas(Gdx.files.internal("spritesheets/MWSspritesheet.atlas")); break;
+//            default: img = new TextureAtlas(Gdx.files.internal("spritesheets/PTspritesheet.atlas")); break;
+//        }
+
+        this.img = img;
 
         anim = new Animation(1f/40f, img.getRegions());
         //img = new Sprite(new Texture(fileName));
         //img.setSize(CHARACTER_SIZE * 1.25f, CHARACTER_SIZE * 1.25f);
+
+        previousPosition = new Vector2(this.getX(), this.getY()); //TODO: is this correct?
     }
 
     public State getState(){
@@ -108,9 +127,17 @@ public class Player extends Sprite {
         else
             return State.DEFAULT;
     }
-    public void draw(SpriteBatch batch){
-        stateTime += Gdx.graphics.getDeltaTime();
-        batch.draw(anim.getKeyFrame(stateTime, true), getX()-CHARACTER_SIZE/2, getY()-CHARACTER_SIZE/2, CHARACTER_SIZE, CHARACTER_SIZE);
+
+    public void render(SpriteBatch spriteBatch) {
+        this.draw(spriteBatch);
+    }
+
+    public void draw(SpriteBatch batch) {
+        if (b2body != null) {
+            stateTime += Gdx.graphics.getDeltaTime();
+            batch.draw(anim.getKeyFrame(stateTime, true), getX() - CHARACTER_SIZE / 2, getY() - CHARACTER_SIZE / 2, CHARACTER_SIZE, CHARACTER_SIZE);
+        }
+
         //img.draw(batch);
     }
 
@@ -119,6 +146,19 @@ public class Player extends Sprite {
     }
     public float getY(){
         return b2body.getPosition().y;
+    }
+
+    /**
+     * checks if the box2d body of Player has moved or not
+     * @return
+     */
+    public boolean hasMoved() {
+        if (previousPosition.x != this.getX() || previousPosition.y != getY()) {
+            previousPosition.x = this.getX();
+            previousPosition.y = this.getY();
+            return true;
+        }
+        return false;
     }
 
     public void update(float delta){
@@ -134,27 +174,36 @@ public class Player extends Sprite {
         else if (currentState == State.JUMPING){
             previousState = State.JUMPING;
             currentState = State.DOUBLEJUMPING;
-            b2body.applyLinearImpulse(new Vector2(0, 4f), b2body.getWorldCenter(), true);
+            b2body.applyLinearImpulse(new Vector2(0, 5f), b2body.getWorldCenter(), true);
         }
         else {
             currentState = State.JUMPING;
-            b2body.applyLinearImpulse(new Vector2(0, 4f), b2body.getWorldCenter(), true);
+            b2body.applyLinearImpulse(new Vector2(0, 5f), b2body.getWorldCenter(), true);
         }
     }
 
     public void speed() {
-//        b2body.setLinearVelocity(new Vector2(3f, 0));
-//    }
         if (b2body.getLinearVelocity().x <= 3) {
             b2body.applyLinearImpulse(new Vector2(1f, 0), b2body.getWorldCenter(), true);
         }
     }
     public void slow() {
-//        b2body.setLinearVelocity(new Vector2(-3f, 0));
         if (b2body.getLinearVelocity().x >= -3) {
             b2body.applyLinearImpulse(new Vector2(-1f, 0), b2body.getWorldCenter(), true);
         }
     }
 
     public TextureAtlas getTxtAtlas(){ return img;}
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
 }
