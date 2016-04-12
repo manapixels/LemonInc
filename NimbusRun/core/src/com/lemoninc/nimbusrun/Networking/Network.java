@@ -77,11 +77,13 @@ public class Network {
     }
 
     static public class MovementState {
+        public int playerId;
         public Vector2 position;
 
         public MovementState() {}
 
-        public MovementState(Vector2 position) {
+        public MovementState(int playerId, Vector2 position) {
+            this.playerId = playerId;
             this.position = position;
         }
     }

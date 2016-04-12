@@ -154,6 +154,15 @@ public class GameMap {
         players.put(msg.playerId, newPlayer);
     }
 
+    public synchronized void playerMoved(Network.MovementState msg) {
+        Player player = players.get(msg.playerId);
+        if (player != null) {
+            logInfo("player is identified");
+            player.setMovementState(msg);
+//            player.setPosition(msg.position.x, msg.position.y);
+        }
+    }
+
     /**
      * Destroy the disconnected player's body from world
      * Remove disconnected player from players
@@ -225,6 +234,7 @@ public class GameMap {
 
         //configure and start batch
         batch.setProjectionMatrix(gamecam.combined);
+
         batch.begin();
         background.draw(batch);
 

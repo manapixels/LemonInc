@@ -213,8 +213,17 @@ public class Player extends Sprite {
         return true;
     }
 
+    /**
+     * Get the box2d position of this Player wrapped in MovementState
+     * @return
+     */
     public Network.MovementState getMovementState() {
-        return new Network.MovementState(b2body.getPosition());
+        return new Network.MovementState(id, b2body.getPosition());
+    }
+
+    public void setMovementState(Network.MovementState msg) {
+        b2body.setTransform(msg.position, 0f); //TODO: collision throws Runtime error 
+//        System.out.println("Changed player's x is "+msg.position.x+" y is "+msg.position.y);
     }
 
     public TextureAtlas getTxtAtlas(){ return img;}

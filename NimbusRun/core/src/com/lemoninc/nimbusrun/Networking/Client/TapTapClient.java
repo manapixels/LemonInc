@@ -106,6 +106,13 @@ public class TapTapClient {
                 map.removePlayer(msg);
             }
         }
+        else if (message instanceof Network.MovementState) {
+            Network.MovementState msg = (Network.MovementState) message;
+            logInfo("MovementState received from "+msg.playerId);
+
+            //hey map, someone moved, handle this
+            map.playerMoved(msg);
+        }
 
     }
 

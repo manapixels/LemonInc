@@ -107,6 +107,14 @@ public class TapTapServer {
                         }
                     }
                 }
+                else if(message instanceof Network.MovementState) {
+                    Network.MovementState msg = (Network.MovementState)message;
+                    msg.playerId = connection.getID();
+                    // TODO Server updates its copy of player from what its told
+                    map.playerMoved(msg);
+//					"SERVER "+msg.playerId+" moved"
+                    server.sendToAllExceptUDP(connection.getID(), msg);
+                }
             }
 
             public void disconnected(Connection c) {
@@ -136,7 +144,7 @@ public class TapTapServer {
     }
 
     public void update(float delta) {
-//        map.update(delta); //TODO:make sure server's map.update doesn't contain rendering
+        map.update(delta); //TODO:make sure server's map.update doesn't contain rendering
     }
 
     public void shutdown() {
