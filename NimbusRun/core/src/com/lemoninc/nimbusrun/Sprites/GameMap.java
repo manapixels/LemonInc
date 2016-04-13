@@ -154,6 +154,14 @@ public class GameMap {
         players.put(msg.playerId, newPlayer);
     }
 
+    public synchronized void playerMoved(Network.MovementState msg) {
+        //TODO: players should be ConcurrentHashMap?
+        Player player = players.get(msg.playerId);
+        if (player != null) {
+            player.setMovementState(msg);
+        }
+    }
+
     /**
      * Destroy the disconnected player's body from world
      * Remove disconnected player from players
@@ -194,19 +202,31 @@ public class GameMap {
 
     public Viewport getGameport() { return this.gameport; }
 
-    private void handleInput(){
-        if (Gdx.input.isKeyJustPressed(Input.Keys.UP))
-//            player1.jump();
-            playerLocal.jump();
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
-//            player1.speed();
-            playerLocal.speed();
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
-//            player1.slow();
-            playerLocal.slow();
+    /**
+     * Update GameMap's state.
+     *
+     * Should the box world be rendered here?
+     *
+     * @param delta
+     */
+    public void update(float delta) {
+        //If client is created and local player has spawned
+        if (client != null && playerLocal != null) {
+            if (playerLocal.handleInput()) { // (arrow key has been pressed by player)
+                client.sendMessageUDP(playerLocal.getMovementState()); //send movement state to server
+            }
+
+            //gamecam constantly to follow playerLocal
+            gamecam.position.set(playerLocal.getX(), playerLocal.getY(), 0);
+            gamecam.update();
+        }
+
+        //Update player
+        //TODO: should the box2d world be rendered here?
+
     }
 
-    private void render() {
+    public void render() {
         //clears screen first, set color to black
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -232,16 +252,9 @@ public class GameMap {
 
         //steps box2d world
         world.step(1 / 60f, 6, 2);
-        //gamecam constantly to follow player1
-        gamecam.position.set(playerLocal.getX(), playerLocal.getY(), 0);
-        gamecam.update();
-
     }
 
-    public void update(float delta) {
-        handleInput();
-        render();
-    }
+
 
     public synchronized void logInfo(String string) {
         Log.info("[GameMap]: " + (isClient ? "[Client] " : "[Server] ") + string);

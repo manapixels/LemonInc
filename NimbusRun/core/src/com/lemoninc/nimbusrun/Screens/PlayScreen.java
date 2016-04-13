@@ -108,16 +108,14 @@ public class PlayScreen implements Screen {
 
     @Override
     public void render(float delta) {
-//        logInfo("Rendering");
 
-        handleInput();
         gamemap.update(delta);
+        gamemap.render();
 
-//        map.render();
-//
-//        if(isHost){
-//            server.update(delta);
-//        }
+
+        if(isHost){
+            server.update(delta);
+        }
     }
 
     public void gameOver() {
