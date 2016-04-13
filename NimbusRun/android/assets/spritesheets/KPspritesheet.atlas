@@ -1,705 +1,705 @@
 KPspritesheet.png
-size: 2420, 2420
+size: 1820, 1820
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
 Kappa Animation0001
   rotate: false
   xy: 1, 1
-  size: 240, 240
-  orig: 240, 240
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0002
   rotate: false
-  xy: 1, 243
-  size: 240, 240
-  orig: 240, 240
+  xy: 1, 183
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0003
   rotate: false
-  xy: 1, 485
-  size: 240, 240
-  orig: 240, 240
+  xy: 1, 365
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0004
   rotate: false
-  xy: 1, 727
-  size: 240, 240
-  orig: 240, 240
+  xy: 1, 547
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0005
   rotate: false
-  xy: 1, 969
-  size: 240, 240
-  orig: 240, 240
+  xy: 1, 729
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0006
   rotate: false
-  xy: 1, 1211
-  size: 240, 240
-  orig: 240, 240
+  xy: 1, 911
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0007
   rotate: false
-  xy: 1, 1453
-  size: 240, 240
-  orig: 240, 240
+  xy: 1, 1093
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0008
   rotate: false
-  xy: 1, 1695
-  size: 240, 240
-  orig: 240, 240
+  xy: 1, 1275
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0009
   rotate: false
-  xy: 1, 1937
-  size: 240, 240
-  orig: 240, 240
+  xy: 1, 1457
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0010
   rotate: false
-  xy: 1, 2179
-  size: 240, 240
-  orig: 240, 240
+  xy: 1, 1639
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0011
   rotate: false
-  xy: 243, 1
-  size: 240, 240
-  orig: 240, 240
+  xy: 183, 1
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0012
   rotate: false
-  xy: 485, 1
-  size: 240, 240
-  orig: 240, 240
+  xy: 365, 1
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0013
   rotate: false
-  xy: 727, 1
-  size: 240, 240
-  orig: 240, 240
+  xy: 547, 1
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0014
   rotate: false
-  xy: 969, 1
-  size: 240, 240
-  orig: 240, 240
+  xy: 729, 1
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0015
   rotate: false
-  xy: 1211, 1
-  size: 240, 240
-  orig: 240, 240
+  xy: 911, 1
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0016
   rotate: false
-  xy: 1453, 1
-  size: 240, 240
-  orig: 240, 240
+  xy: 1093, 1
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0017
   rotate: false
-  xy: 1695, 1
-  size: 240, 240
-  orig: 240, 240
+  xy: 1275, 1
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0018
   rotate: false
-  xy: 1937, 1
-  size: 240, 240
-  orig: 240, 240
+  xy: 1457, 1
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0019
   rotate: false
-  xy: 2179, 1
-  size: 240, 240
-  orig: 240, 240
+  xy: 1639, 1
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0020
   rotate: false
-  xy: 243, 243
-  size: 240, 240
-  orig: 240, 240
+  xy: 183, 183
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0021
   rotate: false
-  xy: 243, 485
-  size: 240, 240
-  orig: 240, 240
+  xy: 183, 365
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0022
   rotate: false
-  xy: 243, 727
-  size: 240, 240
-  orig: 240, 240
+  xy: 183, 547
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0023
   rotate: false
-  xy: 243, 969
-  size: 240, 240
-  orig: 240, 240
+  xy: 183, 729
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0024
   rotate: false
-  xy: 243, 1211
-  size: 240, 240
-  orig: 240, 240
+  xy: 183, 911
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0025
   rotate: false
-  xy: 243, 1453
-  size: 240, 240
-  orig: 240, 240
+  xy: 183, 1093
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0026
   rotate: false
-  xy: 243, 1695
-  size: 240, 240
-  orig: 240, 240
+  xy: 183, 1275
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0027
   rotate: false
-  xy: 243, 1937
-  size: 240, 240
-  orig: 240, 240
+  xy: 183, 1457
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0028
   rotate: false
-  xy: 243, 2179
-  size: 240, 240
-  orig: 240, 240
+  xy: 183, 1639
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0029
   rotate: false
-  xy: 485, 243
-  size: 240, 240
-  orig: 240, 240
+  xy: 365, 183
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0030
   rotate: false
-  xy: 727, 243
-  size: 240, 240
-  orig: 240, 240
+  xy: 547, 183
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0031
   rotate: false
-  xy: 969, 243
-  size: 240, 240
-  orig: 240, 240
+  xy: 729, 183
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0032
   rotate: false
-  xy: 1211, 243
-  size: 240, 240
-  orig: 240, 240
+  xy: 911, 183
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0033
   rotate: false
-  xy: 1453, 243
-  size: 240, 240
-  orig: 240, 240
+  xy: 1093, 183
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0034
   rotate: false
-  xy: 1695, 243
-  size: 240, 240
-  orig: 240, 240
+  xy: 1275, 183
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0035
   rotate: false
-  xy: 1937, 243
-  size: 240, 240
-  orig: 240, 240
+  xy: 1457, 183
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0036
   rotate: false
-  xy: 2179, 243
-  size: 240, 240
-  orig: 240, 240
+  xy: 1639, 183
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0037
   rotate: false
-  xy: 485, 485
-  size: 240, 240
-  orig: 240, 240
+  xy: 365, 365
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0038
   rotate: false
-  xy: 485, 727
-  size: 240, 240
-  orig: 240, 240
+  xy: 365, 547
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0039
   rotate: false
-  xy: 485, 969
-  size: 240, 240
-  orig: 240, 240
+  xy: 365, 729
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0040
   rotate: false
-  xy: 485, 1211
-  size: 240, 240
-  orig: 240, 240
+  xy: 365, 911
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0041
   rotate: false
-  xy: 485, 1453
-  size: 240, 240
-  orig: 240, 240
+  xy: 365, 1093
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0042
   rotate: false
-  xy: 485, 1695
-  size: 240, 240
-  orig: 240, 240
+  xy: 365, 1275
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0043
   rotate: false
-  xy: 485, 1937
-  size: 240, 240
-  orig: 240, 240
+  xy: 365, 1457
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0044
   rotate: false
-  xy: 485, 2179
-  size: 240, 240
-  orig: 240, 240
+  xy: 365, 1639
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0045
   rotate: false
-  xy: 727, 485
-  size: 240, 240
-  orig: 240, 240
+  xy: 547, 365
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0046
   rotate: false
-  xy: 969, 485
-  size: 240, 240
-  orig: 240, 240
+  xy: 729, 365
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0047
   rotate: false
-  xy: 1211, 485
-  size: 240, 240
-  orig: 240, 240
+  xy: 911, 365
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0048
   rotate: false
-  xy: 1453, 485
-  size: 240, 240
-  orig: 240, 240
+  xy: 1093, 365
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0049
   rotate: false
-  xy: 1695, 485
-  size: 240, 240
-  orig: 240, 240
+  xy: 1275, 365
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0050
   rotate: false
-  xy: 1937, 485
-  size: 240, 240
-  orig: 240, 240
+  xy: 1457, 365
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0051
   rotate: false
-  xy: 2179, 485
-  size: 240, 240
-  orig: 240, 240
+  xy: 1639, 365
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0052
   rotate: false
-  xy: 727, 727
-  size: 240, 240
-  orig: 240, 240
+  xy: 547, 547
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0053
   rotate: false
-  xy: 727, 969
-  size: 240, 240
-  orig: 240, 240
+  xy: 547, 729
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0054
   rotate: false
-  xy: 727, 1211
-  size: 240, 240
-  orig: 240, 240
+  xy: 547, 911
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0055
   rotate: false
-  xy: 727, 1453
-  size: 240, 240
-  orig: 240, 240
+  xy: 547, 1093
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0056
   rotate: false
-  xy: 727, 1695
-  size: 240, 240
-  orig: 240, 240
+  xy: 547, 1275
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0057
   rotate: false
-  xy: 727, 1937
-  size: 240, 240
-  orig: 240, 240
+  xy: 547, 1457
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0058
   rotate: false
-  xy: 727, 2179
-  size: 240, 240
-  orig: 240, 240
+  xy: 547, 1639
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0059
   rotate: false
-  xy: 969, 727
-  size: 240, 240
-  orig: 240, 240
+  xy: 729, 547
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0060
   rotate: false
-  xy: 1211, 727
-  size: 240, 240
-  orig: 240, 240
+  xy: 911, 547
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0061
   rotate: false
-  xy: 1453, 727
-  size: 240, 240
-  orig: 240, 240
+  xy: 1093, 547
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0062
   rotate: false
-  xy: 1695, 727
-  size: 240, 240
-  orig: 240, 240
+  xy: 1275, 547
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0063
   rotate: false
-  xy: 1937, 727
-  size: 240, 240
-  orig: 240, 240
+  xy: 1457, 547
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0064
   rotate: false
-  xy: 2179, 727
-  size: 240, 240
-  orig: 240, 240
+  xy: 1639, 547
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0065
   rotate: false
-  xy: 969, 969
-  size: 240, 240
-  orig: 240, 240
+  xy: 729, 729
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0066
   rotate: false
-  xy: 969, 1211
-  size: 240, 240
-  orig: 240, 240
+  xy: 729, 911
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0067
   rotate: false
-  xy: 969, 1453
-  size: 240, 240
-  orig: 240, 240
+  xy: 729, 1093
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0068
   rotate: false
-  xy: 969, 1695
-  size: 240, 240
-  orig: 240, 240
+  xy: 729, 1275
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0069
   rotate: false
-  xy: 969, 1937
-  size: 240, 240
-  orig: 240, 240
+  xy: 729, 1457
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0070
   rotate: false
-  xy: 969, 2179
-  size: 240, 240
-  orig: 240, 240
+  xy: 729, 1639
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0071
   rotate: false
-  xy: 1211, 969
-  size: 240, 240
-  orig: 240, 240
+  xy: 911, 729
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0072
   rotate: false
-  xy: 1453, 969
-  size: 240, 240
-  orig: 240, 240
+  xy: 1093, 729
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0073
   rotate: false
-  xy: 1695, 969
-  size: 240, 240
-  orig: 240, 240
+  xy: 1275, 729
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0074
   rotate: false
-  xy: 1937, 969
-  size: 240, 240
-  orig: 240, 240
+  xy: 1457, 729
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0075
   rotate: false
-  xy: 2179, 969
-  size: 240, 240
-  orig: 240, 240
+  xy: 1639, 729
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0076
   rotate: false
-  xy: 1211, 1211
-  size: 240, 240
-  orig: 240, 240
+  xy: 911, 911
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0077
   rotate: false
-  xy: 1211, 1453
-  size: 240, 240
-  orig: 240, 240
+  xy: 911, 1093
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0078
   rotate: false
-  xy: 1211, 1695
-  size: 240, 240
-  orig: 240, 240
+  xy: 911, 1275
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0079
   rotate: false
-  xy: 1211, 1937
-  size: 240, 240
-  orig: 240, 240
+  xy: 911, 1457
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0080
   rotate: false
-  xy: 1211, 2179
-  size: 240, 240
-  orig: 240, 240
+  xy: 911, 1639
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0081
   rotate: false
-  xy: 1453, 1211
-  size: 240, 240
-  orig: 240, 240
+  xy: 1093, 911
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0082
   rotate: false
-  xy: 1695, 1211
-  size: 240, 240
-  orig: 240, 240
+  xy: 1275, 911
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0083
   rotate: false
-  xy: 1937, 1211
-  size: 240, 240
-  orig: 240, 240
+  xy: 1457, 911
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0084
   rotate: false
-  xy: 2179, 1211
-  size: 240, 240
-  orig: 240, 240
+  xy: 1639, 911
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0085
   rotate: false
-  xy: 1453, 1453
-  size: 240, 240
-  orig: 240, 240
+  xy: 1093, 1093
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0086
   rotate: false
-  xy: 1453, 1695
-  size: 240, 240
-  orig: 240, 240
+  xy: 1093, 1275
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0087
   rotate: false
-  xy: 1453, 1937
-  size: 240, 240
-  orig: 240, 240
+  xy: 1093, 1457
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0088
   rotate: false
-  xy: 1453, 2179
-  size: 240, 240
-  orig: 240, 240
+  xy: 1093, 1639
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0089
   rotate: false
-  xy: 1695, 1453
-  size: 240, 240
-  orig: 240, 240
+  xy: 1275, 1093
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0090
   rotate: false
-  xy: 1937, 1453
-  size: 240, 240
-  orig: 240, 240
+  xy: 1457, 1093
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0091
   rotate: false
-  xy: 2179, 1453
-  size: 240, 240
-  orig: 240, 240
+  xy: 1639, 1093
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0092
   rotate: false
-  xy: 1695, 1695
-  size: 240, 240
-  orig: 240, 240
+  xy: 1275, 1275
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0093
   rotate: false
-  xy: 1695, 1937
-  size: 240, 240
-  orig: 240, 240
+  xy: 1275, 1457
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0094
   rotate: false
-  xy: 1695, 2179
-  size: 240, 240
-  orig: 240, 240
+  xy: 1275, 1639
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0095
   rotate: false
-  xy: 1937, 1695
-  size: 240, 240
-  orig: 240, 240
+  xy: 1457, 1275
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0096
   rotate: false
-  xy: 2179, 1695
-  size: 240, 240
-  orig: 240, 240
+  xy: 1639, 1275
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0097
   rotate: false
-  xy: 1937, 1937
-  size: 240, 240
-  orig: 240, 240
+  xy: 1457, 1457
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0098
   rotate: false
-  xy: 1937, 2179
-  size: 240, 240
-  orig: 240, 240
+  xy: 1457, 1639
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0099
   rotate: false
-  xy: 2179, 1937
-  size: 240, 240
-  orig: 240, 240
+  xy: 1639, 1457
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Kappa Animation0100
   rotate: false
-  xy: 2179, 2179
-  size: 240, 240
-  orig: 240, 240
+  xy: 1639, 1639
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
