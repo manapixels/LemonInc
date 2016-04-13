@@ -32,7 +32,7 @@ public class StartWall {
         float x1 = -gameMap.getGameport().getWorldWidth();
         float y1 = 0;
         float x2 = -gameMap.getGameport().getWorldWidth();
-        float y2 = gameMap.getGameport().getWorldHeight()*1.5f;
+        float y2 = gameMap.getGameport().getWorldHeight()*2f;
 
         FixtureDef fdef = new FixtureDef();
         EdgeShape edgeShape = new EdgeShape();

@@ -23,14 +23,14 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.esotericsoftware.minlog.Log;
 import com.lemoninc.nimbusrun.Networking.Client.TapTapClient;
-//import com.lemoninc.nimbusrun.Networking.Networking;
 import com.lemoninc.nimbusrun.Networking.Server.TapTapServer;
-import com.lemoninc.nimbusrun.Sprites.GameMap;
 import com.lemoninc.nimbusrun.NimbusRun;
+import com.lemoninc.nimbusrun.Sprites.GameMap;
+import com.lemoninc.nimbusrun.scenes.HUD;
 
 import java.io.IOException;
 
-public class PlayScreen implements Screen {
+public class PlayScreen implements Screen{
 
     private NimbusRun game;
 
@@ -42,6 +42,9 @@ public class PlayScreen implements Screen {
 
     private TapTapClient client;
     private TapTapServer server;
+    private HUD hud;
+
+
 
     /**
      *
@@ -61,12 +64,14 @@ public class PlayScreen implements Screen {
             this.ipAddress = "localhost";
         }
         this.playerName = playerName;
+
+        hud=new HUD(game.batch,playerName);
     }
 
     /**
      * Called when this screen becomes the current screen for a Game.
-     * when the screen appears, start TapTapClient, TODO:get the map from the client.
-     * If player is a host, start TapTapServer, connect itself to the server.
+     * when the screen appears, create a new Client, get the map from the client.
+     * If player is a host, create a new Server, connect the newly created client to the server.
      * If player is joining game, connect client to the ip address.
      */
     @Override
@@ -104,6 +109,7 @@ public class PlayScreen implements Screen {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
             gameOver();
         }
+
     }
 
     @Override
@@ -112,11 +118,23 @@ public class PlayScreen implements Screen {
 
         handleInput();
         gamemap.update(delta);
+        hud.update(delta);
 
-//        map.render();
-//
-//        if(isHost){
-//            server.update(delta);
+
+        handleInput();
+        hud.render();
+        hud.stage.draw();
+        if(hud.worldTimer==0){
+            gameOver();
+        }
+
+
+        if(hud.worldTimer==0){
+            gameOver();
+        }
+
+//        for (HashMap.Entry<String, Player> entry: network.friendlyPlayers.entrySet()) {
+//            entry.getValue().update(dt);
 //        }
     }
 
@@ -138,7 +156,7 @@ public class PlayScreen implements Screen {
         client.shutdown();
         if (server != null)
             server.shutdown();
-//        map.dispose();
+        gamemap.dispose();
     }
 
     @Override
@@ -151,6 +169,7 @@ public class PlayScreen implements Screen {
     public void dispose() {    }
 
     private void logInfo(String string) {
-        Log.info("[PlayScreen]: "+string);
+        Log.info("[PlayScreen]: " + string);
+        Log.info(string);
     }
 }
