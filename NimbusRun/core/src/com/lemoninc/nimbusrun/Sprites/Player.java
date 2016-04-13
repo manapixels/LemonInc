@@ -85,27 +85,10 @@ public class Player extends Sprite {
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
         shape.setRadius(CHARACTER_SIZE / 2);
-//        PolygonShape shape = new PolygonShape();
-//        shape.setAsBox(x, y);
+
         fdef.shape = shape;
         b2body.createFixture(fdef); //Player is a circle
         shape.dispose();
-
-//        switch(whichCharacter){
-//            // 1. LAUGHING BUDDHA
-//            // 2. SHESHNAH WITH KRISHNA
-//            // 3. NINE-TAILED FOX
-//            // 4. KAPPA
-//            // 5. PONTIANAK
-//            // 6. MADAME WHITE SNAKE
-//            case 1: img = new TextureAtlas(Gdx.files.internal("spritesheets/LBspritesheet.atlas")); break;
-//            case 2: img = new TextureAtlas(Gdx.files.internal("spritesheets/SKspritesheet.atlas")); break;
-//            case 3: img = new TextureAtlas(Gdx.files.internal("spritesheets/FXspritesheet.atlas")); break;
-//            case 4: img = new TextureAtlas(Gdx.files.internal("spritesheets/KPspritesheet.atlas")); break;
-//            case 5: img = new TextureAtlas(Gdx.files.internal("spritesheets/PTspritesheet.atlas")); break;
-//            case 6: img = new TextureAtlas(Gdx.files.internal("spritesheets/MWSspritesheet.atlas")); break;
-//            default: img = new TextureAtlas(Gdx.files.internal("spritesheets/PTspritesheet.atlas")); break;
-//        }
 
         this.img = img;
 
@@ -214,16 +197,25 @@ public class Player extends Sprite {
     }
 
     /**
-     * Get the box2d position of this Player wrapped in MovementState
+     * Get the Player's body linear Velocity wrapped in MovementState
      * @return
      */
     public Network.MovementState getMovementState() {
-        return new Network.MovementState(id, b2body.getPosition(), b2body.getLinearVelocity());
+//        return new Network.MovementState(id, b2body.getPosition(), b2body.getLinearVelocity());
+        return new Network.MovementState(id, b2body.getLinearVelocity());
     }
 
+    /**
+     * Set the player's linear velocity according to the received MovementState Packet
+     * @param msg
+     */
+    /**
+     * TODO: Not perfectly in sync
+     * @param msg
+     */
     public void setMovementState(Network.MovementState msg) {
         b2body.setLinearVelocity(msg.linearVelocity);
-        b2body.setTransform(msg.position, 0f); //TODO: collision throws Runtime error 
+//        b2body.setTransform(msg.position, 0f); //TODO: collision throws Runtime error
 //        System.out.println("Changed player's x is "+msg.position.x+" y is "+msg.position.y);
     }
 

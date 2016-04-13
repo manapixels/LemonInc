@@ -144,7 +144,7 @@ public class TapTapServer {
     }
 
     public void update(float delta) {
-//        map.update(delta); //TODO:make sure server's map.update doesn't contain rendering
+        map.update(delta); //TODO:make sure server's map.update doesn't contain rendering
     }
 
     public void shutdown() {

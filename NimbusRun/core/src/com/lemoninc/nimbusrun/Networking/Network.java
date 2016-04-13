@@ -76,6 +76,9 @@ public class Network {
         }
     }
 
+    /**
+     * Contains the linear Velocity of the Player
+     */
     static public class MovementState {
 
         public int playerId;
@@ -84,7 +87,7 @@ public class Network {
 
         public MovementState() {}
 
-        public MovementState(int id, Vector2 position, Vector2 linearVelocity) {
+        public MovementState(int id, Vector2 linearVelocity) {
 
             this.position = position;
             this.playerId = id;

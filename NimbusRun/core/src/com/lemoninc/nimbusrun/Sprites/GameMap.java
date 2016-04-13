@@ -203,10 +203,13 @@ public class GameMap {
     public Viewport getGameport() { return this.gameport; }
 
     /**
-     * Update GameMap's state
+     * Update GameMap's state.
+     *
+     * Should the box world be rendered here?
+     *
      * @param delta
      */
-    public void update(float delta) {
+    public synchronized void update(float delta) {
         //If client is created and local player has spawned
         if (client != null && playerLocal != null) {
             if (playerLocal.handleInput()) { // (arrow key has been pressed by player)
@@ -215,9 +218,12 @@ public class GameMap {
             //send movement state to server
 
         }
+
+        //Update player
+        //TODO: should the box2d world be rendered here?
     }
 
-    public void render() {
+    public synchronized void render() {
         //clears screen first, set color to black
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
