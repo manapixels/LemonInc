@@ -218,10 +218,11 @@ public class Player extends Sprite {
      * @return
      */
     public Network.MovementState getMovementState() {
-        return new Network.MovementState(id, b2body.getPosition());
+        return new Network.MovementState(id, b2body.getPosition(), b2body.getLinearVelocity());
     }
 
     public void setMovementState(Network.MovementState msg) {
+        b2body.setLinearVelocity(msg.linearVelocity);
         b2body.setTransform(msg.position, 0f); //TODO: collision throws Runtime error 
 //        System.out.println("Changed player's x is "+msg.position.x+" y is "+msg.position.y);
     }

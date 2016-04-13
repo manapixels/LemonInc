@@ -155,6 +155,7 @@ public class GameMap {
     }
 
     public synchronized void playerMoved(Network.MovementState msg) {
+        //TODO: players should be ConcurrentHashMap?
         Player player = players.get(msg.playerId);
         if (player != null) {
             player.setMovementState(msg);
@@ -200,15 +201,6 @@ public class GameMap {
     }
 
     public Viewport getGameport() { return this.gameport; }
-
-//    private void handleInput(){
-//        if (Gdx.input.isKeyJustPressed(Input.Keys.UP))
-//            playerLocal.jump();
-//        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
-//            playerLocal.speed();
-//        if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
-//            playerLocal.slow();
-//    }
 
     /**
      * Update GameMap's state

@@ -93,7 +93,6 @@ public class TapTapServer {
                     logInfo("Adding the new Client to Server's map");
                     //add this new player to gamemap
                     map.addPlayer(newPlayer); //server stores the new player
-//                    players.add(newPlayer);
 
                     //tell new client about old clients
                     for (Connection con : server.getConnections()) { //upon connection, every client's name is stored in Player
