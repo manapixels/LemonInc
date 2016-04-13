@@ -35,6 +35,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
+import com.lemoninc.nimbusrun.Networking.Network;
 import com.lemoninc.nimbusrun.Screens.PlayScreen;
 import com.lemoninc.nimbusrun.NimbusRun;
 
@@ -84,27 +85,10 @@ public class Player extends Sprite {
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
         shape.setRadius(CHARACTER_SIZE / 2);
-//        PolygonShape shape = new PolygonShape();
-//        shape.setAsBox(x, y);
+
         fdef.shape = shape;
         b2body.createFixture(fdef); //Player is a circle
         shape.dispose();
-
-//        switch(whichCharacter){
-//            // 1. LAUGHING BUDDHA
-//            // 2. SHESHNAH WITH KRISHNA
-//            // 3. NINE-TAILED FOX
-//            // 4. KAPPA
-//            // 5. PONTIANAK
-//            // 6. MADAME WHITE SNAKE
-//            case 1: img = new TextureAtlas(Gdx.files.internal("spritesheets/LBspritesheet.atlas")); break;
-//            case 2: img = new TextureAtlas(Gdx.files.internal("spritesheets/SKspritesheet.atlas")); break;
-//            case 3: img = new TextureAtlas(Gdx.files.internal("spritesheets/FXspritesheet.atlas")); break;
-//            case 4: img = new TextureAtlas(Gdx.files.internal("spritesheets/KPspritesheet.atlas")); break;
-//            case 5: img = new TextureAtlas(Gdx.files.internal("spritesheets/PTspritesheet.atlas")); break;
-//            case 6: img = new TextureAtlas(Gdx.files.internal("spritesheets/MWSspritesheet.atlas")); break;
-//            default: img = new TextureAtlas(Gdx.files.internal("spritesheets/PTspritesheet.atlas")); break;
-//        }
 
         this.img = img;
 
@@ -161,13 +145,29 @@ public class Player extends Sprite {
         return false;
     }
 
+    /**
+     * Player's movement
+     * @return
+     */
+    public boolean handleInput(){
+        //for Desktop
+        if (Gdx.input.isKeyJustPressed(Input.Keys.UP))
+            return this.jump();
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
+            return this.speed();
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
+            return this.slow();
+
+        return false;
+    }
+
     public void update(float delta){
         this.setPosition(getX(), getY());
         this.setRegion(anim.getKeyFrame(stateTime, true));
         //img.setPosition(b2body.getPosition().x - CHARACTER_SIZE / 2 * 1.25f, b2body.getPosition().y - CHARACTER_SIZE / 2 * 1.25f);
     }
 
-    public void jump() {
+    public boolean jump() {
         if (currentState == State.DOUBLEJUMPING){
             currentState = getState();
         }
@@ -180,17 +180,45 @@ public class Player extends Sprite {
             currentState = State.JUMPING;
             b2body.applyLinearImpulse(new Vector2(0, 6f), b2body.getWorldCenter(), true);
         }
+        return true;
     }
 
-    public void speed() {
-        if (b2body.getLinearVelocity().x <= 4) {
-            b2body.applyLinearImpulse(new Vector2(1.25f, 0), b2body.getWorldCenter(), true);
+
+    public boolean speed() {
+        if (b2body.getLinearVelocity().x <= 3) {
+            b2body.applyLinearImpulse(new Vector2(1f, 0), b2body.getWorldCenter(), true);
         }
+        return true;
     }
-    public void slow() {
-        if (b2body.getLinearVelocity().x >= -4) {
-            b2body.applyLinearImpulse(new Vector2(-1.25f, 0), b2body.getWorldCenter(), true);
+
+    public boolean slow() {
+        if (b2body.getLinearVelocity().x >= -3) {
+            b2body.applyLinearImpulse(new Vector2(-1f, 0), b2body.getWorldCenter(), true);
         }
+        return true;
+    }
+
+    /**
+     * Get the Player's body linear Velocity wrapped in MovementState
+     * @return
+     */
+    public Network.MovementState getMovementState() {
+//        return new Network.MovementState(id, b2body.getPosition(), b2body.getLinearVelocity());
+        return new Network.MovementState(id, b2body.getLinearVelocity());
+    }
+
+    /**
+     * Set the player's linear velocity according to the received MovementState Packet
+     * @param msg
+     */
+    /**
+     * TODO: Not perfectly in sync
+     * @param msg
+     */
+    public void setMovementState(Network.MovementState msg) {
+        b2body.setLinearVelocity(msg.linearVelocity);
+//        b2body.setTransform(msg.position, 0f); //TODO: collision throws Runtime error
+//        System.out.println("Changed player's x is "+msg.position.x+" y is "+msg.position.y);
     }
 
     public TextureAtlas getTxtAtlas(){ return img;}

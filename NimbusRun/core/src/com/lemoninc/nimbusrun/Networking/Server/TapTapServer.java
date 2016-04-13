@@ -93,7 +93,6 @@ public class TapTapServer {
                     logInfo("Adding the new Client to Server's map");
                     //add this new player to gamemap
                     map.addPlayer(newPlayer); //server stores the new player
-//                    players.add(newPlayer);
 
                     //tell new client about old clients
                     for (Connection con : server.getConnections()) { //upon connection, every client's name is stored in Player
@@ -106,6 +105,15 @@ public class TapTapServer {
 //                            connection.sendTCP(herePlayer.getMovementState()); // info about current movement
                         }
                     }
+                }
+                else if(message instanceof Network.MovementState) {
+                    Network.MovementState msg = (Network.MovementState)message;
+                    logInfo("MovementState received");
+                    msg.playerId = connection.getID();
+                    // TODO Server updates its copy of player from what its told
+                    map.playerMoved(msg);
+//					"SERVER "+msg.playerId+" moved"
+                    server.sendToAllExceptUDP(connection.getID(), msg);
                 }
             }
 
@@ -136,7 +144,7 @@ public class TapTapServer {
     }
 
     public void update(float delta) {
-//        map.update(delta); //TODO:make sure server's map.update doesn't contain rendering
+        map.update(delta); //TODO:make sure server's map.update doesn't contain rendering
     }
 
     public void shutdown() {
