@@ -89,8 +89,6 @@ public class GameMap implements InputProcessor{
 
         batch = new SpriteBatch();
 
-
-
         //TODO: 5 refers to the character selected at the main menu
         initCommon(5);
 
@@ -294,7 +292,6 @@ public class GameMap implements InputProcessor{
         //dispose textures
         img.dispose();
         //TODO:friendly players textures?
-
     }
 
     public void onDisconnect() {
