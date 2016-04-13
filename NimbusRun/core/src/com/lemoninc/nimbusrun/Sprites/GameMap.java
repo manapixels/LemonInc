@@ -209,21 +209,24 @@ public class GameMap {
      *
      * @param delta
      */
-    public synchronized void update(float delta) {
+    public void update(float delta) {
         //If client is created and local player has spawned
         if (client != null && playerLocal != null) {
             if (playerLocal.handleInput()) { // (arrow key has been pressed by player)
-                client.sendMessageUDP(playerLocal.getMovementState());
+                client.sendMessageUDP(playerLocal.getMovementState()); //send movement state to server
             }
-            //send movement state to server
 
+            //gamecam constantly to follow playerLocal
+            gamecam.position.set(playerLocal.getX(), playerLocal.getY(), 0);
+            gamecam.update();
         }
 
         //Update player
         //TODO: should the box2d world be rendered here?
+
     }
 
-    public synchronized void render() {
+    public void render() {
         //clears screen first, set color to black
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -247,10 +250,6 @@ public class GameMap {
 
         //steps box2d world
         world.step(1 / 60f, 6, 2);
-        //gamecam constantly to follow player1
-        gamecam.position.set(playerLocal.getX(), playerLocal.getY(), 0);
-        gamecam.update();
-
     }
 
 
