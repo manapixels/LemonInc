@@ -24,19 +24,25 @@ public class CharacterSelectionScreen implements Screen {
     private float gameHeight;
     private Viewport viewport;
     private Camera camera;
+    Boolean isHost;
+    String ipAddress;
+    String playername;
     private long startTime;
 
-    public CharacterSelectionScreen(NimbusRun game, float gameWidth, float gameHeight){
+    public CharacterSelectionScreen(NimbusRun game, boolean isHost, String ipAddress, String playerName){
         this.game = game;
-        this.gameWidth = gameWidth;
-        this.gameHeight = gameHeight;
+        this.isHost=isHost;
+        this.ipAddress=ipAddress;
+        this.playername=playerName;
+        this.gameWidth = NimbusRun.V_WIDTH;
+        this.gameHeight = NimbusRun.V_HEIGHT;
         camera=new PerspectiveCamera();
         viewport=new FitViewport(gameWidth,gameHeight,camera);
     }
 
     @Override
     public void show() {
-        sprite = new Sprite(new Texture("Home_Start 1 (Logo).png"));
+        sprite = new Sprite(new Texture("whitebackground.png"));
         //sprite.setColor(1, 1, 1, 0);
 
         sprite.setPosition(0, 0);
@@ -54,7 +60,7 @@ public class CharacterSelectionScreen implements Screen {
         batcher.begin();
         sprite.draw(batcher);
         batcher.end();
-        if (TimeUtils.millis()>(startTime+5000)) game.setScreen(new MenuScreen(game,gameWidth,gameHeight));
+        if (TimeUtils.millis()>(startTime+5000)) game.setScreen(new PlayScreen(game,isHost,ipAddress, playername));;
 
     }
 
@@ -80,6 +86,7 @@ public class CharacterSelectionScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        sprite.getTexture().dispose();
+        batcher.dispose();
     }
 }

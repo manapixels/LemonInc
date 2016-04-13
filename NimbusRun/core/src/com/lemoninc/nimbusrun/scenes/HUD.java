@@ -179,8 +179,9 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
     @Override
     public void dispose() {
         stage.dispose();
-//        skin.dispose();
+//       skin.dispose();
         atlas.dispose();
+
 
     }
 }

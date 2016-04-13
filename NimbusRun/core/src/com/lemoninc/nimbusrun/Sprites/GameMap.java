@@ -21,7 +21,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -147,7 +146,7 @@ public class GameMap implements InputProcessor{
             default: img = new TextureAtlas(Gdx.files.internal("spritesheets/PTspritesheet.atlas")); break;
         }
         //background
-        background = new Sprite(new Texture("TapTap_BGseamless.png"));
+        //background = new Sprite(new Texture("TapTap_BGseamless.png"));
         background.setSize(background.getWidth() / NimbusRun.PPM, background.getHeight() / NimbusRun.PPM);
     }
 
@@ -290,7 +289,7 @@ public class GameMap implements InputProcessor{
     public void dispose() {
         world.dispose();
         b2dr.dispose();
-
+        batch.dispose();
         //dispose textures
         img.dispose();
         //TODO:friendly players textures?
