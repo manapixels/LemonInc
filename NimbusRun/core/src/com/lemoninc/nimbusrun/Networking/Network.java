@@ -82,14 +82,14 @@ public class Network {
     static public class MovementState {
 
         public int playerId;
-        public Vector2 position;
+//        public Vector2 position;
         public Vector2 linearVelocity;
 
         public MovementState() {}
 
         public MovementState(int id, Vector2 linearVelocity) {
 
-            this.position = position;
+//            this.position = position;
             this.playerId = id;
             this.linearVelocity = linearVelocity;
         }
