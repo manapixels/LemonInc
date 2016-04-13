@@ -25,9 +25,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.minlog.Log;
@@ -52,8 +54,10 @@ public class GameMap implements InputProcessor{
     private Viewport gameport;
 
     private SpriteBatch batch;
-    private Sprite background;
-//    private Texture background;
+    private Texture background;
+    private float bgHeight, bgWidth;
+    private Sprite bgSprite1, bgSprite2;
+    private float bgStartX, bgStartY;
 
     private World world;
     private Box2DDebugRenderer b2dr;
@@ -63,8 +67,10 @@ public class GameMap implements InputProcessor{
     private StartWall startWall;
     private EndWall endWall;
 
+
     private Player playerLocal;
     private TextureAtlas img;
+    private int sourceX;
 
 
     class TouchInfo {
@@ -84,12 +90,13 @@ public class GameMap implements InputProcessor{
 
         //instantiate HUD, GameSounds, BitmapFont, Camera, SpriteBatch ...
         gamecam = new OrthographicCamera();
-
         gameport = new FitViewport(NimbusRun.V_WIDTH * 1.5f / NimbusRun.PPM, NimbusRun.V_HEIGHT * 1.5f / NimbusRun.PPM, gamecam);
 
+        //set starting pos of bgSprites after setting cam
+        bgStartX = -gameport.getWorldWidth() * 1.5f;
+        bgStartY = -gameport.getWorldHeight() * 1.2f;
+        Log.info(bgStartY + " y pos");
         batch = new SpriteBatch();
-
-
 
         //TODO: 5 refers to the character selected at the main menu
         initCommon(5);
@@ -146,10 +153,19 @@ public class GameMap implements InputProcessor{
             case 6: img = new TextureAtlas(Gdx.files.internal("spritesheets/MWSspritesheet.atlas")); break;
             default: img = new TextureAtlas(Gdx.files.internal("spritesheets/PTspritesheet.atlas")); break;
         }
-        //background
-        background = new Sprite(new Texture("TapTap_BGseamless.png"));
-        background.setSize(background.getWidth() / NimbusRun.PPM, background.getHeight() / NimbusRun.PPM);
+
+        background = new Texture("PlayScreen/bg.png");
+        bgSprite1 = new Sprite(background);
+        bgWidth = background.getWidth() / NimbusRun.PPM * 1.4f;
+        bgHeight = background.getHeight() / NimbusRun.PPM * 1.4f;
+        bgSprite1.setX(bgStartX);
+        bgSprite1.setY(bgStartY);
+        bgSprite1.setSize(bgWidth, bgHeight);
+        bgSprite2 = new Sprite(bgSprite1);
+
     }
+
+
 
     //called by server to add a new player into its GameMap
     public synchronized void addPlayer(Network.PlayerJoinLeave msg) {
@@ -191,8 +207,8 @@ public class GameMap implements InputProcessor{
             this.playerLocal.setId(client.id);
             this.playerLocal.setName(name);
             players.put(client.id, playerLocal);
-//            hud.setPlayerLocal(playerLocal);
-//            setStatus("Connected to " + client.remoteIP);
+            //hud.setPlayerLocal(playerLocal);
+            //setStatus("Connected to " + client.remoteIP);
         } else {
             logInfo("setNetworkClient called twice");
         }
@@ -210,13 +226,13 @@ public class GameMap implements InputProcessor{
 
     private void handleInput(){
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP))
-//            player1.jump();
+            //player1.jump();
             playerLocal.jump();
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
-//            player1.speed();
+            //player1.speed();
             playerLocal.speed();
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
-//            player1.slow();
+            //player1.slow();
             playerLocal.slow();
         if(Gdx.input.justTouched()) {
             System.out.println("Points are: X=" + Gdx.input.getX() + "Y=" + Gdx.input.getY());
@@ -246,28 +262,32 @@ public class GameMap implements InputProcessor{
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        //configure and start batch
+        //--------------START batch
         batch.setProjectionMatrix(gamecam.combined);
         batch.begin();
-        background.setPosition(-gameport.getWorldWidth(), -gameport.getWorldHeight());
-//        background.setPosition(gamecam.position.x - (gamecam.viewportWidth / 2), -gameport.getWorldHeight() / 2);
-        background.draw(batch);
+
+        // Update background sprite positions and draw anew
+        if(gamecam.position.x -bgWidth/2> bgSprite2.getX()){
+            bgSprite1.setX(bgSprite2.getX());
+            bgSprite2.setX(bgSprite1.getX()+bgWidth); }
+        bgSprite1.draw(batch);
+        bgSprite2.draw(batch);
 
         // Render Players
         for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {
             Player curPlayer = playerEntry.getValue();
             curPlayer.draw(batch);
-//            if(curPlayer != playerLocal) curPlayer.renderNameTag(spriteBatch, fontNameTag);
+            //if(curPlayer != playerLocal) curPlayer.renderNameTag(spriteBatch, fontNameTag);
         }
 
-        //end batch
+        //----------------END batch
         batch.end();
 
         b2dr.render(world, gamecam.combined);
 
         //steps box2d world
         world.step(1 / 60f, 6, 2);
-        //gamecam constantly to follow player1
+        //gamecam constantly follows player1
         gamecam.position.set(playerLocal.getX(), playerLocal.getY(), 0);
         gamecam.update();
 
