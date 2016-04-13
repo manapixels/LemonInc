@@ -1,0 +1,89 @@
+
+charicons.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+btn_buddha
+  rotate: false
+  xy: 1, 305
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+btn_buddha_sel
+  rotate: false
+  xy: 1, 153
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+btn_foxy
+  rotate: false
+  xy: 153, 305
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+btn_foxy_sel
+  rotate: false
+  xy: 1, 1
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+btn_kappa
+  rotate: false
+  xy: 153, 153
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+btn_kappa_sel
+  rotate: false
+  xy: 305, 305
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+btn_krishna
+  rotate: false
+  xy: 153, 1
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+btn_krishna_sel
+  rotate: false
+  xy: 305, 153
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+btn_madame
+  rotate: false
+  xy: 457, 305
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+btn_madame_sel
+  rotate: false
+  xy: 305, 1
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+btn_ponti
+  rotate: false
+  xy: 457, 153
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+btn_ponti_sel
+  rotate: false
+  xy: 609, 305
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1

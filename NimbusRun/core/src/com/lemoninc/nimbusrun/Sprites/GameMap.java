@@ -21,6 +21,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -29,7 +30,6 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.esotericsoftware.minlog.Log;
 import com.lemoninc.nimbusrun.Networking.Client.TapTapClient;
 import com.lemoninc.nimbusrun.Networking.Network;
 import com.lemoninc.nimbusrun.Networking.Server.TapTapServer;
@@ -146,7 +146,7 @@ public class GameMap implements InputProcessor{
             default: img = new TextureAtlas(Gdx.files.internal("spritesheets/PTspritesheet.atlas")); break;
         }
         //background
-        //background = new Sprite(new Texture("TapTap_BGseamless.png"));
+        background = new Sprite(new Texture("TapTap_BGseamless.png"));
         background.setSize(background.getWidth() / NimbusRun.PPM, background.getHeight() / NimbusRun.PPM);
     }
 
@@ -278,7 +278,7 @@ public class GameMap implements InputProcessor{
     }
 
     public synchronized void logInfo(String string) {
-        Log.info("[GameMap]: " + (isClient ? "[Client] " : "[Server] ") + string);
+       // Log.info("[GameMap]: " + (isClient ? "[Client] " : "[Server] ") + string);
     }
 
     public void resize(int width, int height) {

@@ -79,6 +79,7 @@ public class WaitScreen implements Screen{
     private TextField playerIP;
     private TextField playername;
     private Random random = new Random();
+
     Label labeltitle;
     String Ipvalue,NameValue;
     Preferences preferences;
@@ -99,8 +100,9 @@ public class WaitScreen implements Screen{
         style.font=new BitmapFont(Gdx.files.internal("Fonts/crimesFont48Black.fnt"));
         style.font.setColor(Color.RED);
         style.font.getData().setScale(0.65f, 0.65f);
-        style.up=new TextureRegionDrawable(new TextureRegion(new Texture("button_up.png")));
-        style.down=new TextureRegionDrawable(new TextureRegion(new Texture("button_down.png")));
+        style.up=new TextureRegionDrawable(new TextureRegion(new Texture("button_up1.png")));
+        style.down=new TextureRegionDrawable(new TextureRegion(new Texture("button_down1.png")));
+        style.over=new TextureRegionDrawable(new TextureRegion(new Texture("button_down1.png")));
 
         gamecam=new PerspectiveCamera();
         gameport=new FitViewport(gameWidth,gameHeight,gamecam);
@@ -134,11 +136,10 @@ public class WaitScreen implements Screen{
 
         skin = new Skin(Gdx.files.internal("data/uiskin.json"));
 
-
         // Create UI elements
 
         labeltitle=new Label("Nimbus Run",new Label.LabelStyle(new BitmapFont(Gdx.files.internal("Fonts/crimesFont48Black.fnt")), Color.DARK_GRAY));
-        labeltitle.setPosition(this.gameWidth/2, Gdx.graphics.getHeight()-Gdx.graphics.getHeight()/4,Align.center
+        labeltitle.setPosition(this.gameWidth/2, this.gameHeight-this.gameHeight/4,Align.center
         );
         labeltitle.setSize(400, 200);
         stage.addActor(labeltitle);
@@ -173,7 +174,7 @@ public class WaitScreen implements Screen{
                 if (key == '\n') textField.getOnscreenKeyboard().show(false);
             }
         });
-        System.out.println(Ipvalue);
+//        System.out.println(Ipvalue);
 
         playername.setTextFieldListener(new TextField.TextFieldListener() {
             public void keyTyped(TextField textField, char key) {
@@ -181,7 +182,7 @@ public class WaitScreen implements Screen{
                 NameValue = textField.getText();
             }
         });
-        System.out.println(NameValue);
+  //      System.out.println(NameValue);
 
 
         hostbutton.addListener(new ClickListener() {
@@ -249,7 +250,7 @@ public class WaitScreen implements Screen{
     @Override
     public void resize(int width, int height) {
         gameport.update(width, height);
-        gamecam.position.set(gamecam.viewportWidth / 2, gamecam.viewportHeight / 2, 0);
+        //gamecam.position.set(gamecam.viewportWidth / 2, gamecam.viewportHeight / 2, 0);
     }
 
     @Override

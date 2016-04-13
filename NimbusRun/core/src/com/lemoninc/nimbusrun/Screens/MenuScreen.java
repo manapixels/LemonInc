@@ -53,6 +53,7 @@ public class MenuScreen implements Screen {
 
     private NimbusRun game;
 
+
     public MenuScreen(NimbusRun game,float gameWidth,float gameHeight){
         this.gameWidth=gameWidth;
         this.gameHeight=gameHeight;
@@ -67,8 +68,7 @@ public class MenuScreen implements Screen {
         style.font.getData().setScale(0.65f, 0.65f);
         style.up=new TextureRegionDrawable(new TextureRegion(new Texture("button_up.png")));
         style.down=new TextureRegionDrawable(new TextureRegion(new Texture("button_down.png")));
-
-
+        style.over=new TextureRegionDrawable(new TextureRegion(new Texture("button_down1.png")));
 
 
         camera=new PerspectiveCamera();
@@ -125,7 +125,7 @@ public class MenuScreen implements Screen {
         buttonPlay.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println("Play Button Pressed");
+                //System.out.println("Play Button Pressed");
                 // AssetLoader.clickSound.play(AssetLoader.VOLUME);
                 // Host multiplayer game
                 game.setScreen(new WaitScreen(game));

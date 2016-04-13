@@ -99,7 +99,6 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
 
 
         table.add(CharacterLabel).expandX().padTop(20f);
-
         table.add(timelabel).expandX().padTop(20f);
         table.row();
         table.add(playername);

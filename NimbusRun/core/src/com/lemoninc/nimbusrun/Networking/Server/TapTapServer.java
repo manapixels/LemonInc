@@ -10,7 +10,6 @@ package com.lemoninc.nimbusrun.Networking.Server;
  * LAST UPDATED: 8/4/2016 09:00
  ********************************/
 
-import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
@@ -20,9 +19,7 @@ import com.lemoninc.nimbusrun.Sprites.GameMap;
 import com.lemoninc.nimbusrun.Sprites.Player;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Need GameMap?
