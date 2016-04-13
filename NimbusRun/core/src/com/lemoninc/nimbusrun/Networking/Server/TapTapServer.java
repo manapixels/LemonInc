@@ -102,7 +102,7 @@ public class TapTapServer {
                             Network.PlayerJoinLeave hereMsg = new Network.PlayerJoinLeave(conn.getID(), herePlayer.getName(), true, herePlayer.getX(), herePlayer.getY()); //TODO: server's gamemap needs to be updated too
                             logInfo("Telling " + connection.name + " about old client " + herePlayer.getName());
                             connection.sendTCP(hereMsg); // basic info
-//                            connection.sendTCP(herePlayer.getMovementState()); // info about current movement
+                            connection.sendTCP(herePlayer.getMovementState()); // info about current movement
                         }
                     }
                 }

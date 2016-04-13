@@ -204,7 +204,7 @@ public class Player extends Sprite {
      */
     public Network.MovementState getMovementState() {
 //        return new Network.MovementState(id, b2body.getPosition(), b2body.getLinearVelocity());
-        return new Network.MovementState(id, b2body.getLinearVelocity());
+        return new Network.MovementState(id, b2body.getPosition(), b2body.getLinearVelocity());
     }
 
     /**
@@ -217,7 +217,7 @@ public class Player extends Sprite {
      */
     public void setMovementState(Network.MovementState msg) {
         b2body.setLinearVelocity(msg.linearVelocity);
-//        b2body.setTransform(msg.position, 0f); //TODO: collision throws Runtime error
+        b2body.setTransform(msg.position, 0f); //this is outside the world.step call
 //        System.out.println("Changed player's x is "+msg.position.x+" y is "+msg.position.y);
     }
 

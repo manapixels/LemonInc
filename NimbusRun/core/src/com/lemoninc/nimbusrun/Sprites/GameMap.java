@@ -113,7 +113,7 @@ public class GameMap {
     private void initCommon(int whichCharacter){
         //TODO: server needs textureAtls for hwat?
 
-        world = new World(new Vector2(0, -10), true);
+        world = new World(new Vector2(0, -10), true); //box2d world with gravity
         b2dr = new Box2DDebugRenderer();
 
         // Load up all sprites into spriteMap from textureAtlas
@@ -139,19 +139,14 @@ public class GameMap {
 
     //called by server to add a new player into its GameMap
     public synchronized void addPlayer(Network.PlayerJoinLeave msg) {
-        logInfo("Player added to players!");
         //create new player from msg
-        //Need to look at spacegame
 
-        Player newPlayer = new Player(this, img, msg.initial_x, msg.initial_y); //TODO: this coordinate should be from the msg
-        logInfo("check1");
+        Player newPlayer = new Player(this, img, msg.initial_x, msg.initial_y);
         newPlayer.setId(msg.playerId);
-        logInfo("check2");
-
         newPlayer.setName(msg.name);
-        logInfo("check3");
 
         players.put(msg.playerId, newPlayer);
+        logInfo("Player " +msg.playerId+" added to players!");
     }
 
     public synchronized void playerMoved(Network.MovementState msg) {
@@ -226,7 +221,7 @@ public class GameMap {
 
     }
 
-    public void render() {
+    public synchronized void render() {
         //clears screen first, set color to black
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
