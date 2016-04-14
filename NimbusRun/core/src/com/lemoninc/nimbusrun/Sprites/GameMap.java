@@ -72,9 +72,6 @@ public class GameMap{
     private TextureAtlas img;
     private int sourceX;
 
-
-
-
     /**
      * This constructor is called inside TapTapClient
      */
@@ -103,8 +100,6 @@ public class GameMap{
         endWall = new EndWall(this);
 
 //        logInfo("GameMap initialised");
-
-
 
     }
 
@@ -241,6 +236,11 @@ public class GameMap{
 
         //Update player
         //TODO: should the box2d world be rendered here?
+        for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {
+            Player curPlayer = playerEntry.getValue();
+            curPlayer.update(delta);
+            //if(curPlayer != playerLocal) curPlayer.renderNameTag(spriteBatch, fontNameTag);
+        }
 
     }
 
@@ -254,13 +254,6 @@ public class GameMap{
         batch.begin();
 
         // Update background sprite positions and draw anew
-        /*
-        if(gamecam.position.x -bgWidth/2> bgSprite2.getX()){
-            bgSprite1.setX(bgSprite2.getX());
-            bgSprite2.setX(bgSprite1.getX()+bgWidth); }
-        bgSprite1.draw(batch);
-        bgSprite2.draw(batch);
-        */
 
         bgSpriteA1.draw(batch);
         // Render Players
@@ -277,9 +270,6 @@ public class GameMap{
 
         //steps box2d world
         world.step(1 / 60f, 6, 2);
-        //gamecam constantly follows player1
-//        gamecam.position.set(playerLocal.getX(), playerLocal.getY(), 0);
-//        gamecam.update();
     }
 
 

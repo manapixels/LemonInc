@@ -114,28 +114,19 @@ public class PlayScreen implements Screen{
     public void render(float delta) {
 
         gamemap.update(delta);
-//<<<<<<< HEAD
         gamemap.render();
 
 
         if(isHost){
             server.update(delta);
         }
-//=======
         hud.update(delta);
 
-
-//        handleInput();
         hud.render();
         hud.stage.draw();
         if(hud.worldTimer==0){
             gameOver();
         }
-
-//        for (HashMap.Entry<String, Player> entry: network.friendlyPlayers.entrySet()) {
-//            entry.getValue().update(dt);
-//        }
-//>>>>>>> master
     }
 
     public void gameOver() {

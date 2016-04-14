@@ -51,7 +51,6 @@ public class TapTapServer {
 
         Network.registerClasses(server);
 
-//        players = new ArrayList<Network.PlayerJoinLeave>();
 
 /**
  * server listens for messages from the clients.
@@ -124,7 +123,6 @@ public class TapTapServer {
                     Network.PlayerJoinLeave reply  = new Network.PlayerJoinLeave(connection.getID(), connection.name, false, 0f, 0f);
                     server.sendToAllExceptTCP(connection.getID(), reply);
                     map.removePlayer(reply);
-//                    players.remove()
                 }
 
             }
@@ -136,8 +134,6 @@ public class TapTapServer {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
         server.start();
 
 

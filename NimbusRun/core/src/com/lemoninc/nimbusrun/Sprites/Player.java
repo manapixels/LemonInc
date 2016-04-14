@@ -64,10 +64,6 @@ public class Player extends Sprite implements InputProcessor{
 
     private Map<Integer,TouchInfo> touches;
 
-    public Player() {
-        CHARACTER_SIZE = 150 / NimbusRun.PPM;
-    }
-
     /**
      * TODO: this constructor should only be created by client?
      * @param gameMap
@@ -100,12 +96,10 @@ public class Player extends Sprite implements InputProcessor{
         this.img = img;
 
         anim = new Animation(1f/40f, img.getRegions());
-        //img = new Sprite(new Texture(fileName));
-        //img.setSize(CHARACTER_SIZE * 1.25f, CHARACTER_SIZE * 1.25f);
 
-        previousPosition = new Vector2(this.getX(), this.getY()); //TODO: is this correct?
+//        previousPosition = new Vector2(this.getX(), this.getY()); //TODO: is this correct?
 
-        //TODO: only for local
+        //only for playerLocal
         if (isLocal) {
             Gdx.input.setInputProcessor(this);
 
@@ -122,8 +116,6 @@ public class Player extends Sprite implements InputProcessor{
         public float touchY = 0;
         public boolean touched = false;
     }
-
-
 
     public State getState(){
         if(b2body.getLinearVelocity().y != 0){
@@ -179,14 +171,14 @@ public class Player extends Sprite implements InputProcessor{
 
         if(Gdx.app.getType() == Application.ApplicationType.Android){
             if(Gdx.input.justTouched()) {
-                System.out.println("Points are: X=" + Gdx.input.getX() + "Y=" + Gdx.input.getY());
+//                System.out.println("Points are: X=" + Gdx.input.getX() + "Y=" + Gdx.input.getY());
                 int x=Gdx.input.getX();
                 int y=Gdx.input.getY();
                 if(x>NimbusRun.V_WIDTH/2){
-                    this.speed();
+                    return this.speed();
                 }
                 else{
-                    this.jump();
+                    return this.jump();
                 }
             }
             if(touches.get(0).touched&&touches.get(1).touched){
@@ -200,53 +192,27 @@ public class Player extends Sprite implements InputProcessor{
                 }
             }
         }
+        else {
+            //for Desktop
+            if (Gdx.input.isKeyJustPressed(Input.Keys.UP))
+                return this.jump();
+            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
+                return this.speed();
+            if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
+                return this.slow();
+        }
 
-//        private void handleInput(){
-//        if (Gdx.input.isKeyJustPressed(Input.Keys.UP))
-//            //player1.jump();
-//            playerLocal.jump();
-//        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
-//            //player1.speed();
-//            playerLocal.speed();
-//        if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
-//            //player1.slow();
-//            playerLocal.slow();
-//        if(Gdx.input.justTouched()) {
-//            System.out.println("Points are: X=" + Gdx.input.getX() + "Y=" + Gdx.input.getY());
-//            int x=Gdx.input.getX();
-//            int y=Gdx.input.getY();
-//            if(x>NimbusRun.V_WIDTH/2){
-//                playerLocal.speed();
-//            }
-//            else{
-//                playerLocal.jump();
-//            }
-//        }
-//        if(touches.get(0).touched&&touches.get(1).touched){
-//            if(touches.get(0).touchX<(NimbusRun.V_WIDTH/2)&&touches.get(1).touchX>(NimbusRun.V_WIDTH-(NimbusRun.V_WIDTH/2))){
-//                // TODO: Implement method for attack
-//                //player1.attack;
-//            }
-//            else if(touches.get(1).touchX<(NimbusRun.V_WIDTH/2)&&touches.get(0).touchX>(NimbusRun.V_WIDTH-(NimbusRun.V_WIDTH/2))) {
-//                //TODO: Implement method for attack
-//                //player1.attack
-//            }
-//        }
-        //for Desktop
-        if (Gdx.input.isKeyJustPressed(Input.Keys.UP))
-            return this.jump();
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
-            return this.speed();
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
-            return this.slow();
 
         return false;
     }
 
     public void update(float delta){
-        this.setPosition(getX(), getY());
-        this.setRegion(anim.getKeyFrame(stateTime, true));
-        //img.setPosition(b2body.getPosition().x - CHARACTER_SIZE / 2 * 1.25f, b2body.getPosition().y - CHARACTER_SIZE / 2 * 1.25f);
+
+        //player.checkDebuff()
+        //if this is true, player.recover(delta)
+        //inside the player class, implement the recover mechanism
+
+        //TODO: recovery mechanism for weisheng
     }
 
     public boolean jump() {
@@ -285,7 +251,6 @@ public class Player extends Sprite implements InputProcessor{
      * @return
      */
     public Network.MovementState getMovementState() {
-//        return new Network.MovementState(id, b2body.getPosition(), b2body.getLinearVelocity());
         return new Network.MovementState(id, b2body.getPosition(), b2body.getLinearVelocity());
     }
 
@@ -297,7 +262,7 @@ public class Player extends Sprite implements InputProcessor{
      * TODO: Not perfectly in sync
      * @param msg
      */
-    public void setMovementState(Network.MovementState msg) {
+    public synchronized void setMovementState(Network.MovementState msg) {
         b2body.setLinearVelocity(msg.linearVelocity);
         b2body.setTransform(msg.position, 0f); //this is outside the world.step call
 //        System.out.println("Changed player's x is "+msg.position.x+" y is "+msg.position.y);
