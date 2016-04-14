@@ -23,7 +23,10 @@ package com.lemoninc.nimbusrun.Sprites;
  *
  * ********************************/
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -34,9 +37,14 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
+import com.lemoninc.nimbusrun.Networking.Network;
+import com.lemoninc.nimbusrun.Screens.PlayScreen;
 import com.lemoninc.nimbusrun.NimbusRun;
 
-public class Player extends Sprite {
+import java.util.HashMap;
+import java.util.Map;
+
+public class Player extends Sprite implements InputProcessor{
     public World world;
     public Body b2body;
     public enum State { DOUBLEJUMPING, JUMPING, DEFAULT, FORWARD, BACK, DEAD }
@@ -54,9 +62,7 @@ public class Player extends Sprite {
 
     Vector2 previousPosition;
 
-    public Player() {
-        CHARACTER_SIZE = 150 / NimbusRun.PPM;
-    }
+    private Map<Integer,TouchInfo> touches;
 
     /**
      * TODO: this constructor should only be created by client?
@@ -65,7 +71,7 @@ public class Player extends Sprite {
      * @param x
      * @param y
      */
-    public Player(GameMap gameMap, TextureAtlas img, float x, float y) {
+    public Player(GameMap gameMap, TextureAtlas img, float x, float y, boolean isLocal) {
 
         this.world = gameMap.getWorld();
         currentState = State.DEFAULT;
@@ -82,35 +88,33 @@ public class Player extends Sprite {
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
         shape.setRadius(CHARACTER_SIZE / 2);
-//        PolygonShape shape = new PolygonShape();
-//        shape.setAsBox(x, y);
+
         fdef.shape = shape;
         b2body.createFixture(fdef); //Player is a circle
         shape.dispose();
 
-//        switch(whichCharacter){
-//            // 1. LAUGHING BUDDHA
-//            // 2. SHESHNAH WITH KRISHNA
-//            // 3. NINE-TAILED FOX
-//            // 4. KAPPA
-//            // 5. PONTIANAK
-//            // 6. MADAME WHITE SNAKE
-//            case 1: img = new TextureAtlas(Gdx.files.internal("spritesheets/LBspritesheet.atlas")); break;
-//            case 2: img = new TextureAtlas(Gdx.files.internal("spritesheets/SKspritesheet.atlas")); break;
-//            case 3: img = new TextureAtlas(Gdx.files.internal("spritesheets/FXspritesheet.atlas")); break;
-//            case 4: img = new TextureAtlas(Gdx.files.internal("spritesheets/KPspritesheet.atlas")); break;
-//            case 5: img = new TextureAtlas(Gdx.files.internal("spritesheets/PTspritesheet.atlas")); break;
-//            case 6: img = new TextureAtlas(Gdx.files.internal("spritesheets/MWSspritesheet.atlas")); break;
-//            default: img = new TextureAtlas(Gdx.files.internal("spritesheets/PTspritesheet.atlas")); break;
-//        }
-
         this.img = img;
 
         anim = new Animation(1f/40f, img.getRegions());
-        //img = new Sprite(new Texture(fileName));
-        //img.setSize(CHARACTER_SIZE * 1.25f, CHARACTER_SIZE * 1.25f);
 
-        previousPosition = new Vector2(this.getX(), this.getY()); //TODO: is this correct?
+//        previousPosition = new Vector2(this.getX(), this.getY()); //TODO: is this correct?
+
+        //only for playerLocal
+        if (isLocal) {
+            Gdx.input.setInputProcessor(this);
+
+            touches = new HashMap<Integer,TouchInfo>();
+
+            for(int i = 0; i < 2; i++){
+                touches.put(i, new TouchInfo());
+            }
+        }
+    }
+
+    class TouchInfo {
+        public float touchX = 0;
+        public float touchY = 0;
+        public boolean touched = false;
     }
 
     public State getState(){
@@ -159,13 +163,59 @@ public class Player extends Sprite {
         return false;
     }
 
-    public void update(float delta){
-        this.setPosition(getX(), getY());
-        this.setRegion(anim.getKeyFrame(stateTime, true));
-        //img.setPosition(b2body.getPosition().x - CHARACTER_SIZE / 2 * 1.25f, b2body.getPosition().y - CHARACTER_SIZE / 2 * 1.25f);
+    /**
+     * Player's movement
+     * @return
+     */
+    public boolean handleInput(){
+
+        if(Gdx.app.getType() == Application.ApplicationType.Android){
+            if(Gdx.input.justTouched()) {
+//                System.out.println("Points are: X=" + Gdx.input.getX() + "Y=" + Gdx.input.getY());
+                int x=Gdx.input.getX();
+                int y=Gdx.input.getY();
+                if(x>NimbusRun.V_WIDTH/2){
+                    return this.speed();
+                }
+                else{
+                    return this.jump();
+                }
+            }
+            if(touches.get(0).touched&&touches.get(1).touched){
+                if(touches.get(0).touchX<(NimbusRun.V_WIDTH/2)&&touches.get(1).touchX>(NimbusRun.V_WIDTH-(NimbusRun.V_WIDTH/2))){
+                    // TODO: Implement method for attack
+                    //player1.attack;
+                }
+                else if(touches.get(1).touchX<(NimbusRun.V_WIDTH/2)&&touches.get(0).touchX>(NimbusRun.V_WIDTH-(NimbusRun.V_WIDTH/2))) {
+                    //TODO: Implement method for attack
+                    //player1.attack
+                }
+            }
+        }
+        else {
+            //for Desktop
+            if (Gdx.input.isKeyJustPressed(Input.Keys.UP))
+                return this.jump();
+            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
+                return this.speed();
+            if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
+                return this.slow();
+        }
+
+
+        return false;
     }
 
-    public void jump() {
+    public void update(float delta){
+
+        //player.checkDebuff()
+        //if this is true, player.recover(delta)
+        //inside the player class, implement the recover mechanism
+
+        //TODO: recovery mechanism for weisheng
+    }
+
+    public boolean jump() {
         if (currentState == State.DOUBLEJUMPING){
             currentState = getState();
         }
@@ -178,17 +228,44 @@ public class Player extends Sprite {
             currentState = State.JUMPING;
             b2body.applyLinearImpulse(new Vector2(0, 6f), b2body.getWorldCenter(), true);
         }
+        return true;
     }
 
-    public void speed() {
-        if (b2body.getLinearVelocity().x <= 4) {
-            b2body.applyLinearImpulse(new Vector2(1.25f, 0), b2body.getWorldCenter(), true);
+
+    public boolean speed() {
+        if (b2body.getLinearVelocity().x <= 3) {
+            b2body.applyLinearImpulse(new Vector2(1f, 0), b2body.getWorldCenter(), true);
         }
+        return true;
     }
-    public void slow() {
-        if (b2body.getLinearVelocity().x >= -4) {
-            b2body.applyLinearImpulse(new Vector2(-1.25f, 0), b2body.getWorldCenter(), true);
+
+    public boolean slow() {
+        if (b2body.getLinearVelocity().x >= -3) {
+            b2body.applyLinearImpulse(new Vector2(-1f, 0), b2body.getWorldCenter(), true);
         }
+        return true;
+    }
+
+    /**
+     * Get the Player's body linear Velocity wrapped in MovementState
+     * @return
+     */
+    public Network.MovementState getMovementState() {
+        return new Network.MovementState(id, b2body.getPosition(), b2body.getLinearVelocity());
+    }
+
+    /**
+     * Set the player's linear velocity according to the received MovementState Packet
+     * @param msg
+     */
+    /**
+     * TODO: Not perfectly in sync
+     * @param msg
+     */
+    public synchronized void setMovementState(Network.MovementState msg) {
+        b2body.setLinearVelocity(msg.linearVelocity);
+        b2body.setTransform(msg.position, 0f); //this is outside the world.step call
+//        System.out.println("Changed player's x is "+msg.position.x+" y is "+msg.position.y);
     }
 
     public TextureAtlas getTxtAtlas(){ return img;}
@@ -203,5 +280,55 @@ public class Player extends Sprite {
 
     public String getName() {
         return name;
+    }
+
+        @Override
+    public boolean keyDown(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        if(pointer < 2){
+            touches.get(pointer).touchX = screenX;
+            touches.get(pointer).touchY = screenY;
+            touches.get(pointer).touched = true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        if(pointer < 2){
+            touches.get(pointer).touchX = 0;
+            touches.get(pointer).touchY = 0;
+            touches.get(pointer).touched = false;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(int amount) {
+        return false;
     }
 }
