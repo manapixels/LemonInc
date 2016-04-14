@@ -38,7 +38,9 @@ import com.lemoninc.nimbusrun.Networking.Network;
 import com.lemoninc.nimbusrun.Networking.Server.TapTapServer;
 import com.lemoninc.nimbusrun.NimbusRun;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class GameMap implements InputProcessor{
@@ -55,9 +57,15 @@ public class GameMap implements InputProcessor{
 
     private SpriteBatch batch;
     private Texture bgTexture;
-    private float bgHeight, bgWidth;
-    private Sprite bgSpriteA1, bgSpriteA2, bgSpriteB1, bgSpriteB2;
-    private float bgStartX, bgStartY;
+    private Sprite bgSprite;
+    private float bgHeight, bgWidth, bgStartX, bgStartY;
+
+    private Texture bgTextureFlat, bgTextureMountain, bgTexturePit, bgTexturePlateau;
+    private List<Sprite> bgPlatformSprites;
+    private float bgFlatHeight, bgFlatWidth;
+    private float bgMountainHeight, bgMountainWidth;
+    private float bgPlateauHeight, bgPlateauWidth;
+    private float bgPitHeight, bgPitWidth;
 
     private World world;
     private Box2DDebugRenderer b2dr;
@@ -157,13 +165,18 @@ public class GameMap implements InputProcessor{
         // initialise all background sprites
         bgTexture = new Texture("PlayScreen/bg.png");
         bgTexture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
-        bgSpriteA1 = new Sprite(new TextureRegion(bgTexture, bgTexture.getWidth()*11, bgTexture.getHeight()*2));
+        bgSprite = new Sprite(new TextureRegion(bgTexture, bgTexture.getWidth()*11, bgTexture.getHeight()*2));
         bgWidth = bgTexture.getWidth() / NimbusRun.PPM * 1.4f * 11;
         bgHeight = bgTexture.getHeight() / NimbusRun.PPM * 1.4f * 2;
-        bgSpriteA1.setX(bgStartX);
-        bgSpriteA1.setY(bgStartY);
-        bgSpriteA1.setSize(bgWidth, bgHeight);
-        //bgSpriteA2 = new Sprite(bgSpriteA1);
+        bgSprite.setX(bgStartX);
+        bgSprite.setY(bgStartY);
+        bgSprite.setSize(bgWidth, bgHeight);
+
+        bgTextureMountain = new Texture("PlayScreen/platform_mountain.png");
+        bgMountainWidth = bgTextureMountain.getWidth() / NimbusRun.PPM * 2.2f;
+        bgMountainHeight = bgTextureMountain.getHeight() / NimbusRun.PPM * 2.2f;
+
+        bgPlatformSprites = new ArrayList<Sprite>();
 
     }
 
@@ -268,16 +281,12 @@ public class GameMap implements InputProcessor{
         batch.setProjectionMatrix(gamecam.combined);
         batch.begin();
 
-        // Update background sprite positions and draw anew
-        /*
-        if(gamecam.position.x -bgWidth/2> bgSprite2.getX()){
-            bgSprite1.setX(bgSprite2.getX());
-            bgSprite2.setX(bgSprite1.getX()+bgWidth); }
-        bgSprite1.draw(batch);
-        bgSprite2.draw(batch);
-        */
+        // Render seamless bg and platforms
+        bgSprite.draw(batch);
+        for (Sprite sprite : bgPlatformSprites) {
+            sprite.draw(batch);
+        }
 
-        bgSpriteA1.draw(batch);
         // Render Players
         for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {
             Player curPlayer = playerEntry.getValue();
@@ -301,6 +310,18 @@ public class GameMap implements InputProcessor{
     public void update(float delta) {
         handleInput();
         render();
+    }
+
+    public void makePlatformsBG(float startX, float endX, char type){
+        Sprite sprite;
+        switch(type){
+            case 'M': sprite = new Sprite(bgTextureMountain);
+                sprite.setPosition(startX, -bgMountainHeight*0.4f);
+                sprite.setSize(bgMountainWidth, bgMountainHeight);
+                Log.info("Mountain made at: " + startX);
+                bgPlatformSprites.add(sprite); break;
+        }
+
     }
 
     public synchronized void logInfo(String string) {
