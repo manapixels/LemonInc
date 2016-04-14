@@ -44,8 +44,6 @@ public class PlayScreen implements Screen{
     private TapTapServer server;
     private HUD hud;
 
-
-
     /**
      *
      * @param game
