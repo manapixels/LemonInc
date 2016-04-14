@@ -41,7 +41,7 @@ import com.lemoninc.nimbusrun.NimbusRun;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GameMap implements InputProcessor{
+public class GameMap{
 
     private TapTapClient client; // only if I'm the client
     private TapTapServer server; // only if I'm internal to the server
@@ -73,12 +73,7 @@ public class GameMap implements InputProcessor{
     private int sourceX;
 
 
-    class TouchInfo {
-        public float touchX = 0;
-        public float touchY = 0;
-        public boolean touched = false;
-    }
-    private Map<Integer,TouchInfo> touches = new HashMap<Integer,TouchInfo>();
+
 
     /**
      * This constructor is called inside TapTapClient
@@ -109,11 +104,7 @@ public class GameMap implements InputProcessor{
 
 //        logInfo("GameMap initialised");
 
-        Gdx.input.setInputProcessor(this);
 
-        for(int i = 0; i < 2; i++){
-            touches.put(i, new TouchInfo());
-        }
 
     }
 
@@ -173,7 +164,7 @@ public class GameMap implements InputProcessor{
     public synchronized void addPlayer(Network.PlayerJoinLeave msg) {
         //create new player from msg
 
-        Player newPlayer = new Player(this, img, msg.initial_x, msg.initial_y);
+        Player newPlayer = new Player(this, img, msg.initial_x, msg.initial_y, false);
         newPlayer.setId(msg.playerId);
         newPlayer.setName(msg.name);
 
@@ -208,7 +199,7 @@ public class GameMap implements InputProcessor{
 
         if (this.playerLocal == null) {
             // TODO Server should spawn localPlayer too
-            playerLocal = new Player(this, img, Network.SPAWN_X, Network.SPAWN_Y);
+            playerLocal = new Player(this, img, Network.SPAWN_X, Network.SPAWN_Y, true);
             this.playerLocal.setId(client.id);
             this.playerLocal.setName(name);
             players.put(client.id, playerLocal);
@@ -317,53 +308,5 @@ public class GameMap implements InputProcessor{
         this.players.clear();
 //        logInfo("on DIsconnection, clear the players Map");
     }
-    @Override
-    public boolean keyDown(int keycode) {
-        return false;
-    }
 
-    @Override
-    public boolean keyUp(int keycode) {
-        return false;
-    }
-
-    @Override
-    public boolean keyTyped(char character) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        if(pointer < 2){
-            touches.get(pointer).touchX = screenX;
-            touches.get(pointer).touchY = screenY;
-            touches.get(pointer).touched = true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        if(pointer < 2){
-            touches.get(pointer).touchX = 0;
-            touches.get(pointer).touchY = 0;
-            touches.get(pointer).touched = false;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
-        return false;
-    }
-
-    @Override
-    public boolean mouseMoved(int screenX, int screenY) {
-        return false;
-    }
-
-    @Override
-    public boolean scrolled(int amount) {
-        return false;
-    }
 }

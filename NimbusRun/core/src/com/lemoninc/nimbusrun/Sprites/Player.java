@@ -23,8 +23,10 @@ package com.lemoninc.nimbusrun.Sprites;
  *
  * ********************************/
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -39,7 +41,10 @@ import com.lemoninc.nimbusrun.Networking.Network;
 import com.lemoninc.nimbusrun.Screens.PlayScreen;
 import com.lemoninc.nimbusrun.NimbusRun;
 
-public class Player extends Sprite {
+import java.util.HashMap;
+import java.util.Map;
+
+public class Player extends Sprite implements InputProcessor{
     public World world;
     public Body b2body;
     public enum State { DOUBLEJUMPING, JUMPING, DEFAULT, FORWARD, BACK, DEAD }
@@ -57,6 +62,8 @@ public class Player extends Sprite {
 
     Vector2 previousPosition;
 
+    private Map<Integer,TouchInfo> touches;
+
     public Player() {
         CHARACTER_SIZE = 150 / NimbusRun.PPM;
     }
@@ -68,7 +75,7 @@ public class Player extends Sprite {
      * @param x
      * @param y
      */
-    public Player(GameMap gameMap, TextureAtlas img, float x, float y) {
+    public Player(GameMap gameMap, TextureAtlas img, float x, float y, boolean isLocal) {
 
         this.world = gameMap.getWorld();
         currentState = State.DEFAULT;
@@ -97,7 +104,26 @@ public class Player extends Sprite {
         //img.setSize(CHARACTER_SIZE * 1.25f, CHARACTER_SIZE * 1.25f);
 
         previousPosition = new Vector2(this.getX(), this.getY()); //TODO: is this correct?
+
+        //TODO: only for local
+        if (isLocal) {
+            Gdx.input.setInputProcessor(this);
+
+            touches = new HashMap<Integer,TouchInfo>();
+
+            for(int i = 0; i < 2; i++){
+                touches.put(i, new TouchInfo());
+            }
+        }
     }
+
+    class TouchInfo {
+        public float touchX = 0;
+        public float touchY = 0;
+        public boolean touched = false;
+    }
+
+
 
     public State getState(){
         if(b2body.getLinearVelocity().y != 0){
@@ -150,6 +176,30 @@ public class Player extends Sprite {
      * @return
      */
     public boolean handleInput(){
+
+        if(Gdx.app.getType() == Application.ApplicationType.Android){
+            if(Gdx.input.justTouched()) {
+                System.out.println("Points are: X=" + Gdx.input.getX() + "Y=" + Gdx.input.getY());
+                int x=Gdx.input.getX();
+                int y=Gdx.input.getY();
+                if(x>NimbusRun.V_WIDTH/2){
+                    this.speed();
+                }
+                else{
+                    this.jump();
+                }
+            }
+            if(touches.get(0).touched&&touches.get(1).touched){
+                if(touches.get(0).touchX<(NimbusRun.V_WIDTH/2)&&touches.get(1).touchX>(NimbusRun.V_WIDTH-(NimbusRun.V_WIDTH/2))){
+                    // TODO: Implement method for attack
+                    //player1.attack;
+                }
+                else if(touches.get(1).touchX<(NimbusRun.V_WIDTH/2)&&touches.get(0).touchX>(NimbusRun.V_WIDTH-(NimbusRun.V_WIDTH/2))) {
+                    //TODO: Implement method for attack
+                    //player1.attack
+                }
+            }
+        }
 
 //        private void handleInput(){
 //        if (Gdx.input.isKeyJustPressed(Input.Keys.UP))
@@ -265,5 +315,55 @@ public class Player extends Sprite {
 
     public String getName() {
         return name;
+    }
+
+        @Override
+    public boolean keyDown(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        if(pointer < 2){
+            touches.get(pointer).touchX = screenX;
+            touches.get(pointer).touchY = screenY;
+            touches.get(pointer).touched = true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        if(pointer < 2){
+            touches.get(pointer).touchX = 0;
+            touches.get(pointer).touchY = 0;
+            touches.get(pointer).touched = false;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(int amount) {
+        return false;
     }
 }
