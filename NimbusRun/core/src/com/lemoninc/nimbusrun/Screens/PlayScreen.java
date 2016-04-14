@@ -52,7 +52,7 @@ public class PlayScreen implements Screen{
      * @param playerName
      */
     public PlayScreen(NimbusRun game, boolean isHost, String ipAddress, String playerName){
-        logInfo("My name is "+playerName);
+//        logInfo("My name is "+playerName);
 
         this.game = game;
         this.isHost = isHost;
@@ -75,7 +75,7 @@ public class PlayScreen implements Screen{
     @Override
     public void show() {
         client = new TapTapClient(playerName);
-        logInfo("Client created!");
+//        logInfo("Client created!");
         gamemap = client.getMap();
 
         if (isHost) {
@@ -112,21 +112,22 @@ public class PlayScreen implements Screen{
 
     @Override
     public void render(float delta) {
-//        logInfo("Rendering");
 
-        handleInput();
         gamemap.update(delta);
+//<<<<<<< HEAD
+        gamemap.render();
+
+
+        if(isHost){
+            server.update(delta);
+        }
+//=======
         hud.update(delta);
 
 
-        handleInput();
+//        handleInput();
         hud.render();
         hud.stage.draw();
-        if(hud.worldTimer==0){
-            gameOver();
-        }
-
-
         if(hud.worldTimer==0){
             gameOver();
         }
@@ -134,6 +135,7 @@ public class PlayScreen implements Screen{
 //        for (HashMap.Entry<String, Player> entry: network.friendlyPlayers.entrySet()) {
 //            entry.getValue().update(dt);
 //        }
+//>>>>>>> master
     }
 
     public void gameOver() {
@@ -167,7 +169,7 @@ public class PlayScreen implements Screen{
     public void dispose() {    }
 
     private void logInfo(String string) {
-        Log.info("[PlayScreen]: " + string);
-        Log.info(string);
+//        Log.info("[PlayScreen]: " + string);
+//        Log.info(string);
     }
 }

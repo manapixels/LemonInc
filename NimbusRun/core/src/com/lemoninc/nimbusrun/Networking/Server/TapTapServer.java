@@ -93,7 +93,6 @@ public class TapTapServer {
                     logInfo("Adding the new Client to Server's map");
                     //add this new player to gamemap
                     map.addPlayer(newPlayer); //server stores the new player
-//                    players.add(newPlayer);
 
                     //tell new client about old clients
                     for (Connection con : server.getConnections()) { //upon connection, every client's name is stored in Player
@@ -103,9 +102,18 @@ public class TapTapServer {
                             Network.PlayerJoinLeave hereMsg = new Network.PlayerJoinLeave(conn.getID(), herePlayer.getName(), true, herePlayer.getX(), herePlayer.getY()); //TODO: server's gamemap needs to be updated too
                             logInfo("Telling " + connection.name + " about old client " + herePlayer.getName());
                             connection.sendTCP(hereMsg); // basic info
-//                            connection.sendTCP(herePlayer.getMovementState()); // info about current movement
+                            connection.sendTCP(herePlayer.getMovementState()); // info about current movement
                         }
                     }
+                }
+                else if(message instanceof Network.MovementState) {
+                    Network.MovementState msg = (Network.MovementState)message;
+                    logInfo("MovementState received");
+                    msg.playerId = connection.getID();
+                    // TODO Server updates its copy of player from what its told
+                    map.playerMoved(msg);
+//					"SERVER "+msg.playerId+" moved"
+                    server.sendToAllExceptUDP(connection.getID(), msg);
                 }
             }
 
@@ -136,7 +144,7 @@ public class TapTapServer {
     }
 
     public void update(float delta) {
-//        map.update(delta); //TODO:make sure server's map.update doesn't contain rendering
+        map.update(delta); //TODO:make sure server's map.update doesn't contain rendering
     }
 
     public void shutdown() {
@@ -149,7 +157,7 @@ public class TapTapServer {
     }
 
     private void logInfo(String string) {
-        Log.info("[TapTapServer]: " + string);
+//        Log.info("[TapTapServer]: " + string);
     }
 }
 
