@@ -97,7 +97,6 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
         CharacterLabel=new Label("PLAYER",new Label.LabelStyle(new BitmapFont(Gdx.files.internal("Fonts/font.fnt")), Color.GOLDENROD));
         countdownLabel=new Label(String.format("%03d",worldTimer),new Label.LabelStyle(new BitmapFont(Gdx.files.internal("Fonts/font20.fnt")), Color.CYAN));
 
-
         table.add(CharacterLabel).expandX().padTop(20f);
 
         table.add(timelabel).expandX().padTop(20f);
