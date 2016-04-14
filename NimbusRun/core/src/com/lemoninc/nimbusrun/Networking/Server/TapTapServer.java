@@ -157,7 +157,7 @@ public class TapTapServer {
     }
 
     private void logInfo(String string) {
-        Log.info("[TapTapServer]: " + string);
+//        Log.info("[TapTapServer]: " + string);
     }
 }
 

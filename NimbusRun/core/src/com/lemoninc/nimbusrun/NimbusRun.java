@@ -2,7 +2,7 @@ package com.lemoninc.nimbusrun;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.lemoninc.nimbusrun.Screens.WaitScreen;
+import com.lemoninc.nimbusrun.Screens.SplashScreen;
 
 public class NimbusRun extends Game {
 	public static final int V_HEIGHT = 480;
@@ -14,7 +14,9 @@ public class NimbusRun extends Game {
 	public void create () {
 		batch = new SpriteBatch();
 		//game starts with waiting screen
-		setScreen(new WaitScreen(this));
+		setScreen(new SplashScreen(this,V_WIDTH,V_HEIGHT));
+		//setScreen(new WaitScreen(this));
+		//setScreen(new MenuScreen(this,V_WIDTH,V_HEIGHT));
 	}
 
 	@Override

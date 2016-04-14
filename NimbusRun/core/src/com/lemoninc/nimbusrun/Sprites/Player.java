@@ -150,6 +150,38 @@ public class Player extends Sprite {
      * @return
      */
     public boolean handleInput(){
+
+//        private void handleInput(){
+//        if (Gdx.input.isKeyJustPressed(Input.Keys.UP))
+//            //player1.jump();
+//            playerLocal.jump();
+//        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
+//            //player1.speed();
+//            playerLocal.speed();
+//        if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
+//            //player1.slow();
+//            playerLocal.slow();
+//        if(Gdx.input.justTouched()) {
+//            System.out.println("Points are: X=" + Gdx.input.getX() + "Y=" + Gdx.input.getY());
+//            int x=Gdx.input.getX();
+//            int y=Gdx.input.getY();
+//            if(x>NimbusRun.V_WIDTH/2){
+//                playerLocal.speed();
+//            }
+//            else{
+//                playerLocal.jump();
+//            }
+//        }
+//        if(touches.get(0).touched&&touches.get(1).touched){
+//            if(touches.get(0).touchX<(NimbusRun.V_WIDTH/2)&&touches.get(1).touchX>(NimbusRun.V_WIDTH-(NimbusRun.V_WIDTH/2))){
+//                // TODO: Implement method for attack
+//                //player1.attack;
+//            }
+//            else if(touches.get(1).touchX<(NimbusRun.V_WIDTH/2)&&touches.get(0).touchX>(NimbusRun.V_WIDTH-(NimbusRun.V_WIDTH/2))) {
+//                //TODO: Implement method for attack
+//                //player1.attack
+//            }
+//        }
         //for Desktop
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP))
             return this.jump();

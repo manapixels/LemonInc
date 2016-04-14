@@ -96,6 +96,6 @@ public class Network {
     }
 
     private static void logInfo(String string) {
-        Log.info("[Network]: "+string);
+//        Log.info("[Network]: "+string);
     }
 }

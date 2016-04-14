@@ -124,14 +124,14 @@ public class TapTapClient {
     }
 
     public void sendMessage(Object message) {
-        map.logInfo("SENT packet TCP");
+//        map.logInfo("SENT packet TCP");
         if (client.isConnected()) {
             client.sendTCP(message);
         }
     }
 
     public void sendMessageUDP(Object message) {
-        map.logInfo("SENT packet UPD");
+//        map.logInfo("SENT packet UPD");
         if (client.isConnected()) {
             client.sendUDP(message);
         }
@@ -143,6 +143,6 @@ public class TapTapClient {
     }
 
     private void logInfo(String string) {
-        Log.info("[TapTapClient]: "+string);
+//        Log.info("[TapTapClient]: "+string);
     }
 }

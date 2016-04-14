@@ -1,705 +1,705 @@
 SKspritesheet.png
-size: 2420, 2420
+size: 1820, 1820
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
 Sheshnag&Krishna Animation0001
   rotate: false
   xy: 1, 1
-  size: 240, 240
-  orig: 240, 240
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0002
   rotate: false
-  xy: 1, 243
-  size: 240, 240
-  orig: 240, 240
+  xy: 1, 183
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0003
   rotate: false
-  xy: 1, 485
-  size: 240, 240
-  orig: 240, 240
+  xy: 1, 365
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0004
   rotate: false
-  xy: 1, 727
-  size: 240, 240
-  orig: 240, 240
+  xy: 1, 547
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0005
   rotate: false
-  xy: 1, 969
-  size: 240, 240
-  orig: 240, 240
+  xy: 1, 729
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0006
   rotate: false
-  xy: 1, 1211
-  size: 240, 240
-  orig: 240, 240
+  xy: 1, 911
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0007
   rotate: false
-  xy: 1, 1453
-  size: 240, 240
-  orig: 240, 240
+  xy: 1, 1093
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0008
   rotate: false
-  xy: 1, 1695
-  size: 240, 240
-  orig: 240, 240
+  xy: 1, 1275
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0009
   rotate: false
-  xy: 1, 1937
-  size: 240, 240
-  orig: 240, 240
+  xy: 1, 1457
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0010
   rotate: false
-  xy: 1, 2179
-  size: 240, 240
-  orig: 240, 240
+  xy: 1, 1639
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0011
   rotate: false
-  xy: 243, 1
-  size: 240, 240
-  orig: 240, 240
+  xy: 183, 1
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0012
   rotate: false
-  xy: 485, 1
-  size: 240, 240
-  orig: 240, 240
+  xy: 365, 1
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0013
   rotate: false
-  xy: 727, 1
-  size: 240, 240
-  orig: 240, 240
+  xy: 547, 1
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0014
   rotate: false
-  xy: 969, 1
-  size: 240, 240
-  orig: 240, 240
+  xy: 729, 1
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0015
   rotate: false
-  xy: 1211, 1
-  size: 240, 240
-  orig: 240, 240
+  xy: 911, 1
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0016
   rotate: false
-  xy: 1453, 1
-  size: 240, 240
-  orig: 240, 240
+  xy: 1093, 1
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0017
   rotate: false
-  xy: 1695, 1
-  size: 240, 240
-  orig: 240, 240
+  xy: 1275, 1
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0018
   rotate: false
-  xy: 1937, 1
-  size: 240, 240
-  orig: 240, 240
+  xy: 1457, 1
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0019
   rotate: false
-  xy: 2179, 1
-  size: 240, 240
-  orig: 240, 240
+  xy: 1639, 1
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0020
   rotate: false
-  xy: 243, 243
-  size: 240, 240
-  orig: 240, 240
+  xy: 183, 183
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0021
   rotate: false
-  xy: 243, 485
-  size: 240, 240
-  orig: 240, 240
+  xy: 183, 365
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0022
   rotate: false
-  xy: 243, 727
-  size: 240, 240
-  orig: 240, 240
+  xy: 183, 547
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0023
   rotate: false
-  xy: 243, 969
-  size: 240, 240
-  orig: 240, 240
+  xy: 183, 729
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0024
   rotate: false
-  xy: 243, 1211
-  size: 240, 240
-  orig: 240, 240
+  xy: 183, 911
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0025
   rotate: false
-  xy: 243, 1453
-  size: 240, 240
-  orig: 240, 240
+  xy: 183, 1093
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0026
   rotate: false
-  xy: 243, 1695
-  size: 240, 240
-  orig: 240, 240
+  xy: 183, 1275
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0027
   rotate: false
-  xy: 243, 1937
-  size: 240, 240
-  orig: 240, 240
+  xy: 183, 1457
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0028
   rotate: false
-  xy: 243, 2179
-  size: 240, 240
-  orig: 240, 240
+  xy: 183, 1639
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0029
   rotate: false
-  xy: 485, 243
-  size: 240, 240
-  orig: 240, 240
+  xy: 365, 183
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0030
   rotate: false
-  xy: 727, 243
-  size: 240, 240
-  orig: 240, 240
+  xy: 547, 183
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0031
   rotate: false
-  xy: 969, 243
-  size: 240, 240
-  orig: 240, 240
+  xy: 729, 183
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0032
   rotate: false
-  xy: 1211, 243
-  size: 240, 240
-  orig: 240, 240
+  xy: 911, 183
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0033
   rotate: false
-  xy: 1453, 243
-  size: 240, 240
-  orig: 240, 240
+  xy: 1093, 183
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0034
   rotate: false
-  xy: 1695, 243
-  size: 240, 240
-  orig: 240, 240
+  xy: 1275, 183
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0035
   rotate: false
-  xy: 1937, 243
-  size: 240, 240
-  orig: 240, 240
+  xy: 1457, 183
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0036
   rotate: false
-  xy: 2179, 243
-  size: 240, 240
-  orig: 240, 240
+  xy: 1639, 183
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0037
   rotate: false
-  xy: 485, 485
-  size: 240, 240
-  orig: 240, 240
+  xy: 365, 365
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0038
   rotate: false
-  xy: 485, 727
-  size: 240, 240
-  orig: 240, 240
+  xy: 365, 547
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0039
   rotate: false
-  xy: 485, 969
-  size: 240, 240
-  orig: 240, 240
+  xy: 365, 729
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0040
   rotate: false
-  xy: 485, 1211
-  size: 240, 240
-  orig: 240, 240
+  xy: 365, 911
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0041
   rotate: false
-  xy: 485, 1453
-  size: 240, 240
-  orig: 240, 240
+  xy: 365, 1093
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0042
   rotate: false
-  xy: 485, 1695
-  size: 240, 240
-  orig: 240, 240
+  xy: 365, 1275
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0043
   rotate: false
-  xy: 485, 1937
-  size: 240, 240
-  orig: 240, 240
+  xy: 365, 1457
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0044
   rotate: false
-  xy: 485, 2179
-  size: 240, 240
-  orig: 240, 240
+  xy: 365, 1639
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0045
   rotate: false
-  xy: 727, 485
-  size: 240, 240
-  orig: 240, 240
+  xy: 547, 365
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0046
   rotate: false
-  xy: 969, 485
-  size: 240, 240
-  orig: 240, 240
+  xy: 729, 365
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0047
   rotate: false
-  xy: 1211, 485
-  size: 240, 240
-  orig: 240, 240
+  xy: 911, 365
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0048
   rotate: false
-  xy: 1453, 485
-  size: 240, 240
-  orig: 240, 240
+  xy: 1093, 365
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0049
   rotate: false
-  xy: 1695, 485
-  size: 240, 240
-  orig: 240, 240
+  xy: 1275, 365
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0050
   rotate: false
-  xy: 1937, 485
-  size: 240, 240
-  orig: 240, 240
+  xy: 1457, 365
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0051
   rotate: false
-  xy: 2179, 485
-  size: 240, 240
-  orig: 240, 240
+  xy: 1639, 365
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0052
   rotate: false
-  xy: 727, 727
-  size: 240, 240
-  orig: 240, 240
+  xy: 547, 547
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0053
   rotate: false
-  xy: 727, 969
-  size: 240, 240
-  orig: 240, 240
+  xy: 547, 729
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0054
   rotate: false
-  xy: 727, 1211
-  size: 240, 240
-  orig: 240, 240
+  xy: 547, 911
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0055
   rotate: false
-  xy: 727, 1453
-  size: 240, 240
-  orig: 240, 240
+  xy: 547, 1093
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0056
   rotate: false
-  xy: 727, 1695
-  size: 240, 240
-  orig: 240, 240
+  xy: 547, 1275
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0057
   rotate: false
-  xy: 727, 1937
-  size: 240, 240
-  orig: 240, 240
+  xy: 547, 1457
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0058
   rotate: false
-  xy: 727, 2179
-  size: 240, 240
-  orig: 240, 240
+  xy: 547, 1639
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0059
   rotate: false
-  xy: 969, 727
-  size: 240, 240
-  orig: 240, 240
+  xy: 729, 547
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0060
   rotate: false
-  xy: 1211, 727
-  size: 240, 240
-  orig: 240, 240
+  xy: 911, 547
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0061
   rotate: false
-  xy: 1453, 727
-  size: 240, 240
-  orig: 240, 240
+  xy: 1093, 547
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0062
   rotate: false
-  xy: 1695, 727
-  size: 240, 240
-  orig: 240, 240
+  xy: 1275, 547
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0063
   rotate: false
-  xy: 1937, 727
-  size: 240, 240
-  orig: 240, 240
+  xy: 1457, 547
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0064
   rotate: false
-  xy: 2179, 727
-  size: 240, 240
-  orig: 240, 240
+  xy: 1639, 547
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0065
   rotate: false
-  xy: 969, 969
-  size: 240, 240
-  orig: 240, 240
+  xy: 729, 729
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0066
   rotate: false
-  xy: 969, 1211
-  size: 240, 240
-  orig: 240, 240
+  xy: 729, 911
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0067
   rotate: false
-  xy: 969, 1453
-  size: 240, 240
-  orig: 240, 240
+  xy: 729, 1093
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0068
   rotate: false
-  xy: 969, 1695
-  size: 240, 240
-  orig: 240, 240
+  xy: 729, 1275
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0069
   rotate: false
-  xy: 969, 1937
-  size: 240, 240
-  orig: 240, 240
+  xy: 729, 1457
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0070
   rotate: false
-  xy: 969, 2179
-  size: 240, 240
-  orig: 240, 240
+  xy: 729, 1639
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0071
   rotate: false
-  xy: 1211, 969
-  size: 240, 240
-  orig: 240, 240
+  xy: 911, 729
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0072
   rotate: false
-  xy: 1453, 969
-  size: 240, 240
-  orig: 240, 240
+  xy: 1093, 729
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0073
   rotate: false
-  xy: 1695, 969
-  size: 240, 240
-  orig: 240, 240
+  xy: 1275, 729
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0074
   rotate: false
-  xy: 1937, 969
-  size: 240, 240
-  orig: 240, 240
+  xy: 1457, 729
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0075
   rotate: false
-  xy: 2179, 969
-  size: 240, 240
-  orig: 240, 240
+  xy: 1639, 729
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0076
   rotate: false
-  xy: 1211, 1211
-  size: 240, 240
-  orig: 240, 240
+  xy: 911, 911
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0077
   rotate: false
-  xy: 1211, 1453
-  size: 240, 240
-  orig: 240, 240
+  xy: 911, 1093
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0078
   rotate: false
-  xy: 1211, 1695
-  size: 240, 240
-  orig: 240, 240
+  xy: 911, 1275
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0079
   rotate: false
-  xy: 1211, 1937
-  size: 240, 240
-  orig: 240, 240
+  xy: 911, 1457
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0080
   rotate: false
-  xy: 1211, 2179
-  size: 240, 240
-  orig: 240, 240
+  xy: 911, 1639
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0081
   rotate: false
-  xy: 1453, 1211
-  size: 240, 240
-  orig: 240, 240
+  xy: 1093, 911
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0082
   rotate: false
-  xy: 1695, 1211
-  size: 240, 240
-  orig: 240, 240
+  xy: 1275, 911
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0083
   rotate: false
-  xy: 1937, 1211
-  size: 240, 240
-  orig: 240, 240
+  xy: 1457, 911
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0084
   rotate: false
-  xy: 2179, 1211
-  size: 240, 240
-  orig: 240, 240
+  xy: 1639, 911
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0085
   rotate: false
-  xy: 1453, 1453
-  size: 240, 240
-  orig: 240, 240
+  xy: 1093, 1093
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0086
   rotate: false
-  xy: 1453, 1695
-  size: 240, 240
-  orig: 240, 240
+  xy: 1093, 1275
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0087
   rotate: false
-  xy: 1453, 1937
-  size: 240, 240
-  orig: 240, 240
+  xy: 1093, 1457
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0088
   rotate: false
-  xy: 1453, 2179
-  size: 240, 240
-  orig: 240, 240
+  xy: 1093, 1639
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0089
   rotate: false
-  xy: 1695, 1453
-  size: 240, 240
-  orig: 240, 240
+  xy: 1275, 1093
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0090
   rotate: false
-  xy: 1937, 1453
-  size: 240, 240
-  orig: 240, 240
+  xy: 1457, 1093
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0091
   rotate: false
-  xy: 2179, 1453
-  size: 240, 240
-  orig: 240, 240
+  xy: 1639, 1093
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0092
   rotate: false
-  xy: 1695, 1695
-  size: 240, 240
-  orig: 240, 240
+  xy: 1275, 1275
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0093
   rotate: false
-  xy: 1695, 1937
-  size: 240, 240
-  orig: 240, 240
+  xy: 1275, 1457
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0094
   rotate: false
-  xy: 1695, 2179
-  size: 240, 240
-  orig: 240, 240
+  xy: 1275, 1639
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0095
   rotate: false
-  xy: 1937, 1695
-  size: 240, 240
-  orig: 240, 240
+  xy: 1457, 1275
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0096
   rotate: false
-  xy: 2179, 1695
-  size: 240, 240
-  orig: 240, 240
+  xy: 1639, 1275
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0097
   rotate: false
-  xy: 1937, 1937
-  size: 240, 240
-  orig: 240, 240
+  xy: 1457, 1457
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0098
   rotate: false
-  xy: 1937, 2179
-  size: 240, 240
-  orig: 240, 240
+  xy: 1457, 1639
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0099
   rotate: false
-  xy: 2179, 1937
-  size: 240, 240
-  orig: 240, 240
+  xy: 1639, 1457
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
 Sheshnag&Krishna Animation0100
   rotate: false
   xy: 1, 1
-  size: 240, 240
-  orig: 240, 240
+  size: 180, 180
+  orig: 180, 180
   offset: 0, 0
   index: -1
