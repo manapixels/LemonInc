@@ -208,20 +208,21 @@ public class GameMap implements InputProcessor{
 
     private void handleInput(){
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP))
-//            player1.jump();
             playerLocal.jump();
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
-//            player1.speed();
-            playerLocal.speed();
+            playerLocal.moveRight();
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
-//            player1.slow();
-            playerLocal.slow();
-        if(Gdx.input.justTouched()) {
+            playerLocal.moveLeft();
+        if (Gdx.input.isKeyJustPressed(Input.Keys.A))       //NOTE: TESTING PURPOSES ONLY
+            playerLocal.stun();
+        if (Gdx.input.isKeyJustPressed(Input.Keys.S))       //NOTE: TESTING PURPOSES ONLY
+            playerLocal.poison();
+        if (Gdx.input.justTouched()) {
             System.out.println("Points are: X=" + Gdx.input.getX() + "Y=" + Gdx.input.getY());
             int x=Gdx.input.getX();
             int y=Gdx.input.getY();
             if(x>NimbusRun.V_WIDTH/2){
-                playerLocal.speed();
+                playerLocal.moveRight();
             }
             else{
                 playerLocal.jump();
@@ -268,12 +269,14 @@ public class GameMap implements InputProcessor{
         //gamecam constantly to follow player1
         gamecam.position.set(playerLocal.getX(), playerLocal.getY(), 0);
         gamecam.update();
-
     }
 
     public void update(float delta) {
         handleInput();
         render();
+        playerLocal.recover(1f);
+        Log.info("Player State", "isStun: " + playerLocal.isStunned() + " stunTime " + playerLocal.getStunTime());
+        Log.info("Player State", "isPoison: " + playerLocal.isPoisoned() + " poisonTime " + playerLocal.getPoisonTime());
     }
 
     public synchronized void logInfo(String string) {

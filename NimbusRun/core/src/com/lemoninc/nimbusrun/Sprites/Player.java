@@ -39,7 +39,7 @@ import com.lemoninc.nimbusrun.NimbusRun;
 public class Player extends Sprite {
     public World world;
     public Body b2body;
-    public enum State { DOUBLEJUMPING, JUMPING, DEFAULT, FORWARD, BACK, DEAD }
+    public enum State { DOUBLEJUMPING, JUMPING, DEFAULT }
     public State currentState;
     public State previousState;
 
@@ -51,6 +51,12 @@ public class Player extends Sprite {
     private int id;
     private String name;
 
+    private boolean stunned, poisoned;
+    private float stunTime, poisonTime;
+
+    private final float JUMPFORCE = 6f;
+    private final float MOVEFORCE = 1.25f;
+    private final float MOVESPEEDCAP = 4;
 
     Vector2 previousPosition;
 
@@ -72,6 +78,12 @@ public class Player extends Sprite {
         previousState = State.DEFAULT;
         CHARACTER_SIZE = 170 / NimbusRun.PPM;
         stateTime = 0f;
+
+        //debuff variables
+        stunTime = 0f;
+        stunned = false;
+        poisonTime = 0f;
+        poisoned = false;
 
         //create a dynamic bodydef
         BodyDef bdef = new BodyDef();
@@ -116,15 +128,21 @@ public class Player extends Sprite {
     public State getState(){
         if(b2body.getLinearVelocity().y != 0){
             if (previousState == State.JUMPING){
-                return State.DOUBLEJUMPING;
-            }
+                return State.DOUBLEJUMPING; }
             else {
-                return State.JUMPING;
-            }
+                return State.JUMPING; }
         }
         else
             return State.DEFAULT;
     }
+
+    public boolean isStunned() { return stunned; }
+
+    public boolean isPoisoned() { return poisoned; }
+
+    public float getStunTime(){ return stunTime; }
+
+    public float getPoisonTime(){ return poisonTime; }
 
     public void render(SpriteBatch spriteBatch) {
         this.draw(spriteBatch);
@@ -165,29 +183,81 @@ public class Player extends Sprite {
         //img.setPosition(b2body.getPosition().x - CHARACTER_SIZE / 2 * 1.25f, b2body.getPosition().y - CHARACTER_SIZE / 2 * 1.25f);
     }
 
-    public void jump() {
-        if (currentState == State.DOUBLEJUMPING){
-            currentState = getState();
+    public void recover(float delta) {
+        if (isStunned()){
+            stunTime -= delta;
+            if (stunTime <= 0){
+                stunned = false;
+            }
         }
-        else if (currentState == State.JUMPING){
-            previousState = State.JUMPING;
-            currentState = State.DOUBLEJUMPING;
-            b2body.applyLinearImpulse(new Vector2(0, 6f), b2body.getWorldCenter(), true);
-        }
-        else {
-            currentState = State.JUMPING;
-            b2body.applyLinearImpulse(new Vector2(0, 6f), b2body.getWorldCenter(), true);
+        if (isPoisoned()){
+            poisonTime -= delta;
+            if (poisonTime <= 0){
+                poisoned = false;
+            }
         }
     }
 
-    public void speed() {
-        if (b2body.getLinearVelocity().x <= 4) {
-            b2body.applyLinearImpulse(new Vector2(1.25f, 0), b2body.getWorldCenter(), true);
+    public void stun(){
+        stunned = true;
+        stunTime = 150f;
+    }
+
+    public void poison(){
+        poisoned = true;
+        poisonTime = 400f;
+    }
+
+    public void jump() {
+        if (!isStunned()){
+            if (isPoisoned()){
+                if (currentState == State.DOUBLEJUMPING){
+                    currentState = getState();
+                }
+                else if (currentState == State.JUMPING){
+                    previousState = State.JUMPING;
+                    currentState = State.DOUBLEJUMPING;
+                    b2body.applyLinearImpulse(new Vector2(0, JUMPFORCE * 0.5f), b2body.getWorldCenter(), true);
+                }
+                else {
+                    currentState = State.JUMPING;
+                    b2body.applyLinearImpulse(new Vector2(0, JUMPFORCE * 0.5f), b2body.getWorldCenter(), true);
+                }
+            } else {
+                if (currentState == State.DOUBLEJUMPING){
+                    currentState = getState();
+                }
+                else if (currentState == State.JUMPING){
+                    previousState = State.JUMPING;
+                    currentState = State.DOUBLEJUMPING;
+                    b2body.applyLinearImpulse(new Vector2(0, JUMPFORCE), b2body.getWorldCenter(), true);
+                }
+                else {
+                    currentState = State.JUMPING;
+                    b2body.applyLinearImpulse(new Vector2(0, JUMPFORCE), b2body.getWorldCenter(), true);
+                }
+            }
         }
     }
-    public void slow() {
-        if (b2body.getLinearVelocity().x >= -4) {
-            b2body.applyLinearImpulse(new Vector2(-1.25f, 0), b2body.getWorldCenter(), true);
+
+    public void moveRight() {
+        if (!isStunned()) {
+            if (isPoisoned()) {
+                if (b2body.getLinearVelocity().x <= MOVESPEEDCAP * 0.5f) {
+                    b2body.applyLinearImpulse(new Vector2(MOVEFORCE * 0.5f, 0), b2body.getWorldCenter(), true);
+                }
+            } else {
+                if (b2body.getLinearVelocity().x <= MOVESPEEDCAP) {
+                    b2body.applyLinearImpulse(new Vector2(MOVEFORCE, 0), b2body.getWorldCenter(), true);
+                }
+            }
+        }
+    }
+    public void moveLeft() {    //NOTE: NEVER TO MAKE IT TO GAME RELEASE, FOR TESTING PURPOSES ONLY
+        if (!isStunned()) {
+            if (b2body.getLinearVelocity().x >= -MOVESPEEDCAP) {
+                b2body.applyLinearImpulse(new Vector2(-MOVEFORCE, 0), b2body.getWorldCenter(), true);
+            }
         }
     }
 
