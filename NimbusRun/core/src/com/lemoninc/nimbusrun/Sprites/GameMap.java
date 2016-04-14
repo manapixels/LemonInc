@@ -12,7 +12,7 @@ package com.lemoninc.nimbusrun.Sprites;
  *       Viewport   getGamePort()
  *       public synchronized void logInfo(String string)
  * NOTES :
- * LAST UPDATED: 12/4/2016 10:00
+ * LAST UPDATED: 14/4/2016 23:59
  *
  * ********************************/
 
@@ -54,9 +54,9 @@ public class GameMap implements InputProcessor{
     private Viewport gameport;
 
     private SpriteBatch batch;
-    private Texture background;
+    private Texture bgTexture;
     private float bgHeight, bgWidth;
-    private Sprite bgSprite1, bgSprite2;
+    private Sprite bgSpriteA1, bgSpriteA2, bgSpriteB1, bgSpriteB2;
     private float bgStartX, bgStartY;
 
     private World world;
@@ -94,7 +94,7 @@ public class GameMap implements InputProcessor{
 
         //set starting pos of bgSprites after setting cam
         bgStartX = -gameport.getWorldWidth() * 1.5f;
-        bgStartY = -gameport.getWorldHeight() * 1.2f;
+        bgStartY = -gameport.getWorldHeight() * 1.5f;
         Log.info(bgStartY + " y pos");
         batch = new SpriteBatch();
 
@@ -154,14 +154,16 @@ public class GameMap implements InputProcessor{
             default: img = new TextureAtlas(Gdx.files.internal("spritesheets/PTspritesheet.atlas")); break;
         }
 
-        background = new Texture("PlayScreen/bg.png");
-        bgSprite1 = new Sprite(background);
-        bgWidth = background.getWidth() / NimbusRun.PPM * 1.4f;
-        bgHeight = background.getHeight() / NimbusRun.PPM * 1.4f;
-        bgSprite1.setX(bgStartX);
-        bgSprite1.setY(bgStartY);
-        bgSprite1.setSize(bgWidth, bgHeight);
-        bgSprite2 = new Sprite(bgSprite1);
+        // initialise all background sprites
+        bgTexture = new Texture("PlayScreen/bg.png");
+        bgTexture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
+        bgSpriteA1 = new Sprite(new TextureRegion(bgTexture, bgTexture.getWidth()*11, bgTexture.getHeight()*2));
+        bgWidth = bgTexture.getWidth() / NimbusRun.PPM * 1.4f * 11;
+        bgHeight = bgTexture.getHeight() / NimbusRun.PPM * 1.4f * 2;
+        bgSpriteA1.setX(bgStartX);
+        bgSpriteA1.setY(bgStartY);
+        bgSpriteA1.setSize(bgWidth, bgHeight);
+        //bgSpriteA2 = new Sprite(bgSpriteA1);
 
     }
 
@@ -267,12 +269,15 @@ public class GameMap implements InputProcessor{
         batch.begin();
 
         // Update background sprite positions and draw anew
+        /*
         if(gamecam.position.x -bgWidth/2> bgSprite2.getX()){
             bgSprite1.setX(bgSprite2.getX());
             bgSprite2.setX(bgSprite1.getX()+bgWidth); }
         bgSprite1.draw(batch);
         bgSprite2.draw(batch);
+        */
 
+        bgSpriteA1.draw(batch);
         // Render Players
         for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {
             Player curPlayer = playerEntry.getValue();
