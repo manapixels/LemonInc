@@ -12,7 +12,7 @@ package com.lemoninc.nimbusrun.Sprites;
  *       Viewport   getGamePort()
  *       public synchronized void logInfo(String string)
  * NOTES :
- * LAST UPDATED: 12/4/2016 10:00
+ * LAST UPDATED: 14/4/2016 23:59
  *
  * ********************************/
 
@@ -25,9 +25,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lemoninc.nimbusrun.Networking.Client.TapTapClient;
@@ -35,10 +37,12 @@ import com.lemoninc.nimbusrun.Networking.Network;
 import com.lemoninc.nimbusrun.Networking.Server.TapTapServer;
 import com.lemoninc.nimbusrun.NimbusRun;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class GameMap implements InputProcessor{
+public class GameMap{
 
     private TapTapClient client; // only if I'm the client
     private TapTapServer server; // only if I'm internal to the server
@@ -51,8 +55,16 @@ public class GameMap implements InputProcessor{
     private Viewport gameport;
 
     private SpriteBatch batch;
-    private Sprite background;
-//    private Texture background;
+    private Texture bgTexture;
+    private Sprite bgSprite;
+    private float bgHeight, bgWidth, bgStartX, bgStartY;
+
+    private Texture bgTextureFlat, bgTextureMountain, bgTexturePit, bgTexturePlateau;
+    private List<Sprite> bgPlatformSprites;
+    private float bgFlatHeight, bgFlatWidth;
+    private float bgMountainHeight, bgMountainWidth;
+    private float bgPlateauHeight, bgPlateauWidth;
+    private float bgPitHeight, bgPitWidth;
 
     private World world;
     private Box2DDebugRenderer b2dr;
@@ -62,16 +74,10 @@ public class GameMap implements InputProcessor{
     private StartWall startWall;
     private EndWall endWall;
 
+
     private Player playerLocal;
     private TextureAtlas img;
-
-
-    class TouchInfo {
-        public float touchX = 0;
-        public float touchY = 0;
-        public boolean touched = false;
-    }
-    private Map<Integer,TouchInfo> touches = new HashMap<Integer,TouchInfo>();
+    private int sourceX;
 
     /**
      * This constructor is called inside TapTapClient
@@ -83,12 +89,13 @@ public class GameMap implements InputProcessor{
 
         //instantiate HUD, GameSounds, BitmapFont, Camera, SpriteBatch ...
         gamecam = new OrthographicCamera();
-
         gameport = new FitViewport(NimbusRun.V_WIDTH * 1.5f / NimbusRun.PPM, NimbusRun.V_HEIGHT * 1.5f / NimbusRun.PPM, gamecam);
 
+        //set starting pos of bgSprites after setting cam
+        bgStartX = -gameport.getWorldWidth() * 1.5f;
+        bgStartY = -gameport.getWorldHeight() * 1.5f;
+//        Log.info(bgStartY + " y pos");
         batch = new SpriteBatch();
-
-
 
         //TODO: 5 refers to the character selected at the main menu
         initCommon(5);
@@ -99,13 +106,7 @@ public class GameMap implements InputProcessor{
         startWall = new StartWall(this);
         endWall = new EndWall(this);
 
-        logInfo("GameMap initialised");
-
-        Gdx.input.setInputProcessor(this);
-
-        for(int i = 0; i < 2; i++){
-            touches.put(i, new TouchInfo());
-        }
+//        logInfo("GameMap initialised");
 
     }
 
@@ -119,14 +120,14 @@ public class GameMap implements InputProcessor{
 
         initCommon(5);
 
-        logInfo("GameMap initialised");
+//        logInfo("GameMap initialised");
 
     }
 
     private void initCommon(int whichCharacter){
         //TODO: server needs textureAtls for hwat?
 
-        world = new World(new Vector2(0, -10), true);
+        world = new World(new Vector2(0, -10), true); //box2d world with gravity
         b2dr = new Box2DDebugRenderer();
 
         // Load up all sprites into spriteMap from textureAtlas
@@ -145,26 +146,45 @@ public class GameMap implements InputProcessor{
             case 6: img = new TextureAtlas(Gdx.files.internal("spritesheets/MWSspritesheet.atlas")); break;
             default: img = new TextureAtlas(Gdx.files.internal("spritesheets/PTspritesheet.atlas")); break;
         }
-        //background
-        background = new Sprite(new Texture("TapTap_BGseamless.png"));
-        background.setSize(background.getWidth() / NimbusRun.PPM, background.getHeight() / NimbusRun.PPM);
+
+        // initialise all background sprites
+        bgTexture = new Texture("PlayScreen/bg.png");
+        bgTexture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
+        bgSprite = new Sprite(new TextureRegion(bgTexture, bgTexture.getWidth()*11, bgTexture.getHeight()*2));
+        bgWidth = bgTexture.getWidth() / NimbusRun.PPM * 1.4f * 11;
+        bgHeight = bgTexture.getHeight() / NimbusRun.PPM * 1.4f * 2;
+        bgSprite.setX(bgStartX);
+        bgSprite.setY(bgStartY);
+        bgSprite.setSize(bgWidth, bgHeight);
+
+        bgTextureMountain = new Texture("PlayScreen/platform_mountain.png");
+        bgMountainWidth = bgTextureMountain.getWidth() / NimbusRun.PPM * 2.2f;
+        bgMountainHeight = bgTextureMountain.getHeight() / NimbusRun.PPM * 2.2f;
+
+        bgPlatformSprites = new ArrayList<Sprite>();
+
     }
+
+
 
     //called by server to add a new player into its GameMap
     public synchronized void addPlayer(Network.PlayerJoinLeave msg) {
-        logInfo("Player added to players!");
         //create new player from msg
-        //Need to look at spacegame
 
-        Player newPlayer = new Player(this, img, msg.initial_x, msg.initial_y); //TODO: this coordinate should be from the msg
-        logInfo("check1");
+        Player newPlayer = new Player(this, img, msg.initial_x, msg.initial_y, false);
         newPlayer.setId(msg.playerId);
-        logInfo("check2");
-
         newPlayer.setName(msg.name);
-        logInfo("check3");
 
         players.put(msg.playerId, newPlayer);
+//        logInfo("Player " +msg.playerId+" added to players!");
+    }
+
+    public synchronized void playerMoved(Network.MovementState msg) {
+        //TODO: players should be ConcurrentHashMap?
+        Player player = players.get(msg.playerId);
+        if (player != null) {
+            player.setMovementState(msg);
+        }
     }
 
     /**
@@ -186,14 +206,14 @@ public class GameMap implements InputProcessor{
 
         if (this.playerLocal == null) {
             // TODO Server should spawn localPlayer too
-            playerLocal = new Player(this, img, Network.SPAWN_X, Network.SPAWN_Y);
+            playerLocal = new Player(this, img, Network.SPAWN_X, Network.SPAWN_Y, true);
             this.playerLocal.setId(client.id);
             this.playerLocal.setName(name);
             players.put(client.id, playerLocal);
-//            hud.setPlayerLocal(playerLocal);
-//            setStatus("Connected to " + client.remoteIP);
+            //hud.setPlayerLocal(playerLocal);
+            //setStatus("Connected to " + client.remoteIP);
         } else {
-            logInfo("setNetworkClient called twice");
+//            logInfo("setNetworkClient called twice");
         }
     }
 
@@ -207,74 +227,76 @@ public class GameMap implements InputProcessor{
 
     public Viewport getGameport() { return this.gameport; }
 
-    private void handleInput(){
-        if (Gdx.input.isKeyJustPressed(Input.Keys.UP))
-//            player1.jump();
-            playerLocal.jump();
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
-//            player1.speed();
-            playerLocal.speed();
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
-//            player1.slow();
-            playerLocal.slow();
-        if(Gdx.input.justTouched()) {
-            System.out.println("Points are: X=" + Gdx.input.getX() + "Y=" + Gdx.input.getY());
-            int x=Gdx.input.getX();
-            int y=Gdx.input.getY();
-            if(x>NimbusRun.V_WIDTH/2){
-                playerLocal.speed();
+    /**
+     * Update GameMap's state.
+     *
+     * Should the box world be rendered here?
+     *
+     * @param delta
+     */
+    public void update(float delta) {
+        //If client is created and local player has spawned
+        if (client != null && playerLocal != null) {
+            if (playerLocal.handleInput()) { // (arrow key has been pressed by player)
+                client.sendMessageUDP(playerLocal.getMovementState()); //send movement state to server
             }
-            else{
-                playerLocal.jump();
-            }
+
+            //gamecam constantly to follow playerLocal
+            gamecam.position.set(playerLocal.getX(), playerLocal.getY(), 0);
+            gamecam.update();
         }
-        if(touches.get(0).touched&&touches.get(1).touched){
-            if(touches.get(0).touchX<(NimbusRun.V_WIDTH/2)&&touches.get(1).touchX>(NimbusRun.V_WIDTH-(NimbusRun.V_WIDTH/2))){
-                // TODO: Implement method for attack
-                //player1.attack;
-            }
-            else if(touches.get(1).touchX<(NimbusRun.V_WIDTH/2)&&touches.get(0).touchX>(NimbusRun.V_WIDTH-(NimbusRun.V_WIDTH/2))) {
-                //TODO: Implement method for attack
-                //player1.attack
-            }
+
+        //Update player
+        //TODO: should the box2d world be rendered here?
+        for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {
+            Player curPlayer = playerEntry.getValue();
+            curPlayer.update(delta);
+            //if(curPlayer != playerLocal) curPlayer.renderNameTag(spriteBatch, fontNameTag);
         }
+
     }
 
-    private void render() {
+    public synchronized void render() {
         //clears screen first, set color to black
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        //configure and start batch
+        //--------------START batch
         batch.setProjectionMatrix(gamecam.combined);
         batch.begin();
-        background.setPosition(-gameport.getWorldWidth(), -gameport.getWorldHeight());
-//        background.setPosition(gamecam.position.x - (gamecam.viewportWidth / 2), -gameport.getWorldHeight() / 2);
-        background.draw(batch);
+
+        // Render seamless bg and platforms
+        bgSprite.draw(batch);
+        for (Sprite sprite : bgPlatformSprites) {
+            sprite.draw(batch);
+        }
 
         // Render Players
         for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {
             Player curPlayer = playerEntry.getValue();
             curPlayer.draw(batch);
-//            if(curPlayer != playerLocal) curPlayer.renderNameTag(spriteBatch, fontNameTag);
+            //if(curPlayer != playerLocal) curPlayer.renderNameTag(spriteBatch, fontNameTag);
         }
 
-        //end batch
+        //----------------END batch
         batch.end();
 
         b2dr.render(world, gamecam.combined);
 
         //steps box2d world
         world.step(1 / 60f, 6, 2);
-        //gamecam constantly to follow player1
-        gamecam.position.set(playerLocal.getX(), playerLocal.getY(), 0);
-        gamecam.update();
-
     }
 
-    public void update(float delta) {
-        handleInput();
-        render();
+    public void makePlatformsBG(float startX, float endX, char type){
+        Sprite sprite;
+        switch(type){
+            case 'M': sprite = new Sprite(bgTextureMountain);
+                sprite.setPosition(startX, -bgMountainHeight*0.4f);
+                sprite.setSize(bgMountainWidth, bgMountainHeight);
+                Log.info("Mountain made at: " + startX);
+                bgPlatformSprites.add(sprite); break;
+        }
+
     }
 
     public synchronized void logInfo(String string) {
@@ -299,55 +321,7 @@ public class GameMap implements InputProcessor{
     public void onDisconnect() {
         this.client = null;
         this.players.clear();
-        logInfo("on DIsconnection, clear the players Map");
-    }
-    @Override
-    public boolean keyDown(int keycode) {
-        return false;
+//        logInfo("on DIsconnection, clear the players Map");
     }
 
-    @Override
-    public boolean keyUp(int keycode) {
-        return false;
-    }
-
-    @Override
-    public boolean keyTyped(char character) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        if(pointer < 2){
-            touches.get(pointer).touchX = screenX;
-            touches.get(pointer).touchY = screenY;
-            touches.get(pointer).touched = true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        if(pointer < 2){
-            touches.get(pointer).touchX = 0;
-            touches.get(pointer).touchY = 0;
-            touches.get(pointer).touched = false;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
-        return false;
-    }
-
-    @Override
-    public boolean mouseMoved(int screenX, int screenY) {
-        return false;
-    }
-
-    @Override
-    public boolean scrolled(int amount) {
-        return false;
-    }
 }
