@@ -17,8 +17,6 @@ package com.lemoninc.nimbusrun.Sprites;
  * ********************************/
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -29,7 +27,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lemoninc.nimbusrun.Networking.Client.TapTapClient;
@@ -293,7 +290,7 @@ public class GameMap{
             case 'M': sprite = new Sprite(bgTextureMountain);
                 sprite.setPosition(startX, -bgMountainHeight*0.4f);
                 sprite.setSize(bgMountainWidth, bgMountainHeight);
-                Log.info("Mountain made at: " + startX);
+                //Log.info("Mountain made at: " + startX);
                 bgPlatformSprites.add(sprite); break;
         }
 
