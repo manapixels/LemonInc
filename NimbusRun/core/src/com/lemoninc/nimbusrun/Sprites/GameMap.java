@@ -237,6 +237,8 @@ public class GameMap implements InputProcessor{
             playerLocal.stun();
         if (Gdx.input.isKeyJustPressed(Input.Keys.S))       //NOTE: TESTING PURPOSES ONLY
             playerLocal.poison();
+        if (Gdx.input.isKeyJustPressed(Input.Keys.D))       //NOTE: TESTING PURPOSES ONLY
+            playerLocal.reverse();
         if (Gdx.input.justTouched()) {
 
             System.out.println("Points are: X=" + Gdx.input.getX() + "Y=" + Gdx.input.getY());
@@ -303,8 +305,7 @@ public class GameMap implements InputProcessor{
         handleInput();
         render();
         playerLocal.recover(1f);
-        Log.info("Player State", "isStun: " + playerLocal.isStunned() + " stunTime " + playerLocal.getStunTime());
-        Log.info("Player State", "isPoison: " + playerLocal.isPoisoned() + " poisonTime " + playerLocal.getPoisonTime());
+        Log.info("Player State", "reverseTime: " + playerLocal.getReverseTime() + " factor " + playerLocal.getFactor());
     }
 
     public synchronized void logInfo(String string) {

@@ -51,12 +51,13 @@ public class Player extends Sprite {
     private int id;
     private String name;
 
-    private boolean stunned, poisoned;
-    private float stunTime, poisonTime;
+    private boolean stunned, poisoned, reversed;
+    private float stunTime, poisonTime, reverseTime;
 
     private final float JUMPFORCE = 6f;
     private final float MOVEFORCE = 1.25f;
     private final float MOVESPEEDCAP = 4;
+    private float factor = 1;
 
     Vector2 previousPosition;
 
@@ -84,6 +85,8 @@ public class Player extends Sprite {
         stunned = false;
         poisonTime = 0f;
         poisoned = false;
+        reversed = false;
+        reverseTime = 0f;
 
         //create a dynamic bodydef
         BodyDef bdef = new BodyDef();
@@ -140,9 +143,13 @@ public class Player extends Sprite {
 
     public boolean isPoisoned() { return poisoned; }
 
-    public float getStunTime(){ return stunTime; }
+    public boolean isReversed() { return reversed; }
 
-    public float getPoisonTime(){ return poisonTime; }
+    public float getStunTime() { return stunTime; }
+
+    public float getPoisonTime() { return poisonTime; }
+
+    public float getReverseTime() { return reverseTime; }
 
     public void render(SpriteBatch spriteBatch) {
         this.draw(spriteBatch);
@@ -196,16 +203,26 @@ public class Player extends Sprite {
                 poisoned = false;
             }
         }
+        if (isReversed()){
+            reverseTime -= delta;
+            if (reverseTime <= 0){
+                reversed = false;
+            }
+        }
     }
 
     public void stun(){
         stunned = true;
         stunTime = 150f;
+        b2body.setLinearVelocity(new Vector2(0,0));
     }
-
     public void poison(){
         poisoned = true;
         poisonTime = 400f;
+    }
+    public void reverse(){
+        reversed = true;
+        reverseTime = 200f;
     }
 
     public void jump() {
@@ -241,23 +258,26 @@ public class Player extends Sprite {
     }
 
     public void moveRight() {
-        if (!isStunned()) {
-            if (isPoisoned()) {
-                if (b2body.getLinearVelocity().x <= MOVESPEEDCAP * 0.5f) {
-                    b2body.applyLinearImpulse(new Vector2(MOVEFORCE * 0.5f, 0), b2body.getWorldCenter(), true);
-                }
-            } else {
-                if (b2body.getLinearVelocity().x <= MOVESPEEDCAP) {
-                    b2body.applyLinearImpulse(new Vector2(MOVEFORCE, 0), b2body.getWorldCenter(), true);
-                }
-            }
+        factor = checkCondition();
+        if (b2body.getLinearVelocity().x <= Math.abs(MOVESPEEDCAP * factor)) {
+            b2body.applyLinearImpulse(new Vector2(MOVEFORCE * factor, 0), b2body.getWorldCenter(), true);
         }
     }
+
+    private float checkCondition(){
+        factor = 1;
+        if (isStunned()) { factor = factor * 0f; }
+        if (isPoisoned()) { factor = factor * 0.5f; }
+        if (isReversed()) { factor = factor * -1f; }
+        return factor;
+    }
+    public float getFactor() {
+        return factor;
+    }
+
     public void moveLeft() {    //NOTE: NEVER TO MAKE IT TO GAME RELEASE, FOR TESTING PURPOSES ONLY
-        if (!isStunned()) {
-            if (b2body.getLinearVelocity().x >= -MOVESPEEDCAP) {
-                b2body.applyLinearImpulse(new Vector2(-MOVEFORCE, 0), b2body.getWorldCenter(), true);
-            }
+        if (b2body.getLinearVelocity().x >= -MOVESPEEDCAP) {
+            b2body.applyLinearImpulse(new Vector2(-MOVEFORCE, 0), b2body.getWorldCenter(), true);
         }
     }
 
