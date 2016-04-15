@@ -47,10 +47,6 @@ import com.lemoninc.nimbusrun.NimbusRun;
 
 import java.util.Random;
 
-//import com.lemoninc.nimbusrun.Networking.Networking;
-
-//import com.lemoninc.nimbusrun.Networking.Networking;
-
 public class WaitScreen implements Screen{
     private NimbusRun game;
     private Camera gamecam;
@@ -75,7 +71,6 @@ public class WaitScreen implements Screen{
     private float gameWidth;
     private float gameHeight;
     TextField.TextFieldStyle textstyle;
-//    private Networking network;
     private TextField playerIP;
     private TextField playername;
     private Random random = new Random();
@@ -198,18 +193,9 @@ public class WaitScreen implements Screen{
 
         Gdx.input.setInputProcessor(stage);
     }
-    /**
-     * Play game as host for now
-     */
-    private void playGame() {
-        hostGame();
-    }
 
-    private void savePrefs(){
-        preferences.putString("name", getName());
-        preferences.putString("ip", playerIP.getText());
-        preferences.flush();
-    }
+
+
 
     public void update(float dt) {
         handleInput();
@@ -277,9 +263,8 @@ public class WaitScreen implements Screen{
      */
     private void joinGame(){
         game.setScreen(new CharacterSelectionScreen(game, false, playerIP.getText(), getName()));
+        //TODO: what if IP is blank?
         savePrefs();
-        //TODO: setscreen(new playscreen(game, host-false, the IP address you are joining, getname())
-        //save preferences
     }
 
     /**
@@ -288,9 +273,6 @@ public class WaitScreen implements Screen{
     private void hostGame(){
         game.setScreen(new CharacterSelectionScreen(game, true, "localhost", getName()));
         savePrefs();
-        //TODO: setscreen(new playscreen(game, host-true, the IP address you are hosting from - localhost, getname())
-
-        //save preferences
     }
 
     /**
@@ -299,14 +281,18 @@ public class WaitScreen implements Screen{
      *
      * @return player's name
      */
-    //TODO: textfield
     private String getName(){
         String name =playername.getText();
-//        String name = get text from the textfield in the waiting screen
         if (name.isEmpty()) {
             name = "Player" + random.nextInt(10000);
         }
         playername.setText(name);
         return name;
+    }
+
+    private void savePrefs(){
+        preferences.putString("name", getName());
+        preferences.putString("ip", playerIP.getText());
+        preferences.flush();
     }
 }
