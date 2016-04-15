@@ -224,8 +224,8 @@ public class Player extends Sprite implements InputProcessor{
                 return this.jump();
             if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
                 return this.moveRight();
-            if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
-                return this.moveLeft();
+            if (Gdx.input.isKeyPressed(Input.Keys.LEFT))    //testing purposes only
+                return this.moveLeft(1);
             if (Gdx.input.isKeyPressed(Input.Keys.A))       //testing purposes only
                 return this.stun();
             if (Gdx.input.isKeyPressed(Input.Keys.S))       //testing purposes only
@@ -240,7 +240,7 @@ public class Player extends Sprite implements InputProcessor{
 
     public void update(float delta){
         recover(1f);
-        Log.info("Player status " + factor + " stunTime " + stunTime);
+        Log.info("Player isReversed " + isReversed() + " reverseTime " + getReverseTime());
     }
 
     public boolean recover(float delta) {
@@ -283,38 +283,35 @@ public class Player extends Sprite implements InputProcessor{
     }
 
     public boolean jump() {
-        if (!isStunned()) {
-            if (isPoisoned()) {
-                if (currentState == State.DOUBLEJUMPING) {
-                    currentState = getState();
-                } else if (currentState == State.JUMPING) {
-                    previousState = State.JUMPING;
-                    currentState = State.DOUBLEJUMPING;
-                    b2body.applyLinearImpulse(new Vector2(0, JUMPFORCE * 0.5f), b2body.getWorldCenter(), true);
-                } else {
-                    currentState = State.JUMPING;
-                    b2body.applyLinearImpulse(new Vector2(0, JUMPFORCE * 0.5f), b2body.getWorldCenter(), true);
-                }
-            } else {
-                if (currentState == State.DOUBLEJUMPING) {
-                    currentState = getState();
-                } else if (currentState == State.JUMPING) {
-                    previousState = State.JUMPING;
-                    currentState = State.DOUBLEJUMPING;
-                    b2body.applyLinearImpulse(new Vector2(0, JUMPFORCE), b2body.getWorldCenter(), true);
-                } else {
-                    currentState = State.JUMPING;
-                    b2body.applyLinearImpulse(new Vector2(0, JUMPFORCE), b2body.getWorldCenter(), true);
-                }
-            }
+        factor = checkCondition();
+        if (currentState == State.DOUBLEJUMPING) {
+            currentState = getState();
+        } else if (currentState == State.JUMPING) {
+            previousState = State.JUMPING;
+            currentState = State.DOUBLEJUMPING;
+            b2body.applyLinearImpulse(new Vector2(0, JUMPFORCE * checkCondition()), b2body.getWorldCenter(), true);
+        } else {
+            currentState = State.JUMPING;
+            b2body.applyLinearImpulse(new Vector2(0, JUMPFORCE * checkCondition()), b2body.getWorldCenter(), true);
         }
         return true;
     }
 
     public boolean moveRight() {
         factor = checkCondition();
-        if (b2body.getLinearVelocity().x <= (MOVESPEEDCAP * factor)) {
-            b2body.applyLinearImpulse(new Vector2(MOVEFORCE * factor, 0), b2body.getWorldCenter(), true);
+        if (isReversed()){
+            moveLeft(factor);
+        } else {
+            if (b2body.getLinearVelocity().x <= (MOVESPEEDCAP * factor)) {
+                b2body.applyLinearImpulse(new Vector2(MOVEFORCE * factor, 0), b2body.getWorldCenter(), true);
+            }
+        }
+        return true;
+    }
+
+    public boolean moveLeft(float factor) {     //NOTE: NEVER CALLED BY PLAYER INPUT, ONLY CALLED WHEN REVERSED
+        if (b2body.getLinearVelocity().x >= -MOVESPEEDCAP * factor) {
+            b2body.applyLinearImpulse(new Vector2(-MOVEFORCE * factor, 0), b2body.getWorldCenter(), true);
         }
         return true;
     }
@@ -323,19 +320,13 @@ public class Player extends Sprite implements InputProcessor{
         factor = 1;
         if (isStunned()) { factor = factor * 0f; }
         if (isPoisoned()) { factor = factor * 0.5f; }
-        if (isReversed()) { factor = factor * -1f; }
         return factor;
     }
+
     public float getFactor() {
         return factor;
     }
 
-    public boolean moveLeft() {    //NOTE: NEVER TO MAKE IT TO GAME RELEASE, FOR TESTING PURPOSES ONLY
-        if (b2body.getLinearVelocity().x >= -MOVESPEEDCAP) {
-            b2body.applyLinearImpulse(new Vector2(-MOVEFORCE, 0), b2body.getWorldCenter(), true);
-        }
-        return true;
-    }
     /**
      * Get the Player's body linear Velocity wrapped in MovementState
      * @return
