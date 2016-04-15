@@ -32,7 +32,6 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.esotericsoftware.minlog.Log;
 import com.lemoninc.nimbusrun.Networking.Client.TapTapClient;
 import com.lemoninc.nimbusrun.Networking.Network;
 import com.lemoninc.nimbusrun.Networking.Server.TapTapServer;
@@ -294,14 +293,14 @@ public class GameMap{
             case 'M': sprite = new Sprite(bgTextureMountain);
                 sprite.setPosition(startX, -bgMountainHeight*0.4f);
                 sprite.setSize(bgMountainWidth, bgMountainHeight);
-                Log.info("Mountain made at: " + startX);
+//                Log.info("Mountain made at: " + startX);
                 bgPlatformSprites.add(sprite); break;
         }
 
     }
 
     public synchronized void logInfo(String string) {
-        Log.info("[GameMap]: " + (isClient ? "[Client] " : "[Server] ") + string);
+       // Log.info("[GameMap]: " + (isClient ? "[Client] " : "[Server] ") + string);
     }
 
     public void resize(int width, int height) {
@@ -312,7 +311,7 @@ public class GameMap{
     public void dispose() {
         world.dispose();
         b2dr.dispose();
-
+        batch.dispose();
         //dispose textures
         img.dispose();
         //TODO:friendly players textures?

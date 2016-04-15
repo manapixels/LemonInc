@@ -157,7 +157,8 @@ public class PlayScreen implements Screen{
     public void pause() {    }
 
     @Override
-    public void dispose() {    }
+    public void dispose() {
+    }
 
     private void logInfo(String string) {
 //        Log.info("[PlayScreen]: " + string);

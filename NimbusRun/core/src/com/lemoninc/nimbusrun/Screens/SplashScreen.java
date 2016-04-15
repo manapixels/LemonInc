@@ -40,7 +40,7 @@ public class SplashScreen implements Screen{
         //sprite.setColor(1, 1, 1, 0);
 
         sprite.setPosition(0, 0);
-        sprite.setSize(gameWidth, gameHeight);
+        sprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batcher = new SpriteBatch();
         startTime = TimeUtils.millis();
     }
@@ -54,7 +54,7 @@ public class SplashScreen implements Screen{
         batcher.begin();
         sprite.draw(batcher);
         batcher.end();
-        if (TimeUtils.millis()>(startTime+3000)) game.setScreen(new MenuScreen(game,gameWidth,gameHeight));
+        if (TimeUtils.millis()>(startTime+1000)) game.setScreen(new MenuScreen(game,gameWidth,gameHeight));
 
     }
 
@@ -80,6 +80,6 @@ public class SplashScreen implements Screen{
 
     @Override
     public void dispose() {
-
+        sprite.getTexture().dispose();
     }
 }

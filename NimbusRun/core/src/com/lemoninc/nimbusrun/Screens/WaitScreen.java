@@ -20,6 +20,7 @@ package com.lemoninc.nimbusrun.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
@@ -32,7 +33,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
@@ -41,7 +45,6 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lemoninc.nimbusrun.NimbusRun;
 
-import java.awt.TextField;
 import java.util.Random;
 
 //import com.lemoninc.nimbusrun.Networking.Networking;
@@ -64,20 +67,22 @@ public class WaitScreen implements Screen{
     private Sprite sprite;
 
     private Stage stage;
-    //private Skin skin;
+    private Skin skin;
     private TextButton hostbutton;
     private TextButton clientbutton;
 
-    private com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle textFieldStyle;
     private TextButton.TextButtonStyle style;
     private float gameWidth;
     private float gameHeight;
-
+    TextField.TextFieldStyle textstyle;
 //    private Networking network;
     private TextField playerIP;
     private TextField playername;
     private Random random = new Random();
 
+    Label labeltitle;
+    String Ipvalue,NameValue;
+    Preferences preferences;
     /**
      * This constructor instantiates the Sprites, Viewport, Camera, etc
      * @param game The Game object
@@ -86,23 +91,18 @@ public class WaitScreen implements Screen{
         this.game = game;
         this.gameHeight=game.V_HEIGHT;
         this.gameWidth=game.V_WIDTH;
-
-        //skin=new Skin(Gdx.files.internal("data/uiskin.json"),new TextureAtlas("data/uiskin.atlas"));
+        preferences = Gdx.app.getPreferences("NimbusRun_Network");
 
         BUTTON_HEIGHT=50;
-        BUTTON_WIDTH=120;
-//
-//        textFieldStyle=new com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle();
-//        textFieldStyle.fontColor=Color.MAROON;
-//        textFieldStyle.font=new BitmapFont(Gdx.files.internal("Fonts/crimesFont48Black.fnt"));
-
+        BUTTON_WIDTH=125;
 
         style=new TextButton.TextButtonStyle();
         style.font=new BitmapFont(Gdx.files.internal("Fonts/crimesFont48Black.fnt"));
         style.font.setColor(Color.RED);
         style.font.getData().setScale(0.65f, 0.65f);
-        style.up=new TextureRegionDrawable(new TextureRegion(new Texture("button_up.png")));
-        style.down=new TextureRegionDrawable(new TextureRegion(new Texture("button_down.png")));
+        style.up=new TextureRegionDrawable(new TextureRegion(new Texture("button_up1.png")));
+        style.down=new TextureRegionDrawable(new TextureRegion(new Texture("button_down1.png")));
+        style.over=new TextureRegionDrawable(new TextureRegion(new Texture("button_down1.png")));
 
         gamecam=new PerspectiveCamera();
         gameport=new FitViewport(gameWidth,gameHeight,gamecam);
@@ -110,23 +110,11 @@ public class WaitScreen implements Screen{
         hostbutton=new TextButton("Join as Host",style);
         clientbutton=new TextButton("Join as Client",style);
 
-
-        //initialise network
-        //connect to server and configure socket events (receive client ID, all the other player's ID when they join, half empty hashmap
-//        network = new Networking();
-//        network.connectToServer();
-//        network.configSocketEvents();
         Gdx.app.log("WaitScreen", "Finished connecting & configuring events");
         playernumber=1;
         show();
     }
 
-    /**
-     * Play game as host for now
-     */
-    private void playGame() {
-        hostGame();
-    }
 
     /**
      * UI stuff to go in here
@@ -140,57 +128,101 @@ public class WaitScreen implements Screen{
         sprite=new Sprite(background);
         sprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
+        skin = new Skin(Gdx.files.internal("data/uiskin.json"));
 
-//        playerIP=new TextField("");
-//        playerIP.setSize(150, 50);
-//        //playerIP.setPosition(this.gameWidth / 2, 300, Align.center);
-//        playerIP.setText("Enter Ip address");
-//        stage.addActor(playerIP);
-//
-//        playername=new TextField("");
-//        playername.setSize(150,50);
-//        //playername.setCaretPosition(this.gameWidth/2,200,Align.center);
-//        playername.setText("Enter your name");
-//        stage.addActor(playername);
+        // Create UI elements
+
+        labeltitle=new Label("Nimbus Run",new Label.LabelStyle(new BitmapFont(Gdx.files.internal("Fonts/crimesFont48Black.fnt")), Color.DARK_GRAY));
+        labeltitle.setPosition(this.gameWidth/2, this.gameHeight-this.gameHeight/4,Align.center);
+        labeltitle.setSize(400, 200);
+        stage.addActor(labeltitle);
+
+
+        playername=new TextField(preferences.getString("name"),skin);
+        playername.setSize(150, 50);
+        playername.setPosition(this.gameWidth / 2, 375, Align.center);
+        playername.setMessageText("Enter your name");
+        stage.getKeyboardFocus();
+        stage.addActor(playername);
+
+        playerIP=new TextField(preferences.getString("ip"), skin);
+        playerIP.setSize(150, 50);
+        playerIP.setPosition(this.gameWidth / 2, 300, Align.center);
+        playerIP.setMessageText("Enter the host IP to join game");
+        stage.getKeyboardFocus();
+        stage.addActor(playerIP);
+
 
         hostbutton.setSize(this.BUTTON_WIDTH, this.BUTTON_HEIGHT);
-        hostbutton.setPosition(this.gameWidth / 3 * 2, 300, Align.center);
+        hostbutton.setPosition(this.gameWidth / 2, 200, Align.bottomLeft);
         stage.addActor(hostbutton);
 
         clientbutton.setSize(this.BUTTON_WIDTH, this.BUTTON_HEIGHT);
-        clientbutton.setPosition(this.gameWidth / 3 * 2, 200, Align.center);
+        clientbutton.setPosition(this.gameWidth / 2, 200, Align.bottomRight);
         stage.addActor(clientbutton);
+
+        playername.setTextFieldListener(new TextField.TextFieldListener() {
+            public void keyTyped(TextField textField, char key) {
+                if (key == '\n') textField.getOnscreenKeyboard().show(false);
+//                NameValue = textField.getText();
+            }
+        });
+        //      System.out.println(NameValue);
+
+        playerIP.setTextFieldListener(new TextField.TextFieldListener() {
+            public void keyTyped(TextField textField, char key) {
+//                Ipvalue = textField.getText();
+                if (key == '\n') textField.getOnscreenKeyboard().show(false);
+            }
+        });
+//        System.out.println(Ipvalue);
+
+
+
 
         hostbutton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 //game.setScreen(new TutorialScreen(game, gameWidth, gameHeight));
-                playGame();
+                hostGame();
             }
         });
 
         clientbutton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-
-                game.setScreen(new StoryLineScreen(game, gameWidth, gameHeight));
+               // game.setScreen(new StoryLineScreen(game, gameWidth, gameHeight));
+                joinGame();
             }
         });
 
         Gdx.input.setInputProcessor(stage);
     }
+    /**
+     * Play game as host for now
+     */
+    private void playGame() {
+        hostGame();
+    }
+
+    private void savePrefs(){
+        preferences.putString("name", getName());
+        preferences.putString("ip", playerIP.getText());
+        preferences.flush();
+    }
+
     public void update(float dt) {
         handleInput();
         gamecam.update();
     }
 
     protected void handleInput() {
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
-            playGame();
-        }
-        else if (Gdx.input.isKeyPressed(Input.Keys.UP)){
-            game.setScreen(new PlayScreen(game, false, "localhost", getName()));
-        }
+//        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
+//            playGame();
+//        }
+//        else if (Gdx.input.isKeyPressed(Input.Keys.UP)){
+//            game.setScreen(new PlayScreen(game, false, "localhost", getName()));
+//        }
     }
 
     @Override
@@ -213,7 +245,7 @@ public class WaitScreen implements Screen{
     @Override
     public void resize(int width, int height) {
         gameport.update(width, height);
-        gamecam.position.set(gamecam.viewportWidth / 2, gamecam.viewportHeight / 2, 0);
+        //gamecam.position.set(gamecam.viewportWidth / 2, gamecam.viewportHeight / 2, 0);
     }
 
     @Override
@@ -233,7 +265,10 @@ public class WaitScreen implements Screen{
 
     @Override
     public void dispose() {
+        Gdx.input.setInputProcessor(null);
+        skin.dispose();
         stage.dispose();
+        batch.dispose();
         sprite.getTexture().dispose();
     }
 
@@ -241,7 +276,8 @@ public class WaitScreen implements Screen{
      * join a game room
      */
     private void joinGame(){
-        game.setScreen(new PlayScreen(game, false, "HOSTSIPADDRESS", getName()));
+        game.setScreen(new CharacterSelectionScreen(game, false, playerIP.getText(), getName()));
+        savePrefs();
         //TODO: setscreen(new playscreen(game, host-false, the IP address you are joining, getname())
         //save preferences
     }
@@ -250,8 +286,10 @@ public class WaitScreen implements Screen{
      * play game as a host
      */
     private void hostGame(){
-        game.setScreen(new PlayScreen(game, true, "localhost", getName()));
+        game.setScreen(new CharacterSelectionScreen(game, true, "localhost", getName()));
+        savePrefs();
         //TODO: setscreen(new playscreen(game, host-true, the IP address you are hosting from - localhost, getname())
+
         //save preferences
     }
 
@@ -263,12 +301,12 @@ public class WaitScreen implements Screen{
      */
     //TODO: textfield
     private String getName(){
-        String name = "";
+        String name =playername.getText();
 //        String name = get text from the textfield in the waiting screen
         if (name.isEmpty()) {
             name = "Player" + random.nextInt(10000);
         }
-        //textfieldname.settext(name);
+        playername.setText(name);
         return name;
     }
 }

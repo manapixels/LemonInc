@@ -53,6 +53,7 @@ public class MenuScreen implements Screen {
 
     private NimbusRun game;
 
+
     public MenuScreen(NimbusRun game,float gameWidth,float gameHeight){
         this.gameWidth=gameWidth;
         this.gameHeight=gameHeight;
@@ -67,8 +68,7 @@ public class MenuScreen implements Screen {
         style.font.getData().setScale(0.65f, 0.65f);
         style.up=new TextureRegionDrawable(new TextureRegion(new Texture("button_up.png")));
         style.down=new TextureRegionDrawable(new TextureRegion(new Texture("button_down.png")));
-
-
+        style.over=new TextureRegionDrawable(new TextureRegion(new Texture("button_down1.png")));
 
 
         camera=new PerspectiveCamera();
@@ -98,19 +98,19 @@ public class MenuScreen implements Screen {
         sprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         buttonPlay.setSize(this.BUTTON_WIDTH, this.BUTTON_HEIGHT);
-        buttonPlay.setPosition(this.gameWidth/3*2, 300, Align.center);
+        buttonPlay.setPosition(this.gameWidth/3*2+50, 300, Align.center);
         stage.addActor(buttonPlay);
 
         buttonTutorial.setSize(this.BUTTON_WIDTH, this.BUTTON_HEIGHT);
-        buttonTutorial.setPosition(this.gameWidth/3*2, 250, Align.center);
+        buttonTutorial.setPosition(this.gameWidth/3*2+50, 250, Align.center);
         stage.addActor(buttonTutorial);
 
         buttonStory.setSize(this.BUTTON_WIDTH, this.BUTTON_HEIGHT);
-        buttonStory.setPosition(this.gameWidth/3*2, 200, Align.center);
+        buttonStory.setPosition(this.gameWidth/3*2+50, 200, Align.center);
         stage.addActor(buttonStory);
 
         buttonChooseCharacter.setSize(this.BUTTON_WIDTH, this.BUTTON_HEIGHT);
-        buttonChooseCharacter.setPosition(gameWidth/3*2, 150, Align.center);
+        buttonChooseCharacter.setPosition(gameWidth/3*2+50, 150, Align.center);
         stage.addActor(buttonChooseCharacter);
 
         muteButton.setPosition(700, 100);
@@ -125,7 +125,7 @@ public class MenuScreen implements Screen {
         buttonPlay.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println("Play Button Pressed");
+                //System.out.println("Play Button Pressed");
                 // AssetLoader.clickSound.play(AssetLoader.VOLUME);
                 // Host multiplayer game
                 game.setScreen(new WaitScreen(game));
@@ -155,7 +155,7 @@ public class MenuScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
              //   AssetLoader.clickSound.play(AssetLoader.VOLUME);
-                game.setScreen(new CharacterSelectionScreen(game,gameWidth,gameHeight));
+                game.setScreen(new YourCharacterScreen(game,gameWidth,gameHeight,1));
                 // TODO Set to tutorial screen
                 //  gsm.set(new StoryScreen(game, gsm));
             }
@@ -224,6 +224,7 @@ public class MenuScreen implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
+        batch.dispose();
     }
 
 }

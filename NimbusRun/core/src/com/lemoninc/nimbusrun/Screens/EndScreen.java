@@ -44,7 +44,11 @@ public class EndScreen implements Screen{
         gameport = new FitViewport(game.V_WIDTH / game.PPM, game.V_HEIGHT / game.PPM, gamecam);
 
         batch = new SpriteBatch();
-        aspectRatio = new Sprite(new Texture("EndScreen/bg.png"));
+//<<<<<<< HEAD
+//        aspectRatio = new Sprite(new Texture("EndScreen/bg.png"));
+//=======
+        aspectRatio = new Sprite(new Texture("whitebackground.png"));
+//>>>>>>> 7035fb9ae7792fe95a88e16505e31b77f455132e
         aspectRatio.setPosition(0, 0);
         aspectRatio.setSize(game.V_WIDTH / game.PPM, game.V_HEIGHT / game.PPM);
     }

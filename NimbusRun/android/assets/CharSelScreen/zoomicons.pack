@@ -1,0 +1,57 @@
+
+zoomicons.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+bg_Buddha
+  rotate: false
+  xy: 1, 453
+  size: 800, 450
+  orig: 800, 450
+  offset: 0, 0
+  index: -1
+bg_Foxy
+  rotate: false
+  xy: 1, 1
+  size: 800, 450
+  orig: 800, 450
+  offset: 0, 0
+  index: -1
+
+zoomicons2.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+bg_Kappa
+  rotate: false
+  xy: 1, 453
+  size: 800, 450
+  orig: 800, 450
+  offset: 0, 0
+  index: -1
+bg_Krishna
+  rotate: false
+  xy: 1, 1
+  size: 800, 450
+  orig: 800, 450
+  offset: 0, 0
+  index: -1
+
+zoomicons3.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+bg_Madame
+  rotate: false
+  xy: 1, 453
+  size: 800, 450
+  orig: 800, 450
+  offset: 0, 0
+  index: -1
+bg_Pontianak
+  rotate: false
+  xy: 1, 1
+  size: 800, 450
+  orig: 800, 450
+  offset: 0, 0
+  index: -1
