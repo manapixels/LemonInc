@@ -35,6 +35,7 @@ public class Ground {
         startX = -gameMap.getGameport().getWorldWidth();
         endX = gameMap.getGameport().getWorldWidth();
 
+        //makeMountain(startX, endX);
         makeFlatGround(startX, endX);
         startX = endX;
         endX += gameMap.getGameport().getWorldWidth() * 2;
@@ -55,7 +56,7 @@ public class Ground {
             endX += gameMap.getGameport().getWorldWidth()*2;
         }
 
-         makeFlatGround(startX, endX);
+        makeFlatGround(startX, endX);
     }
 
     private void makeFlatGround(float x1, float x2) {
@@ -78,6 +79,7 @@ public class Ground {
         float y1 = 0, y2 = 0;
         float segment = (endX - startX) * 0.125f;
         float x1 = startX, x2 = startX + segment;
+        gameMap.makePlatformsBG(startX, endX, 'P');
 
         BodyDef bdef = new BodyDef();
         bdef.type = BodyDef.BodyType.StaticBody;
@@ -131,6 +133,7 @@ public class Ground {
         float y1 = 0, y2 = 0;
         float segment = (endX - startX) * 0.125f;
         float x1 = startX, x2 = startX + segment;
+        gameMap.makePlatformsBG(startX , endX, 'M');
 
         BodyDef bdef = new BodyDef();
         bdef.type = BodyDef.BodyType.StaticBody;

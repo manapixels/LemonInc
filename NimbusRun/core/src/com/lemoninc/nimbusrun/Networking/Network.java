@@ -11,6 +11,7 @@ package com.lemoninc.nimbusrun.Networking;
  *
  * ********************************/
 
+import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
 import com.esotericsoftware.minlog.Log;
@@ -30,6 +31,8 @@ public class Network {
 
         kryo.register(Network.Login.class);
         kryo.register(Network.PlayerJoinLeave.class);
+        kryo.register(Network.MovementState.class);
+        kryo.register(Vector2.class);
     }
 
     static public class Login {
@@ -73,7 +76,26 @@ public class Network {
         }
     }
 
+    /**
+     * Contains the linear Velocity of the Player
+     */
+    static public class MovementState {
+
+        public int playerId;
+        public Vector2 position;
+        public Vector2 linearVelocity;
+
+        public MovementState() {}
+
+        public MovementState(int id, Vector2 position, Vector2 linearVelocity) {
+
+            this.position = position;
+            this.playerId = id;
+            this.linearVelocity = linearVelocity;
+        }
+    }
+
     private static void logInfo(String string) {
-        Log.info("[Network]: "+string);
+//        Log.info("[Network]: "+string);
     }
 }

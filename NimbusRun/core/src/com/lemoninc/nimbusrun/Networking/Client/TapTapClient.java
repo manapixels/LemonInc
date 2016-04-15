@@ -106,6 +106,11 @@ public class TapTapClient {
                 map.removePlayer(msg);
             }
         }
+        else if (message instanceof Network.MovementState) {
+            Network.MovementState msg = (Network.MovementState) message;
+            //hey map, someone moved, handle this
+            map.playerMoved(msg);
+        }
 
     }
 
@@ -118,12 +123,26 @@ public class TapTapClient {
         logInfo("Client " + name + " of ID: " + id + " connected to server PORT " + Network.PORT);
     }
 
+    public void sendMessage(Object message) {
+//        map.logInfo("SENT packet TCP");
+        if (client.isConnected()) {
+            client.sendTCP(message);
+        }
+    }
+
+    public void sendMessageUDP(Object message) {
+//        map.logInfo("SENT packet UPD");
+        if (client.isConnected()) {
+            client.sendUDP(message);
+        }
+    }
+
     public void shutdown() {
         client.stop();
         client.close();
     }
 
     private void logInfo(String string) {
-        Log.info("[TapTapClient]: "+string);
+//        Log.info("[TapTapClient]: "+string);
     }
 }
