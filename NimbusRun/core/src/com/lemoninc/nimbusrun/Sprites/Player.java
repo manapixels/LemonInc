@@ -60,8 +60,8 @@ public class Player extends Sprite implements InputProcessor{
     private int id;
     private String name;
 
-    private boolean stunned, poisoned, reversed;
-    private float stunTime, poisonTime, reverseTime;
+    private boolean stunned, poisoned, reversed, blackHoled;
+    private float stunTime, poisonTime, reverseTime, blackHoleTime;
 
     private final float JUMPFORCE = 6f;
     private final float MOVEFORCE = 1.25f;
@@ -92,8 +92,10 @@ public class Player extends Sprite implements InputProcessor{
         stunned = false;
         poisonTime = 0f;
         poisoned = false;
-        reversed = false;
         reverseTime = 0f;
+        reversed = false;
+        blackHoleTime = 0f;
+        blackHoled = false;
 
         //create a dynamic bodydef
         BodyDef bdef = new BodyDef();
@@ -150,9 +152,13 @@ public class Player extends Sprite implements InputProcessor{
 
     public boolean isReversed() { return reversed; }
 
+    public boolean isBlackHoled() { return blackHoled; }
+
     public float getStunTime() { return stunTime; }
 
     public float getPoisonTime() { return poisonTime; }
+
+    public float getBlackHoleTime() { return blackHoleTime; }
 
     public float getReverseTime() { return reverseTime; }
 
@@ -232,6 +238,8 @@ public class Player extends Sprite implements InputProcessor{
                 return this.poison();
             if (Gdx.input.isKeyPressed(Input.Keys.D))       //testing purposes only
                 return this.reverse();
+            if (Gdx.input.isKeyPressed(Input.Keys.F))       //testing purposes only
+                return this.blackHole();
         }
 
 
@@ -240,7 +248,7 @@ public class Player extends Sprite implements InputProcessor{
 
     public void update(float delta){
         recover(1f);
-        Log.info("Player isReversed " + isReversed() + " reverseTime " + getReverseTime());
+        Log.info("Player isBlackHoled " + isBlackHoled() + " blackHoleTime " + getBlackHoleTime());
     }
 
     public boolean recover(float delta) {
@@ -262,6 +270,15 @@ public class Player extends Sprite implements InputProcessor{
                 reversed = false;
             }
         }
+        if (isBlackHoled()) {
+            if (b2body.getLinearVelocity().x >= -MOVESPEEDCAP * 2.5f){
+                b2body.applyLinearImpulse(new Vector2(-MOVEFORCE, 0), b2body.getWorldCenter(), true);
+            }
+            blackHoleTime -= delta;
+            if (blackHoleTime <= 0){
+                blackHoled = false;
+            }
+        }
         return true;
     }
 
@@ -279,6 +296,12 @@ public class Player extends Sprite implements InputProcessor{
     public boolean reverse(){
         reversed = true;
         reverseTime = 200f;
+        return true;
+    }
+    public boolean blackHole(){
+        blackHoled = true;
+        b2body.setLinearVelocity(0, 0);
+        blackHoleTime = 100f;
         return true;
     }
 
