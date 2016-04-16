@@ -27,6 +27,7 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -39,7 +40,6 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.esotericsoftware.minlog.Log;
 import com.lemoninc.nimbusrun.Networking.Network;
-import com.lemoninc.nimbusrun.Screens.PlayScreen;
 import com.lemoninc.nimbusrun.NimbusRun;
 
 import java.util.HashMap;
@@ -60,8 +60,9 @@ public class Player extends Sprite implements InputProcessor{
     private int id;
     private String name;
 
-    private boolean stunned, poisoned, reversed, blackHoled;
-    private float stunTime, poisonTime, reverseTime, blackHoleTime;
+    private boolean stunned, poisoned, reversed, blackHoled, flashed, confused;
+    private float stunTime, poisonTime, reverseTime, blackHoleTime, flashTime, confuseTime;
+    private Sprite flashbg;
 
     private final float JUMPFORCE = 6f;
     private final float MOVEFORCE = 1.25f;
@@ -96,6 +97,10 @@ public class Player extends Sprite implements InputProcessor{
         reversed = false;
         blackHoleTime = 0f;
         blackHoled = false;
+        flashed = false;
+        flashTime = 0f;
+        confused = false;
+        confuseTime = 0f;
 
         //create a dynamic bodydef
         BodyDef bdef = new BodyDef();
@@ -114,6 +119,10 @@ public class Player extends Sprite implements InputProcessor{
         this.img = img;
 
         anim = new Animation(1f/40f, img.getRegions());
+
+//        flashbg = new Sprite(new Texture("whitebackground.png"));
+//        flashbg.setBounds(gameMap.getGameport().getWorldWidth()/2, gameMap.getGameport().getWorldHeight()/2,
+//                gameMap.getGameport().getWorldWidth(), gameMap.getGameport().getWorldHeight());
 
 //        previousPosition = new Vector2(this.getX(), this.getY()); //TODO: is this correct?
 
@@ -154,6 +163,10 @@ public class Player extends Sprite implements InputProcessor{
 
     public boolean isBlackHoled() { return blackHoled; }
 
+    public boolean isFlashed() { return flashed; }
+
+    public boolean isConfused() { return confused; }
+
     public float getStunTime() { return stunTime; }
 
     public float getPoisonTime() { return poisonTime; }
@@ -161,6 +174,10 @@ public class Player extends Sprite implements InputProcessor{
     public float getBlackHoleTime() { return blackHoleTime; }
 
     public float getReverseTime() { return reverseTime; }
+
+    public float getFlashTime() { return flashTime ; }
+
+    public float getConfuseTime() { return confuseTime; }
 
     public void render(SpriteBatch spriteBatch) {
         this.draw(spriteBatch);
@@ -171,8 +188,9 @@ public class Player extends Sprite implements InputProcessor{
             stateTime += Gdx.graphics.getDeltaTime();
             batch.draw(anim.getKeyFrame(stateTime, true), getX() - CHARACTER_SIZE / 2, getY() - CHARACTER_SIZE / 2, CHARACTER_SIZE, CHARACTER_SIZE);
         }
-
-        //img.draw(batch);
+//        if (isFlashed()){
+//            flashbg.draw(batch);
+//        }
     }
 
     public float getX(){
@@ -207,10 +225,18 @@ public class Player extends Sprite implements InputProcessor{
                 int x=Gdx.input.getX();
                 int y=Gdx.input.getY();
                 if(x>NimbusRun.V_WIDTH/2){
-                    return this.moveRight();
+                    if (isConfused()){
+                        return this.jump();
+                    } else {
+                        return this.moveRight();
+                    }
                 }
                 else{
-                    return this.jump();
+                    if (isConfused()){
+                        return this.moveRight();
+                    } else {
+                        return this.jump();
+                    }
                 }
             }
             if(touches.get(0).touched&&touches.get(1).touched){
@@ -227,9 +253,17 @@ public class Player extends Sprite implements InputProcessor{
         else {
             //for Desktop
             if (Gdx.input.isKeyJustPressed(Input.Keys.UP))
-                return this.jump();
+                if (isConfused()){
+                    return this.moveRight();
+                } else {
+                    return this.jump();
+                }
             if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
-                return this.moveRight();
+                if (isConfused()){
+                    return this.jump();
+                } else {
+                    return this.moveRight();
+                }
             if (Gdx.input.isKeyPressed(Input.Keys.LEFT))    //testing purposes only
                 return this.moveLeft(1);
             if (Gdx.input.isKeyPressed(Input.Keys.A))       //testing purposes only
@@ -240,6 +274,10 @@ public class Player extends Sprite implements InputProcessor{
                 return this.reverse();
             if (Gdx.input.isKeyPressed(Input.Keys.F))       //testing purposes only
                 return this.blackHole();
+            if (Gdx.input.isKeyPressed(Input.Keys.G))       //testing purposes only
+                return this.flash();
+            if (Gdx.input.isKeyPressed(Input.Keys.H))       //testing purposes only
+                return this.confuse();
         }
 
 
@@ -248,7 +286,12 @@ public class Player extends Sprite implements InputProcessor{
 
     public void update(float delta){
         recover(1f);
-        Log.info("Player isBlackHoled " + isBlackHoled() + " blackHoleTime " + getBlackHoleTime());
+//        Log.info("Player isStunned " + isStunned() + " stunTime " + getStunTime());
+//        Log.info("Player isPoisoned " + isPoisoned() + " poisonTime " + getPoisonTime());
+//        Log.info("Player isReversed " + isReversed() + " reverseTime " + getReverseTime());
+//        Log.info("Player isBlackHoled " + isBlackHoled() + " blackHoleTime " + getBlackHoleTime());
+        Log.info("Player isFlashed " + isFlashed() + " flashTime" + getFlashTime());
+//        Log.info("Player isConfused " + isConfused() + " confuseTime " + getConfuseTime());
     }
 
     public boolean recover(float delta) {
@@ -279,6 +322,18 @@ public class Player extends Sprite implements InputProcessor{
                 blackHoled = false;
             }
         }
+        if (isFlashed()){
+            flashTime -= delta;
+            if (flashTime <= 0){
+                flashed = false;
+            }
+        }
+        if (isConfused()){
+            confuseTime -= delta;
+            if (confuseTime <= 0){
+                confused = false;
+            }
+        }
         return true;
     }
 
@@ -302,6 +357,16 @@ public class Player extends Sprite implements InputProcessor{
         blackHoled = true;
         b2body.setLinearVelocity(0, 0);
         blackHoleTime = 100f;
+        return true;
+    }
+    public boolean flash(){
+        flashed = true;
+        flashTime = 200f;
+        return true;
+    }
+    public boolean confuse(){
+        confused = true;
+        confuseTime = 400f;
         return true;
     }
 
@@ -343,10 +408,6 @@ public class Player extends Sprite implements InputProcessor{
         factor = 1;
         if (isStunned()) { factor = factor * 0f; }
         if (isPoisoned()) { factor = factor * 0.5f; }
-        return factor;
-    }
-
-    public float getFactor() {
         return factor;
     }
 
