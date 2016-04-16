@@ -262,9 +262,11 @@ public class WaitScreen implements Screen{
      * join a game room
      */
     private void joinGame(){
-        game.setScreen(new CharacterSelectionScreen(game, false, playerIP.getText(), getName()));
-        //TODO: what if IP is blank?
-        savePrefs();
+        if (!playerIP.getText().equals("")) {
+            game.setScreen(new CharacterSelectionScreen(game, false, playerIP.getText(), getName()));
+            //TODO: what if IP is blank?
+            savePrefs();
+        }
     }
 
     /**

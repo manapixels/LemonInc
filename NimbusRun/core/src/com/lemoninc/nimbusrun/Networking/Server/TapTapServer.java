@@ -26,6 +26,9 @@ import java.util.List;
  */
 public class TapTapServer {
 
+    //TODO: instantiate taptapserver in characterselectionscreen
+
+
     //Kryonet Server object
     Server server;
 

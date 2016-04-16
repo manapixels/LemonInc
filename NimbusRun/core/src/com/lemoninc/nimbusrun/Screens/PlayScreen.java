@@ -64,6 +64,8 @@ public class PlayScreen implements Screen{
         this.playerName = playerName;
 
         hud=new HUD(game.batch,playerName);
+
+//        this.character = character;
     }
 
     /**

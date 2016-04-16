@@ -70,7 +70,7 @@ public class CharacterSelectionScreen implements Screen{
     TextButton joingame;
     TextButton.TextButtonStyle style;
     private String charactername;
-    private CharSequence myIP;
+//    private CharSequence myIP;
 
     public CharacterSelectionScreen(NimbusRun game, boolean isHost, String ipAddress, String playerName){
         this.game = game;
@@ -79,7 +79,7 @@ public class CharacterSelectionScreen implements Screen{
         this.playername=playerName;
         this.gameWidth = NimbusRun.V_WIDTH;
         this.gameHeight = NimbusRun.V_HEIGHT;
-        myIP=ipAddress;
+//        myIP=ipAddress;
 
         charactername="Buddha";
 
@@ -218,8 +218,8 @@ public class CharacterSelectionScreen implements Screen{
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 resetbuttons();
 //                Buddha.clearActions();
-                System.out.println("touched");
-                Gdx.app.log("Button pressed", "Foxy Button Pressed");
+//                System.out.println("touched");
+//                Gdx.app.log("Button pressed", "Foxy Button Pressed");
                 playercharacter= skin.getSprite("bg_Foxy");
                 playercharacter.setPosition(0, 0);
                 playercharacter.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -311,7 +311,7 @@ public class CharacterSelectionScreen implements Screen{
                 // TODO: SAVE THE LOG OF THE PLAYER ACCORDING TO THE NUMBER
                 //charactername= checkbuttonpress();
                 Gdx.app.log("PlayerNumber","Character "+ charactername + " joined game");
-                gowhere();
+                playGame(charactername);
             }
         });
     }
@@ -342,7 +342,7 @@ public class CharacterSelectionScreen implements Screen{
         sprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 //        playercharacter.setPosition(50, 20);
 //        playercharacter.setSize(Gdx.graphics.getWidth() - Gdx.graphics.getWidth() / 15, Gdx.graphics.getHeight() - Gdx.graphics.getWidth() / 15);
-         style.font=new BitmapFont(Gdx.files.internal("Fonts/Basker32.fnt"));
+        style.font=new BitmapFont(Gdx.files.internal("Fonts/Basker32.fnt"));
         style.font.setColor(Color.DARK_GRAY);
         batcher = new SpriteBatch();
         startTime = TimeUtils.millis();
@@ -359,7 +359,7 @@ public class CharacterSelectionScreen implements Screen{
         madame.setChecked(false);
     }
 
-    public void gowhere(){
+    public void playGame(String charactername){
         stage.clear();
         game.setScreen(new PlayScreen(game,isHost,ipAddress, playername));
     }
@@ -372,7 +372,7 @@ public class CharacterSelectionScreen implements Screen{
 
         batcher.begin();
         sprite.draw(batcher);
-        style.font.draw(batcher, "Enter IP : " + myIP, Gdx.graphics.getWidth()/3+75,80);
+        style.font.draw(batcher, "Host IP address: " + ipAddress, Gdx.graphics.getWidth()/3+75,80);
         playercharacter.setPosition(75, 50);
         playercharacter.setSize(Gdx.graphics.getWidth() - Gdx.graphics.getWidth() / 8, Gdx.graphics.getHeight() - Gdx.graphics.getWidth() / 8);
         playercharacter.draw(batcher);
