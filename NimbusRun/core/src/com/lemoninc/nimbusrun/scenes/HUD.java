@@ -47,7 +47,7 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
 
     public  HUD(SpriteBatch sb, String playernumber){
         this.Player=playernumber;
-        worldTimer = 60;
+        worldTimer = 150;
         timecount=0;
         camera=new PerspectiveCamera();
         viewport=new FillViewport(NimbusRun.V_WIDTH,NimbusRun.V_HEIGHT,new OrthographicCamera());

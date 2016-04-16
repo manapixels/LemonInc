@@ -59,6 +59,7 @@ public class GameMap{
     private Texture bgTexture;
     private Sprite bgSprite;
     private float bgHeight, bgWidth, bgStartX, bgStartY;
+    private Sprite flashbg;
 
     private Texture bgTextureFlat, bgTextureMountain, bgTexturePit, bgTexturePlateau;
     private List<Sprite> bgPlatformSprites;
@@ -163,10 +164,7 @@ public class GameMap{
         bgMountainHeight = bgTextureMountain.getHeight() / NimbusRun.PPM * 2.2f;
 
         bgPlatformSprites = new ArrayList<Sprite>();
-
     }
-
-
 
     //called by server to add a new player into its GameMap
     public synchronized void addPlayer(Network.PlayerJoinLeave msg) {
@@ -276,9 +274,13 @@ public class GameMap{
         for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {
             Player curPlayer = playerEntry.getValue();
             curPlayer.draw(batch);
+            //  Render flashbang if flashed
+            if (curPlayer.isFlashed()) {
+                Gdx.gl.glClearColor(1, 1, 1, 1);
+                Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            }
             //if(curPlayer != playerLocal) curPlayer.renderNameTag(spriteBatch, fontNameTag);
         }
-
         //----------------END batch
         batch.end();
 
@@ -287,7 +289,7 @@ public class GameMap{
         //steps box2d world
         world.step(1 / 60f, 6, 2);
         //gamecam constantly follows player1
-        gamecam.position.set(playerLocal.getX(), playerLocal.getY(), 0);
+//        gamecam.position.set(playerLocal.getX(), playerLocal.getY(), 0);
         gamecam.update();
     }
 

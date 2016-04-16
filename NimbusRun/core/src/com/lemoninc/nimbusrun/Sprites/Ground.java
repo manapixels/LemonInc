@@ -48,7 +48,6 @@ public class Ground {
                 makePlateau(startX, endX);
             } else if (choice == 1) {
                 makeMountain(startX, endX);
-            } else if (choice == 2) {
             } else {
                 makePit(startX, endX);
             }

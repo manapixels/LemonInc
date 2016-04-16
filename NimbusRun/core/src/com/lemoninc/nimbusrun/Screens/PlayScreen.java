@@ -116,7 +116,6 @@ public class PlayScreen implements Screen{
         gamemap.update(delta);
         gamemap.render();
 
-
         if(isHost){
             server.update(delta);
         }

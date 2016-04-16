@@ -60,13 +60,12 @@ public class Player extends Sprite implements InputProcessor{
     private int id;
     private String name;
 
-    private boolean stunned, poisoned, reversed, blackHoled, flashed, confused;
+    private boolean stunned, poisoned, reversed, blackHoled, flashed, confused, devMode;
     private float stunTime, poisonTime, reverseTime, blackHoleTime, flashTime, confuseTime;
-    private Sprite flashbg;
 
     private final float JUMPFORCE = 6f;
-    private final float MOVEFORCE = 1.25f;
-    private final float MOVESPEEDCAP = 4;
+    private final float MOVEFORCE = 1.75f;
+    private final float MOVESPEEDCAP = 5;
     private float factor = 1;
 
     Vector2 previousPosition;
@@ -101,6 +100,7 @@ public class Player extends Sprite implements InputProcessor{
         flashTime = 0f;
         confused = false;
         confuseTime = 0f;
+        devMode = false;
 
         //create a dynamic bodydef
         BodyDef bdef = new BodyDef();
@@ -120,9 +120,6 @@ public class Player extends Sprite implements InputProcessor{
 
         anim = new Animation(1f/40f, img.getRegions());
 
-//        flashbg = new Sprite(new Texture("whitebackground.png"));
-//        flashbg.setBounds(gameMap.getGameport().getWorldWidth()/2, gameMap.getGameport().getWorldHeight()/2,
-//                gameMap.getGameport().getWorldWidth(), gameMap.getGameport().getWorldHeight());
 
 //        previousPosition = new Vector2(this.getX(), this.getY()); //TODO: is this correct?
 
@@ -167,6 +164,8 @@ public class Player extends Sprite implements InputProcessor{
 
     public boolean isConfused() { return confused; }
 
+    public boolean isDevMode() { return devMode; }
+
     public float getStunTime() { return stunTime; }
 
     public float getPoisonTime() { return poisonTime; }
@@ -188,9 +187,6 @@ public class Player extends Sprite implements InputProcessor{
             stateTime += Gdx.graphics.getDeltaTime();
             batch.draw(anim.getKeyFrame(stateTime, true), getX() - CHARACTER_SIZE / 2, getY() - CHARACTER_SIZE / 2, CHARACTER_SIZE, CHARACTER_SIZE);
         }
-//        if (isFlashed()){
-//            flashbg.draw(batch);
-//        }
     }
 
     public float getX(){
@@ -258,29 +254,30 @@ public class Player extends Sprite implements InputProcessor{
                 } else {
                     return this.jump();
                 }
-            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
+            if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT))
                 if (isConfused()){
                     return this.jump();
                 } else {
                     return this.moveRight();
                 }
-            if (Gdx.input.isKeyPressed(Input.Keys.LEFT))    //testing purposes only
+            if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT))    //testing purposes only
                 return this.moveLeft(1);
-            if (Gdx.input.isKeyPressed(Input.Keys.A))       //testing purposes only
+            if (Gdx.input.isKeyJustPressed(Input.Keys.A))       //testing purposes only
                 return this.stun();
-            if (Gdx.input.isKeyPressed(Input.Keys.S))       //testing purposes only
+            if (Gdx.input.isKeyJustPressed(Input.Keys.S))       //testing purposes only
                 return this.poison();
-            if (Gdx.input.isKeyPressed(Input.Keys.D))       //testing purposes only
+            if (Gdx.input.isKeyJustPressed(Input.Keys.D))       //testing purposes only
                 return this.reverse();
-            if (Gdx.input.isKeyPressed(Input.Keys.F))       //testing purposes only
+            if (Gdx.input.isKeyJustPressed(Input.Keys.F))       //testing purposes only
                 return this.blackHole();
-            if (Gdx.input.isKeyPressed(Input.Keys.G))       //testing purposes only
+            if (Gdx.input.isKeyJustPressed(Input.Keys.G))       //testing purposes only
                 return this.flash();
-            if (Gdx.input.isKeyPressed(Input.Keys.H))       //testing purposes only
+            if (Gdx.input.isKeyJustPressed(Input.Keys.H))       //testing purposes only
                 return this.confuse();
+            if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))       //testing purposes only
+                devMode = true;
+                return true;
         }
-
-
         return false;
     }
 
@@ -290,7 +287,7 @@ public class Player extends Sprite implements InputProcessor{
 //        Log.info("Player isPoisoned " + isPoisoned() + " poisonTime " + getPoisonTime());
 //        Log.info("Player isReversed " + isReversed() + " reverseTime " + getReverseTime());
 //        Log.info("Player isBlackHoled " + isBlackHoled() + " blackHoleTime " + getBlackHoleTime());
-        Log.info("Player isFlashed " + isFlashed() + " flashTime" + getFlashTime());
+//        Log.info("Player isFlashed " + isFlashed() + " flashTime" + getFlashTime());
 //        Log.info("Player isConfused " + isConfused() + " confuseTime " + getConfuseTime());
     }
 
@@ -356,12 +353,12 @@ public class Player extends Sprite implements InputProcessor{
     public boolean blackHole(){
         blackHoled = true;
         b2body.setLinearVelocity(0, 0);
-        blackHoleTime = 100f;
+        blackHoleTime = 75f;
         return true;
     }
     public boolean flash(){
         flashed = true;
-        flashTime = 200f;
+        flashTime = 300f;
         return true;
     }
     public boolean confuse(){
@@ -408,6 +405,7 @@ public class Player extends Sprite implements InputProcessor{
         factor = 1;
         if (isStunned()) { factor = factor * 0f; }
         if (isPoisoned()) { factor = factor * 0.5f; }
+        if (isDevMode()) { factor = factor * 2.5f; }
         return factor;
     }
 
