@@ -82,6 +82,13 @@ public class CharacterSelectionScreen implements Screen{
     private TapTapServer server;
     private GameMap gamemap;
 
+    /**
+     *
+     * @param game
+     * @param isHost
+     * @param ipAddress to connect the client to the server
+     * @param playerName
+     */
     public CharacterSelectionScreen(NimbusRun game, final boolean isHost, String ipAddress, String playerName){
         this.game = game;
         this.isHost=isHost;
@@ -337,6 +344,8 @@ public class CharacterSelectionScreen implements Screen{
                     //if received charactername from all players, play game
                     if (server.allDummyReady()) {
                         //TODO: send all clients GameReady
+                        Network.GameReady gameready = new Network.GameReady();
+                        client.sendMessage(gameready);
                         playGame();
                     }
                     else {
@@ -383,7 +392,7 @@ public class CharacterSelectionScreen implements Screen{
 
         //instnatiate server, client here
 
-        client = new TapTapClient(game, playername);
+        client = new TapTapClient(game, this, playername);
         gamemap = client.getMap();
 
         if (isHost) {
@@ -434,8 +443,13 @@ public class CharacterSelectionScreen implements Screen{
 
     public void playGame(){
         stage.clear();
-        game.setScreen(new PlayScreen(game,isHost,ipAddress, playername, client, server));
+        game.setScreen(new PlayScreen(game, isHost, playername, client, server));
     }
+
+//    public void goPlayScreen() {
+//        game.setScreen(new PlayScreen(game, isHost, playername, client, server));
+//
+//    }
 
     @Override
     public void render(float delta) {

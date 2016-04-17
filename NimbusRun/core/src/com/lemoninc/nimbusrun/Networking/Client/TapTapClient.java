@@ -14,17 +14,19 @@ package com.lemoninc.nimbusrun.Networking.Client;
  * ********************************/
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
 import com.lemoninc.nimbusrun.Networking.Network;
 import com.lemoninc.nimbusrun.NimbusRun;
+import com.lemoninc.nimbusrun.Screens.CharacterSelectionScreen;
+import com.lemoninc.nimbusrun.Screens.PlayScreen;
 import com.lemoninc.nimbusrun.Screens.WaitScreen;
 import com.lemoninc.nimbusrun.Sprites.GameMap;
 
 import java.io.IOException;
-import java.util.Scanner;
 
 public class TapTapClient {
     private NimbusRun game;
@@ -34,13 +36,15 @@ public class TapTapClient {
     public String remoteIP;
     private GameMap map;
 
+    private CharacterSelectionScreen currentScreen;
+
     //Kryonet Stuff
     public Client client;
 
     /**
      * This constructor is called in CharacterSelectionScreen when the player is connecting to server
      */
-    public TapTapClient(NimbusRun game, String name) {
+    public TapTapClient(NimbusRun game, CharacterSelectionScreen screen, String name) {
         this.game = game;
         map = new GameMap(this); //create new GameMap for Client
         this.name = name;
@@ -63,6 +67,8 @@ public class TapTapClient {
             }
         });
 
+        currentScreen = screen;
+
         Gdx.app.log("Client", "Client instantiated");
     }
 
@@ -77,7 +83,6 @@ public class TapTapClient {
      * This method is called when the client establishes connection with server.
      * Method gets connection ID between this cleint and server, remote IP from server.
      * Method sends a Login package containing its name to server.
-     * Method calls GameMap to instantiate a character with "name"
      * @param connection
      */
     private void handleConnect(Connection connection) {
@@ -87,8 +92,6 @@ public class TapTapClient {
         //send Login to server
         Network.Login clientName = new Network.Login(name);
         client.sendTCP(clientName);
-
-//        map.onConnect(name);
         Gdx.app.log("Client", "Connection handled, sent Login");
 
     }
@@ -96,13 +99,6 @@ public class TapTapClient {
     /**
      * This method listens for any received packets from the server.
      * This method handles messages from other players about their activities.
-     *
-     * Possible messages:
-     * playerjoinleave
-     * movementstate
-     * gamemapdata
-     * roundend
-     * roundstart
      *
      * @param playerID
      * @param message
@@ -138,7 +134,7 @@ public class TapTapClient {
             Gdx.app.postRunnable(new Runnable() {
                 @Override
                 public void run() {
-                    game.setScreen(new WaitScreen(game)); //CSS.hide() called, client closed
+                    game.setScreen(new WaitScreen(game)); //CSS.hide() called, TODO: client should be closed
                 }
             });
 
@@ -147,6 +143,14 @@ public class TapTapClient {
             Network.Ready msg = (Network.Ready) message;
             map.setCharacter(msg.playerId, msg.charactername);
             //TODO: create check on CS screen
+        }
+        else if (message instanceof Network.GameReady) {
+            Gdx.app.postRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    currentScreen.playGame();
+                }
+            });
         }
 
     }

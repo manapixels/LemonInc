@@ -33,6 +33,7 @@ public class Network {
         kryo.register(Vector2.class);
         kryo.register(GameRoomFull.class);
         kryo.register(Ready.class);
+        kryo.register(GameReady.class);
     }
 
     static public class Login {
@@ -115,5 +116,11 @@ public class Network {
         public void setPlayerId(int playerId) {
             this.playerId = playerId;
         }
+    }
+
+    static public class GameReady {
+
+        public GameReady() {}
+
     }
 }

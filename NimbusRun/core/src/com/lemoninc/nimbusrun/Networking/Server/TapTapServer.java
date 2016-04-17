@@ -148,6 +148,11 @@ public class TapTapServer {
                     server.sendToAllExceptTCP(connection.getID(), msg);
                     Gdx.app.log("Server", "Set character for Client "+connection.getID());
                 }
+                else if (message instanceof Network.GameReady) {
+                    Network.GameReady msg = (Network.GameReady) message;
+                    server.sendToAllExceptTCP(connection.getID(), msg);
+                    Gdx.app.log("Server", "Let the game begin");
+                }
             }
 
             //TODO: what happens here when a player is rejected cos game room is full?
@@ -183,8 +188,8 @@ public class TapTapServer {
         map.update(delta);
     }
 
-    public void initPlay() {
-        map.initPlay();
+    public void initPlayers() {
+        map.initPlayers();
     }
 
     public boolean allDummyReady() {
