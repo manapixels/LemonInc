@@ -35,7 +35,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.esotericsoftware.minlog.Log;
 import com.lemoninc.nimbusrun.Networking.Client.TapTapClient;
 import com.lemoninc.nimbusrun.Networking.Network;
 import com.lemoninc.nimbusrun.Networking.Server.TapTapServer;
@@ -54,6 +53,8 @@ public class GameMap{
     private boolean isClient;
 
     private Map<Integer, Player> players = new HashMap<Integer, Player>(); //playerId, Player
+    private Map<Integer, DummyPlayer> dummyPlayers = new HashMap<Integer, DummyPlayer>(); //playerId, Player
+
 
     private OrthographicCamera gamecam;
     private Viewport gameport;
@@ -74,7 +75,6 @@ public class GameMap{
 
     private World world;
     private Box2DDebugRenderer b2dr;
-    private Player player1, player2, player3, player4;
     private Ground ground;
     private Ceiling ceiling;
     private StartWall startWall;
@@ -82,6 +82,7 @@ public class GameMap{
 
 
     private Player playerLocal;
+    private DummyPlayer dummyLocal;
     private TextureAtlas img;
     private int sourceX;
 
@@ -103,9 +104,25 @@ public class GameMap{
 //        Log.info(bgStartY + " y pos");
         batch = new SpriteBatch();
 
-        //TODO: 5 refers to the character selected at the main menu
-        initCommon(5);
+        initCommon();
 
+        // initialise all background sprites
+        bgTexture = new Texture("PlayScreen/bg.png");
+        bgTexture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
+        bgSprite = new Sprite(new TextureRegion(bgTexture, bgTexture.getWidth()*11, bgTexture.getHeight()*2));
+        bgWidth = bgTexture.getWidth() / NimbusRun.PPM * 1.4f * 11;
+        bgHeight = bgTexture.getHeight() / NimbusRun.PPM * 1.4f * 2;
+        bgSprite.setX(bgStartX);
+        bgSprite.setY(bgStartY);
+        bgSprite.setSize(bgWidth, bgHeight);
+
+        bgTextureMountain = new Texture("PlayScreen/platform_mountain.png");
+        bgMountainWidth = bgTextureMountain.getWidth() / NimbusRun.PPM * 2.2f;
+        bgMountainHeight = bgTextureMountain.getHeight() / NimbusRun.PPM * 2.2f;
+
+        bgPlatformSprites = new ArrayList<Sprite>();
+
+        //TODO: these are created by Server and server sends GameMapStatus to clients
         //add these sprites to the world
         ground = new Ground(this);
         ceiling = new Ceiling(this);
@@ -113,31 +130,40 @@ public class GameMap{
         endWall = new EndWall(this);
 
 //        logInfo("GameMap initialised");
+        Gdx.app.log("GameMap", "GameMap instantiated in Client");
 
     }
 
     /**
      * This constructor is called inside TapTapServer
-     * //TODO: make a constructor for server that does not create World, and box2d related stuff but still can store who is connected, who is where, etc
      */
     public GameMap(TapTapServer server) {
         this.server = server;
         this.isClient = false;
 
-        initCommon(5);
+        initCommon();
 
 //        logInfo("GameMap initialised");
-
+        Gdx.app.log("GameMap", "GameMap instantiated in Server");
     }
 
-    private void initCommon(int whichCharacter){
-        //TODO: server needs textureAtls for hwat?
+    public void initPlayers() {
+        //create Players from dummyPlayers
+        for (Map.Entry<Integer, DummyPlayer> playerEntry : dummyPlayers.entrySet()) {
+            DummyPlayer curPlayer = playerEntry.getValue();
+            if (curPlayer.isLocal) {
+                playerLocal = new Player(this, getImg(curPlayer.character), curPlayer.x, curPlayer.y, true);
+                players.put(curPlayer.playerID, playerLocal);
+            }
+            else {
+                players.put(curPlayer.playerID, new Player(this, getImg(curPlayer.character), curPlayer.x, curPlayer.y, false));
+            }
+        }
+    }
 
-        world = new World(new Vector2(0, -10), true); //box2d world with gravity
-        b2dr = new Box2DDebugRenderer();
-
+    private TextureAtlas getImg(int character) {
         // Load up all sprites into spriteMap from textureAtlas
-        switch(whichCharacter){
+        switch(character){
             // 1. LAUGHING BUDDHA
             // 2. SHESHNAH WITH KRISHNA
             // 3. NINE-TAILED FOX
@@ -152,36 +178,45 @@ public class GameMap{
             case 6: img = new TextureAtlas(Gdx.files.internal("spritesheets/MWSspritesheet.atlas")); break;
             default: img = new TextureAtlas(Gdx.files.internal("spritesheets/PTspritesheet.atlas")); break;
         }
-
-        // initialise all background sprites
-        bgTexture = new Texture("PlayScreen/bg.png");
-        bgTexture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
-        bgSprite = new Sprite(new TextureRegion(bgTexture, bgTexture.getWidth()*11, bgTexture.getHeight()*2));
-        bgWidth = bgTexture.getWidth() / NimbusRun.PPM * 1.4f * 11;
-        bgHeight = bgTexture.getHeight() / NimbusRun.PPM * 1.4f * 2;
-        bgSprite.setX(bgStartX);
-        bgSprite.setY(bgStartY);
-        bgSprite.setSize(bgWidth, bgHeight);
-
-        font = new BitmapFont(Gdx.files.internal("Fonts/font20.fnt"), Gdx.files.internal("Fonts/font20.png"), false);
-        font.setColor(Color.WHITE);
-
-        bgTextureMountain = new Texture("PlayScreen/platform_mountain.png");
-        bgMountainWidth = bgTextureMountain.getWidth() / NimbusRun.PPM * 2.2f;
-        bgMountainHeight = bgTextureMountain.getHeight() / NimbusRun.PPM * 2.2f;
-
-        bgPlatformSprites = new ArrayList<Sprite>();
+        return img;
     }
 
-    //called by server to add a new player into its GameMap
+//<<<<<<< HEAD
+    /**
+     * Create box2d world and DebugRenderer
+     */
+    private void initCommon(){
+        world = new World(new Vector2(0, -10), true); //box2d world with gravity
+        b2dr = new Box2DDebugRenderer();
+    }
+
+    /**
+     * Client receives PlayerJoinLeave from server containing player ID, name, initial x and y
+     * @param msg
+     */
+    public void onConnect(Network.PlayerJoinLeave msg) {
+
+        if (this.dummyLocal == null) {
+            dummyLocal = new DummyPlayer(client.id, msg.name, msg.initial_x, msg.initial_y, true);
+            dummyPlayers.put(dummyLocal.playerID, dummyLocal);
+            //hud.setPlayerLocal(playerLocal);
+            //setStatus("Connected to " + client.remoteIP);
+            Gdx.app.log("GameMap", "local player created at "+msg.initial_x+" "+msg.initial_y);
+        } else {
+//            logInfo("setNetworkClient called twice");
+        }
+    }
+
+    /**
+     * This method is only called in Character Selection screen
+     * @param msg
+     */
+
     public synchronized void addPlayer(Network.PlayerJoinLeave msg) {
         //create new player from msg
+        DummyPlayer newDummy = new DummyPlayer(msg.playerId, msg.name, msg.initial_x, msg.initial_y, false);
 
-        Player newPlayer = new Player(this, img, msg.initial_x, msg.initial_y, false);
-        newPlayer.setId(msg.playerId);
-        newPlayer.setName(msg.name);
-
-        players.put(msg.playerId, newPlayer);
+        dummyPlayers.put(newDummy.playerID, newDummy);
 //        logInfo("Player " +msg.playerId+" added to players!");
     }
 
@@ -196,50 +231,63 @@ public class GameMap{
     /**
      * Destroy the disconnected player's body from world
      * Remove disconnected player from players
+     * Can be called from both CS screen and PlayScreen
+     *
      * @param msg
      */
     public synchronized void removePlayer(Network.PlayerJoinLeave msg) {
-        world.destroyBody(players.get(msg.playerId).b2body);
-        players.remove(msg.playerId);
-    }
+        dummyPlayers.remove(msg.playerId);
 
-
-    /**
-     * Upon client-server connection, client calls map.onConnect(name) where a local Player is instantiated and stored in client's map's players
-     * @param name
-     */
-    public void onConnect(String name) {
-
-        if (this.playerLocal == null) {
-            // TODO Server should spawn localPlayer too
-            playerLocal = new Player(this, img, Network.SPAWN_X, Network.SPAWN_Y, true);
-            this.playerLocal.setId(client.id);
-            this.playerLocal.setName(name);
-            players.put(client.id, playerLocal);
-            //hud.setPlayerLocal(playerLocal);
-            //setStatus("Connected to " + client.remoteIP);
-        } else {
-//            logInfo("setNetworkClient called twice");
+        if (players.get(msg.playerId) != null) {
+            world.destroyBody(players.get(msg.playerId).b2body);
+            players.remove(msg.playerId);
         }
     }
+
 
     public synchronized Player getPlayerById(int id){
         return players.get(id);
     }
 
-    public World getWorld(){ return this.world;  }
+    public synchronized DummyPlayer getDummyById(int id) {
+        return dummyPlayers.get(id);
+    }
+
+    public boolean allDummyReady() {
+        for (Map.Entry<Integer, DummyPlayer> playerEntry : dummyPlayers.entrySet()) {
+            DummyPlayer curPlayer = playerEntry.getValue();
+            if (!curPlayer.isReady()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void declareCharacter(int charactername) {
+        dummyLocal.setCharacter(charactername);
+    }
+
+    public void setCharacter(int playerId, int charactername) {
+        dummyPlayers.get(playerId).setCharacter(charactername);
+    }
+
+    public World getWorld(){
+        return this.world;
+    }
+
 
     public Viewport getGameport() { return this.gameport; }
 
 
     /**
      * Update GameMap's state.
+     * This method is only called in PlayScreen
      *
      * Should the box world be rendered here?
      *
      * @param delta
      */
-    public void update(float delta) {
+    public synchronized void update(float delta) {
         //If client is created and local player has spawned
         if (client != null && playerLocal != null) {
             if (playerLocal.handleInput()) { // (arrow key has been pressed by player)
@@ -255,11 +303,25 @@ public class GameMap{
         //TODO: should the box2d world be rendered here?
         for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {
             Player curPlayer = playerEntry.getValue();
-            curPlayer.update(delta);
+            if (curPlayer != null) {
+                curPlayer.update(delta);
+            }
             //if(curPlayer != playerLocal) curPlayer.renderNameTag(spriteBatch, fontNameTag);
         }
+
+        //Server-only logic
+        if (!isClient) {
+
+        }
+
+        //TODO: I put this in update for the server to do its calculation
+        world.step(1 / 60f, 6, 2);
+
     }
 
+    /**
+     * Only called in PlayScreen by Clients
+     */
     public synchronized void render() {
         //clears screen first, set color to black
         Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -290,13 +352,6 @@ public class GameMap{
         //----------------END batch
         batch.end();
         b2dr.render(world, gamecam.combined);
-
-
-        //steps box2d world
-        world.step(1 / 60f, 6, 2);
-        //gamecam constantly follows player1
-//        gamecam.position.set(playerLocal.getX(), playerLocal.getY(), 0);
-        gamecam.update();
     }
 
     public void makePlatformsBG(float startX, float endX, char type){
@@ -305,13 +360,15 @@ public class GameMap{
             case 'M': sprite = new Sprite(bgTextureMountain);
                 sprite.setPosition(startX, -bgMountainHeight*0.4f);
                 sprite.setSize(bgMountainWidth, bgMountainHeight);
-                Log.info("Mountain made at: " + startX);
+//                Log.info("Mountain made at: " + startX);
                 bgPlatformSprites.add(sprite); break;
         }
     }
 
+
+
     public synchronized void logInfo(String string) {
-        Log.info("[GameMap]: " + (isClient ? "[Client] " : "[Server] ") + string);
+       // Log.info("[GameMap]: " + (isClient ? "[Client] " : "[Server] ") + string);
     }
 
     public void resize(int width, int height) {
@@ -322,7 +379,7 @@ public class GameMap{
     public void dispose() {
         world.dispose();
         b2dr.dispose();
-
+        batch.dispose();
         //dispose textures
         img.dispose();
         font.dispose();
@@ -331,8 +388,38 @@ public class GameMap{
 
     public void onDisconnect() {
         this.client = null;
+        this.dummyPlayers.clear();
         this.players.clear();
-//        logInfo("on DIsconnection, clear the players Map");
+    }
+
+    public class DummyPlayer {
+        private int playerID;
+        public String playerName;
+        public float x;
+        public float y;
+        public boolean isLocal;
+        private int character = 99;
+
+        private DummyPlayer(int playerID, String playerName, float x, float y, boolean isLocal) {
+            this.playerID = playerID;
+            this.playerName = playerName;
+            this.x = x;
+            this.y = y;
+            this.isLocal = isLocal;
+        }
+
+        public void setCharacter(int character) {
+            this.character = character;
+        }
+
+        public boolean isReady() {
+            if (this.character != 99) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
     }
 
 }

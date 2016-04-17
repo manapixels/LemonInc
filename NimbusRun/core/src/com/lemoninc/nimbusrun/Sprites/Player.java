@@ -204,19 +204,6 @@ public class Player extends Sprite implements InputProcessor{
     }
 
     /**
-     * checks if the box2d body of Player has moved or not
-     * @return
-     */
-    public boolean hasMoved() {
-        if (previousPosition.x != this.getX() || previousPosition.y != getY()) {
-            previousPosition.x = this.getX();
-            previousPosition.y = this.getY();
-            return true;
-        }
-        return false;
-    }
-
-    /**
      * Player's movement
      * @return
      */
@@ -423,10 +410,6 @@ public class Player extends Sprite implements InputProcessor{
 
     /**
      * Set the player's linear velocity according to the received MovementState Packet
-     * @param msg
-     */
-    /**
-     * TODO: Not perfectly in sync
      * @param msg
      */
     public synchronized void setMovementState(Network.MovementState msg) {

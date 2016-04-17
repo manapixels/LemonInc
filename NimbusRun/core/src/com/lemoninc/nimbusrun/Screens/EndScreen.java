@@ -45,6 +45,7 @@ public class EndScreen implements Screen{
         gameport = new FitViewport(game.V_WIDTH / game.PPM, game.V_HEIGHT / game.PPM, gamecam);
 
         batch = new SpriteBatch();
+
         aspectRatio = new Sprite(new Texture("EndScreen/TapTap_BGseamless.png"));
         aspectRatio.setPosition(0, 0);
         aspectRatio.setSize(game.V_WIDTH / game.PPM, game.V_HEIGHT / game.PPM);

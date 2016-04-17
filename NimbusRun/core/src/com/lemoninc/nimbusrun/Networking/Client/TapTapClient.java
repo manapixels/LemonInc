@@ -13,30 +13,39 @@ package com.lemoninc.nimbusrun.Networking.Client;
  *
  * ********************************/
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
 import com.lemoninc.nimbusrun.Networking.Network;
+import com.lemoninc.nimbusrun.NimbusRun;
+import com.lemoninc.nimbusrun.Screens.CharacterSelectionScreen;
+import com.lemoninc.nimbusrun.Screens.PlayScreen;
+import com.lemoninc.nimbusrun.Screens.WaitScreen;
 import com.lemoninc.nimbusrun.Sprites.GameMap;
 
 import java.io.IOException;
-import java.util.Scanner;
 
 public class TapTapClient {
+    private NimbusRun game;
 
     private String name; //Player's name
     public int id; //Player's connection ID
     public String remoteIP;
     private GameMap map;
 
+    private CharacterSelectionScreen currentScreen;
+
     //Kryonet Stuff
     public Client client;
 
     /**
-     * This constructor is called in PlayScreen when the player plays game as a client
+     * This constructor is called in CharacterSelectionScreen when the player is connecting to server
      */
-    public TapTapClient(String name) {
+    public TapTapClient(NimbusRun game, CharacterSelectionScreen screen, String name) {
+        this.game = game;
         map = new GameMap(this); //create new GameMap for Client
         this.name = name;
 
@@ -48,25 +57,32 @@ public class TapTapClient {
             public void connected(Connection connection) {
                 handleConnect(connection);
             }
+
             public void received(Connection connection, Object object) {
-                handleMessage(connection.getID(), object);
+                handleMessage(connection, connection.getID(), object);
             }
+
             public void disconnected(Connection connection) {
                 handleDisonnect(connection);
             }
         });
+
+        currentScreen = screen;
+
+        Gdx.app.log("Client", "Client instantiated");
     }
 
     public GameMap getMap() {
         return this.map;
     }
 
+    public String getIP() {return remoteIP;}
+
     /**
      *
      * This method is called when the client establishes connection with server.
      * Method gets connection ID between this cleint and server, remote IP from server.
      * Method sends a Login package containing its name to server.
-     * Method calls GameMap to instantiate a character with "name"
      * @param connection
      */
     private void handleConnect(Connection connection) {
@@ -76,31 +92,32 @@ public class TapTapClient {
         //send Login to server
         Network.Login clientName = new Network.Login(name);
         client.sendTCP(clientName);
+        Gdx.app.log("Client", "Connection handled, sent Login");
 
-        map.onConnect(name);
     }
 
     /**
      * This method listens for any received packets from the server.
      * This method handles messages from other players about their activities.
      *
-     * Possible messages:
-     * playerjoinleave
-     * movementstate
-     * gamemapdata
-     * roundend
-     * roundstart
-     *
      * @param playerID
      * @param message
      */
-    private void handleMessage(int playerID, Object message) {
+    private void handleMessage(Connection connection, int playerID, Object message) {
         if (message instanceof Network.PlayerJoinLeave) {
             Network.PlayerJoinLeave msg = (Network.PlayerJoinLeave) message;
             if (msg.hasJoined) {
 //                map.setStatus(msg.name + " joined");
-                map.addPlayer(msg);
-                logInfo("A new player "+msg.playerId+" has joined.");
+                if (msg.playerId == connection.getID()) {
+                    Gdx.app.log("Client", "onConnect called");
+                    map.onConnect(msg);
+                }
+                else {
+                    Gdx.app.log("Client", "add player called");
+
+                    map.addPlayer(msg);
+                }
+//                logInfo("A new player "+msg.playerId+" has joined.");
             } else {
 //                map.setStatus(msg.name + " left");
                 map.removePlayer(msg);
@@ -110,6 +127,30 @@ public class TapTapClient {
             Network.MovementState msg = (Network.MovementState) message;
             //hey map, someone moved, handle this
             map.playerMoved(msg);
+        }
+        else if (message instanceof Network.GameRoomFull) {
+            connection.setName("gameroomfull");
+
+            Gdx.app.postRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    game.setScreen(new WaitScreen(game)); //CSS.hide() called, TODO: client should be closed
+                }
+            });
+
+        }
+        else if (message instanceof Network.Ready) {
+            Network.Ready msg = (Network.Ready) message;
+            map.setCharacter(msg.playerId, msg.charactername);
+            //TODO: create check on CS screen
+        }
+        else if (message instanceof Network.GameReady) {
+            Gdx.app.postRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    currentScreen.playGame();
+                }
+            });
         }
 
     }

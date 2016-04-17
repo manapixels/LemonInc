@@ -96,7 +96,6 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
         countdownLabel=new Label(String.format("%03d",worldTimer),new Label.LabelStyle(new BitmapFont(Gdx.files.internal("Fonts/font20.fnt")), Color.CYAN));
 
         table.add(CharacterLabel).expandX().padTop(20f);
-
         table.add(timelabel).expandX().padTop(20f);
         table.row();
         table.add(playername);
@@ -176,8 +175,9 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
     @Override
     public void dispose() {
         stage.dispose();
-//        skin.dispose();
+//       skin.dispose();
         atlas.dispose();
+
 
     }
 }
