@@ -20,8 +20,6 @@ public class Network {
 
     public static int PORT = 8080;
     public static int PORTUDP = 8082;
-    public static float SPAWN_X = 32;
-    public static float SPAWN_Y = 500;
     /**
      * the classes that are going to be sent over the network must be registered for both server and client
      *
@@ -38,16 +36,12 @@ public class Network {
 
     static public class Login {
         public String name;
-        public float initial_x;
-        public float initial_y;
 
         public Login() {
         }
 
         public Login(String name) {
             this.name = name;
-            this.initial_x = SPAWN_X;
-            this.initial_y = SPAWN_Y;
 
             Network.logInfo("Login initialised by Client "+name);
         }

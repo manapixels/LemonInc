@@ -53,13 +53,17 @@ public class TapTapClient {
             public void connected(Connection connection) {
                 handleConnect(connection);
             }
+
             public void received(Connection connection, Object object) {
                 handleMessage(connection, connection.getID(), object);
             }
+
             public void disconnected(Connection connection) {
                 handleDisonnect(connection);
             }
         });
+
+        Gdx.app.log("Client", "Client instantiated");
     }
 
     public GameMap getMap() {
@@ -84,7 +88,9 @@ public class TapTapClient {
         Network.Login clientName = new Network.Login(name);
         client.sendTCP(clientName);
 
-        map.onConnect(name);
+//        map.onConnect(name);
+        Gdx.app.log("Client", "Connection handled, sent Login");
+
     }
 
     /**
@@ -106,8 +112,16 @@ public class TapTapClient {
             Network.PlayerJoinLeave msg = (Network.PlayerJoinLeave) message;
             if (msg.hasJoined) {
 //                map.setStatus(msg.name + " joined");
-                map.addPlayer(msg);
-                logInfo("A new player "+msg.playerId+" has joined.");
+                if (msg.playerId == connection.getID()) {
+                    Gdx.app.log("Client", "onConnect called");
+                    map.onConnect(msg);
+                }
+                else {
+                    Gdx.app.log("Client", "add player called");
+
+                    map.addPlayer(msg);
+                }
+//                logInfo("A new player "+msg.playerId+" has joined.");
             } else {
 //                map.setStatus(msg.name + " left");
                 map.removePlayer(msg);

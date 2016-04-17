@@ -107,7 +107,6 @@ public class WaitScreen implements Screen{
 
         Gdx.app.log("WaitScreen", "Finished connecting & configuring events");
         playernumber=1;
-        show();
     }
 
 

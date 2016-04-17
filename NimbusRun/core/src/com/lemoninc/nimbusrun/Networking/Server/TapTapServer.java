@@ -68,18 +68,22 @@ public class TapTapServer {
                 TapTapConnection connection = (TapTapConnection) c;
 
                 if (message instanceof Network.Login) {
-                    logInfo("Login received");
+                    Gdx.app.log("Server", "Login received");
+
                     Network.Login msg = ((Network.Login) message);
 
                     if (PLAYERS.get() < MAXPLAYERS) {
                         PLAYERS.getAndAdd(1);
+                        Gdx.app.log("Server", "Added a player");
+
                     } else { //there is more than or equal to 4 players in the game room
                         Network.GameRoomFull roomfull = new Network.GameRoomFull();
                         connection.sendTCP(roomfull);
+                        Gdx.app.log("Server", "Sent a GameRoomFull");
 
                         return;
                     }
-                    Gdx.app.log("Server", "reached here");
+//                    Gdx.app.log("Server", "reached here");
                     if (connection.name != null) {
                         return;
                     }
@@ -99,12 +103,19 @@ public class TapTapServer {
 
                     //if the login is the first guy, send him 1st place
 
-                    Network.PlayerJoinLeave newPlayer = new Network.PlayerJoinLeave(connection.getID(), connection.name, true, msg.initial_x, msg.initial_y);
+                    Network.PlayerJoinLeave newPlayer = new PlayerJoinFactory().makePlayerJoin(connection.getID(), connection.name, PLAYERS);
+
+                    //tell new client about his position
+                    connection.sendTCP(newPlayer);
+                    Gdx.app.log("Server", "sent Player coordinates to new player");
+
                     //tell old clients about new client
                     server.sendToAllExceptTCP(connection.getID(), newPlayer);
-                    logInfo("Adding the new Client to Server's map");
+
                     //add this new player to gamemap
                     map.addPlayer(newPlayer); //server stores the new player
+                    Gdx.app.log("Server", "Stored new player in Server's map");
+
 
                     //tell new client about old clients
                     for (Connection con : server.getConnections()) { //upon connection, every client's name is stored in Player
@@ -112,7 +123,7 @@ public class TapTapServer {
                         if (conn.getID() != connection.getID() && conn.name != null) { // Not self, Have logged in
                             Player herePlayer = map.getPlayerById(conn.getID());
                             Network.PlayerJoinLeave hereMsg = new Network.PlayerJoinLeave(conn.getID(), herePlayer.getName(), true, herePlayer.getX(), herePlayer.getY()); //TODO: server's gamemap needs to be updated too
-                            logInfo("Telling " + connection.name + " about old client " + herePlayer.getName());
+                            Gdx.app.log("Server", "Telling " + connection.name + " about old client " + herePlayer.getName());
                             connection.sendTCP(hereMsg); // basic info
                             connection.sendTCP(herePlayer.getMovementState()); // info about current movement
                         }
@@ -154,6 +165,8 @@ public class TapTapServer {
         server.start();
 
 
+        Gdx.app.log("Server", "Server instantiated");
+
     }
 
     public void update(float delta) {
@@ -172,5 +185,32 @@ public class TapTapServer {
     private void logInfo(String string) {
 //        Log.info("[TapTapServer]: " + string);
     }
+
+    private class PlayerJoinFactory{
+        Network.PlayerJoinLeave makePlayerJoin(int ID, String playerName, AtomicInteger players) {
+            Network.PlayerJoinLeave msg;
+            switch (players.get()) {
+                case 1:
+                    msg = new Network.PlayerJoinLeave(ID, playerName, true, 70, 200);
+                    break;
+                case 2:
+                    msg = new Network.PlayerJoinLeave(ID, playerName, true, 50, 200);
+                    break;
+                case 3:
+                    msg = new Network.PlayerJoinLeave(ID, playerName, true, 30, 200);
+                    break;
+                case 4:
+                    msg = new Network.PlayerJoinLeave(ID, playerName, true, 10, 200);
+                    break;
+                default:
+                    msg = new Network.PlayerJoinLeave(ID, playerName, true, 10, 200);
+                    break;
+
+            }
+            return msg;
+        }
+    }
 }
+
+
 

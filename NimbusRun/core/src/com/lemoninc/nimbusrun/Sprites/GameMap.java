@@ -107,6 +107,7 @@ public class GameMap{
         endWall = new EndWall(this);
 
 //        logInfo("GameMap initialised");
+        Gdx.app.log("GameMap", "GameMap instantiated in Client");
 
     }
 
@@ -121,6 +122,8 @@ public class GameMap{
         initCommon(5);
 
 //        logInfo("GameMap initialised");
+        Gdx.app.log("GameMap", "GameMap instantiated in Server");
+
 
     }
 
@@ -165,7 +168,25 @@ public class GameMap{
 
     }
 
+    /**
+     * Client receives PlayerJoinLeave from server containing player ID, name, initial x and y
+     * @param msg
+     */
+    public void onConnect(Network.PlayerJoinLeave msg) {
 
+        if (this.playerLocal == null) {
+            // TODO Server should spawn localPlayer too
+            playerLocal = new Player(this, img, msg.initial_x, msg.initial_y, true);
+            this.playerLocal.setId(client.id);
+            this.playerLocal.setName(msg.name);
+            players.put(client.id, playerLocal);
+            //hud.setPlayerLocal(playerLocal);
+            //setStatus("Connected to " + client.remoteIP);
+            Gdx.app.log("GameMap", "local player created at "+msg.initial_x+" "+msg.initial_y);
+        } else {
+//            logInfo("setNetworkClient called twice");
+        }
+    }
 
     //called by server to add a new player into its GameMap
     public synchronized void addPlayer(Network.PlayerJoinLeave msg) {
@@ -197,25 +218,6 @@ public class GameMap{
         players.remove(msg.playerId);
     }
 
-
-    /**
-     * Upon client-server connection, client calls map.onConnect(name) where a local Player is instantiated and stored in client's map's players
-     * @param name
-     */
-    public void onConnect(String name) {
-
-        if (this.playerLocal == null) {
-            // TODO Server should spawn localPlayer too
-            playerLocal = new Player(this, img, Network.SPAWN_X, Network.SPAWN_Y, true);
-            this.playerLocal.setId(client.id);
-            this.playerLocal.setName(name);
-            players.put(client.id, playerLocal);
-            //hud.setPlayerLocal(playerLocal);
-            //setStatus("Connected to " + client.remoteIP);
-        } else {
-//            logInfo("setNetworkClient called twice");
-        }
-    }
 
     public synchronized Player getPlayerById(int id){
         return players.get(id);
