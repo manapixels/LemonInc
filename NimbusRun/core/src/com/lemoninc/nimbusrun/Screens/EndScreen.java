@@ -20,6 +20,7 @@ package com.lemoninc.nimbusrun.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -37,16 +38,28 @@ public class EndScreen implements Screen{
 
     private SpriteBatch batch;
     private Sprite aspectRatio;
+    Music music;
+    Boolean playmusic;
 
-    public EndScreen(NimbusRun game){
+    public EndScreen(NimbusRun game,Boolean playmusic){
+        this.playmusic=playmusic;
         this.game = game;
         gamecam = new OrthographicCamera();
         gameport = new FitViewport(game.V_WIDTH / game.PPM, game.V_HEIGHT / game.PPM, gamecam);
+
+        music=Gdx.audio.newMusic(Gdx.files.internal("Sounds/puppetry_comedy.mp3"));
+        music.setVolume(0.5f);                 // sets the volume to half the maximum volume
+        music.setLooping(true);
+        if(playmusic){
+            music.play();
+        }
 
         batch = new SpriteBatch();
         aspectRatio = new Sprite(new Texture("whitebackground.png"));
         aspectRatio.setPosition(0, 0);
         aspectRatio.setSize(game.V_WIDTH / game.PPM, game.V_HEIGHT / game.PPM);
+
+
     }
 
     protected void handleInput() {
@@ -95,5 +108,6 @@ public class EndScreen implements Screen{
     @Override
     public void dispose() {
         aspectRatio.getTexture().dispose();
+        music.dispose();
     }
 }

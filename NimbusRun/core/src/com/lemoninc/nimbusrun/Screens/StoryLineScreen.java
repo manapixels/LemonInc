@@ -2,6 +2,7 @@ package com.lemoninc.nimbusrun.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
@@ -39,6 +40,7 @@ public class StoryLineScreen implements Screen{
 
     private TextButton.TextButtonStyle style;
     private TextButton Continue;
+    Sound soundclick;
 
 
 
@@ -49,6 +51,8 @@ public class StoryLineScreen implements Screen{
 
         BUTTON_WIDTH = 250;
         BUTTON_HEIGHT = 75;
+
+        soundclick=Gdx.audio.newSound(Gdx.files.internal("Sounds/click.mp3"));
 
         style = new TextButton.TextButtonStyle();  //can customize
         style.font = new BitmapFont(Gdx.files.internal("Fonts/crimesFont48Black.fnt"));
@@ -81,7 +85,9 @@ public class StoryLineScreen implements Screen{
         Continue.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                soundclick.play();
                 game.setScreen(new MenuScreen(game, gameWidth, gameHeight));
+
             }
 
         });
@@ -126,5 +132,6 @@ public class StoryLineScreen implements Screen{
     @Override
     public void dispose() {
         stage.dispose();
+       // soundclick.dispose();
     }
 }

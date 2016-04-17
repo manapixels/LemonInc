@@ -54,7 +54,7 @@ public class GameMap{
     private SpriteBatch batch;
     private Texture bgTexture;
     private Sprite bgSprite;
-    private float bgHeight, bgWidth, bgStartX, bgStartY;
+    public float bgHeight, bgWidth, bgStartX, bgStartY;
 
     private Texture bgTextureFlat, bgTextureMountain, bgTexturePit, bgTexturePlateau;
     private List<Sprite> bgPlatformSprites;
@@ -72,7 +72,7 @@ public class GameMap{
     private EndWall endWall;
 
 
-    private Player playerLocal;
+    public Player playerLocal;
     private TextureAtlas img;
     private int sourceX;
 

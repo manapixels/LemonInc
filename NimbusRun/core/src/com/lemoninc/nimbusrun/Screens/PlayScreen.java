@@ -21,7 +21,8 @@ package com.lemoninc.nimbusrun.Screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.esotericsoftware.minlog.Log;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.lemoninc.nimbusrun.Networking.Client.TapTapClient;
 import com.lemoninc.nimbusrun.Networking.Server.TapTapServer;
 import com.lemoninc.nimbusrun.NimbusRun;
@@ -34,7 +35,7 @@ public class PlayScreen implements Screen{
 
     private NimbusRun game;
 
-    private GameMap gamemap;
+    public GameMap gamemap;
 
     private final boolean isHost;
     private final String ipAddress;
@@ -43,6 +44,11 @@ public class PlayScreen implements Screen{
     private TapTapClient client;
     private TapTapServer server;
     private HUD hud;
+    Boolean playmusic;
+    Music music;
+    private long startTime;
+
+
 
     /**
      *
@@ -51,9 +57,11 @@ public class PlayScreen implements Screen{
      * @param ipAddress Server's IP address (only relevant to the Client)
      * @param playerName
      */
-    public PlayScreen(NimbusRun game, boolean isHost, String ipAddress, String playerName){
+    public PlayScreen(NimbusRun game, boolean isHost, String ipAddress, String playerName,Boolean playmusic){
 //        logInfo("My name is "+playerName);
 
+
+        this.playmusic=playmusic;
         this.game = game;
         this.isHost = isHost;
         if (!ipAddress.isEmpty()) {
@@ -63,7 +71,9 @@ public class PlayScreen implements Screen{
         }
         this.playerName = playerName;
 
-        hud=new HUD(game.batch,playerName);
+        hud=new HUD(game.batch,playerName,gamemap);
+        startTime = TimeUtils.millis();
+
     }
 
     /**
@@ -78,6 +88,17 @@ public class PlayScreen implements Screen{
 //        logInfo("Client created!");
         gamemap = client.getMap();
 
+
+
+        music=Gdx.audio.newMusic(Gdx.files.internal("Sounds/gamescreen.mp3"));
+        music.setVolume(0.5f);                 // sets the volume to half the maximum volume
+        music.setLooping(true);
+
+
+        if(playmusic){
+            music.play();
+        }
+
         if (isHost) {
             //start my server and connect my client to my server
             logInfo("Starting server...");
@@ -88,7 +109,7 @@ public class PlayScreen implements Screen{
             } catch (IOException e) {
                 e.printStackTrace();
                 logInfo("Can't connect to localhost server");
-                game.setScreen(new WaitScreen(game));
+                game.setScreen(new WaitScreen(game,playmusic));
             }
         }
         else {
@@ -97,7 +118,7 @@ public class PlayScreen implements Screen{
                 client.connect(ipAddress);
             } catch (IOException e) {
                 logInfo("Can't connect to server: " + ipAddress);
-                game.setScreen(new WaitScreen(game));
+                game.setScreen(new WaitScreen(game, playmusic));
             }
         }
 
@@ -112,30 +133,30 @@ public class PlayScreen implements Screen{
 
     @Override
     public void render(float delta) {
-
-        gamemap.update(delta);
         gamemap.render();
-
-
-        if(isHost){
-            server.update(delta);
+        gamemap.update(delta);
+            if (isHost) {
+                server.update(delta);
+                hud.update(delta);
+                hud.render();
+                hud.stage.draw();
+            }
+            if (hud.worldTimer == 0) {
+                music.stop();
+                gameOver();
+            }
         }
-        hud.update(delta);
 
-        hud.render();
-        hud.stage.draw();
-        if(hud.worldTimer==0){
-            gameOver();
-        }
-    }
+
 
     public void gameOver() {
-        game.setScreen(new EndScreen(game));
+        game.setScreen(new EndScreen(game,playmusic));
     }
 
     @Override
     public void resize(int width, int height) {
         gamemap.resize(width, height);
+
     }
 
     /**
@@ -158,6 +179,7 @@ public class PlayScreen implements Screen{
 
     @Override
     public void dispose() {
+        music.dispose();
     }
 
     private void logInfo(String string) {

@@ -38,7 +38,6 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.lemoninc.nimbusrun.Networking.Network;
-import com.lemoninc.nimbusrun.Screens.PlayScreen;
 import com.lemoninc.nimbusrun.NimbusRun;
 
 import java.util.HashMap;
@@ -62,6 +61,7 @@ public class Player extends Sprite implements InputProcessor{
 
     Vector2 previousPosition;
 
+  //  Sound attacksound,jumpsound;
     private Map<Integer,TouchInfo> touches;
 
     /**
@@ -78,6 +78,9 @@ public class Player extends Sprite implements InputProcessor{
         previousState = State.DEFAULT;
         CHARACTER_SIZE = 170 / NimbusRun.PPM;
         stateTime = 0f;
+
+      //  attacksound=Gdx.audio.newSound(Gdx.files.internal("Sounds/specialpowermusic.wav"));
+       // jumpsound=Gdx.audio.newSound(Gdx.files.internal("Sounds/jumpsound.mp3"));
 
         //create a dynamic bodydef
         BodyDef bdef = new BodyDef();
@@ -178,15 +181,18 @@ public class Player extends Sprite implements InputProcessor{
                     return this.speed();
                 }
                 else{
+    //                jumpsound.play();
                     return this.jump();
                 }
             }
             if(touches.get(0).touched&&touches.get(1).touched){
                 if(touches.get(0).touchX<(NimbusRun.V_WIDTH/2)&&touches.get(1).touchX>(NimbusRun.V_WIDTH-(NimbusRun.V_WIDTH/2))){
+      //              attacksound.play();
                     // TODO: Implement method for attack
                     //player1.attack;
                 }
                 else if(touches.get(1).touchX<(NimbusRun.V_WIDTH/2)&&touches.get(0).touchX>(NimbusRun.V_WIDTH-(NimbusRun.V_WIDTH/2))) {
+        //            attacksound.play();
                     //TODO: Implement method for attack
                     //player1.attack
                 }
@@ -194,10 +200,13 @@ public class Player extends Sprite implements InputProcessor{
         }
         else {
             //for Desktop
-            if (Gdx.input.isKeyJustPressed(Input.Keys.UP))
+            if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
+          //      jumpsound.play();
                 return this.jump();
-            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
                 return this.speed();
+            }
             if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
                 return this.slow();
         }
