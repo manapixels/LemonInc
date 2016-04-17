@@ -134,15 +134,14 @@ public class GameMap{
         //create Players from dummyPlayers
         for (Map.Entry<Integer, DummyPlayer> playerEntry : dummyPlayers.entrySet()) {
             DummyPlayer curPlayer = playerEntry.getValue();
-            Player newPlayer;
             if (curPlayer.isLocal) {
-                newPlayer = new Player(this, getImg(curPlayer.character), curPlayer.x, curPlayer.y, true);
+                playerLocal = new Player(this, getImg(curPlayer.character), curPlayer.x, curPlayer.y, true);
+                players.put(curPlayer.playerID, playerLocal);
             }
             else {
-                newPlayer = new Player(this, getImg(curPlayer.character), curPlayer.x, curPlayer.y, false);
+                players.put(curPlayer.playerID, new Player(this, getImg(curPlayer.character), curPlayer.x, curPlayer.y, false));
             }
 
-            players.put(curPlayer.playerID, newPlayer);
 
         }
     }
@@ -253,7 +252,6 @@ public class GameMap{
             world.destroyBody(players.get(msg.playerId).b2body);
             players.remove(msg.playerId);
         }
-
     }
 
 
