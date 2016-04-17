@@ -32,6 +32,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.esotericsoftware.minlog.Log;
 import com.lemoninc.nimbusrun.Networking.Client.TapTapClient;
 import com.lemoninc.nimbusrun.Networking.Network;
 import com.lemoninc.nimbusrun.Networking.Server.TapTapServer;
@@ -61,10 +62,6 @@ public class GameMap{
 
     private Texture bgTextureFlat, bgTextureMountain, bgTexturePit, bgTexturePlateau;
     private List<Sprite> bgPlatformSprites;
-    private float bgFlatHeight, bgFlatWidth;
-    private float bgMountainHeight, bgMountainWidth;
-    private float bgPlateauHeight, bgPlateauWidth;
-    private float bgPitHeight, bgPitWidth;
 
     private World world;
     private Box2DDebugRenderer b2dr;
@@ -73,7 +70,6 @@ public class GameMap{
     private Ceiling ceiling;
     private StartWall startWall;
     private EndWall endWall;
-
 
     private Player playerLocal;
     private TextureAtlas img;
@@ -89,7 +85,7 @@ public class GameMap{
 
         //instantiate HUD, GameSounds, BitmapFont, Camera, SpriteBatch ...
         gamecam = new OrthographicCamera();
-        gameport = new FitViewport(NimbusRun.V_WIDTH * 1.5f / NimbusRun.PPM, NimbusRun.V_HEIGHT * 1.5f / NimbusRun.PPM, gamecam);
+        gameport = new FitViewport(NimbusRun.V_WIDTH * 2.4f / NimbusRun.PPM, NimbusRun.V_HEIGHT * 2.4f / NimbusRun.PPM, gamecam);
 
         //set starting pos of bgSprites after setting cam
         bgStartX = -gameport.getWorldWidth() * 1.5f;
@@ -148,18 +144,19 @@ public class GameMap{
         }
 
         // initialise all background sprites
-        bgTexture = new Texture("PlayScreen/bg.png");
+        bgTexture = new Texture("PlayScreen/bg_dark.png");
         bgTexture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
-        bgSprite = new Sprite(new TextureRegion(bgTexture, bgTexture.getWidth()*11, bgTexture.getHeight()*2));
+        bgSprite = new Sprite(new TextureRegion(bgTexture, bgTexture.getWidth()*11, bgTexture.getHeight()*3));
         bgWidth = bgTexture.getWidth() / NimbusRun.PPM * 1.4f * 11;
-        bgHeight = bgTexture.getHeight() / NimbusRun.PPM * 1.4f * 2;
+        bgHeight = bgTexture.getHeight() / NimbusRun.PPM * 1.4f * 3;
         bgSprite.setX(bgStartX);
         bgSprite.setY(bgStartY);
         bgSprite.setSize(bgWidth, bgHeight);
 
+        bgTextureFlat = new Texture("PlayScreen/platform_flat.png");
+        bgTexturePlateau = new Texture("PlayScreen/platform_plateau.png");
         bgTextureMountain = new Texture("PlayScreen/platform_mountain.png");
-        bgMountainWidth = bgTextureMountain.getWidth() / NimbusRun.PPM * 2.2f;
-        bgMountainHeight = bgTextureMountain.getHeight() / NimbusRun.PPM * 2.2f;
+        bgTexturePit = new Texture("PlayScreen/platform_pit.png");
 
         bgPlatformSprites = new ArrayList<Sprite>();
 
@@ -281,7 +278,7 @@ public class GameMap{
         //----------------END batch
         batch.end();
 
-        b2dr.render(world, gamecam.combined);
+        //b2dr.render(world, gamecam.combined);
 
         //steps box2d world
         world.step(1 / 60f, 6, 2);
@@ -289,11 +286,32 @@ public class GameMap{
 
     public void makePlatformsBG(float startX, float endX, char type){
         Sprite sprite;
+        float width = endX-startX;
+        float height;
         switch(type){
+            case 'F': sprite = new Sprite(bgTextureFlat);
+                height = width/1000*390;
+                sprite.setPosition(startX, -height);
+                sprite.setSize(width, height);
+                Log.info("Flatground at: " + -height);
+                bgPlatformSprites.add(sprite); break;
+            case 'P': sprite = new Sprite(bgTexturePlateau);
+                height = width/1000*789;
+                sprite.setPosition(startX, -height*0.7366f);
+                sprite.setSize(width, height);
+                Log.info("Plateau at: " + -height);
+                bgPlatformSprites.add(sprite); break;
             case 'M': sprite = new Sprite(bgTextureMountain);
-                sprite.setPosition(startX, -bgMountainHeight*0.4f);
-                sprite.setSize(bgMountainWidth, bgMountainHeight);
-//                Log.info("Mountain made at: " + startX);
+                height = width/1000*869;
+                sprite.setPosition(startX, -height*0.473f);
+                sprite.setSize(width, height);
+                Log.info("Mountain at: " + -height);
+                bgPlatformSprites.add(sprite); break;
+            case 'T': sprite = new Sprite(bgTexturePit);
+                height = width/1000*605;
+                sprite.setPosition(startX, -height);
+                sprite.setSize(width, height);
+                Log.info("Pit at: " + -height);
                 bgPlatformSprites.add(sprite); break;
         }
 

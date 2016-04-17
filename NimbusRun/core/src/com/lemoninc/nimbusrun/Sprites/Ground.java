@@ -7,7 +7,7 @@ package com.lemoninc.nimbusrun.Sprites;
  * PUBLIC FUNCTIONS :
  *       none
  * NOTES :
- * LAST UPDATED: 14/4/2016 13:10
+ * LAST UPDATED: 17/4/2016 14:26
  *
  * ********************************/
 
@@ -35,8 +35,12 @@ public class Ground {
         startX = -gameMap.getGameport().getWorldWidth();
         endX = gameMap.getGameport().getWorldWidth();
 
-        //makeMountain(startX, endX);
         makeFlatGround(startX, endX);
+        startX = endX;
+        endX += gameMap.getGameport().getWorldWidth()*2;
+        makePlateau(startX, endX);
+        //makeMountain(startX, endX);
+        //
         startX = endX;
         endX += gameMap.getGameport().getWorldWidth() * 2;
 
@@ -66,6 +70,7 @@ public class Ground {
         BodyDef bdef = new BodyDef();
         bdef.type = BodyDef.BodyType.StaticBody;
         b2body = world.createBody(bdef);
+        gameMap.makePlatformsBG(startX , endX, 'F');
 
         FixtureDef fdef = new FixtureDef();
         EdgeShape edgeShape = new EdgeShape();
@@ -97,7 +102,7 @@ public class Ground {
 
         //straight up
         x1 = x2;
-        y2 += gameMap.getGameport().getWorldHeight()*0.75;
+        y2 += gameMap.getGameport().getWorldHeight()*0.65;
         edgeShape.set(x1, y1, x2, y2);
         //Log.info("Plateau p2 coordinates: (" + x1 + " " + y1 + ") and (" + + x2 + " " + y2 + ")");
         fdef.shape = edgeShape;
@@ -114,7 +119,7 @@ public class Ground {
 
         //straight drop
         x1 = x2;
-        y2 -= gameMap.getGameport().getWorldHeight()*0.75f;
+        y2 -= gameMap.getGameport().getWorldHeight()*0.65f;
         edgeShape.set(x1, y1, x2, y2);
         //Log.info("Plateau p4 coordinates: (" + x1 + " " + y1 + ") and (" + + x2 + " " + y2 + ")");
         fdef.shape = edgeShape;
@@ -220,6 +225,7 @@ public class Ground {
         float y1 = 0, y2 = 0;
         float segment = (endX - startX) * 0.125f;
         float x1 = startX, x2 = startX + segment;
+        gameMap.makePlatformsBG(startX , endX, 'T');
 
         BodyDef bdef = new BodyDef();
         bdef.type = BodyDef.BodyType.StaticBody;
