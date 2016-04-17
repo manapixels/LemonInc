@@ -54,7 +54,8 @@ public class SplashScreen implements Screen{
         batcher.begin();
         sprite.draw(batcher);
         batcher.end();
-        if (TimeUtils.millis()>(startTime+1000)) game.setScreen(new MenuScreen(game,gameWidth,gameHeight));
+
+        if (TimeUtils.millis()>(startTime+100)) game.setScreen(new MenuScreen(game,gameWidth,gameHeight));
 
     }
 

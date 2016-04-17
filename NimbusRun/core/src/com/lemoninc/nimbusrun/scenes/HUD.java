@@ -43,11 +43,9 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
 //    ProgressBar.ProgressBarStyle barStyle;
 //    TextureRegionDrawable textureBar;
 
-
-
-    public  HUD(SpriteBatch sb, String playernumber){
+    public HUD(SpriteBatch sb, String playernumber){
         this.Player=playernumber;
-        worldTimer = 60;
+        worldTimer = 150;
         timecount=0;
         camera=new PerspectiveCamera();
         viewport=new FillViewport(NimbusRun.V_WIDTH,NimbusRun.V_HEIGHT,new OrthographicCamera());
@@ -96,7 +94,6 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
         timelabel=new Label("TIME",new Label.LabelStyle(new BitmapFont(Gdx.files.internal("Fonts/font.fnt")), Color.GOLDENROD));
         CharacterLabel=new Label("PLAYER",new Label.LabelStyle(new BitmapFont(Gdx.files.internal("Fonts/font.fnt")), Color.GOLDENROD));
         countdownLabel=new Label(String.format("%03d",worldTimer),new Label.LabelStyle(new BitmapFont(Gdx.files.internal("Fonts/font20.fnt")), Color.CYAN));
-
 
         table.add(CharacterLabel).expandX().padTop(20f);
         table.add(timelabel).expandX().padTop(20f);

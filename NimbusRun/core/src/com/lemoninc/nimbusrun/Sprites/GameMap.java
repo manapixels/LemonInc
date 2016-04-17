@@ -19,9 +19,11 @@ package com.lemoninc.nimbusrun.Sprites;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -29,6 +31,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -60,6 +63,7 @@ public class GameMap{
     private Texture bgTexture;
     private Sprite bgSprite;
     private float bgHeight, bgWidth, bgStartX, bgStartY;
+    private Sprite flashbg;
 
     private Texture bgTextureFlat, bgTextureMountain, bgTexturePit, bgTexturePlateau;
     private List<Sprite> bgPlatformSprites;
@@ -67,6 +71,7 @@ public class GameMap{
     private float bgMountainHeight, bgMountainWidth;
     private float bgPlateauHeight, bgPlateauWidth;
     private float bgPitHeight, bgPitWidth;
+    private BitmapFont font;
 
     private World world;
     private Box2DDebugRenderer b2dr;
@@ -176,6 +181,7 @@ public class GameMap{
         return img;
     }
 
+//<<<<<<< HEAD
     /**
      * Create box2d world and DebugRenderer
      */
@@ -205,6 +211,7 @@ public class GameMap{
      * This method is only called in Character Selection screen
      * @param msg
      */
+
     public synchronized void addPlayer(Network.PlayerJoinLeave msg) {
         //create new player from msg
         DummyPlayer newDummy = new DummyPlayer(msg.playerId, msg.name, msg.initial_x, msg.initial_y, false);
@@ -268,7 +275,9 @@ public class GameMap{
         return this.world;
     }
 
+
     public Viewport getGameport() { return this.gameport; }
+
 
     /**
      * Update GameMap's state.
@@ -294,7 +303,9 @@ public class GameMap{
         //TODO: should the box2d world be rendered here?
         for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {
             Player curPlayer = playerEntry.getValue();
-            curPlayer.update(delta);
+            if (curPlayer != null) {
+                curPlayer.update(delta);
+            }
             //if(curPlayer != playerLocal) curPlayer.renderNameTag(spriteBatch, fontNameTag);
         }
 
@@ -330,15 +341,17 @@ public class GameMap{
         for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {
             Player curPlayer = playerEntry.getValue();
             curPlayer.draw(batch);
+//            font.draw(batch, "PlayerTest", curPlayer.getX(), curPlayer.getY());
+            //  Render flashbang if flashed
+            if (curPlayer.isFlashed()) {
+                Gdx.gl.glClearColor(1, 1, 1, 1);
+                Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            }
             //if(curPlayer != playerLocal) curPlayer.renderNameTag(spriteBatch, fontNameTag);
         }
-
         //----------------END batch
         batch.end();
-
         b2dr.render(world, gamecam.combined);
-
-
     }
 
     public void makePlatformsBG(float startX, float endX, char type){
@@ -350,7 +363,6 @@ public class GameMap{
 //                Log.info("Mountain made at: " + startX);
                 bgPlatformSprites.add(sprite); break;
         }
-
     }
 
 
@@ -370,8 +382,8 @@ public class GameMap{
         batch.dispose();
         //dispose textures
         img.dispose();
+        font.dispose();
         //TODO:friendly players textures?
-
     }
 
     public void onDisconnect() {

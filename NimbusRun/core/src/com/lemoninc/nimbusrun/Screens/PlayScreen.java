@@ -96,6 +96,7 @@ public class PlayScreen implements Screen{
 
         hud.render();
         hud.stage.draw();
+
         if(hud.worldTimer==0){
             gameOver();
         }
