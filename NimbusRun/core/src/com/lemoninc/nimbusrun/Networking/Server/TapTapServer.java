@@ -135,7 +135,7 @@ public class TapTapServer {
                 }
                 else if(message instanceof Network.MovementState) {
                     Network.MovementState msg = (Network.MovementState)message;
-                    logInfo("MovementState received");
+                    Gdx.app.log("TapTapServer MovementState", "MovementState received");
                     msg.playerId = connection.getID();
                     // Server updates its copy of player from what its told
                     map.playerMoved(msg);

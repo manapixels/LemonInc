@@ -86,6 +86,7 @@ public class PlayScreen implements Screen{
     @Override
     public void render(float delta) {
 
+
         gamemap.update(delta);
         gamemap.render();
 

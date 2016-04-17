@@ -286,7 +286,7 @@ public class Player extends Sprite implements InputProcessor{
     }
 
     public boolean recover(float delta) {
-        if (b2body != null)
+        if (gameMap.getGameport() != null)
             if (this.getX() >= gameMap.getGameport().getWorldWidth() * 18.5f) {
                 finished = true;
             }
@@ -413,6 +413,8 @@ public class Player extends Sprite implements InputProcessor{
      * @param msg
      */
     public synchronized void setMovementState(Network.MovementState msg) {
+        Gdx.app.log("Player", "set Movement State");
+
         b2body.setLinearVelocity(msg.linearVelocity);
         b2body.setTransform(msg.position, 0f); //this is outside the world.step call
 //        System.out.println("Changed player's x is "+msg.position.x+" y is "+msg.position.y);

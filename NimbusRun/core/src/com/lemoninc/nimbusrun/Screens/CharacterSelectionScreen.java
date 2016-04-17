@@ -415,6 +415,7 @@ public class CharacterSelectionScreen implements Screen{
         else {
             //client connects to ipAddress
             try {
+                Gdx.app.log("CSscreen", "connecting to "+ipAddress+".");
                 client.connect(ipAddress);
             } catch (IOException e) {
 //                logInfo("Can't connect to server: " + ipAddress);

@@ -95,8 +95,7 @@ public class GameMap{
         this.isClient = true;
 
         //instantiate HUD, GameSounds, BitmapFont, Camera, SpriteBatch ...
-        gamecam = new OrthographicCamera();
-        gameport = new FitViewport(NimbusRun.V_WIDTH * 1.5f / NimbusRun.PPM, NimbusRun.V_HEIGHT * 1.5f / NimbusRun.PPM, gamecam);
+        initCommon();
 
         //set starting pos of bgSprites after setting cam
         bgStartX = -gameport.getWorldWidth() * 1.5f;
@@ -104,7 +103,7 @@ public class GameMap{
 //        Log.info(bgStartY + " y pos");
         batch = new SpriteBatch();
 
-        initCommon();
+
 
         // initialise all background sprites
         bgTexture = new Texture("PlayScreen/bg.png");
@@ -188,6 +187,9 @@ public class GameMap{
     private void initCommon(){
         world = new World(new Vector2(0, -10), true); //box2d world with gravity
         b2dr = new Box2DDebugRenderer();
+
+        gamecam = new OrthographicCamera();
+        gameport = new FitViewport(NimbusRun.V_WIDTH * 1.5f / NimbusRun.PPM, NimbusRun.V_HEIGHT * 1.5f / NimbusRun.PPM, gamecam);
     }
 
     /**
@@ -203,7 +205,7 @@ public class GameMap{
             //setStatus("Connected to " + client.remoteIP);
             Gdx.app.log("GameMap", "local player created at "+msg.initial_x+" "+msg.initial_y);
         } else {
-//            logInfo("setNetworkClient called twice");
+            Gdx.app.log("GameMap onConnect", "setNetworkClient called twice");
         }
     }
 
@@ -224,6 +226,7 @@ public class GameMap{
         //TODO: players should be ConcurrentHashMap?
         Player player = players.get(msg.playerId);
         if (player != null) {
+            Gdx.app.log("GameMap", "Player "+player.getName()+" moved");
             player.setMovementState(msg);
         }
     }
@@ -315,7 +318,7 @@ public class GameMap{
         }
 
         //TODO: I put this in update for the server to do its calculation
-        world.step(1 / 60f, 6, 2);
+
 
     }
 
@@ -352,6 +355,7 @@ public class GameMap{
         //----------------END batch
         batch.end();
         b2dr.render(world, gamecam.combined);
+        world.step(1 / 60f, 6, 2);
     }
 
     public void makePlatformsBG(float startX, float endX, char type){

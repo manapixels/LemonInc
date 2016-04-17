@@ -126,6 +126,8 @@ public class TapTapClient {
         else if (message instanceof Network.MovementState) {
             Network.MovementState msg = (Network.MovementState) message;
             //hey map, someone moved, handle this
+            Gdx.app.log("TapTapClient MovementState", "MovementState received");
+
             map.playerMoved(msg);
         }
         else if (message instanceof Network.GameRoomFull) {
