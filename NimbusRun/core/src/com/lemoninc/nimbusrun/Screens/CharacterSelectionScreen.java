@@ -42,6 +42,7 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lemoninc.nimbusrun.Networking.Client.TapTapClient;
+import com.lemoninc.nimbusrun.Networking.Network;
 import com.lemoninc.nimbusrun.Networking.Server.TapTapServer;
 import com.lemoninc.nimbusrun.NimbusRun;
 import com.lemoninc.nimbusrun.Sprites.GameMap;
@@ -60,7 +61,7 @@ public class CharacterSelectionScreen implements Screen{
     private float gameHeight;
     private Viewport viewport;
     private Camera camera;
-    Boolean isHost;
+    final Boolean isHost;
     String ipAddress;
     String playername;
     private long startTime;
@@ -81,7 +82,7 @@ public class CharacterSelectionScreen implements Screen{
     private TapTapServer server;
     private GameMap gamemap;
 
-    public CharacterSelectionScreen(NimbusRun game, boolean isHost, String ipAddress, String playerName){
+    public CharacterSelectionScreen(NimbusRun game, final boolean isHost, String ipAddress, String playerName){
         this.game = game;
         this.isHost=isHost;
         this.ipAddress=ipAddress;
@@ -317,10 +318,26 @@ public class CharacterSelectionScreen implements Screen{
         joingame.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // TODO: SAVE THE LOG OF THE PLAYER ACCORDING TO THE NUMBER
                 //charactername= checkbuttonpress();
-                Gdx.app.log("PlayerNumber","Character "+ charactername + " joined game");
-                playGame(charactername);
+                Gdx.app.log("PlayerNumber", "Character " + charactername + " joined game");
+//                playGame(charactername);
+                //TODO:save the charactername, let server know player is ready to play
+                //send server charactername packet
+                if (!isHost) {
+                    if (charactername != null) {
+                        Network.Ready ready = new Network.Ready(charactername);
+                        client.sendMessage(ready);
+                        gamemap.declareCharacter(charactername);
+                        //TODO: create check on CS screen
+
+                    }
+                }
+                else {
+                    //if host
+                    //TODO: try to start game
+                    //if received charactername from all players, play game
+//                    game.setScreen(new PlayScreen(game, true, ));
+                }
             }
         });
 

@@ -32,6 +32,7 @@ public class Network {
         kryo.register(Network.MovementState.class);
         kryo.register(Vector2.class);
         kryo.register(GameRoomFull.class);
+        kryo.register(Ready.class);
     }
 
     static public class Login {
@@ -98,5 +99,21 @@ public class Network {
 
         public GameRoomFull() {}
 
+    }
+
+    static public class Ready {
+
+        public String charactername;
+        public int playerId;
+
+        public Ready() {}
+
+        public Ready(String charactername) {
+            this.charactername = charactername;
+        }
+
+        public void setPlayerId(int playerId) {
+            this.playerId = playerId;
+        }
     }
 }

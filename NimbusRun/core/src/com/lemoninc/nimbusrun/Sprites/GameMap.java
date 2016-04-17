@@ -317,6 +317,14 @@ public class GameMap{
 
     }
 
+    public void declareCharacter(String charactername) {
+        dummyLocal.setCharacter(charactername);
+    }
+
+    public void setCharacter(int playerId, String charactername) {
+        dummyPlayers.get(playerId).setCharacter(charactername);
+    }
+
     public synchronized void logInfo(String string) {
        // Log.info("[GameMap]: " + (isClient ? "[Client] " : "[Server] ") + string);
     }
@@ -348,6 +356,7 @@ public class GameMap{
         private float x;
         private float y;
         private boolean isLocal;
+        private String character;
 
         private DummyPlayer(int playerID, String playerName, float x, float y, boolean isLocal) {
             this.playerID = playerID;
@@ -355,6 +364,10 @@ public class GameMap{
             this.x = x;
             this.y = y;
             this.isLocal = isLocal;
+        }
+
+        public void setCharacter(String character) {
+            this.character = character;
         }
     }
 

@@ -143,6 +143,11 @@ public class TapTapClient {
             });
 
         }
+        else if (message instanceof Network.Ready) {
+            Network.Ready msg = (Network.Ready) message;
+            map.setCharacter(msg.playerId, msg.charactername);
+            //TODO: create check on CS screen
+        }
 
     }
 

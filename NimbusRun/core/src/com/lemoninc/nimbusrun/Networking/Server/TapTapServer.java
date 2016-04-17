@@ -141,6 +141,13 @@ public class TapTapServer {
                     map.playerMoved(msg);
                     server.sendToAllExceptUDP(connection.getID(), msg);
                 }
+                else if (message instanceof Network.Ready) {
+                    Network.Ready msg = (Network.Ready) message;
+                    msg.setPlayerId(connection.getID());
+                    map.setCharacter(msg.playerId, msg.charactername);
+                    server.sendToAllExceptTCP(connection.getID(), msg);
+
+                }
             }
 
             //TODO: what happens here when a player is rejected cos game room is full?
