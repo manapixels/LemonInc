@@ -51,7 +51,7 @@ public class PlayScreen implements Screen{
      * @param ipAddress Server's IP address (only relevant to the Client)
      * @param playerName
      */
-    public PlayScreen(NimbusRun game, boolean isHost, String ipAddress, String playerName){
+    public PlayScreen(NimbusRun game, boolean isHost, String ipAddress, String playerName, TapTapClient client, TapTapServer server){
 //        logInfo("My name is "+playerName);
 
         this.game = game;
@@ -61,11 +61,14 @@ public class PlayScreen implements Screen{
         } else {
             this.ipAddress = "localhost";
         }
-        this.playerName = playerName;
+//        this.playerName = playerName;
 
         hud=new HUD(game.batch,playerName);
 
-//        this.character = character;
+        this.client = client;
+        if (isHost) {
+            this.server = server;
+        }
     }
 
     /**
@@ -102,6 +105,13 @@ public class PlayScreen implements Screen{
 //                game.setScreen(new WaitScreen(game));
 //            }
 //        }
+        //create Players from dummyPlayers
+        gamemap = client.getMap();
+        gamemap.initPlay(); //called before gamemap.render
+
+        if (isHost) {
+            server.initPlay();
+        }
 
     }
 

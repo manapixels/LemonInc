@@ -56,7 +56,7 @@ import java.io.IOException;
 public class CharacterSelectionScreen implements Screen{
     private SpriteBatch batcher;
     private Sprite sprite;
-    private NimbusRun game;
+    private final NimbusRun game;
     private float gameWidth;
     private float gameHeight;
     private Viewport viewport;
@@ -75,7 +75,7 @@ public class CharacterSelectionScreen implements Screen{
     Sprite playercharacter;
     TextButton joingame;
     TextButton.TextButtonStyle style;
-    private String charactername;
+    private int charactername = 99;
     private String myIP;
 
     private TapTapClient client;
@@ -91,7 +91,7 @@ public class CharacterSelectionScreen implements Screen{
         this.gameHeight = NimbusRun.V_HEIGHT;
 //        myIP=ipAddress;
 
-        charactername="Buddha";
+        charactername=1; //default character is Buddha
 
         BUTTON_HEIGHT=165;
         BUTTON_WIDTH=140;
@@ -217,7 +217,7 @@ public class CharacterSelectionScreen implements Screen{
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                charactername="Buddha";
+                charactername=1;
                 System.out.println("touched");
 
             }
@@ -238,7 +238,7 @@ public class CharacterSelectionScreen implements Screen{
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                charactername="Foxy";
+                charactername=3;
                 System.out.println("touched");
             }
         });
@@ -257,7 +257,7 @@ public class CharacterSelectionScreen implements Screen{
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                charactername="kappa";
+                charactername=4;
                 System.out.println("touched");
             }
         });
@@ -275,7 +275,7 @@ public class CharacterSelectionScreen implements Screen{
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                charactername="Krishna";
+                charactername=2;
                 System.out.println("touched");
             }
         });
@@ -293,7 +293,7 @@ public class CharacterSelectionScreen implements Screen{
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                charactername="Madame White Snake";
+                charactername=6;
                 System.out.println("touched");
             }
         });
@@ -311,7 +311,7 @@ public class CharacterSelectionScreen implements Screen{
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                charactername="Pontianak";
+                charactername=5;
                 System.out.println("touched");
             }
         });
@@ -323,20 +323,25 @@ public class CharacterSelectionScreen implements Screen{
 //                playGame(charactername);
                 //TODO:save the charactername, let server know player is ready to play
                 //send server charactername packet
-                if (!isHost) {
-                    if (charactername != null) {
-                        Network.Ready ready = new Network.Ready(charactername);
-                        client.sendMessage(ready);
-                        gamemap.declareCharacter(charactername);
-                        //TODO: create check on CS screen
+                if (charactername != 99) {
+                    Network.Ready ready = new Network.Ready(charactername);
+                    client.sendMessage(ready);
+                    gamemap.declareCharacter(charactername);
+                    Gdx.app.log("CSscreen", "self declare character");
+                    //TODO: create check on CS screen
 
-                    }
                 }
-                else {
-                    //if host
+                if (isHost) {
                     //TODO: try to start game
+
                     //if received charactername from all players, play game
-//                    game.setScreen(new PlayScreen(game, true, ));
+                    if (server.allDummyReady()) {
+                        //TODO: send all clients GameReady
+                        playGame();
+                    }
+                    else {
+                        Gdx.app.log("CSscreen", "Not all dummies ready ");
+                    }
                 }
             }
         });
@@ -427,9 +432,9 @@ public class CharacterSelectionScreen implements Screen{
         madame.setChecked(false);
     }
 
-    public void playGame(String charactername){
+    public void playGame(){
         stage.clear();
-        game.setScreen(new PlayScreen(game,isHost,ipAddress, playername));
+        game.setScreen(new PlayScreen(game,isHost,ipAddress, playername, client, server));
     }
 
     @Override
@@ -473,10 +478,6 @@ public class CharacterSelectionScreen implements Screen{
     public void hide() {
         Gdx.input.setInputProcessor(null);
 
-        client.shutdown();
-        if (server != null)
-            server.shutdown();
-        gamemap.dispose();
     }
 
     @Override

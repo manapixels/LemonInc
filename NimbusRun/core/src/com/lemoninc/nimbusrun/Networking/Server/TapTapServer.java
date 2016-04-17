@@ -76,9 +76,9 @@ public class TapTapServer {
                     if (PLAYERS.get() < MAXPLAYERS) { //TODO: only accept players at CS screen
                         PLAYERS.getAndAdd(1);
                         Gdx.app.log("Server", "Added a player");
-                        if (PLAYERS.get() == MAXPLAYERS) {
-                            gameStarting();
-                        }
+//                        if (PLAYERS.get() == MAXPLAYERS) {
+//                            gameStarting();
+//                        }
 
                     } else { //there is more than or equal to 4 players in the game room
                         Network.GameRoomFull roomfull = new Network.GameRoomFull();
@@ -125,11 +125,11 @@ public class TapTapServer {
                     for (Connection con : server.getConnections()) { //upon connection, every client's name is stored in Player
                         TapTapConnection conn = (TapTapConnection) con;
                         if (conn.getID() != connection.getID() && conn.name != null) { // Not self, Have logged in
-                            Player herePlayer = map.getPlayerById(conn.getID());
-                            Network.PlayerJoinLeave hereMsg = new Network.PlayerJoinLeave(conn.getID(), herePlayer.getName(), true, herePlayer.getX(), herePlayer.getY()); //TODO: server's gamemap needs to be updated too
-                            Gdx.app.log("Server", "Telling " + connection.name + " about old client " + herePlayer.getName());
+                            GameMap.DummyPlayer herePlayer = map.getDummyById(conn.getID());
+                            Network.PlayerJoinLeave hereMsg = new Network.PlayerJoinLeave(conn.getID(), herePlayer.playerName, true, herePlayer.x, herePlayer.y); //TODO: server's gamemap needs to be updated too
+                            Gdx.app.log("Server", "Telling " + connection.name + " about old client " + herePlayer.playerName);
                             connection.sendTCP(hereMsg); // basic info
-                            connection.sendTCP(herePlayer.getMovementState()); // info about current movement
+//                            connection.sendTCP(herePlayer.getMovementState()); // info about current movement
                         }
                     }
                 }
@@ -146,7 +146,7 @@ public class TapTapServer {
                     msg.setPlayerId(connection.getID());
                     map.setCharacter(msg.playerId, msg.charactername);
                     server.sendToAllExceptTCP(connection.getID(), msg);
-
+                    Gdx.app.log("Server", "Set character for Client "+connection.getID());
                 }
             }
 
@@ -183,8 +183,12 @@ public class TapTapServer {
         map.update(delta);
     }
 
-    private void gameStarting() {
-        //TODO: game starts when players = 4
+    public void initPlay() {
+        map.initPlay();
+    }
+
+    public boolean allDummyReady() {
+        return map.allDummyReady();
     }
 
     public void shutdown() {

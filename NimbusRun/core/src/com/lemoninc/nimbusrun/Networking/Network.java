@@ -103,12 +103,12 @@ public class Network {
 
     static public class Ready {
 
-        public String charactername;
+        public int charactername;
         public int playerId;
 
         public Ready() {}
 
-        public Ready(String charactername) {
+        public Ready(int charactername) {
             this.charactername = charactername;
         }
 

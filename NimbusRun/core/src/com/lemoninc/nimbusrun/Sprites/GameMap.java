@@ -130,14 +130,26 @@ public class GameMap{
 
     }
 
-    private void initCommon(int whichCharacter){
-        //TODO: server needs textureAtls for hwat?
+    public void initPlay() {
+        //create Players from dummyPlayers
+        for (Map.Entry<Integer, DummyPlayer> playerEntry : dummyPlayers.entrySet()) {
+            DummyPlayer curPlayer = playerEntry.getValue();
+            Player newPlayer;
+            if (curPlayer.isLocal) {
+                newPlayer = new Player(this, getImg(curPlayer.character), curPlayer.x, curPlayer.y, true);
+            }
+            else {
+                newPlayer = new Player(this, getImg(curPlayer.character), curPlayer.x, curPlayer.y, false);
+            }
 
-        world = new World(new Vector2(0, -10), true); //box2d world with gravity
-        b2dr = new Box2DDebugRenderer();
+            players.put(curPlayer.playerID, newPlayer);
 
+        }
+    }
+
+    private TextureAtlas getImg(int character) {
         // Load up all sprites into spriteMap from textureAtlas
-        switch(whichCharacter){
+        switch(character){
             // 1. LAUGHING BUDDHA
             // 2. SHESHNAH WITH KRISHNA
             // 3. NINE-TAILED FOX
@@ -152,6 +164,16 @@ public class GameMap{
             case 6: img = new TextureAtlas(Gdx.files.internal("spritesheets/MWSspritesheet.atlas")); break;
             default: img = new TextureAtlas(Gdx.files.internal("spritesheets/PTspritesheet.atlas")); break;
         }
+        return img;
+    }
+
+    private void initCommon(int whichCharacter){
+        //TODO: server needs textureAtls for hwat?
+
+        world = new World(new Vector2(0, -10), true); //box2d world with gravity
+        b2dr = new Box2DDebugRenderer();
+
+
 
         // initialise all background sprites
         bgTexture = new Texture("PlayScreen/bg.png");
@@ -239,6 +261,28 @@ public class GameMap{
         return players.get(id);
     }
 
+    public synchronized DummyPlayer getDummyById(int id) {
+        return dummyPlayers.get(id);
+    }
+
+    public boolean allDummyReady() {
+        for (Map.Entry<Integer, DummyPlayer> playerEntry : dummyPlayers.entrySet()) {
+            DummyPlayer curPlayer = playerEntry.getValue();
+            if (!curPlayer.isReady()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void declareCharacter(int charactername) {
+        dummyLocal.setCharacter(charactername);
+    }
+
+    public void setCharacter(int playerId, int charactername) {
+        dummyPlayers.get(playerId).setCharacter(charactername);
+    }
+
     public World getWorld(){
         return this.world;
     }
@@ -317,13 +361,7 @@ public class GameMap{
 
     }
 
-    public void declareCharacter(String charactername) {
-        dummyLocal.setCharacter(charactername);
-    }
 
-    public void setCharacter(int playerId, String charactername) {
-        dummyPlayers.get(playerId).setCharacter(charactername);
-    }
 
     public synchronized void logInfo(String string) {
        // Log.info("[GameMap]: " + (isClient ? "[Client] " : "[Server] ") + string);
@@ -350,13 +388,13 @@ public class GameMap{
         this.players.clear();
     }
 
-    private class DummyPlayer {
+    public class DummyPlayer {
         private int playerID;
-        private String playerName;
-        private float x;
-        private float y;
-        private boolean isLocal;
-        private String character;
+        public String playerName;
+        public float x;
+        public float y;
+        public boolean isLocal;
+        private int character = 99;
 
         private DummyPlayer(int playerID, String playerName, float x, float y, boolean isLocal) {
             this.playerID = playerID;
@@ -366,8 +404,17 @@ public class GameMap{
             this.isLocal = isLocal;
         }
 
-        public void setCharacter(String character) {
+        public void setCharacter(int character) {
             this.character = character;
+        }
+
+        public boolean isReady() {
+            if (this.character != 99) {
+                return true;
+            }
+            else {
+                return false;
+            }
         }
     }
 
