@@ -10,6 +10,7 @@ package com.lemoninc.nimbusrun.Networking.Server;
  * LAST UPDATED: 8/4/2016 09:00
  ********************************/
 
+import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -72,9 +73,12 @@ public class TapTapServer {
 
                     Network.Login msg = ((Network.Login) message);
 
-                    if (PLAYERS.get() < MAXPLAYERS) {
+                    if (PLAYERS.get() < MAXPLAYERS) { //TODO: only accept players at CS screen
                         PLAYERS.getAndAdd(1);
                         Gdx.app.log("Server", "Added a player");
+                        if (PLAYERS.get() == MAXPLAYERS) {
+                            gameStarting();
+                        }
 
                     } else { //there is more than or equal to 4 players in the game room
                         Network.GameRoomFull roomfull = new Network.GameRoomFull();
@@ -133,9 +137,8 @@ public class TapTapServer {
                     Network.MovementState msg = (Network.MovementState)message;
                     logInfo("MovementState received");
                     msg.playerId = connection.getID();
-                    // TODO Server updates its copy of player from what its told
+                    // Server updates its copy of player from what its told
                     map.playerMoved(msg);
-//					"SERVER "+msg.playerId+" moved"
                     server.sendToAllExceptUDP(connection.getID(), msg);
                 }
             }
@@ -143,7 +146,7 @@ public class TapTapServer {
             //TODO: what happens here when a player is rejected cos game room is full?
             public void disconnected(Connection c) {
                 TapTapConnection connection = (TapTapConnection) c;
-                if (connection.name != null) {
+                if (connection.name != null) { //Login was received from the connection
                     if (connection.name != "gameroomfull") {
                         // Announce to everyone that someone has left.
                         Network.PlayerJoinLeave reply = new Network.PlayerJoinLeave(connection.getID(), connection.name, false, 0f, 0f);
@@ -170,7 +173,11 @@ public class TapTapServer {
     }
 
     public void update(float delta) {
-        map.update(delta); //TODO:make sure server's map.update doesn't contain rendering
+        map.update(delta);
+    }
+
+    private void gameStarting() {
+        //TODO: game starts when players = 4
     }
 
     public void shutdown() {

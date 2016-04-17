@@ -50,6 +50,8 @@ public class GameMap{
     private boolean isClient;
 
     private Map<Integer, Player> players = new HashMap<Integer, Player>(); //playerId, Player
+    private Map<Integer, DummyPlayer> dummyPlayers = new HashMap<Integer, DummyPlayer>(); //playerId, Player
+
 
     private OrthographicCamera gamecam;
     private Viewport gameport;
@@ -76,6 +78,7 @@ public class GameMap{
 
 
     private Player playerLocal;
+    private DummyPlayer dummyLocal;
     private TextureAtlas img;
     private int sourceX;
 
@@ -174,12 +177,14 @@ public class GameMap{
      */
     public void onConnect(Network.PlayerJoinLeave msg) {
 
-        if (this.playerLocal == null) {
+        if (this.dummyLocal == null) {
             // TODO Server should spawn localPlayer too
-            playerLocal = new Player(this, img, msg.initial_x, msg.initial_y, true);
-            this.playerLocal.setId(client.id);
-            this.playerLocal.setName(msg.name);
-            players.put(client.id, playerLocal);
+//            playerLocal = new Player(this, img, msg.initial_x, msg.initial_y, true);
+            dummyLocal = new DummyPlayer(client.id, msg.name, msg.initial_x, msg.initial_y, true);
+            dummyPlayers.put(dummyLocal.playerID, dummyLocal);
+//            this.playerLocal.setId(client.id);
+//            this.playerLocal.setName(msg.name);
+//            players.put(client.id, playerLocal);
             //hud.setPlayerLocal(playerLocal);
             //setStatus("Connected to " + client.remoteIP);
             Gdx.app.log("GameMap", "local player created at "+msg.initial_x+" "+msg.initial_y);
@@ -188,15 +193,19 @@ public class GameMap{
         }
     }
 
-    //called by server to add a new player into its GameMap
+    /**
+     * This method is only called in Character Selection screen
+     * @param msg
+     */
     public synchronized void addPlayer(Network.PlayerJoinLeave msg) {
         //create new player from msg
+        DummyPlayer newDummy = new DummyPlayer(msg.playerId, msg.name, msg.initial_x, msg.initial_y, false);
+//        Player newPlayer = new Player(this, img, msg.initial_x, msg.initial_y, false);
+//        newPlayer.setId(msg.playerId);
+//        newPlayer.setName(msg.name);
 
-        Player newPlayer = new Player(this, img, msg.initial_x, msg.initial_y, false);
-        newPlayer.setId(msg.playerId);
-        newPlayer.setName(msg.name);
-
-        players.put(msg.playerId, newPlayer);
+        dummyPlayers.put(newDummy.playerID, newDummy);
+//        players.put(msg.playerId, newPlayer);
 //        logInfo("Player " +msg.playerId+" added to players!");
     }
 
@@ -211,11 +220,18 @@ public class GameMap{
     /**
      * Destroy the disconnected player's body from world
      * Remove disconnected player from players
+     * Can be called from both CS screen and PlayScreen
+     *
      * @param msg
      */
     public synchronized void removePlayer(Network.PlayerJoinLeave msg) {
-        world.destroyBody(players.get(msg.playerId).b2body);
-        players.remove(msg.playerId);
+        dummyPlayers.remove(msg.playerId);
+
+        if (players.get(msg.playerId) != null) {
+            world.destroyBody(players.get(msg.playerId).b2body);
+            players.remove(msg.playerId);
+        }
+
     }
 
 
@@ -322,8 +338,24 @@ public class GameMap{
 
     public void onDisconnect() {
         this.client = null;
+        this.dummyPlayers.clear();
         this.players.clear();
-//        logInfo("on DIsconnection, clear the players Map");
+    }
+
+    private class DummyPlayer {
+        private int playerID;
+        private String playerName;
+        private float x;
+        private float y;
+        private boolean isLocal;
+
+        private DummyPlayer(int playerID, String playerName, float x, float y, boolean isLocal) {
+            this.playerID = playerID;
+            this.playerName = playerName;
+            this.x = x;
+            this.y = y;
+            this.isLocal = isLocal;
+        }
     }
 
 }

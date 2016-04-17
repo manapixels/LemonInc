@@ -97,8 +97,6 @@ public class Player extends Sprite implements InputProcessor{
 
         anim = new Animation(1f/40f, img.getRegions());
 
-//        previousPosition = new Vector2(this.getX(), this.getY()); //TODO: is this correct?
-
         //only for playerLocal
         if (isLocal) {
             Gdx.input.setInputProcessor(this);
@@ -148,19 +146,6 @@ public class Player extends Sprite implements InputProcessor{
     }
     public float getY(){
         return b2body.getPosition().y;
-    }
-
-    /**
-     * checks if the box2d body of Player has moved or not
-     * @return
-     */
-    public boolean hasMoved() {
-        if (previousPosition.x != this.getX() || previousPosition.y != getY()) {
-            previousPosition.x = this.getX();
-            previousPosition.y = this.getY();
-            return true;
-        }
-        return false;
     }
 
     /**
@@ -256,10 +241,6 @@ public class Player extends Sprite implements InputProcessor{
 
     /**
      * Set the player's linear velocity according to the received MovementState Packet
-     * @param msg
-     */
-    /**
-     * TODO: Not perfectly in sync
      * @param msg
      */
     public synchronized void setMovementState(Network.MovementState msg) {
