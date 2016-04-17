@@ -33,6 +33,7 @@ public class Network {
         kryo.register(Network.PlayerJoinLeave.class);
         kryo.register(Network.MovementState.class);
         kryo.register(Vector2.class);
+        kryo.register(GameRoomFull.class);
     }
 
     static public class Login {
@@ -97,5 +98,11 @@ public class Network {
 
     private static void logInfo(String string) {
 //        Log.info("[Network]: "+string);
+    }
+
+    static public class GameRoomFull {
+
+        public GameRoomFull() {}
+
     }
 }

@@ -41,7 +41,12 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.lemoninc.nimbusrun.Networking.Client.TapTapClient;
+import com.lemoninc.nimbusrun.Networking.Server.TapTapServer;
 import com.lemoninc.nimbusrun.NimbusRun;
+import com.lemoninc.nimbusrun.Sprites.GameMap;
+
+import java.io.IOException;
 
 
 /**
@@ -70,7 +75,11 @@ public class CharacterSelectionScreen implements Screen{
     TextButton joingame;
     TextButton.TextButtonStyle style;
     private String charactername;
-//    private CharSequence myIP;
+    private String myIP;
+
+    private TapTapClient client;
+    private TapTapServer server;
+    private GameMap gamemap;
 
     public CharacterSelectionScreen(NimbusRun game, boolean isHost, String ipAddress, String playerName){
         this.game = game;
@@ -314,6 +323,9 @@ public class CharacterSelectionScreen implements Screen{
                 playGame(charactername);
             }
         });
+
+
+
     }
 
     // 1. LAUGHING BUDDHA
@@ -347,6 +359,45 @@ public class CharacterSelectionScreen implements Screen{
         batcher = new SpriteBatch();
         startTime = TimeUtils.millis();
 
+        //instnatiate server, client here
+
+        client = new TapTapClient(game, playername);
+        gamemap = client.getMap();
+
+        if (isHost) {
+            //start my server and connect my client to my server
+            try {
+                server = new TapTapServer();
+                client.connect("localhost");
+            } catch (IOException e) {
+                e.printStackTrace();
+//                logInfo("Can't connect to localhost server");
+                Gdx.app.postRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        game.setScreen(new WaitScreen(game));
+
+                    }
+                });
+            }
+        }
+        else {
+            //client connects to ipAddress
+            try {
+                client.connect(ipAddress);
+            } catch (IOException e) {
+//                logInfo("Can't connect to server: " + ipAddress);
+                Gdx.app.postRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        game.setScreen(new WaitScreen(game));
+
+                    }
+                });
+            }
+        }
+
+        myIP = client.getIP();
 
     }
 
@@ -372,7 +423,7 @@ public class CharacterSelectionScreen implements Screen{
 
         batcher.begin();
         sprite.draw(batcher);
-        style.font.draw(batcher, "Host IP address: " + ipAddress, Gdx.graphics.getWidth()/3+75,80);
+        style.font.draw(batcher, "Host IP address: " + myIP, Gdx.graphics.getWidth()/3+75,80);
         playercharacter.setPosition(75, 50);
         playercharacter.setSize(Gdx.graphics.getWidth() - Gdx.graphics.getWidth() / 8, Gdx.graphics.getHeight() - Gdx.graphics.getWidth() / 8);
         playercharacter.draw(batcher);
@@ -404,7 +455,11 @@ public class CharacterSelectionScreen implements Screen{
     @Override
     public void hide() {
         Gdx.input.setInputProcessor(null);
-        dispose();
+
+        client.shutdown();
+        if (server != null)
+            server.shutdown();
+        gamemap.dispose();
     }
 
     @Override

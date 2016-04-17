@@ -13,17 +13,21 @@ package com.lemoninc.nimbusrun.Networking.Client;
  *
  * ********************************/
 
+import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
 import com.lemoninc.nimbusrun.Networking.Network;
+import com.lemoninc.nimbusrun.NimbusRun;
+import com.lemoninc.nimbusrun.Screens.WaitScreen;
 import com.lemoninc.nimbusrun.Sprites.GameMap;
 
 import java.io.IOException;
 import java.util.Scanner;
 
 public class TapTapClient {
+    private NimbusRun game;
 
     private String name; //Player's name
     public int id; //Player's connection ID
@@ -34,9 +38,10 @@ public class TapTapClient {
     public Client client;
 
     /**
-     * This constructor is called in PlayScreen when the player plays game as a client
+     * This constructor is called in CharacterSelectionScreen when the player is connecting to server
      */
-    public TapTapClient(String name) {
+    public TapTapClient(NimbusRun game, String name) {
+        this.game = game;
         map = new GameMap(this); //create new GameMap for Client
         this.name = name;
 
@@ -49,7 +54,7 @@ public class TapTapClient {
                 handleConnect(connection);
             }
             public void received(Connection connection, Object object) {
-                handleMessage(connection.getID(), object);
+                handleMessage(connection, connection.getID(), object);
             }
             public void disconnected(Connection connection) {
                 handleDisonnect(connection);
@@ -60,6 +65,8 @@ public class TapTapClient {
     public GameMap getMap() {
         return this.map;
     }
+
+    public String getIP() {return remoteIP;}
 
     /**
      *
@@ -94,7 +101,7 @@ public class TapTapClient {
      * @param playerID
      * @param message
      */
-    private void handleMessage(int playerID, Object message) {
+    private void handleMessage(Connection connection, int playerID, Object message) {
         if (message instanceof Network.PlayerJoinLeave) {
             Network.PlayerJoinLeave msg = (Network.PlayerJoinLeave) message;
             if (msg.hasJoined) {
@@ -110,6 +117,17 @@ public class TapTapClient {
             Network.MovementState msg = (Network.MovementState) message;
             //hey map, someone moved, handle this
             map.playerMoved(msg);
+        }
+        else if (message instanceof Network.GameRoomFull) {
+            connection.setName("gameroomfull");
+
+            Gdx.app.postRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    game.setScreen(new WaitScreen(game)); //CSS.hide() called, client closed
+                }
+            });
+
         }
 
     }

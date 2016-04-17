@@ -76,39 +76,32 @@ public class PlayScreen implements Screen{
      */
     @Override
     public void show() {
-        client = new TapTapClient(playerName);
+//        client = new TapTapClient(playerName);
 //        logInfo("Client created!");
-        gamemap = client.getMap();
-
-        if (isHost) {
-            //start my server and connect my client to my server
-            logInfo("Starting server...");
-            try {
-                server = new TapTapServer();
-                logInfo("localClient connecting to Server");
-                client.connect("localhost");
-            } catch (IOException e) {
-                e.printStackTrace();
-                logInfo("Can't connect to localhost server");
-                game.setScreen(new WaitScreen(game));
-            }
-        }
-        else {
-            //client connects to ipAddress
-            try {
-                client.connect(ipAddress);
-            } catch (IOException e) {
-                logInfo("Can't connect to server: " + ipAddress);
-                game.setScreen(new WaitScreen(game));
-            }
-        }
-
-    }
-
-    protected void handleInput() {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
-            gameOver();
-        }
+//        gamemap = client.getMap();
+//
+//        if (isHost) {
+//            //start my server and connect my client to my server
+//            logInfo("Starting server...");
+//            try {
+//                server = new TapTapServer();
+//                logInfo("localClient connecting to Server");
+//                client.connect("localhost");
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//                logInfo("Can't connect to localhost server");
+//                game.setScreen(new WaitScreen(game));
+//            }
+//        }
+//        else {
+//            //client connects to ipAddress
+//            try {
+//                client.connect(ipAddress);
+//            } catch (IOException e) {
+//                logInfo("Can't connect to server: " + ipAddress);
+//                game.setScreen(new WaitScreen(game));
+//            }
+//        }
 
     }
 

@@ -10,6 +10,7 @@ package com.lemoninc.nimbusrun.Networking.Server;
  * LAST UPDATED: 8/4/2016 09:00
  ********************************/
 
+import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
@@ -20,20 +21,21 @@ import com.lemoninc.nimbusrun.Sprites.Player;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Need GameMap?
  */
 public class TapTapServer {
 
-    //TODO: instantiate taptapserver in characterselectionscreen
-
-
     //Kryonet Server object
     Server server;
 
     private GameMap map;
     private List<Network.PlayerJoinLeave> players; //player's id, x and y position
+    private AtomicInteger PLAYERS = new AtomicInteger(0); //number of players connected to server
+    private final int MAXPLAYERS = 4;
+
 
     /**
      * Constructor starts a server on port 8080 and adds a listener to the server
@@ -69,6 +71,15 @@ public class TapTapServer {
                     logInfo("Login received");
                     Network.Login msg = ((Network.Login) message);
 
+                    if (PLAYERS.get() < MAXPLAYERS) {
+                        PLAYERS.getAndAdd(1);
+                    } else { //there is more than or equal to 4 players in the game room
+                        Network.GameRoomFull roomfull = new Network.GameRoomFull();
+                        connection.sendTCP(roomfull);
+
+                        return;
+                    }
+                    Gdx.app.log("Server", "reached here");
                     if (connection.name != null) {
                         return;
                     }
@@ -85,6 +96,8 @@ public class TapTapServer {
                     connection.name = name;
 
                     //tell the new client about map state (obstacle coordinates ...)
+
+                    //if the login is the first guy, send him 1st place
 
                     Network.PlayerJoinLeave newPlayer = new Network.PlayerJoinLeave(connection.getID(), connection.name, true, msg.initial_x, msg.initial_y);
                     //tell old clients about new client
@@ -116,13 +129,17 @@ public class TapTapServer {
                 }
             }
 
+            //TODO: what happens here when a player is rejected cos game room is full?
             public void disconnected(Connection c) {
                 TapTapConnection connection = (TapTapConnection) c;
                 if (connection.name != null) {
-                    // Announce to everyone that someone has left.
-                    Network.PlayerJoinLeave reply  = new Network.PlayerJoinLeave(connection.getID(), connection.name, false, 0f, 0f);
-                    server.sendToAllExceptTCP(connection.getID(), reply);
-                    map.removePlayer(reply);
+                    if (connection.name != "gameroomfull") {
+                        // Announce to everyone that someone has left.
+                        Network.PlayerJoinLeave reply = new Network.PlayerJoinLeave(connection.getID(), connection.name, false, 0f, 0f);
+                        server.sendToAllExceptTCP(connection.getID(), reply);
+                        map.removePlayer(reply); //if such player exists
+                    }
+//                    Gdx.app.log("Server", "testing");
                 }
 
             }
