@@ -19,9 +19,11 @@ package com.lemoninc.nimbusrun.Sprites;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -29,6 +31,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -67,6 +70,7 @@ public class GameMap{
     private float bgMountainHeight, bgMountainWidth;
     private float bgPlateauHeight, bgPlateauWidth;
     private float bgPitHeight, bgPitWidth;
+    private BitmapFont font;
 
     private World world;
     private Box2DDebugRenderer b2dr;
@@ -159,6 +163,9 @@ public class GameMap{
         bgSprite.setY(bgStartY);
         bgSprite.setSize(bgWidth, bgHeight);
 
+        font = new BitmapFont(Gdx.files.internal("Fonts/font20.fnt"), Gdx.files.internal("Fonts/font20.png"), false);
+        font.setColor(Color.WHITE);
+
         bgTextureMountain = new Texture("PlayScreen/platform_mountain.png");
         bgMountainWidth = bgTextureMountain.getWidth() / NimbusRun.PPM * 2.2f;
         bgMountainHeight = bgTextureMountain.getHeight() / NimbusRun.PPM * 2.2f;
@@ -220,9 +227,7 @@ public class GameMap{
         return players.get(id);
     }
 
-    public World getWorld(){
-        return this.world;
-    }
+    public World getWorld(){ return this.world;  }
 
     public Viewport getGameport() { return this.gameport; }
 
@@ -274,6 +279,7 @@ public class GameMap{
         for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {
             Player curPlayer = playerEntry.getValue();
             curPlayer.draw(batch);
+//            font.draw(batch, "PlayerTest", curPlayer.getX(), curPlayer.getY());
             //  Render flashbang if flashed
             if (curPlayer.isFlashed()) {
                 Gdx.gl.glClearColor(1, 1, 1, 1);
@@ -283,8 +289,8 @@ public class GameMap{
         }
         //----------------END batch
         batch.end();
-
         b2dr.render(world, gamecam.combined);
+
 
         //steps box2d world
         world.step(1 / 60f, 6, 2);
@@ -292,7 +298,6 @@ public class GameMap{
 //        gamecam.position.set(playerLocal.getX(), playerLocal.getY(), 0);
         gamecam.update();
     }
-
 
     public void makePlatformsBG(float startX, float endX, char type){
         Sprite sprite;
@@ -303,7 +308,6 @@ public class GameMap{
                 Log.info("Mountain made at: " + startX);
                 bgPlatformSprites.add(sprite); break;
         }
-
     }
 
     public synchronized void logInfo(String string) {
@@ -321,6 +325,7 @@ public class GameMap{
 
         //dispose textures
         img.dispose();
+        font.dispose();
         //TODO:friendly players textures?
     }
 

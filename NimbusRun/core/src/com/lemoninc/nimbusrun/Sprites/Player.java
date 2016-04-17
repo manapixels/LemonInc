@@ -29,6 +29,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -41,6 +42,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.esotericsoftware.minlog.Log;
 import com.lemoninc.nimbusrun.Networking.Network;
 import com.lemoninc.nimbusrun.NimbusRun;
+import com.lemoninc.nimbusrun.scenes.HUD;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -52,6 +54,8 @@ public class Player extends Sprite implements InputProcessor{
     public State currentState;
     public State previousState;
 
+    private GameMap gameMap;
+
     private TextureAtlas img;
     private Animation anim;
     private final float CHARACTER_SIZE;
@@ -59,9 +63,10 @@ public class Player extends Sprite implements InputProcessor{
 
     private int id;
     private String name;
+    private BitmapFont font;
 
-    private boolean stunned, poisoned, reversed, blackHoled, flashed, confused, devMode;
-    private float stunTime, poisonTime, reverseTime, blackHoleTime, flashTime, confuseTime;
+    private boolean stunned, poisoned, reversed, terrored, flashed, confused, devMode, finished;
+    private float stunTime, poisonTime, reverseTime, terrorTime, flashTime, confuseTime;
 
     private final float JUMPFORCE = 6f;
     private final float MOVEFORCE = 1.75f;
@@ -81,6 +86,7 @@ public class Player extends Sprite implements InputProcessor{
      */
     public Player(GameMap gameMap, TextureAtlas img, float x, float y, boolean isLocal) {
 
+        this.gameMap = gameMap;
         this.world = gameMap.getWorld();
         currentState = State.DEFAULT;
         previousState = State.DEFAULT;
@@ -94,13 +100,14 @@ public class Player extends Sprite implements InputProcessor{
         poisoned = false;
         reverseTime = 0f;
         reversed = false;
-        blackHoleTime = 0f;
-        blackHoled = false;
+        terrorTime = 0f;
+        terrored = false;
         flashed = false;
         flashTime = 0f;
         confused = false;
         confuseTime = 0f;
         devMode = false;
+        finished = false;
 
         //create a dynamic bodydef
         BodyDef bdef = new BodyDef();
@@ -119,9 +126,6 @@ public class Player extends Sprite implements InputProcessor{
         this.img = img;
 
         anim = new Animation(1f/40f, img.getRegions());
-
-
-//        previousPosition = new Vector2(this.getX(), this.getY()); //TODO: is this correct?
 
         //only for playerLocal
         if (isLocal) {
@@ -158,7 +162,7 @@ public class Player extends Sprite implements InputProcessor{
 
     public boolean isReversed() { return reversed; }
 
-    public boolean isBlackHoled() { return blackHoled; }
+    public boolean isBlackHoled() { return terrored; }
 
     public boolean isFlashed() { return flashed; }
 
@@ -166,11 +170,13 @@ public class Player extends Sprite implements InputProcessor{
 
     public boolean isDevMode() { return devMode; }
 
+    public boolean isFinished() { return finished; }
+
     public float getStunTime() { return stunTime; }
 
     public float getPoisonTime() { return poisonTime; }
 
-    public float getBlackHoleTime() { return blackHoleTime; }
+    public float getBlackHoleTime() { return terrorTime; }
 
     public float getReverseTime() { return reverseTime; }
 
@@ -192,6 +198,7 @@ public class Player extends Sprite implements InputProcessor{
     public float getX(){
         return b2body.getPosition().x;
     }
+
     public float getY(){
         return b2body.getPosition().y;
     }
@@ -269,14 +276,14 @@ public class Player extends Sprite implements InputProcessor{
             if (Gdx.input.isKeyJustPressed(Input.Keys.D))       //testing purposes only
                 return this.reverse();
             if (Gdx.input.isKeyJustPressed(Input.Keys.F))       //testing purposes only
-                return this.blackHole();
+                return this.terror();
             if (Gdx.input.isKeyJustPressed(Input.Keys.G))       //testing purposes only
                 return this.flash();
             if (Gdx.input.isKeyJustPressed(Input.Keys.H))       //testing purposes only
                 return this.confuse();
-            if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))       //testing purposes only
+            if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))  //testing purposes only
                 devMode = true;
-                return true;
+            return true;
         }
         return false;
     }
@@ -292,44 +299,41 @@ public class Player extends Sprite implements InputProcessor{
     }
 
     public boolean recover(float delta) {
+        if (b2body != null)
+            if (this.getX() >= gameMap.getGameport().getWorldWidth() * 18.5f) {
+                finished = true;
+            }
         if (isStunned()){
             stunTime -= delta;
-            if (stunTime <= 0){
+            if (stunTime <= 0)
                 stunned = false;
-            }
         }
-        if (isPoisoned()){
+            if (isPoisoned()){
             poisonTime -= delta;
-            if (poisonTime <= 0){
+            if (poisonTime <= 0)
                 poisoned = false;
-            }
         }
-        if (isReversed()){
+            if (isReversed()){
             reverseTime -= delta;
-            if (reverseTime <= 0){
+            if (reverseTime <= 0)
                 reversed = false;
-            }
         }
-        if (isBlackHoled()) {
-            if (b2body.getLinearVelocity().x >= -MOVESPEEDCAP * 2.5f){
+            if (isBlackHoled()) {
+            if (b2body.getLinearVelocity().x >= -MOVESPEEDCAP * 2f)
                 b2body.applyLinearImpulse(new Vector2(-MOVEFORCE, 0), b2body.getWorldCenter(), true);
-            }
-            blackHoleTime -= delta;
-            if (blackHoleTime <= 0){
-                blackHoled = false;
-            }
+            terrorTime -= delta;
+            if (terrorTime <= 0)
+                terrored = false;
         }
-        if (isFlashed()){
+            if (isFlashed()){
             flashTime -= delta;
-            if (flashTime <= 0){
+            if (flashTime <= 0)
                 flashed = false;
-            }
         }
-        if (isConfused()){
+            if (isConfused()){
             confuseTime -= delta;
-            if (confuseTime <= 0){
+            if (confuseTime <= 0)
                 confused = false;
-            }
         }
         return true;
     }
@@ -350,10 +354,10 @@ public class Player extends Sprite implements InputProcessor{
         reverseTime = 200f;
         return true;
     }
-    public boolean blackHole(){
-        blackHoled = true;
+    public boolean terror(){
+        terrored = true;
         b2body.setLinearVelocity(0, 0);
-        blackHoleTime = 75f;
+        terrorTime = 75f;
         return true;
     }
     public boolean flash(){
@@ -403,7 +407,7 @@ public class Player extends Sprite implements InputProcessor{
 
     private float checkCondition(){
         factor = 1;
-        if (isStunned()) { factor = factor * 0f; }
+        if (isStunned() || isFinished()) { factor = factor * 0f; }
         if (isPoisoned()) { factor = factor * 0.5f; }
         if (isDevMode()) { factor = factor * 2.5f; }
         return factor;
@@ -445,7 +449,7 @@ public class Player extends Sprite implements InputProcessor{
         return name;
     }
 
-        @Override
+    @Override
     public boolean keyDown(int keycode) {
         return false;
     }

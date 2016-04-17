@@ -35,7 +35,6 @@ public class Ground {
         startX = -gameMap.getGameport().getWorldWidth();
         endX = gameMap.getGameport().getWorldWidth();
 
-        //makeMountain(startX, endX);
         makeFlatGround(startX, endX);
         startX = endX;
         endX += gameMap.getGameport().getWorldWidth() * 2;

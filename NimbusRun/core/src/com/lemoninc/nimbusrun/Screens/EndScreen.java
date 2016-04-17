@@ -25,6 +25,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lemoninc.nimbusrun.NimbusRun;
@@ -35,7 +36,7 @@ public class EndScreen implements Screen{
     private OrthographicCamera gamecam;
     private Viewport gameport;
 
-    private SpriteBatch batch;
+    private SpriteBatch batch, winner, second, third, last;
     private Sprite aspectRatio;
 
     public EndScreen(NimbusRun game){
@@ -44,12 +45,22 @@ public class EndScreen implements Screen{
         gameport = new FitViewport(game.V_WIDTH / game.PPM, game.V_HEIGHT / game.PPM, gamecam);
 
         batch = new SpriteBatch();
-        aspectRatio = new Sprite(new Texture("EndScreen/bg.png"));
+        aspectRatio = new Sprite(new Texture("EndScreen/TapTap_BGseamless.png"));
         aspectRatio.setPosition(0, 0);
         aspectRatio.setSize(game.V_WIDTH / game.PPM, game.V_HEIGHT / game.PPM);
+
+//        winner = new Sprite(new Texture());
+//        second = new Sprite(new Texture());
+//        third = new Sprite(new Texture());
+//        last = new Sprite(new Texture());
     }
 
+
+
     protected void handleInput() {
+        if (Gdx.input.justTouched()){
+            game.setScreen(new EndScreen(game));
+        }
     }
 
     @Override

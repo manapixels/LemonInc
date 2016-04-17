@@ -43,9 +43,7 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
 //    ProgressBar.ProgressBarStyle barStyle;
 //    TextureRegionDrawable textureBar;
 
-
-
-    public  HUD(SpriteBatch sb, String playernumber){
+    public HUD(SpriteBatch sb, String playernumber){
         this.Player=playernumber;
         worldTimer = 150;
         timecount=0;
