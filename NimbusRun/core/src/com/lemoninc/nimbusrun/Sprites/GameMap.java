@@ -152,10 +152,14 @@ public class GameMap{
             DummyPlayer curPlayer = playerEntry.getValue();
             if (curPlayer.isLocal) {
                 playerLocal = new Player(this, getImg(curPlayer.character), curPlayer.x, curPlayer.y, true);
+                playerLocal.setName(curPlayer.playerName);
                 players.put(curPlayer.playerID, playerLocal);
             }
             else {
-                players.put(curPlayer.playerID, new Player(this, getImg(curPlayer.character), curPlayer.x, curPlayer.y, false));
+                Player newPlayer= new Player(this, getImg(curPlayer.character), curPlayer.x, curPlayer.y, false);
+                newPlayer.setName(curPlayer.playerName);
+                players.put(curPlayer.playerID, newPlayer);
+
             }
         }
     }
@@ -260,6 +264,7 @@ public class GameMap{
         for (Map.Entry<Integer, DummyPlayer> playerEntry : dummyPlayers.entrySet()) {
             DummyPlayer curPlayer = playerEntry.getValue();
             if (!curPlayer.isReady()) {
+                Gdx.app.log("GameMap allDummyReady", "Hi from "+curPlayer.playerName);
                 return false;
             }
         }
@@ -386,7 +391,7 @@ public class GameMap{
         batch.dispose();
         //dispose textures
         img.dispose();
-        font.dispose();
+//        font.dispose();
         //TODO:friendly players textures?
     }
 

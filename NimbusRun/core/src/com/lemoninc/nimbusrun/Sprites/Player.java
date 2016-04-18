@@ -243,13 +243,13 @@ public class Player extends Sprite implements InputProcessor{
         else {
             //for Desktop
             if (Gdx.input.isKeyJustPressed(Input.Keys.UP))
-                if (isConfused()){
+                if (isConfused()) {
                     return this.moveRight();
                 } else {
                     return this.jump();
                 }
             if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT))
-                if (isConfused()){
+                if (isConfused()) {
                     return this.jump();
                 } else {
                     return this.moveRight();
@@ -268,9 +268,10 @@ public class Player extends Sprite implements InputProcessor{
                 return this.flash();
             if (Gdx.input.isKeyJustPressed(Input.Keys.H))       //testing purposes only
                 return this.confuse();
-            if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))  //testing purposes only
+            if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {  //testing purposes only {
                 devMode = true;
-            return true;
+                return true;
+            }
         }
         return false;
     }

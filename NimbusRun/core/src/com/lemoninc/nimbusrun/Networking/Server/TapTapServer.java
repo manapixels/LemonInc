@@ -79,26 +79,24 @@ public class TapTapServer {
 //                        if (PLAYERS.get() == MAXPLAYERS) {
 //                            gameStarting();
 //                        }
-
                     } else { //there is more than or equal to 4 players in the game room
                         Network.GameRoomFull roomfull = new Network.GameRoomFull();
                         connection.sendTCP(roomfull);
                         Gdx.app.log("Server", "Sent a GameRoomFull");
-
                         return;
                     }
 //                    Gdx.app.log("Server", "reached here");
                     if (connection.name != null) {
-                        return;
+                        connection.close();
                     }
 
                     String name = msg.name;
                     if (name == null) {
-                        return;
+                        connection.close();
                     }
                     name = name.trim();
                     if (name.length() == 0) {
-                        return;
+                        connection.close();
                     }//if name contains no letters
                     //name this connection as the clientname
                     connection.name = name;
