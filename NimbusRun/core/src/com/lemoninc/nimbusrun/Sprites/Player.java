@@ -78,7 +78,7 @@ public class Player extends Sprite implements InputProcessor{
     private Map<Integer,TouchInfo> touches;
 
     /**
-     * TODO: this constructor should only be created by client?
+     *
      * @param gameMap
      * @param img
      * @param x
@@ -218,6 +218,7 @@ public class Player extends Sprite implements InputProcessor{
                     if (isConfused()){
                         return this.jump();
                     } else {
+                        Gdx.app.log("Player", "Moving Right");
                         return this.moveRight();
                     }
                 }
@@ -418,7 +419,6 @@ public class Player extends Sprite implements InputProcessor{
 
         b2body.setLinearVelocity(msg.linearVelocity);
         b2body.setTransform(msg.position, 0f); //this is outside the world.step call
-//        System.out.println("Changed player's x is "+msg.position.x+" y is "+msg.position.y);
     }
 
     public TextureAtlas getTxtAtlas(){ return img;}

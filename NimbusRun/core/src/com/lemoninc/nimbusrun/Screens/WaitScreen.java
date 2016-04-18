@@ -87,6 +87,7 @@ public class WaitScreen implements Screen{
         this.game = game;
         this.gameHeight=game.V_HEIGHT;
         this.gameWidth=game.V_WIDTH;
+        //TODO: remove IP address in preferences
         preferences = Gdx.app.getPreferences("NimbusRun_Network");
 
         BUTTON_HEIGHT=50;
