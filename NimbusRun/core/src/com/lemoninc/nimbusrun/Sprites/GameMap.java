@@ -31,6 +31,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.esotericsoftware.minlog.Log;
 import com.lemoninc.nimbusrun.Networking.Client.TapTapClient;
 import com.lemoninc.nimbusrun.Networking.Network;
 import com.lemoninc.nimbusrun.Networking.Server.TapTapServer;
@@ -93,7 +94,7 @@ public class GameMap{
 
         //instantiate HUD, GameSounds, BitmapFont, Camera, SpriteBatch ...
         gamecam = new OrthographicCamera();
-        gameport = new FitViewport(NimbusRun.V_WIDTH * 1.5f / NimbusRun.PPM, NimbusRun.V_HEIGHT * 1.5f / NimbusRun.PPM, gamecam);
+        gameport = new FitViewport(NimbusRun.V_WIDTH * 2.4f / NimbusRun.PPM, NimbusRun.V_HEIGHT * 2.4f / NimbusRun.PPM, gamecam);
 
         //font for player names on avatars
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("PlayScreen/SF Atarian System.ttf"));
@@ -177,13 +178,13 @@ public class GameMap{
             // 4. KAPPA
             // 5. PONTIANAK
             // 6. MADAME WHITE SNAKE
-            case 1: img = new TextureAtlas(Gdx.files.internal("spritesheets/LBspritesheet.atlas")); break;
-            case 2: img = new TextureAtlas(Gdx.files.internal("spritesheets/SKspritesheet.atlas")); break;
-            case 3: img = new TextureAtlas(Gdx.files.internal("spritesheets/FXspritesheet.atlas")); break;
-            case 4: img = new TextureAtlas(Gdx.files.internal("spritesheets/KPspritesheet.atlas")); break;
-            case 5: img = new TextureAtlas(Gdx.files.internal("spritesheets/PTspritesheet.atlas")); break;
-            case 6: img = new TextureAtlas(Gdx.files.internal("spritesheets/MWSspritesheet.atlas")); break;
-            default: img = new TextureAtlas(Gdx.files.internal("spritesheets/PTspritesheet.atlas")); break;
+            case 1: img = new TextureAtlas(Gdx.files.internal("Spritesheets/LBspritesheet.atlas")); break;
+            case 2: img = new TextureAtlas(Gdx.files.internal("Spritesheets/SKspritesheet.atlas")); break;
+            case 3: img = new TextureAtlas(Gdx.files.internal("Spritesheets/FXspritesheet.atlas")); break;
+            case 4: img = new TextureAtlas(Gdx.files.internal("Spritesheets/KPspritesheet.atlas")); break;
+            case 5: img = new TextureAtlas(Gdx.files.internal("Spritesheets/PTspritesheet.atlas")); break;
+            case 6: img = new TextureAtlas(Gdx.files.internal("Spritesheets/MWSspritesheet.atlas")); break;
+            default: img = new TextureAtlas(Gdx.files.internal("Spritesheets/PTspritesheet.atlas")); break;
         }
         return img;
     }
@@ -196,6 +197,15 @@ public class GameMap{
         b2dr = new Box2DDebugRenderer();
     }
 
+        // initialise all background sprites
+        bgTexture = new Texture("4_PlayScreen/bg_dark.png");
+        bgTexture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
+        bgSprite = new Sprite(new TextureRegion(bgTexture, bgTexture.getWidth()*11, bgTexture.getHeight()*3));
+        bgWidth = bgTexture.getWidth() / NimbusRun.PPM * 1.4f * 11;
+        bgHeight = bgTexture.getHeight() / NimbusRun.PPM * 1.4f * 3;
+        bgSprite.setX(bgStartX);
+        bgSprite.setY(bgStartY);
+        bgSprite.setSize(bgWidth, bgHeight);
     /**
      * Client receives PlayerJoinLeave from server containing player ID, name, initial x and y
      * @param msg
@@ -211,6 +221,13 @@ public class GameMap{
         } else {
 //            logInfo("setNetworkClient called twice");
         }
+        bgTextureFlat = new Texture("4_PlayScreen/platform_flat.png");
+        bgTexturePlateau = new Texture("4_PlayScreen/platform_plateau.png");
+        bgTextureMountain = new Texture("4_PlayScreen/platform_mountain.png");
+        bgTexturePit = new Texture("4_PlayScreen/platform_pit.png");
+
+        bgPlatformSprites = new ArrayList<Sprite>();
+
     }
 
     /**
@@ -358,17 +375,48 @@ public class GameMap{
         }
         //----------------END batch
         batch.end();
+
+        //b2dr.render(world, gamecam.combined);
+
+        //steps box2d world
+        world.step(1 / 60f, 6, 2);
     }
 
     public void makePlatformsBG(float startX, float endX, char type){
         Sprite sprite;
+        float width = endX-startX;
+        float height;
         switch(type){
+            case 'F': sprite = new Sprite(bgTextureFlat);
+                height = width/1000*390;
+                sprite.setPosition(startX, -height);
+                sprite.setSize(width, height);
+                Log.info("Flatground at: " + -height);
+                bgPlatformSprites.add(sprite); break;
+            case 'P': sprite = new Sprite(bgTexturePlateau);
+                height = width/1000*789;
+                sprite.setPosition(startX, -height*0.7366f);
+                sprite.setSize(width, height);
+                Log.info("Plateau at: " + -height);
+                bgPlatformSprites.add(sprite); break;
             case 'M': sprite = new Sprite(bgTextureMountain);
-                sprite.setPosition(startX, -bgMountainHeight*0.4f);
-                sprite.setSize(bgMountainWidth, bgMountainHeight);
-//                Log.info("Mountain made at: " + startX);
+                height = width/1000*869;
+                sprite.setPosition(startX, -height*0.473f);
+                sprite.setSize(width, height);
+                Log.info("Mountain at: " + -height);
+                bgPlatformSprites.add(sprite); break;
+            case 'T': sprite = new Sprite(bgTexturePit);
+                height = width/1000*605;
+                sprite.setPosition(startX, -height);
+                sprite.setSize(width, height);
+                Log.info("Pit at: " + -height);
                 bgPlatformSprites.add(sprite); break;
         }
+
+    }
+
+    public Map<Integer, Player> getPlayers(){
+        return players;
     }
 
 

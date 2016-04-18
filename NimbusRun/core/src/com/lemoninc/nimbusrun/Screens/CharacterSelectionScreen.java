@@ -43,14 +43,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.lemoninc.nimbusrun.Networking.Client.TapTapClient;
-import com.lemoninc.nimbusrun.Networking.Network;
-import com.lemoninc.nimbusrun.Networking.Server.TapTapServer;
 import com.lemoninc.nimbusrun.NimbusRun;
-import com.lemoninc.nimbusrun.Sprites.GameMap;
-
-import java.io.IOException;
-import java.util.Random;
 
 
 /**
@@ -112,30 +105,17 @@ public class CharacterSelectionScreen implements Screen{
         this.mapData = null;
 //        myIP=ipAddress;
 
+        charactername="Buddha";
 
-        //myIP=ipAddress;
-        Playerability="STUN";
-
-        charactername=1; //default character is Buddha
-
-        BUTTON_HEIGHT=150;
-        BUTTON_WIDTH=125;
-
-        soundclick=Gdx.audio.newSound(Gdx.files.internal("Sounds/click.mp3"));
-
-        music=Gdx.audio.newMusic(Gdx.files.internal("Sounds/characterselectionscreen.mp3"));
-        music.setVolume(0.5f);                 // sets the volume to half the maximum volume
-        music.setLooping(true);
-        if(playmusic){
-            music.play();
-        }
+        BUTTON_HEIGHT=165;
+        BUTTON_WIDTH=140;
 
         camera=new PerspectiveCamera();
         viewport=new FitViewport(gameWidth,gameHeight,camera);
-        skin=new Skin(Gdx.files.internal("data/uiskin.json"));
-        atlas1=new TextureAtlas(Gdx.files.internal("CharSelScreen/charicons.pack"));
-        atlas2=new TextureAtlas(Gdx.files.internal("CharSelScreen/zoomicons.pack"));
-        atlas3=new TextureAtlas(Gdx.files.internal("buttonsupdown.pack"));;
+        skin=new Skin();
+        atlas1=new TextureAtlas(Gdx.files.internal("3_CharSelScreen/charicons.pack"));
+        atlas2=new TextureAtlas(Gdx.files.internal("3_CharSelScreen/zoomicons.pack"));
+        atlas3=new TextureAtlas(Gdx.files.internal("3_CharSelScreen/buttonsupdown.pack"));
         skin.addRegions(atlas1);
         skin.addRegions(atlas2);
         skin.addRegions(atlas3);
@@ -430,7 +410,7 @@ public class CharacterSelectionScreen implements Screen{
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
-        sprite = new Sprite(new Texture("whitebackground.png"));
+        sprite = new Sprite(new Texture("3_CharSelScreen/whiteBG.png"));
         //sprite.setColor(1, 1, 1, 0);
         playercharacter=new Sprite(skin.getSprite("bg_Buddha"));
         //sprite.setPosition(0, 0);

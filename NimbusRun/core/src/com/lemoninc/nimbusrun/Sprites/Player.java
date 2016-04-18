@@ -91,7 +91,7 @@ public class Player extends Sprite implements InputProcessor{
         this.world = gameMap.getWorld();
         currentState = State.DEFAULT;
         previousState = State.DEFAULT;
-        CHARACTER_SIZE = 170 / NimbusRun.PPM;
+        CHARACTER_SIZE = 220 / NimbusRun.PPM;
         stateTime = 0f;
 
       //  attacksound=Gdx.audio.newSound(Gdx.files.internal("Sounds/specialpowermusic.wav"));

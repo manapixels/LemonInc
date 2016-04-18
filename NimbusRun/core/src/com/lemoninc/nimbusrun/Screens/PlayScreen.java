@@ -119,7 +119,7 @@ public class PlayScreen implements Screen{
             }
         }
     public void gameOver() {
-        game.setScreen(new EndScreen(game, playmusic));
+        game.setScreen(new EndScreen(game, gamemap.getPlayers()));
     }
 
     @Override

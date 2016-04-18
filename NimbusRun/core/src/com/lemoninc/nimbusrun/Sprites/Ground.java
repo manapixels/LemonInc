@@ -7,7 +7,7 @@ package com.lemoninc.nimbusrun.Sprites;
  * PUBLIC FUNCTIONS :
  *       none
  * NOTES :
- * LAST UPDATED: 14/4/2016 13:10
+ * LAST UPDATED: 17/4/2016 14:26
  *
  * ********************************/
 
@@ -37,6 +37,11 @@ public class Ground {
 
         makeFlatGround(startX, endX);
         startX = endX;
+        endX += gameMap.getGameport().getWorldWidth()*2;
+        makePlateau(startX, endX);
+        //makeMountain(startX, endX);
+        //
+        startX = endX;
         endX += gameMap.getGameport().getWorldWidth() * 2;
 
         //Log.info("Each platform is " + gameMap.getGameport().getWorldWidth()*2 + " long.");
@@ -61,6 +66,7 @@ public class Ground {
         BodyDef bdef = new BodyDef();
         bdef.type = BodyDef.BodyType.StaticBody;
         b2body = world.createBody(bdef);
+        gameMap.makePlatformsBG(startX , endX, 'F');
 
         FixtureDef fdef = new FixtureDef();
         EdgeShape edgeShape = new EdgeShape();
@@ -215,6 +221,7 @@ public class Ground {
         float y1 = 0, y2 = 0;
         float segment = (endX - startX) * 0.125f;
         float x1 = startX, x2 = startX + segment;
+        gameMap.makePlatformsBG(startX , endX, 'T');
 
         BodyDef bdef = new BodyDef();
         bdef.type = BodyDef.BodyType.StaticBody;

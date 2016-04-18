@@ -23,6 +23,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.lemoninc.nimbusrun.Assetloading.AssetLoader;
 import com.lemoninc.nimbusrun.NimbusRun;
 
 /**
@@ -80,23 +81,19 @@ public class MenuScreen implements Screen {
         style.font=new BitmapFont(Gdx.files.internal("Fonts/crimesFont48Black.fnt"));
         style.font.setColor(Color.RED);
         style.font.getData().setScale(0.65f, 0.65f);
-        style.up=new TextureRegionDrawable(new TextureRegion(new Texture("button_up.png")));
-        style.down=new TextureRegionDrawable(new TextureRegion(new Texture("button_down.png")));
-        style.over=new TextureRegionDrawable(new TextureRegion(new Texture("button_down1.png")));
-
-
-
-
+        style.up=new TextureRegionDrawable(new TextureRegion(new Texture("1_MenuScreen/button_up.png")));
+        style.down=new TextureRegionDrawable(new TextureRegion(new Texture("1_MenuScreen/button_down.png")));
+        style.over=new TextureRegionDrawable(new TextureRegion(new Texture("1_MenuScreen/button_down1.png")));
+        
         camera=new PerspectiveCamera();
         viewport=new FitViewport(gameWidth,gameHeight,camera);
         stage= new Stage(new ExtendViewport(gameWidth,gameHeight));
         buttonPlay=new TextButton("Start Play",style);
-        buttonChooseCharacter=new TextButton("Choose Avatar",style);
         buttonTutorial=new TextButton("Tutorial",style);
         buttonStory=new TextButton("Story", style);
 
-        muteButton=new Image(new TextureRegionDrawable(new TextureRegion(new Texture("muteButton.png"))));
-        unmuteButton=new Image(new TextureRegionDrawable(new TextureRegion(new Texture("unmuteButton.png"))));
+        muteButton=new Image(new TextureRegionDrawable(new TextureRegion(new Texture("1_MenuScreen/muteButton.png"))));
+        unmuteButton=new Image(new TextureRegionDrawable(new TextureRegion(new Texture("1_MenuScreen/unmuteButton.png"))));
         show();
 
     }
@@ -104,7 +101,7 @@ public class MenuScreen implements Screen {
     @Override
     public void show() {
         batch= new SpriteBatch();
-        background= new Texture("Home_Start Page.png");
+        background= new Texture("1_MenuScreen/bg.png");
         background.setFilter(Texture.TextureFilter.Linear,Texture.TextureFilter.Linear);
         sprite=new Sprite(background);
         sprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -120,10 +117,6 @@ public class MenuScreen implements Screen {
         buttonStory.setSize(this.BUTTON_WIDTH, this.BUTTON_HEIGHT);
         buttonStory.setPosition(this.gameWidth/3*2+50, 200, Align.center);
         stage.addActor(buttonStory);
-
-        buttonChooseCharacter.setSize(this.BUTTON_WIDTH, this.BUTTON_HEIGHT);
-        buttonChooseCharacter.setPosition(gameWidth/3*2+50, 150, Align.center);
-        stage.addActor(buttonChooseCharacter);
 
         muteButton.setPosition(700, 100);
         unmuteButton.setPosition(700, 100);
@@ -169,18 +162,7 @@ public class MenuScreen implements Screen {
                 //  gsm.set(new StoryScreen(game, gsm));
             }
         });
-        buttonChooseCharacter.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-             //   AssetLoader.clickSound.play(AssetLoader.VOLUME);
-               // game.setScreen(new CharacterSelectionScreen(game,gameWidth,gameHeight));
-                soundclick.play();
-                game.setScreen(new YourCharacterScreen(game, gameWidth,gameHeight,1));
 
-                // TODO Set to tutorial screen
-                //  gsm.set(new StoryScreen(game, gsm));
-            }
-        });
 
         muteButton.addListener(new ClickListener() {
             @Override
