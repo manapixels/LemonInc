@@ -79,7 +79,7 @@ public class GameMap{
     private Ceiling ceiling;
     private StartWall startWall;
     private EndWall endWall;
-
+    private int[] mapData;
 
     private Player playerLocal;
     private DummyPlayer dummyLocal;
@@ -89,10 +89,11 @@ public class GameMap{
     /**
      * This constructor is called inside TapTapClient
      */
-    public GameMap(TapTapClient client) {
+    public GameMap(TapTapClient client, int[] mapData) {
 
         this.client = client;
         this.isClient = true;
+        this.mapData = mapData;
 
         //instantiate HUD, GameSounds, BitmapFont, Camera, SpriteBatch ...
         gamecam = new OrthographicCamera();
@@ -124,7 +125,7 @@ public class GameMap{
 
         //TODO: these are created by Server and server sends GameMapStatus to clients
         //add these sprites to the world
-        ground = new Ground(this);
+        ground = new Ground(this, mapData);
         ceiling = new Ceiling(this);
         startWall = new StartWall(this);
         endWall = new EndWall(this);
@@ -181,7 +182,6 @@ public class GameMap{
         return img;
     }
 
-//<<<<<<< HEAD
     /**
      * Create box2d world and DebugRenderer
      */

@@ -48,6 +48,7 @@ import com.lemoninc.nimbusrun.NimbusRun;
 import com.lemoninc.nimbusrun.Sprites.GameMap;
 
 import java.io.IOException;
+import java.util.Random;
 
 
 /**
@@ -82,6 +83,8 @@ public class CharacterSelectionScreen implements Screen{
     private TapTapServer server;
     private GameMap gamemap;
 
+    private int[] mapData;
+
     /**
      *
      * @param game
@@ -91,11 +94,12 @@ public class CharacterSelectionScreen implements Screen{
      */
     public CharacterSelectionScreen(NimbusRun game, final boolean isHost, String ipAddress, String playerName){
         this.game = game;
-        this.isHost=isHost;
-        this.ipAddress=ipAddress;
-        this.playername=playerName;
+        this.isHost = isHost;
+        this.ipAddress = ipAddress;
+        this.playername = playerName;
         this.gameWidth = NimbusRun.V_WIDTH;
         this.gameHeight = NimbusRun.V_HEIGHT;
+        this.mapData = null;
 //        myIP=ipAddress;
 
         charactername=1; //default character is Buddha
@@ -129,7 +133,6 @@ public class CharacterSelectionScreen implements Screen{
         final Table table = new Table();
         table.right();
         table.setFillParent(true);
-
 
         //Title=new Label(String.format("%03d","Choose your Avatar"),new Label.LabelStyle(new BitmapFont(Gdx.files.internal("Fonts/crime.fnt")), Color.DARK_GRAY));
         Title=new Label("Choose Your Character",new Label.LabelStyle(new BitmapFont(Gdx.files.internal("Fonts/crimesFont48Black.fnt")), Color.DARK_GRAY));
@@ -174,7 +177,6 @@ public class CharacterSelectionScreen implements Screen{
         pontibtnStyle.imageDown = skin.getDrawable("btn_ponti_sel");
         pontibtnStyle.imageOver = skin.getDrawable("btn_ponti_sel");
         pontibtnStyle.imageChecked=skin.getDrawable("btn_ponti_sel");
-
 
         Buddha= new ImageButton(BuddhabtnStyle);
         foxy=new ImageButton(foxybtnStyle);
@@ -354,9 +356,6 @@ public class CharacterSelectionScreen implements Screen{
                 }
             }
         });
-
-
-
     }
 
     // 1. LAUGHING BUDDHA
@@ -389,13 +388,17 @@ public class CharacterSelectionScreen implements Screen{
         style.font.setColor(Color.DARK_GRAY);
         batcher = new SpriteBatch();
         startTime = TimeUtils.millis();
+        mapData = new int[8];
 
-        //instnatiate server, client here
-
-        client = new TapTapClient(game, this, playername);
-        gamemap = client.getMap();
+        //instantiate server, client here
 
         if (isHost) {
+            Random rand = new Random();
+            for (int i = 0; i < 8; i++){
+                mapData[i] = rand.nextInt(3);
+            }
+            client = new TapTapClient(game, this, playername, mapData);
+            gamemap = client.getMap();
             //start my server and connect my client to my server
             try {
                 server = new TapTapServer();
@@ -413,6 +416,8 @@ public class CharacterSelectionScreen implements Screen{
             }
         }
         else {
+            client = new TapTapClient(game, this, playername, mapData);
+            gamemap = client.getMap();
             //client connects to ipAddress
             try {
                 client.connect(ipAddress);
@@ -422,7 +427,6 @@ public class CharacterSelectionScreen implements Screen{
                     @Override
                     public void run() {
                         game.setScreen(new WaitScreen(game));
-
                     }
                 });
             }

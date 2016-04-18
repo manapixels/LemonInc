@@ -27,10 +27,12 @@ public class Ground {
     public Body b2body;
     private GameMap gameMap;
     private float startX, endX;
+    private int[] mapData;
 
-    public Ground(GameMap gameMap) {
+    public Ground(GameMap gameMap, int[] mapData) {
         this.gameMap = gameMap;
         this.world = gameMap.getWorld();
+        this.mapData = mapData;
 
         startX = -gameMap.getGameport().getWorldWidth();
         endX = gameMap.getGameport().getWorldWidth();
@@ -41,8 +43,7 @@ public class Ground {
 
         //Log.info("Each platform is " + gameMap.getGameport().getWorldWidth()*2 + " long.");
         for (int i = 0; i < 8; i++){
-            Random rand = new Random();
-            int choice = rand.nextInt(3);
+            int choice = mapData[i];
             if (choice == 0){
                 makePlateau(startX, endX);
             } else if (choice == 1) {
@@ -53,7 +54,6 @@ public class Ground {
             startX = endX;
             endX += gameMap.getGameport().getWorldWidth()*2;
         }
-
         makeFlatGround(startX, endX);
     }
 
