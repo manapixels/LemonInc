@@ -84,6 +84,7 @@ public class PlayScreen implements Screen{
         //create Players from dummyPlayers
         gamemap = client.getMap();
         gamemap.initPlayers(); //called before gamemap.render
+        gamemap.createEnv(); //create ground, ceiling, etc
 
 
 

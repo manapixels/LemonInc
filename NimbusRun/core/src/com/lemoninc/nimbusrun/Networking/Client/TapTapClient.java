@@ -34,7 +34,7 @@ public class TapTapClient {
     public int id; //Player's connection ID
     public String remoteIP;
     private GameMap map;
-    private int[] mapData;
+    public int[] mapData;
 
     private CharacterSelectionScreen currentScreen;
     private MenuScreen menuScreen;
@@ -128,33 +128,36 @@ public class TapTapClient {
                 map.removePlayer(msg);
             }
         }
-        else if (message instanceof Network.MovementState) {
+        else if (message instanceof Network.MapDataPacket) {
+            Gdx.app.log("GDX TapTapClient", "Client received MapDataPacket");
+            Network.MapDataPacket msg = (Network.MapDataPacket) message;
+
+            //set its gamemap mapdata accordingly
+            map.setMapData(msg.mapData);
+        } else if (message instanceof Network.MovementState) {
             Gdx.app.log("GDX TapTapClient", "Client received MovementState");
 
             Network.MovementState msg = (Network.MovementState) message;
             //hey map, someone moved, handle this
 
             map.playerMoved(msg);
-        }
-        else if (message instanceof Network.GameRoomFull) {
+        } else if (message instanceof Network.GameRoomFull) {
             Gdx.app.log("GDX TapTapClient", "Client received GameRoomFull");
             connection.setName("gameroomfull");
 
             Gdx.app.postRunnable(new Runnable() {
                 @Override
                 public void run() {
-                    game.setScreen(new WaitScreen(game,menuScreen.playmusic)); //CSS.hide() called, TODO: client should be closed
+                    game.setScreen(new WaitScreen(game, menuScreen.playmusic)); //CSS.hide() called, TODO: client should be closed
                 }
             });
 
-        }
-        else if (message instanceof Network.Ready) {
+        } else if (message instanceof Network.Ready) {
             Gdx.app.log("GDX TapTapClient", "Client received Ready");
             Network.Ready msg = (Network.Ready) message;
             map.setCharacter(msg.playerId, msg.charactername);
             //TODO: create check on CS screen
-        }
-        else if (message instanceof Network.GameReady) {
+        } else if (message instanceof Network.GameReady) {
             Gdx.app.log("GDX TapTapClient", "Client received GameReady");
             Gdx.app.postRunnable(new Runnable() {
                 @Override

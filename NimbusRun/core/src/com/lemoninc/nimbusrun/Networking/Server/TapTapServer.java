@@ -14,6 +14,7 @@ import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
+import com.lemoninc.nimbusrun.Networking.Client.TapTapClient;
 import com.lemoninc.nimbusrun.Networking.Network;
 import com.lemoninc.nimbusrun.Sprites.GameMap;
 
@@ -34,11 +35,13 @@ public class TapTapServer {
     private AtomicInteger PLAYERS = new AtomicInteger(0); //number of players connected to server
     private final int MAXPLAYERS = 4;
 
+    private int[] mapData;
+
 
     /**
      * Constructor starts a server on port 8080 and adds a listener to the server
      */
-    public TapTapServer() {
+    public TapTapServer(int[] mapData) {
         server = new Server() {
             protected Connection newConnection() {
                 //Provide our own implementation of connection so that we can refer
@@ -47,7 +50,9 @@ public class TapTapServer {
             }
         };
 
-        map = new GameMap(this);
+        this.mapData = mapData;
+
+        map = new GameMap(this, mapData);
 
         Network.registerClasses(server);
 
@@ -98,7 +103,8 @@ public class TapTapServer {
                     //name this connection as the clientname
                     connection.name = name;
 
-                    //tell the new client about map state (obstacle coordinates ...)
+                    //tell the new client about mapData
+                    connection.sendTCP(map.getMapDataPacket());
 
                     //if the login is the first guy, send him 1st place
 
@@ -124,7 +130,6 @@ public class TapTapServer {
                             Network.PlayerJoinLeave hereMsg = new Network.PlayerJoinLeave(conn.getID(), herePlayer.playerName, true, herePlayer.x, herePlayer.y); //TODO: server's gamemap needs to be updated too
                             Gdx.app.log("GDX Server", "Telling " + connection.name + " about old client " + herePlayer.playerName);
                             connection.sendTCP(hereMsg); // basic info
-//                            connection.sendTCP(herePlayer.getMovementState()); // info about current movement
                         }
                     }
                 }

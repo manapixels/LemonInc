@@ -106,7 +106,6 @@ public class CharacterSelectionScreen implements Screen{
         this.gameWidth = NimbusRun.V_WIDTH;
         this.gameHeight = NimbusRun.V_HEIGHT;
         this.playmusic=playmusic;
-        this.mapData = null;
 
         charactername=1; //default character is Buddha
 
@@ -429,25 +428,22 @@ public class CharacterSelectionScreen implements Screen{
         style.font.setColor(Color.DARK_GRAY);
         batcher = new SpriteBatch();
         startTime = TimeUtils.millis();
-        mapData = new int[GameMap.NUMPLATFORMS];
+
 
         //instnatiate server, client here
 
-        //TODO: what is happening here?
-//        client = new TapTapClient(game, this, playername);
-//        gamemap = client.getMap();
-
         if (isHost) {
+            mapData = new int[GameMap.NUMPLATFORMS];
             Random rand = new Random();
             for (int i = 0; i < 8; i++){
                 mapData[i] = rand.nextInt(3);
             }
-            Gdx.app.log("GDX CSscreen", "Mapdata created");
+            Gdx.app.log("GDX CSscreen", "Mapdata only created by the Host");
             client = new TapTapClient(game, this, playername, mapData);
             gamemap = client.getMap();
             //start my server and connect my client to my server
             try {
-                server = new TapTapServer();
+                server = new TapTapServer(mapData);
                 client.connect("localhost");
             } catch (IOException e) {
                 Gdx.app.log("GDX CSscreen", "Host cannot connect to server, setting to WaitScreen");

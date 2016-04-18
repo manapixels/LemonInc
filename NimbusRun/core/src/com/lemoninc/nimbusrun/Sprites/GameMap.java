@@ -135,11 +135,7 @@ public class GameMap{
         bgPlatformSprites = new ArrayList<Sprite>();
 
         //TODO: these are created by Server and server sends GameMapStatus to clients
-        //add these sprites to the world
-        ground = new Ground(this, mapData, NUMPLATFORMS);
-        ceiling = new Ceiling(this);
-        startWall = new StartWall(this);
-        endWall = new EndWall(this);
+
 
 //        logInfo("GameMap initialised");
         Gdx.app.log("GDX GameMap", "GameMap instantiated in Client");
@@ -149,14 +145,26 @@ public class GameMap{
     /**
      * This constructor is called inside TapTapServer
      */
-    public GameMap(TapTapServer server) {
+    public GameMap(TapTapServer server, int[] mapData) {
         this.server = server;
         this.isClient = false;
+        this.mapData = mapData;
 
         initCommon();
 
 //        logInfo("GameMap initialised");
         Gdx.app.log("GDX GameMap", "GameMap instantiated in Server");
+    }
+
+    /**
+     * Create box2d world and DebugRenderer
+     */
+    private void initCommon(){
+        world = new World(new Vector2(0, -10), true); //box2d world with gravity
+        b2dr = new Box2DDebugRenderer();
+
+        gamecam = new OrthographicCamera();
+        gameport = new FitViewport(NimbusRun.V_WIDTH * 1.5f / NimbusRun.PPM, NimbusRun.V_HEIGHT * 1.5f / NimbusRun.PPM, gamecam);
     }
 
     public void initPlayers() {
@@ -178,6 +186,14 @@ public class GameMap{
         }
     }
 
+    public void createEnv() {
+        //add these sprites to the world
+        ground = new Ground(this, mapData, NUMPLATFORMS); //TODO: need to be created after MapData is received. At PlayScreen?
+        ceiling = new Ceiling(this);
+        startWall = new StartWall(this);
+        endWall = new EndWall(this);
+    }
+
     private TextureAtlas getImg(int character) {
         // Load up all sprites into spriteMap from textureAtlas
         switch(character){
@@ -197,17 +213,19 @@ public class GameMap{
         }
         return img;
     }
-    
-    /**
-     * Create box2d world and DebugRenderer
-     */
-    private void initCommon(){
-        world = new World(new Vector2(0, -10), true); //box2d world with gravity
-        b2dr = new Box2DDebugRenderer();
 
-        gamecam = new OrthographicCamera();
-        gameport = new FitViewport(NimbusRun.V_WIDTH * 1.5f / NimbusRun.PPM, NimbusRun.V_HEIGHT * 1.5f / NimbusRun.PPM, gamecam);
+    public Network.MapDataPacket getMapDataPacket() {
+        return new Network.MapDataPacket(mapData);
     }
+
+    /**
+     * HAS TO BE CALLED BEFORE GROUND is instantiated
+     * @param mapData
+     */
+    public void setMapData(int[] mapData) {
+        this.mapData = mapData;
+    }
+
     /**
      * Client receives PlayerJoinLeave from server containing player ID, name, initial x and y
      * @param msg
