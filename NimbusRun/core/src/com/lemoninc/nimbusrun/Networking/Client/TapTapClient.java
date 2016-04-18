@@ -27,6 +27,7 @@ import com.lemoninc.nimbusrun.Screens.WaitScreen;
 import com.lemoninc.nimbusrun.Sprites.GameMap;
 
 import java.io.IOException;
+import java.net.InetAddress;
 
 public class TapTapClient {
     private NimbusRun game;
@@ -55,10 +56,13 @@ public class TapTapClient {
         Network.registerClasses(client); //register the classes Client uses with Server
         client.addListener(new Listener() {//add listener for the client
             public void connected(Connection connection) {
+                Gdx.app.log("TapTapClient", "Connected to server");
+
                 handleConnect(connection);
             }
 
             public void received(Connection connection, Object object) {
+                Gdx.app.log("TapTapClient", "Received message");
                 handleMessage(connection, connection.getID(), object);
             }
 
@@ -166,6 +170,17 @@ public class TapTapClient {
         logInfo("Client " + name + " of ID: " + id + " connected to server PORT " + Network.PORT);
     }
 
+    public boolean connectLAN() throws IOException{
+        InetAddress address = client.discoverHost(Network.PORTUDP, 5000);
+
+        if (address != null) {
+            client.connect(1000, address, Network.PORT, Network.PORTUDP);
+            Gdx.app.log("TapTapClient", "Connected successfully!");
+            return true;
+        }
+        return false;
+    }
+
     public void sendMessage(Object message) {
 //        map.logInfo("SENT packet TCP");
         if (client.isConnected()) {
@@ -177,6 +192,7 @@ public class TapTapClient {
 //        map.logInfo("SENT packet UPD");
         if (client.isConnected()) {
             client.sendUDP(message);
+            Gdx.app.log("TapTapClient", "Sent packet UDP");
         }
     }
 

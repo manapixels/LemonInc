@@ -300,6 +300,8 @@ public class GameMap{
         if (client != null && playerLocal != null) {
             if (playerLocal.handleInput()) { // (arrow key has been pressed by player)
                 client.sendMessageUDP(playerLocal.getMovementState()); //send movement state to server
+                Gdx.app.log("GameMap", "Sent MovementState to Server");
+
             }
 
             //gamecam constantly to follow playerLocal

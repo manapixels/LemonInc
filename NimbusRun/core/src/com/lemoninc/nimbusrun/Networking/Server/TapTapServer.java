@@ -137,7 +137,8 @@ public class TapTapServer {
                     msg.playerId = connection.getID();
                     // Server updates its copy of player from what its told
                     map.playerMoved(msg);
-                    server.sendToAllExceptUDP(connection.getID(), msg);
+                    server.sendToAllExceptTCP(connection.getID(), new Network.MovementState(msg.playerId, msg.position, msg.linearVelocity));
+//                    server.sendToAllUDP(new Network.MovementState(msg.playerId, msg.position, msg.linearVelocity));
                 }
                 else if (message instanceof Network.Ready) {
                     Network.Ready msg = (Network.Ready) message;

@@ -416,7 +416,7 @@ public class CharacterSelectionScreen implements Screen{
             //client connects to ipAddress
             try {
                 Gdx.app.log("CSscreen", "connecting to "+ipAddress+".");
-                client.connect(ipAddress);
+                client.connectLAN();
             } catch (IOException e) {
 //                logInfo("Can't connect to server: " + ipAddress);
                 Gdx.app.postRunnable(new Runnable() {
@@ -460,7 +460,9 @@ public class CharacterSelectionScreen implements Screen{
 
         batcher.begin();
         sprite.draw(batcher);
-        style.font.draw(batcher, "Host IP address: " + myIP, Gdx.graphics.getWidth()/3+75,80);
+        if (myIP != null) {
+            style.font.draw(batcher, "Host IP address: " + myIP, Gdx.graphics.getWidth()/3+75,80);
+        }
         playercharacter.setPosition(75, 50);
         playercharacter.setSize(Gdx.graphics.getWidth() - Gdx.graphics.getWidth() / 8, Gdx.graphics.getHeight() - Gdx.graphics.getWidth() / 8);
         playercharacter.draw(batcher);

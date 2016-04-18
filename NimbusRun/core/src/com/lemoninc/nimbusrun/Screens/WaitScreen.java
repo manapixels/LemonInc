@@ -45,6 +45,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lemoninc.nimbusrun.NimbusRun;
 
+import java.net.InetAddress;
 import java.util.Random;
 
 public class WaitScreen implements Screen{
@@ -197,17 +198,7 @@ public class WaitScreen implements Screen{
 
 
     public void update(float dt) {
-        handleInput();
         gamecam.update();
-    }
-
-    protected void handleInput() {
-//        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
-//            playGame();
-//        }
-//        else if (Gdx.input.isKeyPressed(Input.Keys.UP)){
-//            game.setScreen(new PlayScreen(game, false, "localhost", getName()));
-//        }
     }
 
     @Override
@@ -221,7 +212,6 @@ public class WaitScreen implements Screen{
         batch.begin();
         sprite.draw(batch);
         batch.end();
-
 
         stage.act();
         stage.draw();
@@ -261,11 +251,10 @@ public class WaitScreen implements Screen{
      * join a game room
      */
     private void joinGame(){
-        if (!playerIP.getText().equals("")) {
+//        if (!playerIP.getText().equals("")) {
             game.setScreen(new CharacterSelectionScreen(game, false, playerIP.getText(), getName()));
-            //TODO: what if IP is blank?
             savePrefs();
-        }
+//        }
     }
 
     /**
