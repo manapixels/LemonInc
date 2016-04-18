@@ -65,7 +65,7 @@ public class Player extends Sprite implements InputProcessor{
     private String name;
     private BitmapFont font;
 
-    private boolean stunned, poisoned, reversed, terrored, flashed, confused, devMode, finished, instantiated;
+    private boolean stunned, poisoned, reversed, terrored, flashed, confused, devMode, finished;
     private float stunTime, poisonTime, reverseTime, terrorTime, flashTime, confuseTime;
 
     private final float JUMPFORCE = 6f;
@@ -108,7 +108,6 @@ public class Player extends Sprite implements InputProcessor{
         confuseTime = 0f;
         devMode = false;
         finished = false;
-        instantiated = false;
 
         //create a dynamic bodydef
         BodyDef bdef = new BodyDef();
@@ -277,13 +276,7 @@ public class Player extends Sprite implements InputProcessor{
     }
 
     public void update(float delta){
-        if (instantiated){
-            recover(1f);
-        } else {
-            if (b2body != null || gameMap != null){
-                instantiated = true;
-            }
-        }
+        recover(1f);
 //        Log.info("Player isStunned " + isStunned() + " stunTime " + getStunTime());
 //        Log.info("Player isPoisoned " + isPoisoned() + " poisonTime " + getPoisonTime());
 //        Log.info("Player isReversed " + isReversed() + " reverseTime " + getReverseTime());
@@ -293,9 +286,10 @@ public class Player extends Sprite implements InputProcessor{
     }
 
     public boolean recover(float delta) {
-        if (this.getX() >= gameMap.getGameport().getWorldWidth() * 18.5f) {
-            finished = true;
-        }
+        if (b2body != null || gameMap != null)
+            if (this.getX() >= gameMap.getGameport().getWorldWidth() * 18.5f) {
+                finished = true;
+            }
         if (isStunned()){
             stunTime -= delta;
             if (stunTime <= 0)

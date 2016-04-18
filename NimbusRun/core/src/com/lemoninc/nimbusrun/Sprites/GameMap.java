@@ -28,6 +28,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
@@ -98,6 +99,16 @@ public class GameMap{
         //instantiate HUD, GameSounds, BitmapFont, Camera, SpriteBatch ...
         gamecam = new OrthographicCamera();
         gameport = new FitViewport(NimbusRun.V_WIDTH * 1.5f / NimbusRun.PPM, NimbusRun.V_HEIGHT * 1.5f / NimbusRun.PPM, gamecam);
+
+        //font for player names on avatars
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("PlayScreen/SF Atarian System.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 10;
+        font = generator.generateFont(parameter);
+        font.setColor(Color.WHITE);
+        font.getData().setScale(0.1f, 0.1f);
+        font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        generator.dispose();
 
         //set starting pos of bgSprites after setting cam
         bgStartX = -gameport.getWorldWidth() * 1.5f;
@@ -303,7 +314,7 @@ public class GameMap{
         //TODO: should the box2d world be rendered here?
         for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {
             Player curPlayer = playerEntry.getValue();
-            if (curPlayer != null) {
+            if (client!=null && curPlayer != null) {
                 curPlayer.update(delta);
             }
             //if(curPlayer != playerLocal) curPlayer.renderNameTag(spriteBatch, fontNameTag);
@@ -327,6 +338,7 @@ public class GameMap{
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        b2dr.render(world, gamecam.combined);
         //--------------START batch
         batch.setProjectionMatrix(gamecam.combined);
         batch.begin();
@@ -341,7 +353,7 @@ public class GameMap{
         for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {
             Player curPlayer = playerEntry.getValue();
             curPlayer.draw(batch);
-//            font.draw(batch, "PlayerTest", curPlayer.getX(), curPlayer.getY());
+            font.draw(batch, "PlayerTest", curPlayer.getX(), curPlayer.getY());
             //  Render flashbang if flashed
             if (curPlayer.isFlashed()) {
                 Gdx.gl.glClearColor(1, 1, 1, 1);
@@ -351,7 +363,6 @@ public class GameMap{
         }
         //----------------END batch
         batch.end();
-        b2dr.render(world, gamecam.combined);
     }
 
     public void makePlatformsBG(float startX, float endX, char type){
