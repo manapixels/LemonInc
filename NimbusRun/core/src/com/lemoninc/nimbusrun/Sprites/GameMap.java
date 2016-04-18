@@ -60,6 +60,7 @@ public class GameMap{
     private Viewport gameport;
 
     private SpriteBatch batch;
+    private TextureAtlas img;
     private Texture bgTexture;
     private Sprite bgSprite;
     private float bgHeight, bgWidth, bgStartX, bgStartY;
@@ -67,10 +68,7 @@ public class GameMap{
 
     private Texture bgTextureFlat, bgTextureMountain, bgTexturePit, bgTexturePlateau;
     private List<Sprite> bgPlatformSprites;
-    private float bgFlatHeight, bgFlatWidth;
-    private float bgMountainHeight, bgMountainWidth;
-    private float bgPlateauHeight, bgPlateauWidth;
-    private float bgPitHeight, bgPitWidth;
+
     private BitmapFont font;
 
     private World world;
@@ -80,11 +78,12 @@ public class GameMap{
     private StartWall startWall;
     private EndWall endWall;
     private int[] mapData;
-
+    final private int numPlatforms = 8;
 
     private Player playerLocal;
     private DummyPlayer dummyLocal;
-    private TextureAtlas img;
+    private List<Integer> rankings;
+
     private int sourceX;
 
     /**
@@ -100,7 +99,7 @@ public class GameMap{
         initCommon();
 
         //font for player names on avatars
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("PlayScreen/SF Atarian System.ttf"));
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("Fonts/SF Atarian System.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 10;
         font = generator.generateFont(parameter);
@@ -114,14 +113,16 @@ public class GameMap{
         bgStartY = -gameport.getWorldHeight() * 1.5f;
 //        Log.info(bgStartY + " y pos");
         batch = new SpriteBatch();
+        rankings = new ArrayList<Integer>();
+        initCommon();
 
 
         // initialise all background sprites
         bgTexture = new Texture("4_PlayScreen/bg_dark.png");
         bgTexture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
-        bgSprite = new Sprite(new TextureRegion(bgTexture, bgTexture.getWidth()*11, bgTexture.getHeight()*2));
-        bgWidth = bgTexture.getWidth() / NimbusRun.PPM * 1.4f * 11;
-        bgHeight = bgTexture.getHeight() / NimbusRun.PPM * 1.4f * 2;
+        bgSprite = new Sprite(new TextureRegion(bgTexture, bgTexture.getWidth()*19, bgTexture.getHeight()*3));
+        bgWidth = bgTexture.getWidth() / NimbusRun.PPM * 1.5f * 19;
+        bgHeight = bgTexture.getHeight() / NimbusRun.PPM * 1.5f * 3;
         bgSprite.setX(bgStartX);
         bgSprite.setY(bgStartY);
         bgSprite.setSize(bgWidth, bgHeight);
@@ -135,8 +136,7 @@ public class GameMap{
 
         //TODO: these are created by Server and server sends GameMapStatus to clients
         //add these sprites to the world
-        //TODO: mapData is sent from server
-        ground = new Ground(this, mapData);
+        ground = new Ground(this, mapData, numPlatforms);
         ceiling = new Ceiling(this);
         startWall = new StartWall(this);
         endWall = new EndWall(this);
@@ -167,6 +167,7 @@ public class GameMap{
                 playerLocal = new Player(this, getImg(curPlayer.character), curPlayer.x, curPlayer.y, true);
                 playerLocal.setName(curPlayer.playerName);
                 players.put(curPlayer.playerID, playerLocal);
+                rankings.add(curPlayer.playerID);
             }
             else {
                 Player newPlayer= new Player(this, getImg(curPlayer.character), curPlayer.x, curPlayer.y, false);
@@ -207,7 +208,6 @@ public class GameMap{
         gamecam = new OrthographicCamera();
         gameport = new FitViewport(NimbusRun.V_WIDTH * 1.5f / NimbusRun.PPM, NimbusRun.V_HEIGHT * 1.5f / NimbusRun.PPM, gamecam);
     }
-
     /**
      * Client receives PlayerJoinLeave from server containing player ID, name, initial x and y
      * @param msg
@@ -415,6 +415,9 @@ public class GameMap{
 
     public Map<Integer, Player> getPlayers(){
         return players;
+    }
+    public List<Integer> getRankings(){
+        return rankings;
     }
 
     public synchronized void logInfo(String string) {

@@ -14,7 +14,7 @@ package com.lemoninc.nimbusrun.Screens;
  *       Viewport   getGamePort(()
  *       void       dispose()
  * NOTES :
- * LAST UPDATED: 8/4/2016 09:00
+ * LAST UPDATED: 18/4/2016 21:37
  *
  * ********************************/
 
@@ -44,6 +44,8 @@ import com.lemoninc.nimbusrun.NimbusRun;
 import com.lemoninc.nimbusrun.Sprites.GameMap;
 import com.lemoninc.nimbusrun.Sprites.Player;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class EndScreen implements Screen{
@@ -53,16 +55,19 @@ public class EndScreen implements Screen{
     private OrthographicCamera gamecam;
     private Viewport gameport;
     private Map<Integer, Player> players;
+    private List<Integer> rankings;
+    private int numPlayers;
+
 
     private SpriteBatch batch, winner, second, third, last;
-    private Sprite aspectRatio;
+    private Sprite bg;
     Music music;
     Boolean playmusic;
     private TextButton.TextButtonStyle style;
     private TextButton Continue;
     private Stage stage;
 
-    public EndScreen(NimbusRun game,Boolean playmusic){
+    public EndScreen(NimbusRun game, Boolean playmusic, Map<Integer, Player> players, List<Integer> rankings){
         this.playmusic=playmusic;
         this.game = game;
         gamecam = new OrthographicCamera();
@@ -78,15 +83,11 @@ public class EndScreen implements Screen{
         stage= new Stage(new ExtendViewport(game.V_WIDTH, game.V_HEIGHT));
         this.players = players;
 
-        //Log.info(players.size() + " size");
-
         batch = new SpriteBatch();
-        aspectRatio = new Sprite(new Texture("whitebackground.png"));
 
-        aspectRatio = new Sprite(new Texture("5_EndScreen/bg.png"));
-
-        aspectRatio.setPosition(0, 0);
-        aspectRatio.setSize(game.V_WIDTH / game.PPM, game.V_HEIGHT / game.PPM);
+        bg = new Sprite(new Texture("5_EndScreen/bg.png"));
+        bg.setPosition(gameport.getWorldWidth()/2, gameport.getWorldHeight()/2);
+        bg.setSize(game.V_WIDTH / game.PPM, game.V_HEIGHT / game.PPM);
 
         style = new TextButton.TextButtonStyle();  //can customize
         style.font = new BitmapFont(Gdx.files.internal("Fonts/crimesFont48Black.fnt"));
@@ -112,10 +113,6 @@ public class EndScreen implements Screen{
         show();
 }
 
-//    public void update(float delta) {
-//        gamecam.update();
-//    }
-
     @Override
     public void resize(int width, int height) {
         gameport.update(width, height);
@@ -127,14 +124,14 @@ public class EndScreen implements Screen{
 
         batch.setProjectionMatrix(gamecam.combined);
         batch.begin();
-        //aspectRatio.draw(batch);
+        bg.draw(batch);
 
-        // Render Players
+        int numPlayers = players.size();
         for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {
             Player curPlayer = playerEntry.getValue();
-            //Log.info(playerEntry.toString());
-            int ranking = 1;
-            curPlayer.setX(NimbusRun.V_WIDTH/2);
+            int ranking = rankings.indexOf(playerEntry.getKey());
+            // formula for setting X positions based on rankings
+            curPlayer.setX(gameport.getScreenWidth() * ((numPlayers - ranking + 1)/(numPlayers+1)));
             curPlayer.draw(batch);
         }
 
@@ -168,7 +165,7 @@ public class EndScreen implements Screen{
 
     @Override
     public void dispose() {
-        aspectRatio.getTexture().dispose();
+        bg.getTexture().dispose();
         stage.dispose();
         music.dispose();
         //aspectRatio.getTexture().dispose();

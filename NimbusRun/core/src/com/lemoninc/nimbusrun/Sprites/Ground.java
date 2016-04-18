@@ -27,7 +27,7 @@ public class Ground {
     private float startX, endX;
     private int[] mapData;
 
-    public Ground(GameMap gameMap, int[] mapData) {
+    public Ground(GameMap gameMap, int[] mapData, int numPlatforms) {
         this.gameMap = gameMap;
         this.world = gameMap.getWorld();
         this.mapData = mapData;
@@ -40,7 +40,7 @@ public class Ground {
         endX += gameMap.getGameport().getWorldWidth()*2;
 
         //Log.info("Each platform is " + gameMap.getGameport().getWorldWidth()*2 + " long.");
-        for (int i = 0; i < 8; i++){
+        for (int i = 0; i < numPlatforms; i++){
             int choice = mapData[i];
             if (choice == 0){
                 makePlateau(startX, endX);
