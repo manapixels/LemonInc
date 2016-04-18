@@ -33,6 +33,7 @@ public class TapTapClient {
     public int id; //Player's connection ID
     public String remoteIP;
     private GameMap map;
+    private int[] mapData;
 
     private CharacterSelectionScreen currentScreen;
     private MenuScreen menuScreen;
@@ -42,9 +43,9 @@ public class TapTapClient {
     /**
      * This constructor is called in CharacterSelectionScreen when the player is connecting to server
      */
-    public TapTapClient(NimbusRun game, CharacterSelectionScreen screen, String name) {
+    public TapTapClient(NimbusRun game, CharacterSelectionScreen screen, String name, int[] mapData) {
         this.game = game;
-        map = new GameMap(this); //create new GameMap for Client
+        map = new GameMap(this, mapData); //create new GameMap for Client
         this.name = name;
 
         client = new Client();

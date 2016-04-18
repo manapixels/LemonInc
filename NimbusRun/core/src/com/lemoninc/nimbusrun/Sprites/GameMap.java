@@ -17,10 +17,6 @@ package com.lemoninc.nimbusrun.Sprites;
  * ********************************/
 
 import com.badlogic.gdx.Gdx;
-
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -32,8 +28,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lemoninc.nimbusrun.Networking.Client.TapTapClient;
@@ -55,6 +49,7 @@ public class GameMap{
 
     private Map<Integer, Player> players = new HashMap<Integer, Player>(); //playerId, Player
     private Map<Integer, DummyPlayer> dummyPlayers = new HashMap<Integer, DummyPlayer>(); //playerId, Player
+
 
     private OrthographicCamera gamecam;
     private Viewport gameport;
@@ -79,6 +74,7 @@ public class GameMap{
     private Ceiling ceiling;
     private StartWall startWall;
     private EndWall endWall;
+    private int[] mapData;
 
     private Player playerLocal;
     private DummyPlayer dummyLocal;
@@ -88,10 +84,11 @@ public class GameMap{
     /**
      * This constructor is called inside TapTapClient
      */
-    public GameMap(TapTapClient client) {
+    public GameMap(TapTapClient client, int[] mapData) {
 
         this.client = client;
         this.isClient = true;
+        this.mapData = mapData;
 
         //instantiate HUD, GameSounds, BitmapFont, Camera, SpriteBatch ...
         gamecam = new OrthographicCamera();
@@ -123,7 +120,7 @@ public class GameMap{
 
         //TODO: these are created by Server and server sends GameMapStatus to clients
         //add these sprites to the world
-        ground = new Ground(this);
+        ground = new Ground(this, mapData);
         ceiling = new Ceiling(this);
         startWall = new StartWall(this);
         endWall = new EndWall(this);
@@ -179,8 +176,7 @@ public class GameMap{
         }
         return img;
     }
-
-//<<<<<<< HEAD
+    
     /**
      * Create box2d world and DebugRenderer
      */
@@ -359,7 +355,7 @@ public class GameMap{
             case 'M': sprite = new Sprite(bgTextureMountain);
                 sprite.setPosition(startX, -bgMountainHeight*0.4f);
                 sprite.setSize(bgMountainWidth, bgMountainHeight);
-                //Log.info("Mountain made at: " + startX);
+//                Log.info("Mountain made at: " + startX);
                 bgPlatformSprites.add(sprite); break;
         }
     }
@@ -381,7 +377,7 @@ public class GameMap{
         batch.dispose();
         //dispose textures
         img.dispose();
-        //font.dispose();
+        font.dispose();
         //TODO:friendly players textures?
     }
 

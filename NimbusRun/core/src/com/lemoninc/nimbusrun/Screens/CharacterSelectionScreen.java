@@ -23,7 +23,6 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -51,6 +50,7 @@ import com.lemoninc.nimbusrun.NimbusRun;
 import com.lemoninc.nimbusrun.Sprites.GameMap;
 
 import java.io.IOException;
+import java.util.Random;
 
 
 /**
@@ -90,6 +90,8 @@ public class CharacterSelectionScreen implements Screen{
     private TapTapServer server;
     private GameMap gamemap;
 
+    private int[] mapData;
+
     public CharacterSelectionScreen(final NimbusRun game, final boolean isHost, String ipAddress, String playerName, final Boolean playmusic){
 
 
@@ -101,12 +103,14 @@ public class CharacterSelectionScreen implements Screen{
      * @param playerName
      */
         this.game = game;
-        this.isHost=isHost;
-        this.ipAddress=ipAddress;
-        this.playername=playerName;
+        this.isHost = isHost;
+        this.ipAddress = ipAddress;
+        this.playername = playerName;
         this.gameWidth = NimbusRun.V_WIDTH;
         this.gameHeight = NimbusRun.V_HEIGHT;
         this.playmusic=playmusic;
+        this.mapData = null;
+//        myIP=ipAddress;
 
 
         //myIP=ipAddress;
@@ -244,7 +248,6 @@ public class CharacterSelectionScreen implements Screen{
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 resetbuttons();
-
                 System.out.println("touched");
                 Gdx.app.log("Button pressed", "Buddha Button Pressed");
                 playercharacter = skin.getSprite("bg_Buddha");
@@ -256,7 +259,7 @@ public class CharacterSelectionScreen implements Screen{
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 
                 Playerability = "STUN";
-                charactername=1;
+                charactername = 1;
                 System.out.println("touched");
 
             }
@@ -270,6 +273,8 @@ public class CharacterSelectionScreen implements Screen{
 //                System.out.println("touched");
 //                Gdx.app.log("Button pressed", "Foxy Button Pressed");
                 playercharacter= skin.getSprite("bg_Foxy");
+                playercharacter.setPosition(0, 0);
+                playercharacter.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
                 return true;
             }
 
@@ -289,6 +294,8 @@ public class CharacterSelectionScreen implements Screen{
                 System.out.println("touched");
                 Gdx.app.log("Button pressed", "Kappa Button Pressed");
                 playercharacter= skin.getSprite("bg_Kappa");
+                playercharacter.setPosition(0, 0);
+                playercharacter.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
                 return true;
             }
 
@@ -306,6 +313,8 @@ public class CharacterSelectionScreen implements Screen{
                 System.out.println("touched");
                 Gdx.app.log("Button pressed", "KrishnaButton Pressed");
                 playercharacter= skin.getSprite("bg_Krishna");
+                playercharacter.setPosition(0, 0);
+                playercharacter.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
                 return true;
             }
 
@@ -323,6 +332,8 @@ public class CharacterSelectionScreen implements Screen{
                 System.out.println("touched");
                 Gdx.app.log("Button pressed", "madame Button Pressed");
                 playercharacter= skin.getSprite("bg_Madame");
+                playercharacter.setPosition(0, 0);
+                playercharacter.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
                 return true;
             }
 
@@ -340,6 +351,8 @@ public class CharacterSelectionScreen implements Screen{
                 System.out.println("touched");
                 Gdx.app.log("Button pressed", "Ponti Button Pressed");
                 playercharacter= skin.getSprite("bg_Pontianak");
+                playercharacter.setPosition(0, 0);
+                playercharacter.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
                 return true;
             }
 
@@ -417,24 +430,29 @@ public class CharacterSelectionScreen implements Screen{
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
-        //sprite = new Sprite(new Texture("whitebackground.png"));
+        sprite = new Sprite(new Texture("whitebackground.png"));
         //sprite.setColor(1, 1, 1, 0);
         playercharacter=new Sprite(skin.getSprite("bg_Buddha"));
         //sprite.setPosition(0, 0);
         //sprite.setSize(gameWidth, gameHeight);
         style.font=new BitmapFont(Gdx.files.internal("Fonts/crimesFont36Black.fnt"));
-        style.font.getData().setScale(0.7f,0.7f);
+        style.font.getData().setScale(0.7f, 0.7f);
         style.font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         style.font.setColor(Color.DARK_GRAY);
         batcher = new SpriteBatch();
         startTime = TimeUtils.millis();
+        mapData = new int[8];
 
         //instnatiate server, client here
 
-        client = new TapTapClient(game, this, playername);
-        gamemap = client.getMap();
-
+        
         if (isHost) {
+            Random rand = new Random();
+            for (int i = 0; i < 8; i++){
+                mapData[i] = rand.nextInt(3);
+            }
+            client = new TapTapClient(game, this, playername, mapData);
+            gamemap = client.getMap();
             //start my server and connect my client to my server
             try {
                 server = new TapTapServer();
@@ -452,6 +470,8 @@ public class CharacterSelectionScreen implements Screen{
             }
         }
         else {
+            client = new TapTapClient(game, this, playername, mapData);
+            gamemap = client.getMap();
             //client connects to ipAddress
             try {
                 client.connect(ipAddress);

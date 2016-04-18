@@ -27,7 +27,6 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -39,10 +38,8 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
-import com.esotericsoftware.minlog.Log;
 import com.lemoninc.nimbusrun.Networking.Network;
 import com.lemoninc.nimbusrun.NimbusRun;
-import com.lemoninc.nimbusrun.scenes.HUD;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -65,7 +62,7 @@ public class Player extends Sprite implements InputProcessor{
     private String name;
     private BitmapFont font;
 
-    private boolean stunned, poisoned, reversed, terrored, flashed, confused, devMode, finished;
+    private boolean stunned, poisoned, reversed, terrored, flashed, confused, devMode, finished, instantiated;
     private float stunTime, poisonTime, reverseTime, terrorTime, flashTime, confuseTime;
 
     private final float JUMPFORCE = 6f;
@@ -111,6 +108,7 @@ public class Player extends Sprite implements InputProcessor{
         confuseTime = 0f;
         devMode = false;
         finished = false;
+        instantiated = false;
 
         //create a dynamic bodydef
         BodyDef bdef = new BodyDef();
@@ -282,7 +280,13 @@ public class Player extends Sprite implements InputProcessor{
     }
 
     public void update(float delta){
-        recover(1f);
+        if (instantiated){
+            recover(1f);
+        } else {
+            if (b2body != null || gameMap != null){
+                instantiated = true;
+            }
+        }
 //        Log.info("Player isStunned " + isStunned() + " stunTime " + getStunTime());
 //        Log.info("Player isPoisoned " + isPoisoned() + " poisonTime " + getPoisonTime());
 //        Log.info("Player isReversed " + isReversed() + " reverseTime " + getReverseTime());
