@@ -58,7 +58,6 @@ public class EndScreen implements Screen{
     private List<Integer> rankings;
     private int numPlayers;
 
-
     private SpriteBatch batch, winner, second, third, last;
     private Sprite bg;
     Music music;
@@ -66,6 +65,8 @@ public class EndScreen implements Screen{
     private TextButton.TextButtonStyle style;
     private TextButton Continue;
     private Stage stage;
+
+    private List<Sprite> dummySprites;
 
     public EndScreen(NimbusRun game, Boolean playmusic, Map<Integer, Player> players, List<Integer> rankings){
         this.playmusic=playmusic;
@@ -82,11 +83,12 @@ public class EndScreen implements Screen{
 
         stage= new Stage(new ExtendViewport(game.V_WIDTH, game.V_HEIGHT));
         this.players = players;
+        this.rankings = rankings;
 
         batch = new SpriteBatch();
 
         bg = new Sprite(new Texture("5_EndScreen/bg.png"));
-        bg.setPosition(gameport.getWorldWidth()/2, gameport.getWorldHeight()/2);
+        bg.setPosition(-game.V_WIDTH/game.PPM/2, -game.V_HEIGHT/game.PPM/2);
         bg.setSize(game.V_WIDTH / game.PPM, game.V_HEIGHT / game.PPM);
 
         style = new TextButton.TextButtonStyle();  //can customize
@@ -101,6 +103,24 @@ public class EndScreen implements Screen{
         Continue.setPosition(game.V_WIDTH/game.PPM*0.8f, game.V_HEIGHT/game.PPM*0.8f);
         stage.addActor(Continue);
 
+        /*
+        *  remove code below after removal of dummyPlayers
+         */
+        dummySprites = new ArrayList<Sprite>();
+        dummySprites.add(new Sprite(new Texture(Gdx.files.internal("5_EndScreen/btn_kappa.png"))));
+        dummySprites.add(new Sprite(new Texture(Gdx.files.internal("5_EndScreen/btn_kappa.png"))));
+        dummySprites.get(0).setSize(150, 150);
+        dummySprites.get(1).setSize(150, 150);
+
+        int i=0;
+        int numPlayers = dummySprites.size();
+        for (Sprite sprite : dummySprites) {
+            int ranking = i++;
+            // formula for setting X positions based on rankings
+            // ((numPlayers - ranking + 1)/(numPlayers+1))
+            sprite.setPosition(game.V_WIDTH / 2, 0);
+            Log.info("pos " + (game.V_WIDTH/game.PPM * ((numPlayers - ranking + 1)/(numPlayers+1))));
+        }
     }
 
     @Override
@@ -122,18 +142,28 @@ public class EndScreen implements Screen{
     @Override
     public void show() {
 
-        batch.setProjectionMatrix(gamecam.combined);
+        //batch.setProjectionMatrix(gamecam.combined);
         batch.begin();
         bg.draw(batch);
+        //Log.info("hello" + dummySprites.size() + " " + rankings.size());
 
-        int numPlayers = players.size();
-        for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {
-            Player curPlayer = playerEntry.getValue();
-            int ranking = rankings.indexOf(playerEntry.getKey());
-            // formula for setting X positions based on rankings
-            curPlayer.setX(gameport.getScreenWidth() * ((numPlayers - ranking + 1)/(numPlayers+1)));
-            curPlayer.draw(batch);
+
+        for (Sprite sprite : dummySprites) {
+            sprite.draw(batch);
         }
+
+        /*
+        Use the code below to replace the dummy player sprites
+         */
+//        int numPlayers = players.size();
+//        for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {
+//            Player curPlayer = playerEntry.getValue();
+//            int ranking = rankings.indexOf(playerEntry.getKey());
+//            // formula for setting X positions based on rankings
+//            curPlayer.setX(game.V_WIDTH/game.PPM * ((numPlayers - ranking + 1)/(numPlayers+1)));
+//            Log.info("pos " + (game.V_WIDTH/game.PPM * ((numPlayers - ranking + 1)/(numPlayers+1))));
+//            curPlayer.draw(batch);
+//        }
 
         batch.end();
 
@@ -166,9 +196,8 @@ public class EndScreen implements Screen{
     @Override
     public void dispose() {
         bg.getTexture().dispose();
-        stage.dispose();
+        //stage.dispose();
         music.dispose();
-        //aspectRatio.getTexture().dispose();
         //gameMap.getWorld().dispose();
         //stage.dispose();
         for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {

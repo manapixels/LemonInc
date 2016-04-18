@@ -22,6 +22,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.esotericsoftware.minlog.Log;
 import com.lemoninc.nimbusrun.Networking.Client.TapTapClient;
 import com.lemoninc.nimbusrun.Networking.Server.TapTapServer;
 import com.lemoninc.nimbusrun.NimbusRun;
@@ -123,6 +124,7 @@ public class PlayScreen implements Screen{
     }
     
     public void gameOver() {
+        Log.info("numPlayers" + gamemap.getDummyPlayers().size());
         game.setScreen(new EndScreen(game, playmusic, gamemap.getPlayers(), gamemap.getRankings()));
     }
 

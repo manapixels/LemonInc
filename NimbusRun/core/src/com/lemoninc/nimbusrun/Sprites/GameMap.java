@@ -82,7 +82,7 @@ public class GameMap{
 
     private Player playerLocal;
     private DummyPlayer dummyLocal;
-    private List<Integer> rankings;
+    private List<Integer> rankings = new ArrayList<Integer>();
 
     private int sourceX;
 
@@ -113,7 +113,7 @@ public class GameMap{
         bgStartY = -gameport.getWorldHeight() * 1.5f;
 //        Log.info(bgStartY + " y pos");
         batch = new SpriteBatch();
-        rankings = new ArrayList<Integer>();
+
         initCommon();
 
 
@@ -181,6 +181,7 @@ public class GameMap{
                 Player newPlayer= new Player(this, getImg(curPlayer.character), curPlayer.x, curPlayer.y, false);
                 newPlayer.setName(curPlayer.playerName);
                 players.put(curPlayer.playerID, newPlayer);
+                rankings.add(curPlayer.playerID);
 
             }
         }
@@ -235,6 +236,7 @@ public class GameMap{
         if (this.dummyLocal == null) {
             dummyLocal = new DummyPlayer(client.id, msg.name, msg.initial_x, msg.initial_y, true);
             dummyPlayers.put(dummyLocal.playerID, dummyLocal);
+            rankings.add(dummyLocal.playerID);
             //hud.setPlayerLocal(playerLocal);
             //setStatus("Connected to " + client.remoteIP);
             Gdx.app.log("GDX GameMap", "local player created at "+msg.initial_x+" "+msg.initial_y);
@@ -253,6 +255,7 @@ public class GameMap{
         DummyPlayer newDummy = new DummyPlayer(msg.playerId, msg.name, msg.initial_x, msg.initial_y, false);
 
         dummyPlayers.put(newDummy.playerID, newDummy);
+        rankings.add(newDummy.playerID);
 //        logInfo("Player " +msg.playerId+" added to players!");
     }
 
@@ -274,6 +277,7 @@ public class GameMap{
      */
     public synchronized void removePlayer(Network.PlayerJoinLeave msg) {
         dummyPlayers.remove(msg.playerId);
+        rankings.remove(rankings.indexOf(msg.playerId));
 
         if (players.get(msg.playerId) != null) {
             world.destroyBody(players.get(msg.playerId).b2body);
@@ -433,6 +437,9 @@ public class GameMap{
 
     public Map<Integer, Player> getPlayers(){
         return players;
+    }
+    public Map<Integer, DummyPlayer> getDummyPlayers(){
+        return dummyPlayers;
     }
     public List<Integer> getRankings(){
         return rankings;

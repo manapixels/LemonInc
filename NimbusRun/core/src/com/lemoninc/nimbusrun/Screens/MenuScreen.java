@@ -228,7 +228,7 @@ public class MenuScreen implements Screen {
     public void dispose() {
         stage.dispose();
         batch.dispose();
-        //music.dispose();
+        music.dispose();
         //soundclick.dispose();
     }
 

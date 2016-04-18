@@ -67,7 +67,7 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
         //worldLength = 18*gameMap.getGameport().getWorldWidth();
         Gdx.app.log("worled length",String.valueOf(worldLength));
         powerupdistance=worldLength/3;
-        worldTimer = 100;
+        worldTimer = 1;
 
         timecount=0;
         camera=new PerspectiveCamera();
