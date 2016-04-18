@@ -115,12 +115,9 @@ public class CharacterSelectionScreen implements Screen{
 
         //myIP=ipAddress;
         Playerability="STUN";
-
         charactername=1; //default character is Buddha
-
         BUTTON_HEIGHT=150;
         BUTTON_WIDTH=125;
-
         soundclick=Gdx.audio.newSound(Gdx.files.internal("Sounds/click.mp3"));
 
         music=Gdx.audio.newMusic(Gdx.files.internal("Sounds/characterselectionscreen.mp3"));
