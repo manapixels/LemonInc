@@ -86,17 +86,15 @@ public class CharacterSelectionScreen implements Screen{
      *
      * @param game
      * @param isHost
-     * @param ipAddress to connect the client to the server
      * @param playerName
      */
-    public CharacterSelectionScreen(NimbusRun game, final boolean isHost, String ipAddress, String playerName){
+    public CharacterSelectionScreen(NimbusRun game, final boolean isHost, String playerName){
         this.game = game;
         this.isHost=isHost;
         this.ipAddress=ipAddress;
         this.playername=playerName;
         this.gameWidth = NimbusRun.V_WIDTH;
         this.gameHeight = NimbusRun.V_HEIGHT;
-//        myIP=ipAddress;
 
         charactername=1; //default character is Buddha
 
@@ -325,31 +323,25 @@ public class CharacterSelectionScreen implements Screen{
         joingame.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                //charactername= checkbuttonpress();
-                Gdx.app.log("PlayerNumber", "Character " + charactername + " joined game");
-//                playGame(charactername);
-                //TODO:save the charactername, let server know player is ready to play
+                Gdx.app.log("CSscreen", "Character " + charactername + " selected for the player");
                 //send server charactername packet
-                if (charactername != 99) {
+                if (charactername != 99) { //if character is chosen
                     Network.Ready ready = new Network.Ready(charactername);
                     client.sendMessage(ready);
                     gamemap.declareCharacter(charactername);
-                    Gdx.app.log("CSscreen", "self declare character");
-                    //TODO: create check on CS screen
+                    Gdx.app.log("CSscreen", "I declared my character to GameMap");
 
                 }
                 if (isHost) {
-                    //TODO: try to start game
-
                     //if received charactername from all players, play game
                     if (server.allDummyReady()) {
-                        //TODO: send all clients GameReady
+                        //send to server GameReady
                         Network.GameReady gameready = new Network.GameReady();
                         client.sendMessage(gameready);
                         playGame();
                     }
                     else {
-                        Gdx.app.log("CSscreen", "Not all dummies ready ");
+                        Gdx.app.log("CSscreen", "Not all dummies ready");
                     }
                 }
             }
@@ -379,12 +371,10 @@ public class CharacterSelectionScreen implements Screen{
     public void show() {
         Gdx.input.setInputProcessor(stage);
         sprite = new Sprite(new Texture("whitebackground.png"));
-        //sprite.setColor(1, 1, 1, 0);
         playercharacter=new Sprite(skin.getSprite("bg_Buddha"));
         sprite.setPosition(0, 0);
         sprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-//        playercharacter.setPosition(50, 20);
-//        playercharacter.setSize(Gdx.graphics.getWidth() - Gdx.graphics.getWidth() / 15, Gdx.graphics.getHeight() - Gdx.graphics.getWidth() / 15);
+
         style.font=new BitmapFont(Gdx.files.internal("Fonts/Basker32.fnt"));
         style.font.setColor(Color.DARK_GRAY);
         batcher = new SpriteBatch();
@@ -401,13 +391,11 @@ public class CharacterSelectionScreen implements Screen{
                 server = new TapTapServer();
                 client.connect("localhost");
             } catch (IOException e) {
-                e.printStackTrace();
-//                logInfo("Can't connect to localhost server");
+                Gdx.app.log("CSscreen", "Host cannot connect to server, setting to WaitScreen");
                 Gdx.app.postRunnable(new Runnable() {
                     @Override
                     public void run() {
                         game.setScreen(new WaitScreen(game));
-
                     }
                 });
             }
@@ -415,10 +403,10 @@ public class CharacterSelectionScreen implements Screen{
         else {
             //client connects to ipAddress
             try {
-                Gdx.app.log("CSscreen", "connecting to "+ipAddress+".");
+                Gdx.app.log("CSscreen", "Player connecting to LAN.");
                 client.connectLAN();
             } catch (IOException e) {
-//                logInfo("Can't connect to server: " + ipAddress);
+                Gdx.app.log("CSscreen", "Player cannot connect to server");
                 Gdx.app.postRunnable(new Runnable() {
                     @Override
                     public void run() {

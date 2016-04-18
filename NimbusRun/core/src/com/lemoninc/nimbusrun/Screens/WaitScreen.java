@@ -252,7 +252,7 @@ public class WaitScreen implements Screen{
      */
     private void joinGame(){
 //        if (!playerIP.getText().equals("")) {
-            game.setScreen(new CharacterSelectionScreen(game, false, playerIP.getText(), getName()));
+            game.setScreen(new CharacterSelectionScreen(game, false, getName()));
             savePrefs();
 //        }
     }
@@ -261,7 +261,7 @@ public class WaitScreen implements Screen{
      * play game as a host
      */
     private void hostGame(){
-        game.setScreen(new CharacterSelectionScreen(game, true, "localhost", getName()));
+        game.setScreen(new CharacterSelectionScreen(game, true, getName()));
         savePrefs();
     }
 
