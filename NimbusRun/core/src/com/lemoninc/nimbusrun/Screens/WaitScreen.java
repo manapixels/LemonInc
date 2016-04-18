@@ -22,6 +22,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -46,6 +48,8 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lemoninc.nimbusrun.NimbusRun;
 
 import java.util.Random;
+
+//import com.lemoninc.nimbusrun.Networking.Networking;
 
 public class WaitScreen implements Screen{
     private NimbusRun game;
@@ -78,15 +82,27 @@ public class WaitScreen implements Screen{
     Label labeltitle;
     String Ipvalue,NameValue;
     Preferences preferences;
+
+    Boolean playmusic;
+    Music music;
+    Sound soundclick;
     /**
      * This constructor instantiates the Sprites, Viewport, Camera, etc
      * @param game The Game object
      */
-    public WaitScreen(NimbusRun game) {
+    public WaitScreen(NimbusRun game,Boolean playmusic) {
         this.game = game;
         this.gameHeight=game.V_HEIGHT;
         this.gameWidth=game.V_WIDTH;
+        this.playmusic=playmusic;
         preferences = Gdx.app.getPreferences("NimbusRun_Network");
+        soundclick=Gdx.audio.newSound(Gdx.files.internal("Sounds/click.mp3"));
+        music=Gdx.audio.newMusic(Gdx.files.internal("Sounds/waitscreen.mp3"));
+        music.setVolume(0.5f);                 // sets the volume to half the maximum volume
+        music.setLooping(true);
+        if(playmusic){
+            music.play();
+        }
 
         BUTTON_HEIGHT=50;
         BUTTON_WIDTH=125;
@@ -178,7 +194,9 @@ public class WaitScreen implements Screen{
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 //game.setScreen(new TutorialScreen(game, gameWidth, gameHeight));
+                soundclick.play();
                 hostGame();
+
             }
         });
 
@@ -186,6 +204,7 @@ public class WaitScreen implements Screen{
             @Override
             public void clicked(InputEvent event, float x, float y) {
                // game.setScreen(new StoryLineScreen(game, gameWidth, gameHeight));
+                soundclick.play();
                 joinGame();
             }
         });
@@ -202,6 +221,7 @@ public class WaitScreen implements Screen{
     }
 
     protected void handleInput() {
+
 //        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
 //            playGame();
 //        }
@@ -255,6 +275,9 @@ public class WaitScreen implements Screen{
         stage.dispose();
         batch.dispose();
         sprite.getTexture().dispose();
+        music.stop();
+        music.dispose();
+        soundclick.dispose();
     }
 
     /**
@@ -262,7 +285,7 @@ public class WaitScreen implements Screen{
      */
     private void joinGame(){
         if (!playerIP.getText().equals("")) {
-            game.setScreen(new CharacterSelectionScreen(game, false, playerIP.getText(), getName()));
+            game.setScreen(new CharacterSelectionScreen(game, false, playerIP.getText(), getName(),playmusic));
             //TODO: what if IP is blank?
             savePrefs();
         }
@@ -272,7 +295,7 @@ public class WaitScreen implements Screen{
      * play game as a host
      */
     private void hostGame(){
-        game.setScreen(new CharacterSelectionScreen(game, true, "localhost", getName()));
+        game.setScreen(new CharacterSelectionScreen(game, true, "localhost", getName(),playmusic));
         savePrefs();
     }
 

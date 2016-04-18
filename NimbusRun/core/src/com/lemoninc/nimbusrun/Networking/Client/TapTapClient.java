@@ -14,15 +14,13 @@ package com.lemoninc.nimbusrun.Networking.Client;
  * ********************************/
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-import com.esotericsoftware.minlog.Log;
 import com.lemoninc.nimbusrun.Networking.Network;
 import com.lemoninc.nimbusrun.NimbusRun;
 import com.lemoninc.nimbusrun.Screens.CharacterSelectionScreen;
-import com.lemoninc.nimbusrun.Screens.PlayScreen;
+import com.lemoninc.nimbusrun.Screens.MenuScreen;
 import com.lemoninc.nimbusrun.Screens.WaitScreen;
 import com.lemoninc.nimbusrun.Sprites.GameMap;
 
@@ -38,7 +36,7 @@ public class TapTapClient {
     private int[] mapData;
 
     private CharacterSelectionScreen currentScreen;
-
+    private MenuScreen menuScreen;
     //Kryonet Stuff
     public Client client;
 
@@ -135,7 +133,7 @@ public class TapTapClient {
             Gdx.app.postRunnable(new Runnable() {
                 @Override
                 public void run() {
-                    game.setScreen(new WaitScreen(game)); //CSS.hide() called, TODO: client should be closed
+                    game.setScreen(new WaitScreen(game,menuScreen.playmusic)); //CSS.hide() called, TODO: client should be closed
                 }
             });
 

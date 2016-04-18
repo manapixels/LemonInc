@@ -65,7 +65,7 @@ public class Player extends Sprite implements InputProcessor{
     private String name;
     private BitmapFont font;
 
-    private boolean stunned, poisoned, reversed, terrored, flashed, confused, devMode, finished;
+    private boolean stunned, poisoned, reversed, terrored, flashed, confused, devMode, finished, instantiated;
     private float stunTime, poisonTime, reverseTime, terrorTime, flashTime, confuseTime;
 
     private final float JUMPFORCE = 6f;
@@ -75,6 +75,7 @@ public class Player extends Sprite implements InputProcessor{
 
     Vector2 previousPosition;
 
+  //  Sound attacksound,jumpsound;
     private Map<Integer,TouchInfo> touches;
 
     /**
@@ -93,6 +94,8 @@ public class Player extends Sprite implements InputProcessor{
         CHARACTER_SIZE = 170 / NimbusRun.PPM;
         stateTime = 0f;
 
+      //  attacksound=Gdx.audio.newSound(Gdx.files.internal("Sounds/specialpowermusic.wav"));
+       // jumpsound=Gdx.audio.newSound(Gdx.files.internal("Sounds/jumpsound.mp3"));
         //debuff variables
         stunTime = 0f;
         stunned = false;
@@ -108,6 +111,7 @@ public class Player extends Sprite implements InputProcessor{
         confuseTime = 0f;
         devMode = false;
         finished = false;
+        instantiated = false;
 
         //create a dynamic bodydef
         BodyDef bdef = new BodyDef();
@@ -225,16 +229,19 @@ public class Player extends Sprite implements InputProcessor{
                     if (isConfused()){
                         return this.moveRight();
                     } else {
+  //                      jumpsound.play();
                         return this.jump();
                     }
                 }
             }
             if(touches.get(0).touched&&touches.get(1).touched){
                 if(touches.get(0).touchX<(NimbusRun.V_WIDTH/2)&&touches.get(1).touchX>(NimbusRun.V_WIDTH-(NimbusRun.V_WIDTH/2))){
+      //              attacksound.play();
                     // TODO: Implement method for attack
                     //player1.attack;
                 }
                 else if(touches.get(1).touchX<(NimbusRun.V_WIDTH/2)&&touches.get(0).touchX>(NimbusRun.V_WIDTH-(NimbusRun.V_WIDTH/2))) {
+        //            attacksound.play();
                     //TODO: Implement method for attack
                     //player1.attack
                 }
@@ -286,10 +293,11 @@ public class Player extends Sprite implements InputProcessor{
     }
 
     public boolean recover(float delta) {
-        if (b2body != null || gameMap != null)
+        if (b2body != null || gameMap != null) {
             if (this.getX() >= gameMap.getGameport().getWorldWidth() * 18.5f) {
                 finished = true;
             }
+        }
         if (isStunned()){
             stunTime -= delta;
             if (stunTime <= 0)

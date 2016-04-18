@@ -18,6 +18,8 @@ package com.lemoninc.nimbusrun.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -74,8 +76,13 @@ public class CharacterSelectionScreen implements Screen{
     float BUTTON_HEIGHT,BUTTON_WIDTH;
     Label Title;
     Sprite playercharacter;
-    TextButton joingame;
+    TextButton joingame,goback;
     TextButton.TextButtonStyle style;
+    //Dialog dialog;
+    CharSequence Playerability;
+    Boolean playmusic;
+    Music music;
+    Sound soundclick;
     private int charactername = 99;
     private String myIP;
 
@@ -85,6 +92,9 @@ public class CharacterSelectionScreen implements Screen{
 
     private int[] mapData;
 
+    public CharacterSelectionScreen(final NimbusRun game, final boolean isHost, String ipAddress, String playerName, final Boolean playmusic){
+
+
     /**
      *
      * @param game
@@ -92,27 +102,40 @@ public class CharacterSelectionScreen implements Screen{
      * @param ipAddress to connect the client to the server
      * @param playerName
      */
-    public CharacterSelectionScreen(NimbusRun game, final boolean isHost, String ipAddress, String playerName){
         this.game = game;
         this.isHost = isHost;
         this.ipAddress = ipAddress;
         this.playername = playerName;
         this.gameWidth = NimbusRun.V_WIDTH;
         this.gameHeight = NimbusRun.V_HEIGHT;
+        this.playmusic=playmusic;
         this.mapData = null;
 //        myIP=ipAddress;
 
+
+        //myIP=ipAddress;
+        Playerability="STUN";
+
         charactername=1; //default character is Buddha
 
-        BUTTON_HEIGHT=165;
-        BUTTON_WIDTH=140;
+        BUTTON_HEIGHT=150;
+        BUTTON_WIDTH=125;
+
+        soundclick=Gdx.audio.newSound(Gdx.files.internal("Sounds/click.mp3"));
+
+        music=Gdx.audio.newMusic(Gdx.files.internal("Sounds/characterselectionscreen.mp3"));
+        music.setVolume(0.5f);                 // sets the volume to half the maximum volume
+        music.setLooping(true);
+        if(playmusic){
+            music.play();
+        }
 
         camera=new PerspectiveCamera();
         viewport=new FitViewport(gameWidth,gameHeight,camera);
-        skin=new Skin();
+        skin=new Skin(Gdx.files.internal("data/uiskin.json"));
         atlas1=new TextureAtlas(Gdx.files.internal("CharSelScreen/charicons.pack"));
         atlas2=new TextureAtlas(Gdx.files.internal("CharSelScreen/zoomicons.pack"));
-        atlas3=new TextureAtlas(Gdx.files.internal("buttonsupdown.pack"));
+        atlas3=new TextureAtlas(Gdx.files.internal("buttonsupdown.pack"));;
         skin.addRegions(atlas1);
         skin.addRegions(atlas2);
         skin.addRegions(atlas3);
@@ -134,10 +157,11 @@ public class CharacterSelectionScreen implements Screen{
         table.right();
         table.setFillParent(true);
 
+
         //Title=new Label(String.format("%03d","Choose your Avatar"),new Label.LabelStyle(new BitmapFont(Gdx.files.internal("Fonts/crime.fnt")), Color.DARK_GRAY));
         Title=new Label("Choose Your Character",new Label.LabelStyle(new BitmapFont(Gdx.files.internal("Fonts/crimesFont48Black.fnt")), Color.DARK_GRAY));
-        Title.setPosition(250, 400);
-        Title.setSize(250,100);
+        Title.setPosition(gameWidth / 2, gameHeight - gameWidth / 20, Align.center);
+        Title.setSize(gameWidth / 15, gameHeight / 15);
         table.addActor(Title);
 
         BuddhabtnStyle=new ImageButton.ImageButtonStyle();
@@ -178,6 +202,7 @@ public class CharacterSelectionScreen implements Screen{
         pontibtnStyle.imageOver = skin.getDrawable("btn_ponti_sel");
         pontibtnStyle.imageChecked=skin.getDrawable("btn_ponti_sel");
 
+
         Buddha= new ImageButton(BuddhabtnStyle);
         foxy=new ImageButton(foxybtnStyle);
         kappa=new ImageButton(kappabtnStyle);
@@ -192,18 +217,25 @@ public class CharacterSelectionScreen implements Screen{
         madame.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
         ponti.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
 
-        Buddha.setPosition(viewport.getScreenWidth() / 4, 420, Align.left);
-        foxy.setPosition(viewport.getScreenWidth() / 4, 270, Align.left);
-        kappa.setPosition(viewport.getScreenWidth() / 4, 100, Align.left);
-        krishna.setPosition(viewport.getScreenWidth() / 4 + 275, 380, Align.right);
-        madame.setPosition(viewport.getScreenWidth() / 4 + 275, 230, Align.right);
-        ponti.setPosition(viewport.getScreenWidth() / 4 + 275, 80, Align.right);
+        Buddha.setPosition(viewport.getScreenWidth() / 4, 400, Align.left);
+        foxy.setPosition(viewport.getScreenWidth() / 4, 260, Align.left);
+        kappa.setPosition(viewport.getScreenWidth() / 4, 120, Align.left);
+        krishna.setPosition(viewport.getScreenWidth() / 4 + 250, 360, Align.right);
+        madame.setPosition(viewport.getScreenWidth() / 4 + 250, 220, Align.right);
+        ponti.setPosition(viewport.getScreenWidth() / 4 + 250, 80, Align.right);
 
         joingame=new TextButton("Join Game",style);
-        joingame.setSize(150,75);
-        joingame.setPosition(600,400);
+        joingame.setSize(gameWidth / 5, gameHeight / 8);
+        joingame.setPosition(gameWidth / 3, gameHeight / 5);
 
+        goback=new TextButton("Go Back",style);
+        goback.setSize(gameWidth/5,gameHeight/8);
+        goback.setPosition(gameWidth * 0.85f, gameHeight * 0.75f);
+
+
+        table.addActor(Title);
         table.addActor(joingame);
+        table.addActor(goback);
         table.addActor(Buddha);
         table.addActor(foxy);
         table.addActor(kappa);
@@ -219,14 +251,15 @@ public class CharacterSelectionScreen implements Screen{
                 System.out.println("touched");
                 Gdx.app.log("Button pressed", "Buddha Button Pressed");
                 playercharacter = skin.getSprite("bg_Buddha");
-                playercharacter.setPosition(0, 0);
-                playercharacter.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
                 return true;
             }
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                charactername=1;
+
+                Playerability = "STUN";
+                charactername = 1;
                 System.out.println("touched");
 
             }
@@ -247,6 +280,8 @@ public class CharacterSelectionScreen implements Screen{
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+
+                Playerability="SUCKS BACK";
                 charactername=3;
                 System.out.println("touched");
             }
@@ -266,6 +301,7 @@ public class CharacterSelectionScreen implements Screen{
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                Playerability="FREEZE";
                 charactername=4;
                 System.out.println("touched");
             }
@@ -284,6 +320,7 @@ public class CharacterSelectionScreen implements Screen{
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                Playerability="FLASH LIGHT TO";
                 charactername=2;
                 System.out.println("touched");
             }
@@ -302,6 +339,7 @@ public class CharacterSelectionScreen implements Screen{
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                Playerability="JUMP STOP";
                 charactername=6;
                 System.out.println("touched");
             }
@@ -320,6 +358,7 @@ public class CharacterSelectionScreen implements Screen{
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                Playerability="DARKEN";
                 charactername=5;
                 System.out.println("touched");
             }
@@ -327,7 +366,8 @@ public class CharacterSelectionScreen implements Screen{
         joingame.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                //charactername= checkbuttonpress();
+                soundclick.play();
+                music.stop();
                 Gdx.app.log("PlayerNumber", "Character " + charactername + " joined game");
 //                playGame(charactername);
                 //TODO:save the charactername, let server know player is ready to play
@@ -342,7 +382,6 @@ public class CharacterSelectionScreen implements Screen{
                 }
                 if (isHost) {
                     //TODO: try to start game
-
                     //if received charactername from all players, play game
                     if (server.allDummyReady()) {
                         //TODO: send all clients GameReady
@@ -356,6 +395,20 @@ public class CharacterSelectionScreen implements Screen{
                 }
             }
         });
+
+        goback.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                // TODO: SAVE THE LOG OF THE PLAYER ACCORDING TO THE NUMBER
+                //charactername= checkbuttonpress();
+                soundclick.play();
+                game.setScreen(new MenuScreen(game,gameWidth,gameHeight));
+                music.stop();
+            }
+        });
+
+
+
     }
 
     // 1. LAUGHING BUDDHA
@@ -380,18 +433,19 @@ public class CharacterSelectionScreen implements Screen{
         sprite = new Sprite(new Texture("whitebackground.png"));
         //sprite.setColor(1, 1, 1, 0);
         playercharacter=new Sprite(skin.getSprite("bg_Buddha"));
-        sprite.setPosition(0, 0);
-        sprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-//        playercharacter.setPosition(50, 20);
-//        playercharacter.setSize(Gdx.graphics.getWidth() - Gdx.graphics.getWidth() / 15, Gdx.graphics.getHeight() - Gdx.graphics.getWidth() / 15);
-        style.font=new BitmapFont(Gdx.files.internal("Fonts/Basker32.fnt"));
+        //sprite.setPosition(0, 0);
+        //sprite.setSize(gameWidth, gameHeight);
+        style.font=new BitmapFont(Gdx.files.internal("Fonts/crimesFont36Black.fnt"));
+        style.font.getData().setScale(0.7f, 0.7f);
+        style.font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         style.font.setColor(Color.DARK_GRAY);
         batcher = new SpriteBatch();
         startTime = TimeUtils.millis();
         mapData = new int[8];
 
-        //instantiate server, client here
+        //instnatiate server, client here
 
+        
         if (isHost) {
             Random rand = new Random();
             for (int i = 0; i < 8; i++){
@@ -409,7 +463,7 @@ public class CharacterSelectionScreen implements Screen{
                 Gdx.app.postRunnable(new Runnable() {
                     @Override
                     public void run() {
-                        game.setScreen(new WaitScreen(game));
+                        game.setScreen(new WaitScreen(game,playmusic));
 
                     }
                 });
@@ -426,7 +480,8 @@ public class CharacterSelectionScreen implements Screen{
                 Gdx.app.postRunnable(new Runnable() {
                     @Override
                     public void run() {
-                        game.setScreen(new WaitScreen(game));
+                        game.setScreen(new WaitScreen(game,playmusic));
+
                     }
                 });
             }
@@ -447,7 +502,7 @@ public class CharacterSelectionScreen implements Screen{
 
     public void playGame(){
         stage.clear();
-        game.setScreen(new PlayScreen(game, isHost, playername, client, server));
+        game.setScreen(new PlayScreen(game, isHost, playername, client, server,playmusic));
     }
 
 //    public void goPlayScreen() {
@@ -457,15 +512,22 @@ public class CharacterSelectionScreen implements Screen{
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClearColor(255, 255, 255, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        //BitmapFont font=new BitmapFont(Gdx.files.internal("Fonts/crimesFont36Black"));
 
 
+        //batcher.setProjectionMatrix(camera.combined);
         batcher.begin();
-        sprite.draw(batcher);
-        style.font.draw(batcher, "Host IP address: " + myIP, Gdx.graphics.getWidth()/3+75,80);
-        playercharacter.setPosition(75, 50);
-        playercharacter.setSize(Gdx.graphics.getWidth() - Gdx.graphics.getWidth() / 8, Gdx.graphics.getHeight() - Gdx.graphics.getWidth() / 8);
+       // sprite.draw(batcher);
+
+        style.font.draw(batcher, "My Special ability is to", viewport.getScreenWidth() / 3, viewport.getScreenHeight() - 250);
+        style.font.draw(batcher,Playerability,viewport.getScreenWidth()/3,viewport.getScreenHeight()-275);
+        style.font.draw(batcher, "the world",viewport.getScreenWidth()/3,viewport.getScreenHeight()-300);
+        style.font.draw(batcher, "Enter IP : " + myIP, viewport.getScreenWidth()/3,viewport.getScreenHeight()/7);
+        playercharacter.setPosition(viewport.getScreenWidth()/4,viewport.getScreenHeight()/12);
+        playercharacter.setSize(viewport.getScreenWidth()*0.75f,viewport.getScreenHeight()*0.75f);
+
         playercharacter.draw(batcher);
         batcher.end();
 
@@ -495,7 +557,7 @@ public class CharacterSelectionScreen implements Screen{
     @Override
     public void hide() {
         Gdx.input.setInputProcessor(null);
-
+        dispose();
     }
 
     @Override
@@ -504,7 +566,9 @@ public class CharacterSelectionScreen implements Screen{
         atlas2.dispose();
         stage.dispose();
         skin.dispose();
-        sprite.getTexture().dispose();
+     //   sprite.getTexture().dispose();
         batcher.dispose();
+        music.dispose();
+        soundclick.dispose();
     }
 }

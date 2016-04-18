@@ -2,6 +2,7 @@ package com.lemoninc.nimbusrun.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
@@ -38,6 +39,8 @@ public class TutorialScreen implements Screen{
 
     private TextButton.TextButtonStyle style;
     private TextButton Return;
+    Sound soundclick;
+
 
 
     public TutorialScreen(NimbusRun game,float gameWidth,float gameHeight){
@@ -47,6 +50,9 @@ public class TutorialScreen implements Screen{
         camera=new PerspectiveCamera();
         viewport=new FitViewport(gameWidth,gameHeight,camera);
         stage= new Stage(new ExtendViewport(gameWidth,gameHeight));
+
+        soundclick=Gdx.audio.newSound(Gdx.files.internal("Sounds/click.mp3"));
+
 
         BUTTON_WIDTH = 250;
         BUTTON_HEIGHT = 75;
@@ -76,6 +82,7 @@ public class TutorialScreen implements Screen{
         Return.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                soundclick.play();
                 game.setScreen(new MenuScreen(game, gameWidth, gameHeight));
             }
 
@@ -92,7 +99,6 @@ public class TutorialScreen implements Screen{
         batcher.begin();
         sprite.draw(batcher);
         batcher.end();
-
         stage.act();
         stage.draw();
     }
@@ -119,6 +125,7 @@ public class TutorialScreen implements Screen{
 
     @Override
     public void dispose() {
+        //soundclick.dispose();
         stage.dispose();
     }
 

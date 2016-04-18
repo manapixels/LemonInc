@@ -10,15 +10,12 @@ package com.lemoninc.nimbusrun.Networking.Server;
  * LAST UPDATED: 8/4/2016 09:00
  ********************************/
 
-import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
-import com.esotericsoftware.minlog.Log;
 import com.lemoninc.nimbusrun.Networking.Network;
 import com.lemoninc.nimbusrun.Sprites.GameMap;
-import com.lemoninc.nimbusrun.Sprites.Player;
 
 import java.io.IOException;
 import java.util.List;

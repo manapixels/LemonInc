@@ -93,7 +93,7 @@ public class Network {
     }
 
     private static void logInfo(String string) {
-//        Log.info("[Network]: "+string);
+        Log.info("[Network]: "+string);
     }
 
     static public class GameRoomFull {
@@ -121,6 +121,5 @@ public class Network {
     static public class GameReady {
 
         public GameReady() {}
-
     }
 }
