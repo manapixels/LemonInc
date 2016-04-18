@@ -78,7 +78,7 @@ public class GameMap{
     private StartWall startWall;
     private EndWall endWall;
     private int[] mapData;
-    final private int numPlatforms = 8;
+    public static final int NUMPLATFORMS = 8;
 
     private Player playerLocal;
     private DummyPlayer dummyLocal;
@@ -93,7 +93,7 @@ public class GameMap{
 //TODO: how is mapdata passed into GameMap? After instantiation?
         this.client = client;
         this.isClient = true;
-//        this.mapData = mapData;
+        this.mapData = mapData;
 
         //instantiate HUD, GameSounds, BitmapFont, Camera, SpriteBatch ...
         initCommon();
@@ -136,13 +136,13 @@ public class GameMap{
 
         //TODO: these are created by Server and server sends GameMapStatus to clients
         //add these sprites to the world
-        ground = new Ground(this, mapData, numPlatforms);
+        ground = new Ground(this, mapData, NUMPLATFORMS);
         ceiling = new Ceiling(this);
         startWall = new StartWall(this);
         endWall = new EndWall(this);
 
 //        logInfo("GameMap initialised");
-        Gdx.app.log("GameMap", "GameMap instantiated in Client");
+        Gdx.app.log("GDX GameMap", "GameMap instantiated in Client");
 
     }
 
@@ -156,7 +156,7 @@ public class GameMap{
         initCommon();
 
 //        logInfo("GameMap initialised");
-        Gdx.app.log("GameMap", "GameMap instantiated in Server");
+        Gdx.app.log("GDX GameMap", "GameMap instantiated in Server");
     }
 
     public void initPlayers() {
@@ -187,13 +187,13 @@ public class GameMap{
             // 4. KAPPA
             // 5. PONTIANAK
             // 6. MADAME WHITE SNAKE
-            case 1: img = new TextureAtlas(Gdx.files.internal("Spritesheets/LBspritesheet.atlas")); break;
-            case 2: img = new TextureAtlas(Gdx.files.internal("Spritesheets/SKspritesheet.atlas")); break;
-            case 3: img = new TextureAtlas(Gdx.files.internal("Spritesheets/FXspritesheet.atlas")); break;
-            case 4: img = new TextureAtlas(Gdx.files.internal("Spritesheets/KPspritesheet.atlas")); break;
-            case 5: img = new TextureAtlas(Gdx.files.internal("Spritesheets/PTspritesheet.atlas")); break;
-            case 6: img = new TextureAtlas(Gdx.files.internal("Spritesheets/MWSspritesheet.atlas")); break;
-            default: img = new TextureAtlas(Gdx.files.internal("Spritesheets/PTspritesheet.atlas")); break;
+            case 1: img = new TextureAtlas(Gdx.files.internal("spritesheets/LBspritesheet.atlas")); break;
+            case 2: img = new TextureAtlas(Gdx.files.internal("spritesheets/SKspritesheet.atlas")); break;
+            case 3: img = new TextureAtlas(Gdx.files.internal("spritesheets/FXspritesheet.atlas")); break;
+            case 4: img = new TextureAtlas(Gdx.files.internal("spritesheets/KPspritesheet.atlas")); break;
+            case 5: img = new TextureAtlas(Gdx.files.internal("spritesheets/PTspritesheet.atlas")); break;
+            case 6: img = new TextureAtlas(Gdx.files.internal("spritesheets/MWSspritesheet.atlas")); break;
+            default: img = new TextureAtlas(Gdx.files.internal("spritesheets/PTspritesheet.atlas")); break;
         }
         return img;
     }
@@ -219,9 +219,9 @@ public class GameMap{
             dummyPlayers.put(dummyLocal.playerID, dummyLocal);
             //hud.setPlayerLocal(playerLocal);
             //setStatus("Connected to " + client.remoteIP);
-            Gdx.app.log("GameMap", "local player created at "+msg.initial_x+" "+msg.initial_y);
+            Gdx.app.log("GDX GameMap", "local player created at "+msg.initial_x+" "+msg.initial_y);
         } else {
-            Gdx.app.log("GameMap onConnect", "setNetworkClient called twice");
+            Gdx.app.log("GDX GameMap onConnect", "setNetworkClient called twice");
         }
     }
 
@@ -242,7 +242,7 @@ public class GameMap{
         //TODO: players should be ConcurrentHashMap?
         Player player = players.get(msg.playerId);
         if (player != null) {
-            Gdx.app.log("GameMap", "Player "+player.getName()+" moved");
+            Gdx.app.log("GDX GameMap", "Player "+player.getName()+" moved");
             player.setMovementState(msg);
         }
     }
@@ -276,7 +276,7 @@ public class GameMap{
         for (Map.Entry<Integer, DummyPlayer> playerEntry : dummyPlayers.entrySet()) {
             DummyPlayer curPlayer = playerEntry.getValue();
             if (!curPlayer.isReady()) {
-                Gdx.app.log("GameMap allDummyReady", "Hi from "+curPlayer.playerName);
+                Gdx.app.log("GDX GameMap allDummyReady", "Hi from "+curPlayer.playerName);
                 return false;
             }
         }
@@ -312,7 +312,7 @@ public class GameMap{
         if (client != null && playerLocal != null) {
             if (playerLocal.handleInput()) { // (arrow key has been pressed by player)
                 client.sendMessageUDP(playerLocal.getMovementState()); //send movement state to server
-                Gdx.app.log("GameMap", "Sent MovementState to Server");
+                Gdx.app.log("GDX GameMap", "Sent MovementState to Server");
 
             }
 

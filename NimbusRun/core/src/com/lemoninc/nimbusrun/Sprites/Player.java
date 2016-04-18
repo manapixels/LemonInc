@@ -221,7 +221,7 @@ public class Player extends Sprite implements InputProcessor{
                     if (isConfused()){
                         return this.jump();
                     } else {
-                        Gdx.app.log("Player", "Moving Right");
+                        Gdx.app.log("GDX Player", "Moving Right");
                         return this.moveRight();
                     }
                 }
@@ -422,7 +422,7 @@ public class Player extends Sprite implements InputProcessor{
      * @param msg
      */
     public synchronized void setMovementState(Network.MovementState msg) {
-        Gdx.app.log("Player", "set Movement State");
+        Gdx.app.log("GDX Player", "set Movement State");
 
         b2body.setLinearVelocity(msg.linearVelocity);
         b2body.setTransform(msg.position, 0f); //this is outside the world.step call

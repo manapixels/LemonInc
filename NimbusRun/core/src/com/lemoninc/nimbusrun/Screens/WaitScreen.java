@@ -121,7 +121,7 @@ public class WaitScreen implements Screen{
         hostbutton=new TextButton("Join as Host",style);
         clientbutton=new TextButton("Join as Client",style);
 
-        Gdx.app.log("WaitScreen", "Finished connecting & configuring events");
+        Gdx.app.log("GDX WaitScreen", "Finished connecting & configuring events");
         playernumber=1;
     }
 

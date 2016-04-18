@@ -102,13 +102,11 @@ public class CharacterSelectionScreen implements Screen{
     public CharacterSelectionScreen(NimbusRun game, final boolean isHost, String playerName, final Boolean playmusic){
         this.game = game;
         this.isHost = isHost;
-        this.ipAddress = ipAddress;
         this.playername = playerName;
         this.gameWidth = NimbusRun.V_WIDTH;
         this.gameHeight = NimbusRun.V_HEIGHT;
         this.playmusic=playmusic;
         this.mapData = null;
-//        myIP=ipAddress;
 
         charactername=1; //default character is Buddha
 
@@ -243,7 +241,7 @@ public class CharacterSelectionScreen implements Screen{
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 resetbuttons();
                 System.out.println("touched");
-                Gdx.app.log("Button pressed", "Buddha Button Pressed");
+                Gdx.app.log("GDX Button pressed", "Buddha Button Pressed");
                 playercharacter = skin.getSprite("bg_Buddha");
 
                 return true;
@@ -286,7 +284,7 @@ public class CharacterSelectionScreen implements Screen{
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 resetbuttons();
                 System.out.println("touched");
-                Gdx.app.log("Button pressed", "Kappa Button Pressed");
+                Gdx.app.log("GDX Button pressed", "Kappa Button Pressed");
                 playercharacter= skin.getSprite("bg_Kappa");
                 playercharacter.setPosition(0, 0);
                 playercharacter.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -305,7 +303,7 @@ public class CharacterSelectionScreen implements Screen{
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 resetbuttons();
                 System.out.println("touched");
-                Gdx.app.log("Button pressed", "KrishnaButton Pressed");
+                Gdx.app.log("GDX Button pressed", "KrishnaButton Pressed");
                 playercharacter= skin.getSprite("bg_Krishna");
                 playercharacter.setPosition(0, 0);
                 playercharacter.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -363,13 +361,13 @@ public class CharacterSelectionScreen implements Screen{
                 soundclick.play();
                 music.stop();
                 
-                Gdx.app.log("CSscreen", "Character " + charactername + " selected for the player");
+                Gdx.app.log("GDX CSscreen", "Character " + charactername + " selected for the player");
                 //send server charactername packet
                 if (charactername != 99) { //if character is chosen
                     Network.Ready ready = new Network.Ready(charactername);
                     client.sendMessage(ready);
                     gamemap.declareCharacter(charactername);
-                    Gdx.app.log("CSscreen", "I declared my character to GameMap");
+                    Gdx.app.log("GDX CSscreen", "I declared my character to GameMap");
 
                 }
                 if (isHost) {
@@ -381,7 +379,7 @@ public class CharacterSelectionScreen implements Screen{
                         playGame();
                     }
                     else {
-                        Gdx.app.log("CSscreen", "Not all dummies ready");
+                        Gdx.app.log("GDX CSscreen", "Not all dummies ready");
                     }
                 }
             }
@@ -431,7 +429,7 @@ public class CharacterSelectionScreen implements Screen{
         style.font.setColor(Color.DARK_GRAY);
         batcher = new SpriteBatch();
         startTime = TimeUtils.millis();
-        mapData = new int[8];
+        mapData = new int[GameMap.NUMPLATFORMS];
 
         //instnatiate server, client here
 
@@ -444,6 +442,7 @@ public class CharacterSelectionScreen implements Screen{
             for (int i = 0; i < 8; i++){
                 mapData[i] = rand.nextInt(3);
             }
+            Gdx.app.log("GDX CSscreen", "Mapdata created");
             client = new TapTapClient(game, this, playername, mapData);
             gamemap = client.getMap();
             //start my server and connect my client to my server
@@ -451,7 +450,7 @@ public class CharacterSelectionScreen implements Screen{
                 server = new TapTapServer();
                 client.connect("localhost");
             } catch (IOException e) {
-                Gdx.app.log("CSscreen", "Host cannot connect to server, setting to WaitScreen");
+                Gdx.app.log("GDX CSscreen", "Host cannot connect to server, setting to WaitScreen");
                 Gdx.app.postRunnable(new Runnable() {
                     @Override
                     public void run() {
@@ -466,10 +465,10 @@ public class CharacterSelectionScreen implements Screen{
             gamemap = client.getMap();
             //client connects to ipAddress
             try {
-                Gdx.app.log("CSscreen", "Player connecting to LAN.");
+                Gdx.app.log("GDX CSscreen", "Player connecting to LAN.");
                 client.connectLAN();
             } catch (IOException e) {
-                Gdx.app.log("CSscreen", "Player cannot connect to server");
+                Gdx.app.log("GDX CSscreen", "Player cannot connect to server");
                 Gdx.app.postRunnable(new Runnable() {
                     @Override
                     public void run() {
@@ -501,6 +500,7 @@ public class CharacterSelectionScreen implements Screen{
     public void goToMenu(){
         stage.clear();
         game.setScreen(new MenuScreen(game, gameWidth, gameHeight));
+        //TODO: shutdown client, server
 
     }
 

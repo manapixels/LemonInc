@@ -66,20 +66,20 @@ public class TapTapServer {
                 TapTapConnection connection = (TapTapConnection) c;
 
                 if (message instanceof Network.Login) {
-                    Gdx.app.log("Server", "Login received");
+                    Gdx.app.log("GDX Server", "Login received");
 
                     Network.Login msg = ((Network.Login) message);
 
                     if (PLAYERS.get() < MAXPLAYERS) { //TODO: only accept players at CS screen
                         PLAYERS.getAndAdd(1);
-                        Gdx.app.log("Server", "Added a player");
+                        Gdx.app.log("GDX Server", "Added a player");
 //                        if (PLAYERS.get() == MAXPLAYERS) {
 //                            gameStarting();
 //                        }
                     } else { //there is more than or equal to 4 players in the game room
                         Network.GameRoomFull roomfull = new Network.GameRoomFull();
                         connection.sendTCP(roomfull);
-                        Gdx.app.log("Server", "Sent a GameRoomFull");
+                        Gdx.app.log("GDX GDX Server", "Sent a GameRoomFull");
                         return;
                     }
 //                    Gdx.app.log("Server", "reached here");
@@ -106,14 +106,14 @@ public class TapTapServer {
 
                     //tell new client about his position
                     connection.sendTCP(newPlayer);
-                    Gdx.app.log("Server", "sent Player coordinates to new player");
+                    Gdx.app.log("GDX Server", "sent Player coordinates to new player");
 
                     //tell old clients about new client
                     server.sendToAllExceptTCP(connection.getID(), newPlayer);
 
                     //add this new player to gamemap
                     map.addPlayer(newPlayer); //server stores the new player
-                    Gdx.app.log("Server", "Stored new player in Server's map");
+                    Gdx.app.log("GDX Server", "Stored new player in Server's map");
 
 
                     //tell new client about old clients
@@ -122,7 +122,7 @@ public class TapTapServer {
                         if (conn.getID() != connection.getID() && conn.name != null) { // Not self, Have logged in
                             GameMap.DummyPlayer herePlayer = map.getDummyById(conn.getID());
                             Network.PlayerJoinLeave hereMsg = new Network.PlayerJoinLeave(conn.getID(), herePlayer.playerName, true, herePlayer.x, herePlayer.y); //TODO: server's gamemap needs to be updated too
-                            Gdx.app.log("Server", "Telling " + connection.name + " about old client " + herePlayer.playerName);
+                            Gdx.app.log("GDX Server", "Telling " + connection.name + " about old client " + herePlayer.playerName);
                             connection.sendTCP(hereMsg); // basic info
 //                            connection.sendTCP(herePlayer.getMovementState()); // info about current movement
                         }
@@ -130,7 +130,7 @@ public class TapTapServer {
                 }
                 else if(message instanceof Network.MovementState) {
                     Network.MovementState msg = (Network.MovementState)message;
-                    Gdx.app.log("TapTapServer MovementState", "MovementState received");
+                    Gdx.app.log("GDX TapTapServer MovementState", "MovementState received");
                     msg.playerId = connection.getID();
                     // Server updates its copy of player from what its told
                     map.playerMoved(msg);
@@ -142,12 +142,12 @@ public class TapTapServer {
                     msg.setPlayerId(connection.getID());
                     map.setCharacter(msg.playerId, msg.charactername);
                     server.sendToAllExceptTCP(connection.getID(), msg);
-                    Gdx.app.log("Server", "Set character for Client "+connection.getID());
+                    Gdx.app.log("GDX TapTapServer receivedReady", "Set character for Client "+connection.getID());
                 }
                 else if (message instanceof Network.GameReady) {
                     Network.GameReady msg = (Network.GameReady) message;
                     server.sendToAllExceptTCP(connection.getID(), msg);
-                    Gdx.app.log("Server", "Let the game begin");
+                    Gdx.app.log("GDX Server", "Let the game begin");
                 }
             }
 
@@ -176,7 +176,7 @@ public class TapTapServer {
         server.start();
 
 
-        Gdx.app.log("Server", "Server instantiated");
+        Gdx.app.log("GDX Server", "Server instantiated");
 
     }
 
