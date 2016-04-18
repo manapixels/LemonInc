@@ -79,7 +79,7 @@ public class Player extends Sprite implements InputProcessor{
     private Map<Integer,TouchInfo> touches;
 
     /**
-     * TODO: this constructor should only be created by client?
+     *
      * @param gameMap
      * @param img
      * @param x
@@ -221,6 +221,7 @@ public class Player extends Sprite implements InputProcessor{
                     if (isConfused()){
                         return this.jump();
                     } else {
+                        Gdx.app.log("Player", "Moving Right");
                         return this.moveRight();
                     }
                 }
@@ -254,13 +255,13 @@ public class Player extends Sprite implements InputProcessor{
                 } else {
                     return this.jump();
                 }
-            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
-                if (isConfused()){
+            if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT))
+                if (isConfused()) {
                     return this.jump();
                 } else {
                     return this.moveRight();
                 }
-            if (Gdx.input.isKeyPressed(Input.Keys.LEFT))    //testing purposes only
+            if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT))    //testing purposes only
                 return this.moveLeft(1);
             if (Gdx.input.isKeyJustPressed(Input.Keys.A))       //testing purposes only
                 return this.stun();
@@ -274,9 +275,10 @@ public class Player extends Sprite implements InputProcessor{
                 return this.flash();
             if (Gdx.input.isKeyJustPressed(Input.Keys.H))       //testing purposes only
                 return this.confuse();
-            if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE))  //testing purposes only
+            if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {  //testing purposes only {
                 devMode = true;
-            return true;
+                return true;
+            }
         }
         return false;
     }
@@ -292,7 +294,7 @@ public class Player extends Sprite implements InputProcessor{
     }
 
     public boolean recover(float delta) {
-        if (b2body != null || gameMap != null) {
+        if (b2body != null || gameMap.getGameport() != null) {
             if (this.getX() >= gameMap.getGameport().getWorldWidth() * 18.5f) {
                 finished = true;
             }
@@ -420,9 +422,10 @@ public class Player extends Sprite implements InputProcessor{
      * @param msg
      */
     public synchronized void setMovementState(Network.MovementState msg) {
+        Gdx.app.log("Player", "set Movement State");
+
         b2body.setLinearVelocity(msg.linearVelocity);
         b2body.setTransform(msg.position, 0f); //this is outside the world.step call
-//        System.out.println("Changed player's x is "+msg.position.x+" y is "+msg.position.y);
     }
 
     public TextureAtlas getTxtAtlas(){ return img;}

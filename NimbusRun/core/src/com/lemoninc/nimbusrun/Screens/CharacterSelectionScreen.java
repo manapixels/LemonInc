@@ -92,16 +92,14 @@ public class CharacterSelectionScreen implements Screen{
 
     private int[] mapData;
 
-    public CharacterSelectionScreen(final NimbusRun game, final boolean isHost, String ipAddress, String playerName, final Boolean playmusic){
-
 
     /**
      *
      * @param game
      * @param isHost
-     * @param ipAddress to connect the client to the server
      * @param playerName
      */
+    public CharacterSelectionScreen(NimbusRun game, final boolean isHost, String playerName, final Boolean playmusic){
         this.game = game;
         this.isHost = isHost;
         this.ipAddress = ipAddress;
@@ -111,6 +109,8 @@ public class CharacterSelectionScreen implements Screen{
         this.playmusic=playmusic;
         this.mapData = null;
 //        myIP=ipAddress;
+
+        charactername=1; //default character is Buddha
 
         BUTTON_HEIGHT=165;
         BUTTON_WIDTH=140;
@@ -164,6 +164,7 @@ public class CharacterSelectionScreen implements Screen{
         madamebtnStyle=new ImageButton.ImageButtonStyle();
         pontibtnStyle=new ImageButton.ImageButtonStyle();
 
+
         BuddhabtnStyle.imageUp = skin.getDrawable("btn_buddha");
         BuddhabtnStyle.imageOver=skin.getDrawable("btn_buddha_sel");
         BuddhabtnStyle.imageDown = skin.getDrawable("btn_buddha_sel");
@@ -193,6 +194,7 @@ public class CharacterSelectionScreen implements Screen{
         pontibtnStyle.imageDown = skin.getDrawable("btn_ponti_sel");
         pontibtnStyle.imageOver = skin.getDrawable("btn_ponti_sel");
         pontibtnStyle.imageChecked=skin.getDrawable("btn_ponti_sel");
+
 
         Buddha= new ImageButton(BuddhabtnStyle);
         foxy=new ImageButton(foxybtnStyle);
@@ -360,29 +362,26 @@ public class CharacterSelectionScreen implements Screen{
             public void clicked(InputEvent event, float x, float y) {
                 soundclick.play();
                 music.stop();
-                Gdx.app.log("PlayerNumber", "Character " + charactername + " joined game");
-//                playGame(charactername);
-                //TODO:save the charactername, let server know player is ready to play
+                
+                Gdx.app.log("CSscreen", "Character " + charactername + " selected for the player");
                 //send server charactername packet
-                if (charactername != 99) {
+                if (charactername != 99) { //if character is chosen
                     Network.Ready ready = new Network.Ready(charactername);
                     client.sendMessage(ready);
                     gamemap.declareCharacter(charactername);
-                    Gdx.app.log("CSscreen", "self declare character");
-                    //TODO: create check on CS screen
+                    Gdx.app.log("CSscreen", "I declared my character to GameMap");
 
                 }
                 if (isHost) {
-                    //TODO: try to start game
                     //if received charactername from all players, play game
                     if (server.allDummyReady()) {
-                        //TODO: send all clients GameReady
+                        //send to server GameReady
                         Network.GameReady gameready = new Network.GameReady();
                         client.sendMessage(gameready);
                         playGame();
                     }
                     else {
-                        Gdx.app.log("CSscreen", "Not all dummies ready ");
+                        Gdx.app.log("CSscreen", "Not all dummies ready");
                     }
                 }
             }
@@ -398,7 +397,6 @@ public class CharacterSelectionScreen implements Screen{
                 music.stop();
             }
         });
-
 
 
     }
@@ -437,7 +435,10 @@ public class CharacterSelectionScreen implements Screen{
 
         //instnatiate server, client here
 
-        
+        //TODO: what is happening here?
+//        client = new TapTapClient(game, this, playername);
+//        gamemap = client.getMap();
+
         if (isHost) {
             Random rand = new Random();
             for (int i = 0; i < 8; i++){
@@ -450,8 +451,7 @@ public class CharacterSelectionScreen implements Screen{
                 server = new TapTapServer();
                 client.connect("localhost");
             } catch (IOException e) {
-                e.printStackTrace();
-//                logInfo("Can't connect to localhost server");
+                Gdx.app.log("CSscreen", "Host cannot connect to server, setting to WaitScreen");
                 Gdx.app.postRunnable(new Runnable() {
                     @Override
                     public void run() {
@@ -466,9 +466,10 @@ public class CharacterSelectionScreen implements Screen{
             gamemap = client.getMap();
             //client connects to ipAddress
             try {
-                client.connect(ipAddress);
+                Gdx.app.log("CSscreen", "Player connecting to LAN.");
+                client.connectLAN();
             } catch (IOException e) {
-//                logInfo("Can't connect to server: " + ipAddress);
+                Gdx.app.log("CSscreen", "Player cannot connect to server");
                 Gdx.app.postRunnable(new Runnable() {
                     @Override
                     public void run() {
@@ -494,7 +495,7 @@ public class CharacterSelectionScreen implements Screen{
 
     public void playGame(){
         stage.clear();
-        game.setScreen(new PlayScreen(game, isHost, playername, client, server,playmusic));
+        game.setScreen(new PlayScreen(game, isHost, playername, client, server, playmusic));
     }
 
 //    public void goPlayScreen() {
@@ -506,17 +507,16 @@ public class CharacterSelectionScreen implements Screen{
     public void render(float delta) {
         Gdx.gl.glClearColor(255, 255, 255, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        //BitmapFont font=new BitmapFont(Gdx.files.internal("Fonts/crimesFont36Black"));
 
 
-        //batcher.setProjectionMatrix(camera.combined);
         batcher.begin();
        // sprite.draw(batcher);
 
         style.font.draw(batcher, "My Special ability is to", viewport.getScreenWidth() / 3, viewport.getScreenHeight() - 250);
         style.font.draw(batcher, Playerability, viewport.getScreenWidth() / 3, viewport.getScreenHeight() - 275);
         style.font.draw(batcher, "the world",viewport.getScreenWidth()/3,viewport.getScreenHeight()-300);
-        style.font.draw(batcher, "Enter IP : " + myIP, viewport.getScreenWidth()/3,viewport.getScreenHeight()/7);
+        if (myIP != null)
+            style.font.draw(batcher, "Host IP address: " + myIP, viewport.getScreenWidth()/3,viewport.getScreenHeight()/7);
         playercharacter.setPosition(viewport.getScreenWidth()/4,viewport.getScreenHeight()/12);
         playercharacter.setSize(viewport.getScreenWidth()*0.75f,viewport.getScreenHeight()*0.75f);
 

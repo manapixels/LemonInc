@@ -18,8 +18,8 @@ import com.esotericsoftware.minlog.Log;
 
 public class Network {
 
-    public static int PORT = 8080;
-    public static int PORTUDP = 8082;
+    public static int PORT = 12080;
+    public static int PORTUDP = 12082;
     /**
      * the classes that are going to be sent over the network must be registered for both server and client
      *

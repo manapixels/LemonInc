@@ -76,26 +76,24 @@ public class TapTapServer {
 //                        if (PLAYERS.get() == MAXPLAYERS) {
 //                            gameStarting();
 //                        }
-
                     } else { //there is more than or equal to 4 players in the game room
                         Network.GameRoomFull roomfull = new Network.GameRoomFull();
                         connection.sendTCP(roomfull);
                         Gdx.app.log("Server", "Sent a GameRoomFull");
-
                         return;
                     }
 //                    Gdx.app.log("Server", "reached here");
                     if (connection.name != null) {
-                        return;
+                        connection.close();
                     }
 
                     String name = msg.name;
                     if (name == null) {
-                        return;
+                        connection.close();
                     }
                     name = name.trim();
                     if (name.length() == 0) {
-                        return;
+                        connection.close();
                     }//if name contains no letters
                     //name this connection as the clientname
                     connection.name = name;
@@ -132,11 +130,12 @@ public class TapTapServer {
                 }
                 else if(message instanceof Network.MovementState) {
                     Network.MovementState msg = (Network.MovementState)message;
-                    logInfo("MovementState received");
+                    Gdx.app.log("TapTapServer MovementState", "MovementState received");
                     msg.playerId = connection.getID();
                     // Server updates its copy of player from what its told
                     map.playerMoved(msg);
-                    server.sendToAllExceptUDP(connection.getID(), msg);
+                    server.sendToAllExceptTCP(connection.getID(), new Network.MovementState(msg.playerId, msg.position, msg.linearVelocity));
+//                    server.sendToAllUDP(new Network.MovementState(msg.playerId, msg.position, msg.linearVelocity));
                 }
                 else if (message instanceof Network.Ready) {
                     Network.Ready msg = (Network.Ready) message;

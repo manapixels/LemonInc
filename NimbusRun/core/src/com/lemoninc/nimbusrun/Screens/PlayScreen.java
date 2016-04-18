@@ -103,21 +103,24 @@ public class PlayScreen implements Screen{
 
     @Override
     public void render(float delta) {
+
         gamemap.update(delta);
         gamemap.render();
 
-        if (isHost) {
+        if(isHost){
             server.update(delta);
         }
         hud.update(delta);
+
         hud.render();
         hud.stage.draw();
 
         if (hud.worldTimer == 0) {
                 music.stop();
                 gameOver();
-            }
         }
+    }
+    
     public void gameOver() {
         game.setScreen(new EndScreen(game, playmusic));
     }
@@ -149,10 +152,5 @@ public class PlayScreen implements Screen{
     @Override
     public void dispose() {
         music.dispose();
-    }
-
-    private void logInfo(String string) {
-//        Log.info("[PlayScreen]: " + string);
-//        Log.info(string);
     }
 }

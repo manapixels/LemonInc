@@ -47,9 +47,8 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lemoninc.nimbusrun.NimbusRun;
 
+import java.net.InetAddress;
 import java.util.Random;
-
-//import com.lemoninc.nimbusrun.Networking.Networking;
 
 public class WaitScreen implements Screen{
     private NimbusRun game;
@@ -95,6 +94,7 @@ public class WaitScreen implements Screen{
         this.gameHeight=game.V_HEIGHT;
         this.gameWidth=game.V_WIDTH;
         this.playmusic=playmusic;
+        //TODO: remove IP address in preferences
         preferences = Gdx.app.getPreferences("NimbusRun_Network");
         soundclick=Gdx.audio.newSound(Gdx.files.internal("Sounds/click.mp3"));
         music=Gdx.audio.newMusic(Gdx.files.internal("Sounds/waitscreen.mp3"));
@@ -196,7 +196,6 @@ public class WaitScreen implements Screen{
                 //game.setScreen(new TutorialScreen(game, gameWidth, gameHeight));
                 soundclick.play();
                 hostGame();
-
             }
         });
 
@@ -216,18 +215,7 @@ public class WaitScreen implements Screen{
 
 
     public void update(float dt) {
-        handleInput();
         gamecam.update();
-    }
-
-    protected void handleInput() {
-
-//        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
-//            playGame();
-//        }
-//        else if (Gdx.input.isKeyPressed(Input.Keys.UP)){
-//            game.setScreen(new PlayScreen(game, false, "localhost", getName()));
-//        }
     }
 
     @Override
@@ -241,7 +229,6 @@ public class WaitScreen implements Screen{
         batch.begin();
         sprite.draw(batch);
         batch.end();
-
 
         stage.act();
         stage.draw();
@@ -284,18 +271,15 @@ public class WaitScreen implements Screen{
      * join a game room
      */
     private void joinGame(){
-        if (!playerIP.getText().equals("")) {
-            game.setScreen(new CharacterSelectionScreen(game, false, playerIP.getText(), getName(),playmusic));
-            //TODO: what if IP is blank?
-            savePrefs();
-        }
+        game.setScreen(new CharacterSelectionScreen(game, false, getName()));
+        savePrefs();
     }
 
     /**
      * play game as a host
      */
     private void hostGame(){
-        game.setScreen(new CharacterSelectionScreen(game, true, "localhost", getName(),playmusic));
+        game.setScreen(new CharacterSelectionScreen(game, true, getName()));
         savePrefs();
     }
 
