@@ -399,7 +399,7 @@ public class CharacterSelectionScreen implements Screen{
                 // TODO: SAVE THE LOG OF THE PLAYER ACCORDING TO THE NUMBER
                 //charactername= checkbuttonpress();
                 soundclick.play();
-                game.setScreen(new MenuScreen(game,gameWidth,gameHeight));
+                game.setScreen(new MenuScreen(game, gameWidth, gameHeight));
                 music.stop();
             }
         });
@@ -427,7 +427,7 @@ public class CharacterSelectionScreen implements Screen{
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
-        sprite = new Sprite(new Texture("whitebackground.png"));
+        sprite = new Sprite(new Texture("3_CharSelScreen/whiteBG.png"));
         //sprite.setColor(1, 1, 1, 0);
         playercharacter=new Sprite(skin.getSprite("bg_Buddha"));
         //sprite.setPosition(0, 0);
@@ -519,7 +519,7 @@ public class CharacterSelectionScreen implements Screen{
        // sprite.draw(batcher);
 
         style.font.draw(batcher, "My Special ability is to", viewport.getScreenWidth() / 3, viewport.getScreenHeight() - 250);
-        style.font.draw(batcher,Playerability,viewport.getScreenWidth()/3,viewport.getScreenHeight()-275);
+        style.font.draw(batcher, Playerability, viewport.getScreenWidth() / 3, viewport.getScreenHeight() - 275);
         style.font.draw(batcher, "the world",viewport.getScreenWidth()/3,viewport.getScreenHeight()-300);
         style.font.draw(batcher, "Enter IP : " + myIP, viewport.getScreenWidth()/3,viewport.getScreenHeight()/7);
         playercharacter.setPosition(viewport.getScreenWidth()/4,viewport.getScreenHeight()/12);

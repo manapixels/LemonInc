@@ -10,13 +10,16 @@ package com.lemoninc.nimbusrun.Sprites;
  *       void       update(float delta)
  *       World      getWorld()
  *       Viewport   getGamePort()
+ *       private    makePlatformsBG()
+ *       public     getPlayers()
  *       public synchronized void logInfo(String string)
  * NOTES :
- * LAST UPDATED: 14/4/2016 23:59
+ * LAST UPDATED: 18/4/2016 11:27
  *
  * ********************************/
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -25,11 +28,13 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.esotericsoftware.minlog.Log;
 import com.lemoninc.nimbusrun.Networking.Client.TapTapClient;
 import com.lemoninc.nimbusrun.Networking.Network;
 import com.lemoninc.nimbusrun.Networking.Server.TapTapServer;
@@ -92,7 +97,17 @@ public class GameMap{
 
         //instantiate HUD, GameSounds, BitmapFont, Camera, SpriteBatch ...
         gamecam = new OrthographicCamera();
-        gameport = new FitViewport(NimbusRun.V_WIDTH * 1.5f / NimbusRun.PPM, NimbusRun.V_HEIGHT * 1.5f / NimbusRun.PPM, gamecam);
+        gameport = new FitViewport(NimbusRun.V_WIDTH * 2.4f / NimbusRun.PPM, NimbusRun.V_HEIGHT * 2.4f / NimbusRun.PPM, gamecam);
+
+        //font for player names on avatars
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("PlayScreen/SF Atarian System.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 10;
+        font = generator.generateFont(parameter);
+        font.setColor(Color.WHITE);
+        font.getData().setScale(0.1f, 0.1f);
+        font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        generator.dispose();
 
         //set starting pos of bgSprites after setting cam
         bgStartX = -gameport.getWorldWidth() * 1.5f;
@@ -103,7 +118,7 @@ public class GameMap{
         initCommon();
 
         // initialise all background sprites
-        bgTexture = new Texture("PlayScreen/bg.png");
+        bgTexture = new Texture("4_PlayScreen/bg_dark.png");
         bgTexture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
         bgSprite = new Sprite(new TextureRegion(bgTexture, bgTexture.getWidth()*11, bgTexture.getHeight()*2));
         bgWidth = bgTexture.getWidth() / NimbusRun.PPM * 1.4f * 11;
@@ -112,9 +127,12 @@ public class GameMap{
         bgSprite.setY(bgStartY);
         bgSprite.setSize(bgWidth, bgHeight);
 
-        bgTextureMountain = new Texture("PlayScreen/platform_mountain.png");
-        bgMountainWidth = bgTextureMountain.getWidth() / NimbusRun.PPM * 2.2f;
-        bgMountainHeight = bgTextureMountain.getHeight() / NimbusRun.PPM * 2.2f;
+        bgTextureFlat = new Texture("4_PlayScreen/platform_flat.png");
+        bgTexturePlateau = new Texture("4_PlayScreen/platform_plateau.png");
+        bgTextureMountain = new Texture("4_PlayScreen/platform_mountain.png");
+        bgTexturePit = new Texture("4_PlayScreen/platform_pit.png");
+
+        bgPlatformSprites = new ArrayList<Sprite>();
 
         bgPlatformSprites = new ArrayList<Sprite>();
 
@@ -166,13 +184,13 @@ public class GameMap{
             // 4. KAPPA
             // 5. PONTIANAK
             // 6. MADAME WHITE SNAKE
-            case 1: img = new TextureAtlas(Gdx.files.internal("spritesheets/LBspritesheet.atlas")); break;
-            case 2: img = new TextureAtlas(Gdx.files.internal("spritesheets/SKspritesheet.atlas")); break;
-            case 3: img = new TextureAtlas(Gdx.files.internal("spritesheets/FXspritesheet.atlas")); break;
-            case 4: img = new TextureAtlas(Gdx.files.internal("spritesheets/KPspritesheet.atlas")); break;
-            case 5: img = new TextureAtlas(Gdx.files.internal("spritesheets/PTspritesheet.atlas")); break;
-            case 6: img = new TextureAtlas(Gdx.files.internal("spritesheets/MWSspritesheet.atlas")); break;
-            default: img = new TextureAtlas(Gdx.files.internal("spritesheets/PTspritesheet.atlas")); break;
+            case 1: img = new TextureAtlas(Gdx.files.internal("Spritesheets/LBspritesheet.atlas")); break;
+            case 2: img = new TextureAtlas(Gdx.files.internal("Spritesheets/SKspritesheet.atlas")); break;
+            case 3: img = new TextureAtlas(Gdx.files.internal("Spritesheets/FXspritesheet.atlas")); break;
+            case 4: img = new TextureAtlas(Gdx.files.internal("Spritesheets/KPspritesheet.atlas")); break;
+            case 5: img = new TextureAtlas(Gdx.files.internal("Spritesheets/PTspritesheet.atlas")); break;
+            case 6: img = new TextureAtlas(Gdx.files.internal("Spritesheets/MWSspritesheet.atlas")); break;
+            default: img = new TextureAtlas(Gdx.files.internal("Spritesheets/PTspritesheet.atlas")); break;
         }
         return img;
     }
@@ -184,7 +202,6 @@ public class GameMap{
         world = new World(new Vector2(0, -10), true); //box2d world with gravity
         b2dr = new Box2DDebugRenderer();
     }
-
     /**
      * Client receives PlayerJoinLeave from server containing player ID, name, initial x and y
      * @param msg
@@ -322,6 +339,7 @@ public class GameMap{
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        b2dr.render(world, gamecam.combined);
         //--------------START batch
         batch.setProjectionMatrix(gamecam.combined);
         batch.begin();
@@ -336,7 +354,7 @@ public class GameMap{
         for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {
             Player curPlayer = playerEntry.getValue();
             curPlayer.draw(batch);
-//            font.draw(batch, "PlayerTest", curPlayer.getX(), curPlayer.getY());
+            font.draw(batch, "PlayerTest", curPlayer.getX(), curPlayer.getY());
             //  Render flashbang if flashed
             if (curPlayer.isFlashed()) {
                 Gdx.gl.glClearColor(1, 1, 1, 1);
@@ -346,29 +364,56 @@ public class GameMap{
         }
         //----------------END batch
         batch.end();
-        b2dr.render(world, gamecam.combined);
-    }
 
-    public void makePlatformsBG(float startX, float endX, char type){
-        Sprite sprite;
-        switch(type){
-            case 'M': sprite = new Sprite(bgTextureMountain);
-                sprite.setPosition(startX, -bgMountainHeight*0.4f);
-                sprite.setSize(bgMountainWidth, bgMountainHeight);
-//                Log.info("Mountain made at: " + startX);
-                bgPlatformSprites.add(sprite); break;
-        }
-    }
-
-
-
-    public synchronized void logInfo(String string) {
-       // Log.info("[GameMap]: " + (isClient ? "[Client] " : "[Server] ") + string);
+        //b2dr.render(world, gamecam.combined);
+        //steps box2d world
+        world.step(1 / 60f, 6, 2);
     }
 
     public void resize(int width, int height) {
         gameport.update(width, height);
         gamecam.position.set(gamecam.viewportWidth / 2, gamecam.viewportHeight / 2, 0);
+    }
+
+    public void makePlatformsBG(float startX, float endX, char type){
+        Sprite sprite;
+        float width = endX-startX;
+        float height;
+
+        switch(type){
+            case 'F': sprite = new Sprite(bgTextureFlat);
+                height = width/1000*390;
+                sprite.setPosition(startX, -height);
+                sprite.setSize(width, height);
+                bgPlatformSprites.add(sprite); break;
+
+            case 'P': sprite = new Sprite(bgTexturePlateau);
+                height = width/1000*789;
+                sprite.setPosition(startX, -height*0.7366f);
+                sprite.setSize(width, height);
+                bgPlatformSprites.add(sprite); break;
+
+            case 'M': sprite = new Sprite(bgTextureMountain);
+                height = width/1000*869;
+                sprite.setPosition(startX, -height*0.473f);
+                sprite.setSize(width, height);
+                bgPlatformSprites.add(sprite); break;
+
+            case 'T': sprite = new Sprite(bgTexturePit);
+                height = width/1000*605;
+                sprite.setPosition(startX, -height);
+                sprite.setSize(width, height);
+                bgPlatformSprites.add(sprite); break;
+        }
+
+    }
+
+    public Map<Integer, Player> getPlayers(){
+        return players;
+    }
+
+    public synchronized void logInfo(String string) {
+       // Log.info("[GameMap]: " + (isClient ? "[Client] " : "[Server] ") + string);
     }
 
     public void dispose() {
@@ -416,5 +461,4 @@ public class GameMap{
             }
         }
     }
-
 }

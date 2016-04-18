@@ -58,8 +58,8 @@ public class StoryLineScreen implements Screen{
         style.font = new BitmapFont(Gdx.files.internal("Fonts/crimesFont48Black.fnt"));
         style.font.setColor(Color.BLUE);
         style.font.getData().setScale(0.65f, 0.65f);
-        style.up= new TextureRegionDrawable(new TextureRegion(new Texture("button_up.png")));
-        style.down= new TextureRegionDrawable(new TextureRegion(new Texture("button_down.png")));
+        style.up= new TextureRegionDrawable(new TextureRegion(new Texture("0_StorylineScreen/button_up.png")));
+        style.down= new TextureRegionDrawable(new TextureRegion(new Texture("0_StorylineScreen/button_down.png")));
 
         camera=new PerspectiveCamera();
         viewport=new FitViewport(gameWidth,gameHeight,camera);
@@ -72,7 +72,7 @@ public class StoryLineScreen implements Screen{
     @Override
     public void show() {
         batch = new SpriteBatch();
-        background=new Texture("Plain-Brown-Worship-Background.png");
+        background=new Texture("0_StorylineScreen/bg.png");
         background.setFilter(Texture.TextureFilter.Linear,Texture.TextureFilter.Linear);
         sprite = new Sprite(background);
         //   sprite.setColor(1, 1, 1, 0);

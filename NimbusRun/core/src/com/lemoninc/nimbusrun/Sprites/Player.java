@@ -27,6 +27,7 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -38,8 +39,10 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
+import com.esotericsoftware.minlog.Log;
 import com.lemoninc.nimbusrun.Networking.Network;
 import com.lemoninc.nimbusrun.NimbusRun;
+import com.lemoninc.nimbusrun.scenes.HUD;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -62,11 +65,11 @@ public class Player extends Sprite implements InputProcessor{
     private String name;
     private BitmapFont font;
 
-    private boolean stunned, poisoned, reversed, terrored, flashed, confused, devMode, finished, instantiated;
+    private boolean stunned, poisoned, reversed, terrored, flashed, confused, devMode, finished;
     private float stunTime, poisonTime, reverseTime, terrorTime, flashTime, confuseTime;
 
-    private final float JUMPFORCE = 6f;
-    private final float MOVEFORCE = 1.75f;
+    private final float JUMPFORCE = 8f;
+    private final float MOVEFORCE = 2f;
     private final float MOVESPEEDCAP = 5;
     private float factor = 1;
 
@@ -88,7 +91,7 @@ public class Player extends Sprite implements InputProcessor{
         this.world = gameMap.getWorld();
         currentState = State.DEFAULT;
         previousState = State.DEFAULT;
-        CHARACTER_SIZE = 170 / NimbusRun.PPM;
+        CHARACTER_SIZE = 220 / NimbusRun.PPM;
         stateTime = 0f;
 
       //  attacksound=Gdx.audio.newSound(Gdx.files.internal("Sounds/specialpowermusic.wav"));
@@ -108,7 +111,6 @@ public class Player extends Sprite implements InputProcessor{
         confuseTime = 0f;
         devMode = false;
         finished = false;
-        instantiated = false;
 
         //create a dynamic bodydef
         BodyDef bdef = new BodyDef();
@@ -252,13 +254,13 @@ public class Player extends Sprite implements InputProcessor{
                 } else {
                     return this.jump();
                 }
-            if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT))
+            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
                 if (isConfused()){
                     return this.jump();
                 } else {
                     return this.moveRight();
                 }
-            if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT))    //testing purposes only
+            if (Gdx.input.isKeyPressed(Input.Keys.LEFT))    //testing purposes only
                 return this.moveLeft(1);
             if (Gdx.input.isKeyJustPressed(Input.Keys.A))       //testing purposes only
                 return this.stun();
@@ -280,13 +282,7 @@ public class Player extends Sprite implements InputProcessor{
     }
 
     public void update(float delta){
-        if (instantiated){
-            recover(1f);
-        } else {
-            if (b2body != null || gameMap != null){
-                instantiated = true;
-            }
-        }
+        recover(1f);
 //        Log.info("Player isStunned " + isStunned() + " stunTime " + getStunTime());
 //        Log.info("Player isPoisoned " + isPoisoned() + " poisonTime " + getPoisonTime());
 //        Log.info("Player isReversed " + isReversed() + " reverseTime " + getReverseTime());
@@ -491,5 +487,9 @@ public class Player extends Sprite implements InputProcessor{
     @Override
     public boolean scrolled(int amount) {
         return false;
+    }
+
+    public void dispose(){
+        img.dispose();
     }
 }
