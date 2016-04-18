@@ -17,6 +17,7 @@ package com.lemoninc.nimbusrun.Sprites;
  * ********************************/
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -115,7 +116,7 @@ public class GameMap{
         initCommon();
 
         // initialise all background sprites
-        bgTexture = new Texture("PlayScreen/bg.png");
+        bgTexture = new Texture("4_PlayScreen/bg_dark.png");
         bgTexture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
         bgSprite = new Sprite(new TextureRegion(bgTexture, bgTexture.getWidth()*11, bgTexture.getHeight()*2));
         bgWidth = bgTexture.getWidth() / NimbusRun.PPM * 1.4f * 11;
@@ -124,9 +125,12 @@ public class GameMap{
         bgSprite.setY(bgStartY);
         bgSprite.setSize(bgWidth, bgHeight);
 
-        bgTextureMountain = new Texture("PlayScreen/platform_mountain.png");
-        bgMountainWidth = bgTextureMountain.getWidth() / NimbusRun.PPM * 2.2f;
-        bgMountainHeight = bgTextureMountain.getHeight() / NimbusRun.PPM * 2.2f;
+        bgTextureFlat = new Texture("4_PlayScreen/platform_flat.png");
+        bgTexturePlateau = new Texture("4_PlayScreen/platform_plateau.png");
+        bgTextureMountain = new Texture("4_PlayScreen/platform_mountain.png");
+        bgTexturePit = new Texture("4_PlayScreen/platform_pit.png");
+
+        bgPlatformSprites = new ArrayList<Sprite>();
 
         bgPlatformSprites = new ArrayList<Sprite>();
 
@@ -196,16 +200,6 @@ public class GameMap{
         world = new World(new Vector2(0, -10), true); //box2d world with gravity
         b2dr = new Box2DDebugRenderer();
     }
-
-        // initialise all background sprites
-        bgTexture = new Texture("4_PlayScreen/bg_dark.png");
-        bgTexture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
-        bgSprite = new Sprite(new TextureRegion(bgTexture, bgTexture.getWidth()*11, bgTexture.getHeight()*3));
-        bgWidth = bgTexture.getWidth() / NimbusRun.PPM * 1.4f * 11;
-        bgHeight = bgTexture.getHeight() / NimbusRun.PPM * 1.4f * 3;
-        bgSprite.setX(bgStartX);
-        bgSprite.setY(bgStartY);
-        bgSprite.setSize(bgWidth, bgHeight);
     /**
      * Client receives PlayerJoinLeave from server containing player ID, name, initial x and y
      * @param msg
@@ -221,13 +215,6 @@ public class GameMap{
         } else {
 //            logInfo("setNetworkClient called twice");
         }
-        bgTextureFlat = new Texture("4_PlayScreen/platform_flat.png");
-        bgTexturePlateau = new Texture("4_PlayScreen/platform_plateau.png");
-        bgTextureMountain = new Texture("4_PlayScreen/platform_mountain.png");
-        bgTexturePit = new Texture("4_PlayScreen/platform_pit.png");
-
-        bgPlatformSprites = new ArrayList<Sprite>();
-
     }
 
     /**

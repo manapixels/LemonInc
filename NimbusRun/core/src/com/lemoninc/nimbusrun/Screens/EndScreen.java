@@ -63,7 +63,6 @@ public class EndScreen implements Screen{
 
     public EndScreen(NimbusRun game,Boolean playmusic){
         this.playmusic=playmusic;
-    public EndScreen(NimbusRun game, Map<Integer, Player> players){
         this.game = game;
         gamecam = new OrthographicCamera();
         gameport = new FitViewport(game.V_WIDTH / game.PPM, game.V_HEIGHT / game.PPM, gamecam);

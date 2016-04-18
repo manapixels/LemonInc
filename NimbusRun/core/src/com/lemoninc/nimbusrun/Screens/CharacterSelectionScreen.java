@@ -43,7 +43,14 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.lemoninc.nimbusrun.Networking.Client.TapTapClient;
+import com.lemoninc.nimbusrun.Networking.Network;
+import com.lemoninc.nimbusrun.Networking.Server.TapTapServer;
 import com.lemoninc.nimbusrun.NimbusRun;
+import com.lemoninc.nimbusrun.Sprites.GameMap;
+
+import java.io.IOException;
+import java.util.Random;
 
 
 /**
@@ -105,10 +112,17 @@ public class CharacterSelectionScreen implements Screen{
         this.mapData = null;
 //        myIP=ipAddress;
 
-        charactername="Buddha";
-
         BUTTON_HEIGHT=165;
         BUTTON_WIDTH=140;
+
+        soundclick=Gdx.audio.newSound(Gdx.files.internal("Sounds/click.mp3"));
+
+        music=Gdx.audio.newMusic(Gdx.files.internal("Sounds/characterselectionscreen.mp3"));
+        music.setVolume(0.5f);                 // sets the volume to half the maximum volume
+        music.setLooping(true);
+        if(playmusic){
+            music.play();
+        }
 
         camera=new PerspectiveCamera();
         viewport=new FitViewport(gameWidth,gameHeight,camera);
@@ -137,7 +151,6 @@ public class CharacterSelectionScreen implements Screen{
         table.right();
         table.setFillParent(true);
 
-
         //Title=new Label(String.format("%03d","Choose your Avatar"),new Label.LabelStyle(new BitmapFont(Gdx.files.internal("Fonts/crime.fnt")), Color.DARK_GRAY));
         Title=new Label("Choose Your Character",new Label.LabelStyle(new BitmapFont(Gdx.files.internal("Fonts/crimesFont48Black.fnt")), Color.DARK_GRAY));
         Title.setPosition(gameWidth / 2, gameHeight - gameWidth / 20, Align.center);
@@ -150,7 +163,6 @@ public class CharacterSelectionScreen implements Screen{
         krishnabtnStyle=new ImageButton.ImageButtonStyle();
         madamebtnStyle=new ImageButton.ImageButtonStyle();
         pontibtnStyle=new ImageButton.ImageButtonStyle();
-
 
         BuddhabtnStyle.imageUp = skin.getDrawable("btn_buddha");
         BuddhabtnStyle.imageOver=skin.getDrawable("btn_buddha_sel");
@@ -182,7 +194,6 @@ public class CharacterSelectionScreen implements Screen{
         pontibtnStyle.imageOver = skin.getDrawable("btn_ponti_sel");
         pontibtnStyle.imageChecked=skin.getDrawable("btn_ponti_sel");
 
-
         Buddha= new ImageButton(BuddhabtnStyle);
         foxy=new ImageButton(foxybtnStyle);
         kappa=new ImageButton(kappabtnStyle);
@@ -211,7 +222,6 @@ public class CharacterSelectionScreen implements Screen{
         goback=new TextButton("Go Back",style);
         goback.setSize(gameWidth/5,gameHeight/8);
         goback.setPosition(gameWidth * 0.85f, gameHeight * 0.75f);
-
 
         table.addActor(Title);
         table.addActor(joingame);
@@ -382,7 +392,7 @@ public class CharacterSelectionScreen implements Screen{
                 // TODO: SAVE THE LOG OF THE PLAYER ACCORDING TO THE NUMBER
                 //charactername= checkbuttonpress();
                 soundclick.play();
-                game.setScreen(new MenuScreen(game,gameWidth,gameHeight));
+                game.setScreen(new MenuScreen(game, gameWidth, gameHeight));
                 music.stop();
             }
         });
@@ -502,7 +512,7 @@ public class CharacterSelectionScreen implements Screen{
        // sprite.draw(batcher);
 
         style.font.draw(batcher, "My Special ability is to", viewport.getScreenWidth() / 3, viewport.getScreenHeight() - 250);
-        style.font.draw(batcher,Playerability,viewport.getScreenWidth()/3,viewport.getScreenHeight()-275);
+//        style.font.draw(batcher, Playerability, viewport.getScreenWidth() / 3, viewport.getScreenHeight() - 275);
         style.font.draw(batcher, "the world",viewport.getScreenWidth()/3,viewport.getScreenHeight()-300);
         style.font.draw(batcher, "Enter IP : " + myIP, viewport.getScreenWidth()/3,viewport.getScreenHeight()/7);
         playercharacter.setPosition(viewport.getScreenWidth()/4,viewport.getScreenHeight()/12);

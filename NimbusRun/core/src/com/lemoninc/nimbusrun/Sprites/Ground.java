@@ -38,11 +38,6 @@ public class Ground {
         makeFlatGround(startX, endX);
         startX = endX;
         endX += gameMap.getGameport().getWorldWidth()*2;
-        makePlateau(startX, endX);
-        //makeMountain(startX, endX);
-        //
-        startX = endX;
-        endX += gameMap.getGameport().getWorldWidth() * 2;
 
         //Log.info("Each platform is " + gameMap.getGameport().getWorldWidth()*2 + " long.");
         for (int i = 0; i < 8; i++){

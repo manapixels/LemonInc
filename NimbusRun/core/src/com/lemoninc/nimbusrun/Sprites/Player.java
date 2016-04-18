@@ -65,11 +65,11 @@ public class Player extends Sprite implements InputProcessor{
     private String name;
     private BitmapFont font;
 
-    private boolean stunned, poisoned, reversed, terrored, flashed, confused, devMode, finished, instantiated;
+    private boolean stunned, poisoned, reversed, terrored, flashed, confused, devMode, finished;
     private float stunTime, poisonTime, reverseTime, terrorTime, flashTime, confuseTime;
 
-    private final float JUMPFORCE = 6f;
-    private final float MOVEFORCE = 1.75f;
+    private final float JUMPFORCE = 8f;
+    private final float MOVEFORCE = 2f;
     private final float MOVESPEEDCAP = 5;
     private float factor = 1;
 
@@ -111,7 +111,6 @@ public class Player extends Sprite implements InputProcessor{
         confuseTime = 0f;
         devMode = false;
         finished = false;
-        instantiated = false;
 
         //create a dynamic bodydef
         BodyDef bdef = new BodyDef();
@@ -255,13 +254,13 @@ public class Player extends Sprite implements InputProcessor{
                 } else {
                     return this.jump();
                 }
-            if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT))
+            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
                 if (isConfused()){
                     return this.jump();
                 } else {
                     return this.moveRight();
                 }
-            if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT))    //testing purposes only
+            if (Gdx.input.isKeyPressed(Input.Keys.LEFT))    //testing purposes only
                 return this.moveLeft(1);
             if (Gdx.input.isKeyJustPressed(Input.Keys.A))       //testing purposes only
                 return this.stun();

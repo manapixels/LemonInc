@@ -151,7 +151,6 @@ public class TapTapClient {
                 }
             });
         }
-
     }
 
     private void handleDisonnect(Connection connection) {
