@@ -53,7 +53,7 @@ public class MenuScreen implements Screen {
     private Image unmuteButton;
     private Music music;
     private NimbusRun game;
-    Boolean playmusic;
+    public Boolean playmusic;
     Sound soundclick;
 
 

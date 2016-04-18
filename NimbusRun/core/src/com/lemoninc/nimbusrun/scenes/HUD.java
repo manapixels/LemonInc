@@ -59,16 +59,16 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
     float playerLocalX,worldLength;
     GameMap gameMap;
 
-
     public  HUD(SpriteBatch sb, String playernumber, GameMap gameMap){
 
         this.Player=playernumber;
         this.gameMap=gameMap;
-        playerLocalX =gameMap.bgStartX;
-        worldLength = 18*gameMap.getGameport().getWorldWidth();
+        //playerLocalX =gameMap.bgStartX;
+        //worldLength = 18*gameMap.getGameport().getWorldWidth();
         Gdx.app.log("worled length",String.valueOf(worldLength));
         powerupdistance=worldLength/3;
-        worldTimer = 60;
+        worldTimer = 150;
+
         timecount=0;
         camera=new PerspectiveCamera();
         viewport=new FillViewport(NimbusRun.V_WIDTH,NimbusRun.V_HEIGHT,new OrthographicCamera());
@@ -146,7 +146,6 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
         CharacterLabel=new Label("PLAYER",new Label.LabelStyle(new BitmapFont(Gdx.files.internal("Fonts/font.fnt")), Color.GOLDENROD));
         countdownLabel=new Label(String.format("%03d",worldTimer),new Label.LabelStyle(new BitmapFont(Gdx.files.internal("Fonts/font20.fnt")), Color.CYAN));
 
-
         table.add(CharacterLabel).expandX().padTop(20f);
         table.add(timelabel).expandX().padTop(20f);
         table.row();
@@ -174,7 +173,7 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
         else {
             dialogstart.remove();
 //            if(Gdx.input.justTouched()) {
-               playerLocalX = gameMap.playerLocal.getX();
+//               playerLocalX = gameMap.playerLocal.getX();
 //            }
             if (timecount >= 1&&worldTimer>0) {
                 worldTimer--;
@@ -184,12 +183,12 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
         }
 
         progress= MathUtils.lerp(progress,(worldTimer/60),0.001f);
-        powerup=playerLocalX/powerupdistance;
-        Gdx.app.log("Powerdistance",String.valueOf(powerupdistance));
-       if(playerLocalX%powerupdistance==0){
-           nopowerups--;
-           powerup=1f;
-       }
+//        powerup=playerLocalX/powerupdistance;
+//        Gdx.app.log("Powerdistance",String.valueOf(powerupdistance));
+//       if(playerLocalX%powerupdistance==0){
+//           nopowerups--;
+//           powerup=1f;
+//       }
        /*if player used power up, onclicklistener at Playscreen/gamemap,
         command the power up has been used,powerup=0f)
 
@@ -226,7 +225,7 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
         shapeRenderer.setColor(Color.RED);
         shapeRenderer.rect(Gdx.graphics.getWidth()/2-90, Gdx.graphics.getHeight()-80, 220, 40);
         shapeRenderer.setColor(Color.BLUE);
-        shapeRenderer.rect(Gdx.graphics.getWidth()/2-90,  Gdx.graphics.getHeight()-80, this.powerup* 220, 40);
+        shapeRenderer.rect(Gdx.graphics.getWidth()/2-90,  Gdx.graphics.getHeight()-80, this.progress* 220, 40);
         shapeRenderer.end();
     }
 

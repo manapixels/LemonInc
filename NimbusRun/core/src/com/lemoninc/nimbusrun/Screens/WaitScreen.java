@@ -75,7 +75,6 @@ public class WaitScreen implements Screen{
     private float gameWidth;
     private float gameHeight;
     TextField.TextFieldStyle textstyle;
-//    private Networking network;
     private TextField playerIP;
     private TextField playername;
     private Random random = new Random();
@@ -122,15 +121,8 @@ public class WaitScreen implements Screen{
         hostbutton=new TextButton("Join as Host",style);
         clientbutton=new TextButton("Join as Client",style);
 
-
-        //initialise network
-        //connect to server and configure socket events (receive client ID, all the other player's ID when they join, half empty hashmap
-//        network = new Networking();
-//        network.connectToServer();
-//        network.configSocketEvents();
         Gdx.app.log("WaitScreen", "Finished connecting & configuring events");
         playernumber=1;
-        show();
     }
 
 
@@ -151,8 +143,7 @@ public class WaitScreen implements Screen{
         // Create UI elements
 
         labeltitle=new Label("Nimbus Run",new Label.LabelStyle(new BitmapFont(Gdx.files.internal("Fonts/crimesFont48Black.fnt")), Color.DARK_GRAY));
-        labeltitle.setPosition(this.gameWidth/2, this.gameHeight-this.gameHeight/4,Align.center
-        );
+        labeltitle.setPosition(this.gameWidth/2, this.gameHeight-this.gameHeight/4,Align.center);
         labeltitle.setSize(400, 200);
         stage.addActor(labeltitle);
 
@@ -167,34 +158,36 @@ public class WaitScreen implements Screen{
         playerIP=new TextField(preferences.getString("ip"), skin);
         playerIP.setSize(150, 50);
         playerIP.setPosition(this.gameWidth / 2, 300, Align.center);
-        playerIP.setMessageText("Enter your IP");
+        playerIP.setMessageText("Enter the host IP to join game");
         stage.getKeyboardFocus();
         stage.addActor(playerIP);
 
 
         hostbutton.setSize(this.BUTTON_WIDTH, this.BUTTON_HEIGHT);
-        hostbutton.setPosition(this.gameWidth / 2 , 200, Align.bottomLeft);
+        hostbutton.setPosition(this.gameWidth / 2, 200, Align.bottomLeft);
         stage.addActor(hostbutton);
 
         clientbutton.setSize(this.BUTTON_WIDTH, this.BUTTON_HEIGHT);
-        clientbutton.setPosition(this.gameWidth / 2 , 200, Align.bottomRight);
+        clientbutton.setPosition(this.gameWidth / 2, 200, Align.bottomRight);
         stage.addActor(clientbutton);
+
+        playername.setTextFieldListener(new TextField.TextFieldListener() {
+            public void keyTyped(TextField textField, char key) {
+                if (key == '\n') textField.getOnscreenKeyboard().show(false);
+//                NameValue = textField.getText();
+            }
+        });
+        //      System.out.println(NameValue);
 
         playerIP.setTextFieldListener(new TextField.TextFieldListener() {
             public void keyTyped(TextField textField, char key) {
-                Ipvalue = textField.getText();
+//                Ipvalue = textField.getText();
                 if (key == '\n') textField.getOnscreenKeyboard().show(false);
             }
         });
 //        System.out.println(Ipvalue);
 
-        playername.setTextFieldListener(new TextField.TextFieldListener() {
-            public void keyTyped(TextField textField, char key) {
-                if (key == '\n') textField.getOnscreenKeyboard().show(false);
-                NameValue = textField.getText();
-            }
-        });
-  //      System.out.println(NameValue);
+
 
 
         hostbutton.addListener(new ClickListener() {
@@ -218,18 +211,9 @@ public class WaitScreen implements Screen{
 
         Gdx.input.setInputProcessor(stage);
     }
-    /**
-     * Play game as host for now
-     */
-    private void playGame() {
-        hostGame();
-    }
 
-    private void savePrefs(){
-        preferences.putString("name", getName());
-        preferences.putString("ip", playerIP.getText());
-        preferences.flush();
-    }
+
+
 
     public void update(float dt) {
         handleInput();
@@ -237,12 +221,13 @@ public class WaitScreen implements Screen{
     }
 
     protected void handleInput() {
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
-            playGame();
-        }
-        else if (Gdx.input.isKeyPressed(Input.Keys.UP)){
-            game.setScreen(new PlayScreen(game, false, "localhost", getName(),Boolean.FALSE));
-        }
+
+//        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
+//            playGame();
+//        }
+//        else if (Gdx.input.isKeyPressed(Input.Keys.UP)){
+//            game.setScreen(new PlayScreen(game, false, "localhost", getName()));
+//        }
     }
 
     @Override
@@ -299,10 +284,11 @@ public class WaitScreen implements Screen{
      * join a game room
      */
     private void joinGame(){
-        game.setScreen(new CharacterSelectionScreen(game, false, playerIP.getText(), getName(),playmusic));
-        savePrefs();
-        //TODO: setscreen(new playscreen(game, host-false, the IP address you are joining, getname())
-        //save preferences
+        if (!playerIP.getText().equals("")) {
+            game.setScreen(new CharacterSelectionScreen(game, false, playerIP.getText(), getName(),playmusic));
+            //TODO: what if IP is blank?
+            savePrefs();
+        }
     }
 
     /**
@@ -311,9 +297,6 @@ public class WaitScreen implements Screen{
     private void hostGame(){
         game.setScreen(new CharacterSelectionScreen(game, true, "localhost", getName(),playmusic));
         savePrefs();
-        //TODO: setscreen(new playscreen(game, host-true, the IP address you are hosting from - localhost, getname())
-
-        //save preferences
     }
 
     /**
@@ -322,14 +305,18 @@ public class WaitScreen implements Screen{
      *
      * @return player's name
      */
-    //TODO: textfield
     private String getName(){
         String name =playername.getText();
-//        String name = get text from the textfield in the waiting screen
         if (name.isEmpty()) {
             name = "Player" + random.nextInt(10000);
         }
         playername.setText(name);
         return name;
+    }
+
+    private void savePrefs(){
+        preferences.putString("name", getName());
+        preferences.putString("ip", playerIP.getText());
+        preferences.flush();
     }
 }

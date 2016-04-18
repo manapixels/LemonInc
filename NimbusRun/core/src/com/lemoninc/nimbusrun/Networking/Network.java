@@ -20,8 +20,6 @@ public class Network {
 
     public static int PORT = 8080;
     public static int PORTUDP = 8082;
-    public static float SPAWN_X = 32;
-    public static float SPAWN_Y = 500;
     /**
      * the classes that are going to be sent over the network must be registered for both server and client
      *
@@ -33,20 +31,19 @@ public class Network {
         kryo.register(Network.PlayerJoinLeave.class);
         kryo.register(Network.MovementState.class);
         kryo.register(Vector2.class);
+        kryo.register(GameRoomFull.class);
+        kryo.register(Ready.class);
+        kryo.register(GameReady.class);
     }
 
     static public class Login {
         public String name;
-        public float initial_x;
-        public float initial_y;
 
         public Login() {
         }
 
         public Login(String name) {
             this.name = name;
-            this.initial_x = SPAWN_X;
-            this.initial_y = SPAWN_Y;
 
             Network.logInfo("Login initialised by Client "+name);
         }
@@ -96,7 +93,33 @@ public class Network {
     }
 
     private static void logInfo(String string) {
-//        Log.info("[Network]: "+string);
-        Log.info("[Network]: " + string);
+        Log.info("[Network]: "+string);
+    }
+
+    static public class GameRoomFull {
+
+        public GameRoomFull() {}
+
+    }
+
+    static public class Ready {
+
+        public int charactername;
+        public int playerId;
+
+        public Ready() {}
+
+        public Ready(int charactername) {
+            this.charactername = charactername;
+        }
+
+        public void setPlayerId(int playerId) {
+            this.playerId = playerId;
+        }
+    }
+
+    static public class GameReady {
+
+        public GameReady() {}
     }
 }

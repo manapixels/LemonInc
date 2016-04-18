@@ -17,7 +17,6 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.EdgeShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
-import com.esotericsoftware.minlog.Log;
 
 import java.util.Random;
 
@@ -35,7 +34,6 @@ public class Ground {
         startX = -gameMap.getGameport().getWorldWidth();
         endX = gameMap.getGameport().getWorldWidth();
 
-        //makeMountain(startX, endX);
         makeFlatGround(startX, endX);
         startX = endX;
         endX += gameMap.getGameport().getWorldWidth() * 2;
@@ -43,15 +41,13 @@ public class Ground {
         //Log.info("Each platform is " + gameMap.getGameport().getWorldWidth()*2 + " long.");
         for (int i = 0; i < 8; i++){
             Random rand = new Random();
-            int choice = rand.nextInt(4);
+            int choice = rand.nextInt(3);
             if (choice == 0){
-                makeFlatGround(startX, endX);
+                makePlateau(startX, endX);
             } else if (choice == 1) {
                 makeMountain(startX, endX);
-            } else if (choice == 2) {
-                makePit(startX, endX);
             } else {
-                makePlateau(startX, endX);
+                makePit(startX, endX);
             }
             startX = endX;
             endX += gameMap.getGameport().getWorldWidth()*2;
@@ -97,7 +93,7 @@ public class Ground {
 
         //straight up
         x1 = x2;
-        y2 += gameMap.getGameport().getWorldHeight()*0.75;
+        y2 += gameMap.getGameport().getWorldHeight()*0.65;
         edgeShape.set(x1, y1, x2, y2);
         //Log.info("Plateau p2 coordinates: (" + x1 + " " + y1 + ") and (" + + x2 + " " + y2 + ")");
         fdef.shape = edgeShape;
@@ -114,7 +110,7 @@ public class Ground {
 
         //straight drop
         x1 = x2;
-        y2 -= gameMap.getGameport().getWorldHeight()*0.75f;
+        y2 -= gameMap.getGameport().getWorldHeight()*0.65f;
         edgeShape.set(x1, y1, x2, y2);
         //Log.info("Plateau p4 coordinates: (" + x1 + " " + y1 + ") and (" + + x2 + " " + y2 + ")");
         fdef.shape = edgeShape;
