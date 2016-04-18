@@ -271,7 +271,7 @@ public class WaitScreen implements Screen{
      * join a game room
      */
     private void joinGame(){
-        game.setScreen(new CharacterSelectionScreen(game, false, getName()));
+        game.setScreen(new CharacterSelectionScreen(game, false, getName(), playmusic));
         savePrefs();
     }
 
@@ -279,7 +279,7 @@ public class WaitScreen implements Screen{
      * play game as a host
      */
     private void hostGame(){
-        game.setScreen(new CharacterSelectionScreen(game, true, getName()));
+        game.setScreen(new CharacterSelectionScreen(game, true, getName(), playmusic));
         savePrefs();
     }
 

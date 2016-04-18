@@ -90,7 +90,7 @@ public class GameMap{
     /**
      * This constructor is called inside TapTapClient
      */
-    public GameMap(TapTapClient client) {
+    public GameMap(TapTapClient client, int[] mapData) {
 //TODO: how is mapdata passed into GameMap? After instantiation?
         this.client = client;
         this.isClient = true;

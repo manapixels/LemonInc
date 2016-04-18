@@ -393,7 +393,7 @@ public class CharacterSelectionScreen implements Screen{
                 // TODO: SAVE THE LOG OF THE PLAYER ACCORDING TO THE NUMBER
                 //charactername= checkbuttonpress();
                 soundclick.play();
-                game.setScreen(new MenuScreen(game, gameWidth, gameHeight));
+                goToMenu();
                 music.stop();
             }
         });
@@ -496,6 +496,12 @@ public class CharacterSelectionScreen implements Screen{
     public void playGame(){
         stage.clear();
         game.setScreen(new PlayScreen(game, isHost, playername, client, server, playmusic));
+    }
+
+    public void goToMenu(){
+        stage.clear();
+        game.setScreen(new MenuScreen(game, gameWidth, gameHeight));
+
     }
 
 //    public void goPlayScreen() {
