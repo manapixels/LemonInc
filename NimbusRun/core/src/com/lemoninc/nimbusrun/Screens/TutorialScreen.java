@@ -55,8 +55,8 @@ public class TutorialScreen implements Screen{
         style.font = new BitmapFont(Gdx.files.internal("Fonts/crimesFont48Black.fnt"));
         style.font.setColor(Color.BLUE);
         style.font.getData().setScale(0.65f, 0.65f);
-        style.up= new TextureRegionDrawable(new TextureRegion(new Texture("button_up.png")));
-        style.down= new TextureRegionDrawable(new TextureRegion(new Texture("button_down.png")));
+        style.up= new TextureRegionDrawable(new TextureRegion(new Texture("2_TutorialScreen/button_up.png")));
+        style.down= new TextureRegionDrawable(new TextureRegion(new Texture("2_TutorialScreen/button_down.png")));
 
 
         Return = new TextButton("Return to main menu", style);
@@ -65,7 +65,7 @@ public class TutorialScreen implements Screen{
     @Override
     public void show() {
         batcher = new SpriteBatch();
-        sprite = new Sprite(new Texture("Plain-Brown-Worship-Background.png"));
+        sprite = new Sprite(new Texture("2_TutorialScreen/bg.png"));
         //   sprite.setColor(1, 1, 1, 0);
         sprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 

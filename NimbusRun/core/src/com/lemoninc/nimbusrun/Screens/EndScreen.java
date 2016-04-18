@@ -20,41 +20,73 @@ package com.lemoninc.nimbusrun.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lemoninc.nimbusrun.NimbusRun;
+import com.lemoninc.nimbusrun.Sprites.GameMap;
+import com.lemoninc.nimbusrun.Sprites.Player;
+
+import java.util.Map;
 
 public class EndScreen implements Screen{
 
     private NimbusRun game;
+    private GameMap gameMap;
     private OrthographicCamera gamecam;
     private Viewport gameport;
+    private Map<Integer, Player> players;
 
     private SpriteBatch batch;
     private Sprite aspectRatio;
+    private TextButton.TextButtonStyle style;
+    private TextButton Continue;
+    private Stage stage;
 
-    public EndScreen(NimbusRun game){
+    public EndScreen(NimbusRun game, Map<Integer, Player> players){
         this.game = game;
         gamecam = new OrthographicCamera();
         gameport = new FitViewport(game.V_WIDTH / game.PPM, game.V_HEIGHT / game.PPM, gamecam);
-
+        stage= new Stage(new ExtendViewport(game.V_WIDTH, game.V_HEIGHT));
+        this.players = players;
         batch = new SpriteBatch();
-//<<<<<<< HEAD
-//        aspectRatio = new Sprite(new Texture("EndScreen/bg.png"));
-//=======
-        aspectRatio = new Sprite(new Texture("whitebackground.png"));
-//>>>>>>> 7035fb9ae7792fe95a88e16505e31b77f455132e
+
+        aspectRatio = new Sprite(new Texture("5_EndScreen/bg.png"));
+
         aspectRatio.setPosition(0, 0);
         aspectRatio.setSize(game.V_WIDTH / game.PPM, game.V_HEIGHT / game.PPM);
+
+        style = new TextButton.TextButtonStyle();  //can customize
+        style.font = new BitmapFont(Gdx.files.internal("Fonts/crimesFont48Black.fnt"));
+        style.font.setColor(Color.BLUE);
+        style.font.getData().setScale(0.65f, 0.65f);
+        style.up= new TextureRegionDrawable(new TextureRegion(new Texture("5_EndScreen/button_up.png")));
+        style.down= new TextureRegionDrawable(new TextureRegion(new Texture("5_EndScreen/button_down.png")));
+
+        Continue = new TextButton("Click to Return", style);
+        Continue.setSize(250, 75);
+        Continue.setPosition(500, 100, Align.bottomLeft);
+        stage.addActor(Continue);
+
     }
 
     protected void handleInput() {
     }
+
 
     @Override
     public void render(float delta) {
@@ -65,8 +97,19 @@ public class EndScreen implements Screen{
 
         batch.setProjectionMatrix(gamecam.combined);
         batch.begin();
-        aspectRatio.draw(batch);
+        //aspectRatio.draw(batch);
+
+        // Render Players
+        for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {
+            Player curPlayer = playerEntry.getValue();
+            curPlayer.draw(batch);
+            //if(curPlayer != playerLocal) curPlayer.renderNameTag(spriteBatch, fontNameTag);
+        }
+
         batch.end();
+
+        stage.act();
+        stage.draw();
 }
 
     public void update(float delta) {
@@ -81,7 +124,17 @@ public class EndScreen implements Screen{
     }
 
     @Override
-    public void show() {    }
+    public void show() {
+        Continue.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new MenuScreen(game, gamecam.viewportWidth, gamecam.viewportHeight));
+            }
+
+        });
+
+        Gdx.input.setInputProcessor(stage);
+    }
 
     @Override
     public void pause() {    }
@@ -90,7 +143,7 @@ public class EndScreen implements Screen{
     public void resume() {    }
 
     @Override
-    public void hide() {    }
+    public void hide() {  dispose();  }
 
     public Viewport getGamePort(){
         return gameport;
@@ -99,5 +152,6 @@ public class EndScreen implements Screen{
     @Override
     public void dispose() {
         aspectRatio.getTexture().dispose();
+        stage.dispose();
     }
 }

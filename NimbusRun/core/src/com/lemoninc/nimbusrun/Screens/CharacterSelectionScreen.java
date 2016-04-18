@@ -89,9 +89,9 @@ public class CharacterSelectionScreen implements Screen{
         camera=new PerspectiveCamera();
         viewport=new FitViewport(gameWidth,gameHeight,camera);
         skin=new Skin();
-        atlas1=new TextureAtlas(Gdx.files.internal("CharSelScreen/charicons.pack"));
-        atlas2=new TextureAtlas(Gdx.files.internal("CharSelScreen/zoomicons.pack"));
-        atlas3=new TextureAtlas(Gdx.files.internal("buttonsupdown.pack"));
+        atlas1=new TextureAtlas(Gdx.files.internal("3_CharSelScreen/charicons.pack"));
+        atlas2=new TextureAtlas(Gdx.files.internal("3_CharSelScreen/zoomicons.pack"));
+        atlas3=new TextureAtlas(Gdx.files.internal("3_CharSelScreen/buttonsupdown.pack"));
         skin.addRegions(atlas1);
         skin.addRegions(atlas2);
         skin.addRegions(atlas3);
@@ -335,7 +335,7 @@ public class CharacterSelectionScreen implements Screen{
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
-        sprite = new Sprite(new Texture("whitebackground.png"));
+        sprite = new Sprite(new Texture("3_CharSelScreen/whiteBG.png"));
         //sprite.setColor(1, 1, 1, 0);
         playercharacter=new Sprite(skin.getSprite("bg_Buddha"));
         sprite.setPosition(0, 0);

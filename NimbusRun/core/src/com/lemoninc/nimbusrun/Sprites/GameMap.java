@@ -134,17 +134,17 @@ public class GameMap{
             // 4. KAPPA
             // 5. PONTIANAK
             // 6. MADAME WHITE SNAKE
-            case 1: img = new TextureAtlas(Gdx.files.internal("spritesheets/LBspritesheet.atlas")); break;
-            case 2: img = new TextureAtlas(Gdx.files.internal("spritesheets/SKspritesheet.atlas")); break;
-            case 3: img = new TextureAtlas(Gdx.files.internal("spritesheets/FXspritesheet.atlas")); break;
-            case 4: img = new TextureAtlas(Gdx.files.internal("spritesheets/KPspritesheet.atlas")); break;
-            case 5: img = new TextureAtlas(Gdx.files.internal("spritesheets/PTspritesheet.atlas")); break;
-            case 6: img = new TextureAtlas(Gdx.files.internal("spritesheets/MWSspritesheet.atlas")); break;
-            default: img = new TextureAtlas(Gdx.files.internal("spritesheets/PTspritesheet.atlas")); break;
+            case 1: img = new TextureAtlas(Gdx.files.internal("Spritesheets/LBspritesheet.atlas")); break;
+            case 2: img = new TextureAtlas(Gdx.files.internal("Spritesheets/SKspritesheet.atlas")); break;
+            case 3: img = new TextureAtlas(Gdx.files.internal("Spritesheets/FXspritesheet.atlas")); break;
+            case 4: img = new TextureAtlas(Gdx.files.internal("Spritesheets/KPspritesheet.atlas")); break;
+            case 5: img = new TextureAtlas(Gdx.files.internal("Spritesheets/PTspritesheet.atlas")); break;
+            case 6: img = new TextureAtlas(Gdx.files.internal("Spritesheets/MWSspritesheet.atlas")); break;
+            default: img = new TextureAtlas(Gdx.files.internal("Spritesheets/PTspritesheet.atlas")); break;
         }
 
         // initialise all background sprites
-        bgTexture = new Texture("PlayScreen/bg_dark.png");
+        bgTexture = new Texture("4_PlayScreen/bg_dark.png");
         bgTexture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
         bgSprite = new Sprite(new TextureRegion(bgTexture, bgTexture.getWidth()*11, bgTexture.getHeight()*3));
         bgWidth = bgTexture.getWidth() / NimbusRun.PPM * 1.4f * 11;
@@ -153,10 +153,10 @@ public class GameMap{
         bgSprite.setY(bgStartY);
         bgSprite.setSize(bgWidth, bgHeight);
 
-        bgTextureFlat = new Texture("PlayScreen/platform_flat.png");
-        bgTexturePlateau = new Texture("PlayScreen/platform_plateau.png");
-        bgTextureMountain = new Texture("PlayScreen/platform_mountain.png");
-        bgTexturePit = new Texture("PlayScreen/platform_pit.png");
+        bgTextureFlat = new Texture("4_PlayScreen/platform_flat.png");
+        bgTexturePlateau = new Texture("4_PlayScreen/platform_plateau.png");
+        bgTextureMountain = new Texture("4_PlayScreen/platform_mountain.png");
+        bgTexturePit = new Texture("4_PlayScreen/platform_pit.png");
 
         bgPlatformSprites = new ArrayList<Sprite>();
 
@@ -315,6 +315,10 @@ public class GameMap{
                 bgPlatformSprites.add(sprite); break;
         }
 
+    }
+
+    public Map<Integer, Player> getPlayers(){
+        return players;
     }
 
     public synchronized void logInfo(String string) {

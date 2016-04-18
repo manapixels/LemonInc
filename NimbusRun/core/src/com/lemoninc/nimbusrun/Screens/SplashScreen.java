@@ -36,7 +36,7 @@ public class SplashScreen implements Screen{
     }
     @Override
     public void show() {
-        sprite = new Sprite(new Texture("Home_Start 1 (Logo).png"));
+        sprite = new Sprite(new Texture("0_SplashScreen/bg.png"));
         //sprite.setColor(1, 1, 1, 0);
 
         sprite.setPosition(0, 0);

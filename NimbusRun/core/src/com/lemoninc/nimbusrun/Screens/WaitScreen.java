@@ -95,9 +95,9 @@ public class WaitScreen implements Screen{
         style.font=new BitmapFont(Gdx.files.internal("Fonts/crimesFont48Black.fnt"));
         style.font.setColor(Color.RED);
         style.font.getData().setScale(0.65f, 0.65f);
-        style.up=new TextureRegionDrawable(new TextureRegion(new Texture("button_up1.png")));
-        style.down=new TextureRegionDrawable(new TextureRegion(new Texture("button_down1.png")));
-        style.over=new TextureRegionDrawable(new TextureRegion(new Texture("button_down1.png")));
+        style.up=new TextureRegionDrawable(new TextureRegion(new Texture("3_CharSelScreen/button_up1.png")));
+        style.down=new TextureRegionDrawable(new TextureRegion(new Texture("3_CharSelScreen/button_down1.png")));
+        style.over=new TextureRegionDrawable(new TextureRegion(new Texture("3_CharSelScreen/button_down1.png")));
 
         gamecam=new PerspectiveCamera();
         gameport=new FitViewport(gameWidth,gameHeight,gamecam);
@@ -118,7 +118,7 @@ public class WaitScreen implements Screen{
     public void show() {
 
         batch= new SpriteBatch();
-        background= new Texture("whitebackground.png");
+        background= new Texture("3_CharSelScreen/whiteBG.png");
         background.setFilter(Texture.TextureFilter.Linear,Texture.TextureFilter.Linear);
         sprite=new Sprite(background);
         sprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
