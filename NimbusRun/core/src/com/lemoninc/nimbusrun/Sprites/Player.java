@@ -488,4 +488,8 @@ public class Player extends Sprite implements InputProcessor{
     public boolean scrolled(int amount) {
         return false;
     }
+
+    public void dispose(){
+        img.dispose();
+    }
 }

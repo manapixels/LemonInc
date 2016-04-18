@@ -7,9 +7,6 @@ import com.badlogic.gdx.graphics.Texture;
 
 import java.util.ArrayList;
 
-/**
- * Created by Nikki on 10/4/2016.
- */
 public class AssetLoader {
     //buttons
     public static Texture muteButton;

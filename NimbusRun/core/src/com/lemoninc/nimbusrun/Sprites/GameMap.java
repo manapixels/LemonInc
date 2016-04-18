@@ -10,9 +10,11 @@ package com.lemoninc.nimbusrun.Sprites;
  *       void       update(float delta)
  *       World      getWorld()
  *       Viewport   getGamePort()
+ *       private    makePlatformsBG()
+ *       public     getPlayers()
  *       public synchronized void logInfo(String string)
  * NOTES :
- * LAST UPDATED: 14/4/2016 23:59
+ * LAST UPDATED: 18/4/2016 11:27
  *
  * ********************************/
 
@@ -364,39 +366,43 @@ public class GameMap{
         batch.end();
 
         //b2dr.render(world, gamecam.combined);
-
         //steps box2d world
         world.step(1 / 60f, 6, 2);
+    }
+
+    public void resize(int width, int height) {
+        gameport.update(width, height);
+        gamecam.position.set(gamecam.viewportWidth / 2, gamecam.viewportHeight / 2, 0);
     }
 
     public void makePlatformsBG(float startX, float endX, char type){
         Sprite sprite;
         float width = endX-startX;
         float height;
+
         switch(type){
             case 'F': sprite = new Sprite(bgTextureFlat);
                 height = width/1000*390;
                 sprite.setPosition(startX, -height);
                 sprite.setSize(width, height);
-                Log.info("Flatground at: " + -height);
                 bgPlatformSprites.add(sprite); break;
+
             case 'P': sprite = new Sprite(bgTexturePlateau);
                 height = width/1000*789;
                 sprite.setPosition(startX, -height*0.7366f);
                 sprite.setSize(width, height);
-                Log.info("Plateau at: " + -height);
                 bgPlatformSprites.add(sprite); break;
+
             case 'M': sprite = new Sprite(bgTextureMountain);
                 height = width/1000*869;
                 sprite.setPosition(startX, -height*0.473f);
                 sprite.setSize(width, height);
-                Log.info("Mountain at: " + -height);
                 bgPlatformSprites.add(sprite); break;
+
             case 'T': sprite = new Sprite(bgTexturePit);
                 height = width/1000*605;
                 sprite.setPosition(startX, -height);
                 sprite.setSize(width, height);
-                Log.info("Pit at: " + -height);
                 bgPlatformSprites.add(sprite); break;
         }
 
@@ -406,15 +412,8 @@ public class GameMap{
         return players;
     }
 
-
-
     public synchronized void logInfo(String string) {
        // Log.info("[GameMap]: " + (isClient ? "[Client] " : "[Server] ") + string);
-    }
-
-    public void resize(int width, int height) {
-        gameport.update(width, height);
-        gamecam.position.set(gamecam.viewportWidth / 2, gamecam.viewportHeight / 2, 0);
     }
 
     public void dispose() {
@@ -462,5 +461,4 @@ public class GameMap{
             }
         }
     }
-
 }
