@@ -10,9 +10,11 @@ package com.lemoninc.nimbusrun.Sprites;
  *       void       update(float delta)
  *       World      getWorld()
  *       Viewport   getGamePort()
+ *       private    makePlatformsBG()
+ *       public     getPlayers()
  *       public synchronized void logInfo(String string)
  * NOTES :
- * LAST UPDATED: 14/4/2016 23:59
+ * LAST UPDATED: 18/4/2016 11:27
  *
  * ********************************/
 
@@ -258,7 +260,6 @@ public class GameMap{
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        //--------------START batch
         batch.setProjectionMatrix(gamecam.combined);
         batch.begin();
 
@@ -275,54 +276,11 @@ public class GameMap{
             //if(curPlayer != playerLocal) curPlayer.renderNameTag(spriteBatch, fontNameTag);
         }
 
-        //----------------END batch
         batch.end();
 
         //b2dr.render(world, gamecam.combined);
-
         //steps box2d world
         world.step(1 / 60f, 6, 2);
-    }
-
-    public void makePlatformsBG(float startX, float endX, char type){
-        Sprite sprite;
-        float width = endX-startX;
-        float height;
-        switch(type){
-            case 'F': sprite = new Sprite(bgTextureFlat);
-                height = width/1000*390;
-                sprite.setPosition(startX, -height);
-                sprite.setSize(width, height);
-                Log.info("Flatground at: " + -height);
-                bgPlatformSprites.add(sprite); break;
-            case 'P': sprite = new Sprite(bgTexturePlateau);
-                height = width/1000*789;
-                sprite.setPosition(startX, -height*0.7366f);
-                sprite.setSize(width, height);
-                Log.info("Plateau at: " + -height);
-                bgPlatformSprites.add(sprite); break;
-            case 'M': sprite = new Sprite(bgTextureMountain);
-                height = width/1000*869;
-                sprite.setPosition(startX, -height*0.473f);
-                sprite.setSize(width, height);
-                Log.info("Mountain at: " + -height);
-                bgPlatformSprites.add(sprite); break;
-            case 'T': sprite = new Sprite(bgTexturePit);
-                height = width/1000*605;
-                sprite.setPosition(startX, -height);
-                sprite.setSize(width, height);
-                Log.info("Pit at: " + -height);
-                bgPlatformSprites.add(sprite); break;
-        }
-
-    }
-
-    public Map<Integer, Player> getPlayers(){
-        return players;
-    }
-
-    public synchronized void logInfo(String string) {
-       // Log.info("[GameMap]: " + (isClient ? "[Client] " : "[Server] ") + string);
     }
 
     public void resize(int width, int height) {
@@ -331,19 +289,52 @@ public class GameMap{
     }
 
     public void dispose() {
-        world.dispose();
-        b2dr.dispose();
+        //world.dispose();
+        //b2dr.dispose();
         batch.dispose();
-        //dispose textures
-        img.dispose();
-        //TODO:friendly players textures?
 
     }
 
     public void onDisconnect() {
         this.client = null;
-        this.players.clear();
-//        logInfo("on DIsconnection, clear the players Map");
+        //this.players.clear();
+    }
+
+    public void makePlatformsBG(float startX, float endX, char type){
+        Sprite sprite;
+        float width = endX-startX;
+        float height;
+
+        switch(type){
+            case 'F': sprite = new Sprite(bgTextureFlat);
+                height = width/1000*390;
+                sprite.setPosition(startX, -height);
+                sprite.setSize(width, height);
+                bgPlatformSprites.add(sprite); break;
+
+            case 'P': sprite = new Sprite(bgTexturePlateau);
+                height = width/1000*789;
+                sprite.setPosition(startX, -height*0.7366f);
+                sprite.setSize(width, height);
+                bgPlatformSprites.add(sprite); break;
+
+            case 'M': sprite = new Sprite(bgTextureMountain);
+                height = width/1000*869;
+                sprite.setPosition(startX, -height*0.473f);
+                sprite.setSize(width, height);
+                bgPlatformSprites.add(sprite); break;
+
+            case 'T': sprite = new Sprite(bgTexturePit);
+                height = width/1000*605;
+                sprite.setPosition(startX, -height);
+                sprite.setSize(width, height);
+                bgPlatformSprites.add(sprite); break;
+        }
+
+    }
+
+    public Map<Integer, Player> getPlayers(){
+        return players;
     }
 
 }

@@ -139,8 +139,6 @@ public class Player extends Sprite implements InputProcessor{
             stateTime += Gdx.graphics.getDeltaTime();
             batch.draw(anim.getKeyFrame(stateTime, true), getX() - CHARACTER_SIZE / 2, getY() - CHARACTER_SIZE / 2, CHARACTER_SIZE, CHARACTER_SIZE);
         }
-
-        //img.draw(batch);
     }
 
     public float getX(){
@@ -330,5 +328,9 @@ public class Player extends Sprite implements InputProcessor{
     @Override
     public boolean scrolled(int amount) {
         return false;
+    }
+
+    public void dispose(){
+        img.dispose();
     }
 }

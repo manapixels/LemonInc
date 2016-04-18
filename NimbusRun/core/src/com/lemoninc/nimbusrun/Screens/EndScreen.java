@@ -37,6 +37,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.esotericsoftware.minlog.Log;
 import com.lemoninc.nimbusrun.NimbusRun;
 import com.lemoninc.nimbusrun.Sprites.GameMap;
 import com.lemoninc.nimbusrun.Sprites.Player;
@@ -63,6 +64,9 @@ public class EndScreen implements Screen{
         gameport = new FitViewport(game.V_WIDTH / game.PPM, game.V_HEIGHT / game.PPM, gamecam);
         stage= new Stage(new ExtendViewport(game.V_WIDTH, game.V_HEIGHT));
         this.players = players;
+
+        //Log.info(players.size() + " size");
+
         batch = new SpriteBatch();
 
         aspectRatio = new Sprite(new Texture("5_EndScreen/bg.png"));
@@ -79,21 +83,33 @@ public class EndScreen implements Screen{
 
         Continue = new TextButton("Click to Return", style);
         Continue.setSize(250, 75);
-        Continue.setPosition(500, 100, Align.bottomLeft);
+        Continue.setPosition(game.V_WIDTH/game.PPM*0.8f, game.V_HEIGHT/game.PPM*0.8f);
         stage.addActor(Continue);
 
     }
 
-    protected void handleInput() {
-    }
-
-
     @Override
     public void render(float delta) {
-        update(delta);
+//        update(delta);
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        show();
+}
+
+//    public void update(float delta) {
+//        gamecam.update();
+//    }
+
+    @Override
+    public void resize(int width, int height) {
+        gameport.update(width, height);
+//        gamecam.position.set(gamecam.viewportWidth/2, gamecam.viewportHeight/2, 0);
+    }
+
+    @Override
+    public void show() {
 
         batch.setProjectionMatrix(gamecam.combined);
         batch.begin();
@@ -102,29 +118,16 @@ public class EndScreen implements Screen{
         // Render Players
         for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {
             Player curPlayer = playerEntry.getValue();
+            //Log.info(playerEntry.toString());
+            int ranking = 1;
+            curPlayer.setX(NimbusRun.V_WIDTH/2);
             curPlayer.draw(batch);
-            //if(curPlayer != playerLocal) curPlayer.renderNameTag(spriteBatch, fontNameTag);
         }
 
         batch.end();
 
         stage.act();
         stage.draw();
-}
-
-    public void update(float delta) {
-        handleInput();
-        gamecam.update();
-    }
-
-    @Override
-    public void resize(int width, int height) {
-        gameport.update(width, height);
-        gamecam.position.set(gamecam.viewportWidth/2, gamecam.viewportHeight/2, 0);
-    }
-
-    @Override
-    public void show() {
         Continue.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -151,7 +154,12 @@ public class EndScreen implements Screen{
 
     @Override
     public void dispose() {
-        aspectRatio.getTexture().dispose();
-        stage.dispose();
+        //aspectRatio.getTexture().dispose();
+        //gameMap.getWorld().dispose();
+        //stage.dispose();
+        for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {
+            playerEntry.getValue().dispose();
+        }
+        //this.players.clear();
     }
 }

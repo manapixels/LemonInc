@@ -84,10 +84,7 @@ public class MenuScreen implements Screen {
 
     @Override
     public void show() {
-        if (AssetLoader.gameMusic != null) {
-            AssetLoader.gameMusic.stop();
-            AssetLoader.disposeSFX();
-        }
+
         batch= new SpriteBatch();
         background= new Texture("1_MenuScreen/bg.png");
         background.setFilter(Texture.TextureFilter.Linear,Texture.TextureFilter.Linear);
@@ -208,8 +205,8 @@ public class MenuScreen implements Screen {
 
     @Override
     public void dispose() {
-        stage.dispose();
-        batch.dispose();
+        //stage.dispose();
+        //batch.dispose();
     }
 
 }
