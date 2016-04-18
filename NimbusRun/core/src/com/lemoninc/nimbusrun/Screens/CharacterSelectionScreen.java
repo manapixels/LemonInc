@@ -126,7 +126,7 @@ public class CharacterSelectionScreen implements Screen{
 
         camera=new PerspectiveCamera();
         viewport=new FitViewport(gameWidth,gameHeight,camera);
-        skin=new Skin();
+        skin=new Skin(Gdx.files.internal("data/uiskin.json"));
         atlas1=new TextureAtlas(Gdx.files.internal("3_CharSelScreen/charicons.pack"));
         atlas2=new TextureAtlas(Gdx.files.internal("3_CharSelScreen/zoomicons.pack"));
         atlas3=new TextureAtlas(Gdx.files.internal("3_CharSelScreen/buttonsupdown.pack"));
@@ -233,6 +233,8 @@ public class CharacterSelectionScreen implements Screen{
         table.addActor(madame);
         table.addActor(ponti);
         stage.addActor(table);
+
+        Playerability = "STUN";
 
         Buddha.addListener(new InputListener() {
             @Override
@@ -512,7 +514,7 @@ public class CharacterSelectionScreen implements Screen{
        // sprite.draw(batcher);
 
         style.font.draw(batcher, "My Special ability is to", viewport.getScreenWidth() / 3, viewport.getScreenHeight() - 250);
-//        style.font.draw(batcher, Playerability, viewport.getScreenWidth() / 3, viewport.getScreenHeight() - 275);
+        style.font.draw(batcher, Playerability, viewport.getScreenWidth() / 3, viewport.getScreenHeight() - 275);
         style.font.draw(batcher, "the world",viewport.getScreenWidth()/3,viewport.getScreenHeight()-300);
         style.font.draw(batcher, "Enter IP : " + myIP, viewport.getScreenWidth()/3,viewport.getScreenHeight()/7);
         playercharacter.setPosition(viewport.getScreenWidth()/4,viewport.getScreenHeight()/12);
