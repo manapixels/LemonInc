@@ -57,7 +57,7 @@ import java.util.Random;
  */
 public class CharacterSelectionScreen implements Screen{
     private SpriteBatch batcher;
-    private final NimbusRun game;
+    private NimbusRun game;
     private float gameWidth;
     private float gameHeight;
     private Viewport viewport;
@@ -97,7 +97,7 @@ public class CharacterSelectionScreen implements Screen{
      * @param isHost
      * @param playerName
      */
-    public CharacterSelectionScreen(NimbusRun game, final boolean isHost, String playerName, final Boolean playmusic){
+    public CharacterSelectionScreen(final NimbusRun game, final boolean isHost, String playerName, final Boolean playmusic){
         this.game = game;
         this.isHost = isHost;
         this.playername = playerName;
@@ -134,7 +134,7 @@ public class CharacterSelectionScreen implements Screen{
         skin.addRegions(atlas2);
         skin.addRegions(atlas3);
 
-        style=new TextButton.TextButtonStyle();
+        style = new TextButton.TextButtonStyle();
         style.font=new BitmapFont(Gdx.files.internal("Fonts/crimesFont48Black.fnt"));
         style.font.setColor(Color.DARK_GRAY);
         style.font.getData().setScale(0.65f, 0.65f);
@@ -144,13 +144,12 @@ public class CharacterSelectionScreen implements Screen{
 //        style.up=new TextureRegionDrawable(new TextureRegion(new Texture("button_up.png")));
 //        style.down=new TextureRegionDrawable(new TextureRegion(new Texture("button_down.png")));
 
-        stage= new Stage(new ExtendViewport(gameWidth,gameHeight));
+        stage = new Stage(new ExtendViewport(gameWidth,gameHeight));
         stage.clear();
 
         final Table table = new Table();
         table.right();
         table.setFillParent(true);
-
 
         //Title=new Label(String.format("%03d","Choose your Avatar"),new Label.LabelStyle(new BitmapFont(Gdx.files.internal("Fonts/crime.fnt")), Color.DARK_GRAY));
         Title=new Label("Choose Your Character",new Label.LabelStyle(new BitmapFont(Gdx.files.internal("Fonts/crimesFont48Black.fnt")), Color.DARK_GRAY));
@@ -425,7 +424,7 @@ public class CharacterSelectionScreen implements Screen{
         playercharacter=new Sprite(skin.getSprite("bg_Buddha"));
         //sprite.setPosition(0, 0);
         //sprite.setSize(gameWidth, gameHeight);
-        style.font=new BitmapFont(Gdx.files.internal("Fonts/crimesFont36Black.fnt"));
+        style.font = new BitmapFont(Gdx.files.internal("Fonts/crimesFont36Black.fnt"));
         style.font.getData().setScale(0.7f, 0.7f);
         style.font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         style.font.setColor(Color.DARK_GRAY);
@@ -433,7 +432,7 @@ public class CharacterSelectionScreen implements Screen{
         startTime = TimeUtils.millis();
 
 
-        //instnatiate server, client here
+        //instantiate server, client here
 
         if (isHost) {
             mapData = new int[GameMap.NUMPLATFORMS];
@@ -513,7 +512,6 @@ public class CharacterSelectionScreen implements Screen{
         Gdx.gl.glClearColor(255, 255, 255, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-
         batcher.begin();
        // sprite.draw(batcher);
 
@@ -550,7 +548,6 @@ public class CharacterSelectionScreen implements Screen{
     @Override
     public void hide() {
         Gdx.input.setInputProcessor(null);
-        dispose();
     }
 
     @Override

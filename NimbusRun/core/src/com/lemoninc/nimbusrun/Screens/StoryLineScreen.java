@@ -88,7 +88,6 @@ public class StoryLineScreen implements Screen{
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 soundclick.play();
-                dispose();
                 game.setScreen(new MenuScreen(game, gameWidth, gameHeight));
 
             }
@@ -129,7 +128,6 @@ public class StoryLineScreen implements Screen{
 
     @Override
     public void hide() {
-        dispose();
     }
 
     @Override

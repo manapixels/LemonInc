@@ -81,7 +81,12 @@ public class GameMap{
     public Player playerLocal;
     private DummyPlayer dummyLocal;
 
-    private int sourceX;
+    public int noPowerUps;
+    public String globalStatus;
+
+    public float powerUpDistance;
+
+    long timeStamp;
 
     /**
      * This constructor is called inside TapTapClient
@@ -91,6 +96,13 @@ public class GameMap{
         this.client = client;
         this.isClient = true;
         this.mapData = mapData;
+
+        //for HUD
+        noPowerUps=0;
+        globalStatus = "";
+
+        float worldLength = 300f;
+        powerUpDistance=worldLength/4; //distance needed to cover to have a power up
 
         //instantiate HUD, GameSounds, BitmapFont, Camera, SpriteBatch ...
         initCommon();
@@ -215,6 +227,47 @@ public class GameMap{
         return img;
     }
 
+    private String getCharacterSkil(int character) {
+        String characterSkill;
+
+        switch(character){
+            // 1. LAUGHING BUDDHA
+            // 2. SHESHNAH WITH KRISHNA
+            // 3. NINE-TAILED FOX
+            // 4. KAPPA
+            // 5. PONTIANAK
+            // 6. MADAME WHITE SNAKE
+            case 1: characterSkill = "stunned"; break;
+            case 2: characterSkill = "flashed"; break;
+            case 3: characterSkill = "charmed"; break;
+            case 4: characterSkill = "tide-shifted"; break;
+            case 5: characterSkill = "terror'd"; break;
+            case 6: characterSkill = "poisoned"; break;
+            default: characterSkill = "stunned"; break;
+        }
+        return characterSkill;
+    }
+
+    private String getCharacterType(int character) {
+        String type;
+        switch(character){
+            // 1. LAUGHING BUDDHA
+            // 2. SHESHNAH WITH KRISHNA
+            // 3. NINE-TAILED FOX
+            // 4. KAPPA
+            // 5. PONTIANAK
+            // 6. MADAME WHITE SNAKE
+            case 1: type = "Buddha"; break;
+            case 2: type = "Krishna"; break;
+            case 3: type = "Foxy"; break;
+            case 4: type = "Kappa"; break;
+            case 5: type = "Pontianak"; break;
+            case 6: type = "Madame"; break;
+            default: type = "Buddha"; break;
+        }
+        return type;
+    }
+
     public Network.MapDataPacket getMapDataPacket() {
         return new Network.MapDataPacket(mapData);
     }
@@ -300,7 +353,8 @@ public class GameMap{
         for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {
             Player curPlayer = playerEntry.getValue();
             if (curPlayer.getId() != id) {
-                curPlayer.flash();
+                Gdx.app.log("GDX GameMap flashExceptId", "Flash on curPlayer "+curPlayer.getName());
+                curPlayer.flash(); //curPlayer does not have flash sound file
             }
         }
     }
@@ -332,12 +386,22 @@ public class GameMap{
     }
 
     public boolean onPlayerAttack(Network.PlayerAttack msg) {
-        Gdx.app.log("GDX GameMap onPlayerAttack", "");
+
 
         Player player = getPlayerById(msg.id);
 
+        Gdx.app.log("GDX GameMap onPlayerAttack", "Player " + player.getName() + " attacked");
+
+
         if (player != null) {
-            if (!player.attack()) {
+            if (player.attack()) {
+                if (client != null) { //only for client
+                    timeStamp = System.currentTimeMillis();
+                    globalStatus = getCharacterType(msg.character)+" "+player.getName()+" "+getCharacterSkil(msg.character)+" you";
+                    playerLocal.attackSoundPlay(msg.character); //playerlocal is called just  to borrow its method
+                }
+                return true;
+            } else {
                 return false;
             }
         }
@@ -410,6 +474,7 @@ public class GameMap{
     public World getWorld(){
         return this.world;
     }
+
     public boolean getGameMapReadyForHUD() { return gameMapReadyForHUD; }
 
     public Viewport getGameport() { return this.gameport; }
@@ -449,6 +514,23 @@ public class GameMap{
             //gamecam constantly to follow playerLocal
             gamecam.position.set(playerLocal.getX(), playerLocal.getY(), 0);
             gamecam.update();
+
+            //update client's number of power ups
+            if(playerLocal.getX()/powerUpDistance>=1) { //player's x position is beyond the power up distance
+                powerUpDistance=powerUpDistance+75f;
+                if (noPowerUps == 0) {
+                    noPowerUps++;
+                }
+                else{
+                    noPowerUps=1;
+                }
+            }
+
+            //update globalStatus
+            if (System.currentTimeMillis() > timeStamp + 3000) {
+                globalStatus = "";
+            }
+
         }
 
         //Update player
@@ -458,8 +540,9 @@ public class GameMap{
             if (client!=null && curPlayer != null) {
                 curPlayer.update(delta);
             }
-            //if(curPlayer != playerLocal) curPlayer.renderNameTag(spriteBatch, fontNameTag);
         }
+
+
 
         //Server-only logic
         if (!isClient) {
@@ -491,14 +574,17 @@ public class GameMap{
         // Render Players
         for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {
             Player curPlayer = playerEntry.getValue();
-            curPlayer.draw(batch);
-            //font.draw(batch, "PlayerTest", curPlayer.getX(), curPlayer.getY());
-            //  Render flashbang if flashed
-            if (curPlayer.isFlashed()) {
-                Gdx.gl.glClearColor(1, 1, 1, 1);
-                Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            //  Render every other players
+            if (curPlayer.getId() != playerLocal.getId()) {
+                curPlayer.draw(batch);
             }
-            //if(curPlayer != playerLocal) curPlayer.renderNameTag(spriteBatch, fontNameTag);
+        }
+        if (playerLocal.isFlashed()) {
+            Gdx.gl.glClearColor(1, 1, 1, 1);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        } else {
+            playerLocal.draw(batch);
         }
         //----------------END batch
         batch.end();
@@ -540,6 +626,10 @@ public class GameMap{
                 sprite.setSize(width, height);
                 bgPlatformSprites.add(sprite); break;
         }
+    }
+
+    public boolean isFlashed() {
+        return playerLocal.isFlashed();
     }
 
     public Map<Integer, Player> getPlayers(){

@@ -78,8 +78,10 @@ public class Player extends Sprite implements InputProcessor {
     private float factor = 1;
 
     private float screenWidth = Gdx.graphics.getWidth();
-    Sound jump;
-    Sound attack;
+    private Sound jumpSound;
+    private Sound buddhaSound, snakeSound, kappaSound, pontianakSound, gumihoSound, krishnaSound;
+
+
 
     Vector2 previousPosition;
 
@@ -103,8 +105,6 @@ public class Player extends Sprite implements InputProcessor {
         CHARACTER_SIZE = 220 / NimbusRun.PPM;
         stateTime = 0f;
 
-        //  attacksound=Gdx.audio.newSound(Gdx.files.internal("Sounds/specialpowermusic.wav"));
-        // jumpsound=Gdx.audio.newSound(Gdx.files.internal("Sounds/jumpsound.mp3"));
         //debuff variables
         stunTime = 0f;
         stunned = false;
@@ -144,9 +144,15 @@ public class Player extends Sprite implements InputProcessor {
 
             //create music
 
-            jump = Gdx.audio.newSound(Gdx.files.internal("Sounds/swoosh.wav"));
+            jumpSound = Gdx.audio.newSound(Gdx.files.internal("Sounds/swoosh.wav"));
+            buddhaSound = Gdx.audio.newSound(Gdx.files.internal("Sounds/Buddha.mp3"));
+            snakeSound = Gdx.audio.newSound(Gdx.files.internal("Sounds/Snake.mp3"));
+            pontianakSound = Gdx.audio.newSound(Gdx.files.internal("Sounds/Pontianak.mp3"));
+            gumihoSound = Gdx.audio.newSound(Gdx.files.internal("Sounds/Gumiho.mp3"));
+            kappaSound = Gdx.audio.newSound(Gdx.files.internal("Sounds/Kappa.mp3"));
+            krishnaSound = Gdx.audio.newSound(Gdx.files.internal("Sounds/Krishna.mp3"));
 
-            Gdx.input.setInputProcessor(this);
+//            Gdx.input.setInputProcessor(this);
 
             touches = new HashMap<Integer, TouchInfo>();
 
@@ -157,9 +163,15 @@ public class Player extends Sprite implements InputProcessor {
     }
 
     class TouchInfo {
-        public float touchX = 0;
-        public float touchY = 0;
-        public boolean touched = false;
+        float touchX;
+        float touchY;
+        boolean touched;
+
+        TouchInfo() {
+            touchX = 0;
+            touchY = 0;
+            touched = false;
+        }
     }
 
     public State getState() {
@@ -271,22 +283,22 @@ public class Player extends Sprite implements InputProcessor {
                     if (isConfused()) {
                         return this.moveRight();
                     } else {
-                        //                      jumpsound.play();
                         return this.jump();
                     }
                 }
             }
             if (touches.get(0).touched && touches.get(1).touched) {
-                if (touches.get(0).touchX < (screenWidth / 2) && touches.get(1).touchX > (screenWidth - (screenWidth / 2))) {
-                    // TODO: attacksound.play();
-                    // TODO: gauge bar for attack
-                    if (mayAttack()) attack();
-                    Gdx.app.log("GDX Player", "Player " +id+" Attacked");
+                if (touches.get(0).touchX < (screenWidth / 2) && touches.get(1).touchX > (screenWidth / 2)) {
+                    if (mayAttack()) {
+                        attackSoundPlay(character);
+                        attack();
+                    }
 
-                } else if (touches.get(1).touchX < (screenWidth / 2) && touches.get(0).touchX > (screenWidth - (screenWidth / 2))) {
-                    // TODO: attacksound.play();
-                    if (mayAttack()) attack();
-                    Gdx.app.log("GDX Player", "Player " +id+" Attacked");
+                } else if (touches.get(1).touchX < (screenWidth / 2) && touches.get(0).touchX > (screenWidth / 2)) {
+                    if (mayAttack()) {
+                        attackSoundPlay(character);
+                        attack();
+                    }
                 }
             }
         } else {
@@ -325,11 +337,27 @@ public class Player extends Sprite implements InputProcessor {
         return false;
     }
 
+    public void attackSoundPlay(int character) {
+        if (character == 1)
+            buddhaSound.play();
+        if (character == 2)
+            krishnaSound.play();
+        if (character == 3)
+            gumihoSound.play();
+        if (character == 4)
+            kappaSound.play();
+        if (character == 5)
+            pontianakSound.play();
+        if (character == 6)
+            snakeSound.play();
+    }
+
     public void update(float delta) {
-        if (gameMap.getHud().count > 0){
+        if (gameMap.getHud().count_initial > 0){
             stunned = true;
             stunTime = 1f;
-        } else {
+        }
+        else {
             recover(1f);
         }
     }
@@ -376,15 +404,30 @@ public class Player extends Sprite implements InputProcessor {
     }
 
     public boolean mayAttack() {
-
         //TODO:check if player can attack
-        return true;
+
+
+
+        if (gameMap.noPowerUps > 0) {
+            gameMap.noPowerUps--;
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     public boolean attack() {
+        Gdx.app.log("GDX Player", "Player " +id+" Attacked");
         Network.PlayerAttack msgPlayerAttack = new Network.PlayerAttack(id, character);
+
+        //post on HUD "Playername" casted
+
+//        if (character )
         gameMap.playerAttacked(msgPlayerAttack);
-        //TODO: reset attack gauge bar
+
+        //decrement number of powerups
+//        gameMap.getHud().noPowerUps--;
 
         if (isLocal) {
             //attack sound
@@ -402,32 +445,34 @@ public class Player extends Sprite implements InputProcessor {
 
     public boolean poison() {
         poisoned = true;
-        poisonTime = 400f;
+        poisonTime = 300f;
         return true;
     }
 
     public boolean reverse() {
         reversed = true;
-        reverseTime = 200f;
+        reverseTime = 250f;
         return true;
     }
 
     public boolean terror() {
-        terrored = true;
-        b2body.setLinearVelocity(0, 0);
-        terrorTime = 75f;
+        if (!isFinished()){
+            terrored = true;
+            b2body.setLinearVelocity(0, 0);
+            terrorTime = 75f;
+        }
         return true;
     }
 
     public boolean flash() {
         flashed = true;
-        flashTime = 300f;
+        flashTime = 250f;
         return true;
     }
 
     public boolean confuse() {
         confused = true;
-        confuseTime = 400f;
+        confuseTime = 500f;
         return true;
     }
 
@@ -439,13 +484,13 @@ public class Player extends Sprite implements InputProcessor {
             previousState = State.JUMPING;
             currentState = State.DOUBLEJUMPING;
             b2body.applyLinearImpulse(new Vector2(0, JUMPFORCE * checkCondition()), b2body.getWorldCenter(), true);
-            jump.play();
+            jumpSound.play();
         } else {
             currentState = State.JUMPING;
             b2body.applyLinearImpulse(new Vector2(0, JUMPFORCE * checkCondition()), b2body.getWorldCenter(), true);
-            jump.play();
+            jumpSound.play();
         }
-        return true;
+        return false;
     }
 
     public boolean moveRight() {
@@ -461,8 +506,10 @@ public class Player extends Sprite implements InputProcessor {
     }
 
     public boolean moveLeft(float factor) {     //NOTE: NEVER CALLED BY PLAYER INPUT, ONLY CALLED WHEN REVERSED
-        if (b2body.getLinearVelocity().x >= -MOVESPEEDCAP * factor) {
-            b2body.applyLinearImpulse(new Vector2(-MOVEFORCE * factor, 0), b2body.getWorldCenter(), true);
+        if (!isFinished()) {
+            if (b2body.getLinearVelocity().x >= -MOVESPEEDCAP * factor) {
+                b2body.applyLinearImpulse(new Vector2(-MOVEFORCE * factor, 0), b2body.getWorldCenter(), true);
+            }
         }
         return true;
     }
@@ -539,7 +586,10 @@ public class Player extends Sprite implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+//        Gdx.app.log("GDX Player touchDown", "touchDOwn called");
+
         if(pointer < 2){
+//            Gdx.app.log("GDX Player touchDown", "touchDOwn called pointer < 2");
             touches.get(pointer).touchX = screenX;
             touches.get(pointer).touchY = screenY;
             touches.get(pointer).touched = true;
@@ -574,7 +624,13 @@ public class Player extends Sprite implements InputProcessor {
 
     public void dispose() {
         if (isLocal) {
-            jump.dispose();
+            jumpSound.dispose();
+            krishnaSound.dispose();
+            buddhaSound.dispose();
+            pontianakSound.dispose();
+            snakeSound.dispose();
+            gumihoSound.dispose();
+            kappaSound.dispose();
         }
         img.dispose();
     }

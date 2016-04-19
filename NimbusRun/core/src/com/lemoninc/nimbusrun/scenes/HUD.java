@@ -3,7 +3,6 @@ package com.lemoninc.nimbusrun.scenes;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
@@ -23,16 +22,12 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.esotericsoftware.minlog.Log;
 import com.lemoninc.nimbusrun.NimbusRun;
-import com.lemoninc.nimbusrun.Screens.PlayScreen;
 import com.lemoninc.nimbusrun.Sprites.GameMap;
 import com.lemoninc.nimbusrun.Sprites.Player;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
@@ -44,25 +39,22 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
     public Stage stage;
     private Viewport viewport;
     public Integer worldTimer;
-    private Label playername;
+    private Label nameLabel;
     //private float timecount;
     Label countdownLabel;
     Label timelabel;
     Label CharacterLabel;
-    private Camera camera;
-    String player;
+
     private ShapeRenderer shapeRenderer;
     private float progress;
-    private Map<Integer, Player> players;
     String PlayerCharacter;
     float timecount;
-    public int count;
+    public int count_initial;
     Label dialoglabel;
     com.badlogic.gdx.scenes.scene2d.ui.Dialog dialogstart;
     private com.badlogic.gdx.scenes.scene2d.ui.Skin skin;
-    private float powerup;
-    int nopowerups;
-    private float powerupdistance;
+
+
     float playerLocalX,worldLength;
     GameMap gameMap;
     ArrayList positioninfo;
@@ -70,31 +62,31 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
     int characternumber,position;
     Window scorewindow,timewindow;
     Label positionboardlabel, GlobalState, Poweruplabel, PowerUpsLeft,Powertype,yourposition;
-    String playernamestring,playerpowerstring,Globalinfo;
+    private Label.LabelStyle yellowLabelStyle, blackLabelStyle;
     TextureRegionDrawable windowbackground;
 
-    private PlayScreen playScreen;
+    /**
+     * Parameters are passed into HUD at PlayScreen after GameMap is created, initialised.
+     * @param sb
+     * @param playername
+     * @param gameMap client's gameMap
+     * @param characternumber
+     */
+    public HUD(SpriteBatch sb, String playername, GameMap gameMap,int characternumber){
 
-    public  HUD(PlayScreen playScreen, SpriteBatch sb, String playernumber, GameMap gameMap,int characternumber){
-        this.playScreen = playScreen;
-        this.characternumber=characternumber;
-        this.player=playernumber;
         this.gameMap=gameMap;
-        worldLength = 300f;
         Gdx.app.log("world length",String.valueOf(worldLength));
-        powerupdistance=worldLength/4;
-        Gdx.app.log("power distance",String.valueOf(powerupdistance));
         worldTimer = 150;
 
 
 
         timecount=0;
-        camera=new PerspectiveCamera();
+
         viewport=new FillViewport(NimbusRun.V_WIDTH,NimbusRun.V_HEIGHT,new OrthographicCamera());
         shapeRenderer=new ShapeRenderer();
-        powerup=0f;
-        count=4;
-        nopowerups=0;
+        progress=1f;
+        count_initial=4;
+
         position=1;
         windowbackground=new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("blackbg2.png"))));
 
@@ -105,8 +97,9 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
         stage=new Stage(viewport,sb);
         stage.clear();
 
-        dialoglabel=new Label(String.format("%01d", count),new Label.LabelStyle(new BitmapFont(Gdx.files.internal("Fonts/Baskek45.fnt")), Color.YELLOW));
+        dialoglabel=new Label(String.format("%01d", count_initial),new Label.LabelStyle(new BitmapFont(Gdx.files.internal("Fonts/Baskek45.fnt")), Color.YELLOW));
         skin=new com.badlogic.gdx.scenes.scene2d.ui.Skin(Gdx.files.internal("data/uiskin.json"));
+
         dialogstart=new com.badlogic.gdx.scenes.scene2d.ui.Dialog("",skin){
             @Override
             public float getPrefWidth(){
@@ -146,14 +139,16 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
         dialogstart.setPosition(0, 0, Align.center);
         dialogstart.show(stage);
         timecount=0;
-        count=4;
+        
         dialogstart.text(dialoglabel);
         stage.addActor(dialogstart);
+
         Table table = new Table();
         table.top();
         table.setHeight(viewport.getScreenHeight());
         table.setWidth(viewport.getScreenWidth());
         table.setFillParent(true);
+
         // 1. LAUGHING BUDDHA
         // 2. SHESHNAH WITH KRISHNA
         // 3. NINE-TAILED FOX
@@ -161,46 +156,19 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
         // 5. PONTIANAK
         // 6. MADAME WHITE SNAKE
 
-        if(characternumber==1){
-            playernamestring="LAUGHING BUDDHA";
-            playerpowerstring="STUN";
-        }
-        else if(characternumber==2){
-            playernamestring="SHESHNAH WITH KRISHNA";
-            playerpowerstring="FLASH LIGHT";
-        }
-        else if(characternumber==3){
-            playernamestring="NINE-TAILED FOX";
-            playerpowerstring="SUCKS BACK";
-        }
-        else if(characternumber==4){
-            playernamestring=" KAPPA";
-            playerpowerstring="FREEZE";
-        }
-        else if(characternumber==5){
-            playernamestring="PONTIANAK";
-            playerpowerstring="DARKEN";
-        }
-        else if(characternumber==6){
-            playernamestring="MADAME WHITE SNAKE";
-            playerpowerstring="JUMP STOP";
-        }
-        else {
-            playernamestring="LAUGHING BUDDHA";
-            playerpowerstring="STUN";
-        }
+        yellowLabelStyle = new Label.LabelStyle(font, Color.YELLOW);
+        blackLabelStyle = new Label.LabelStyle(font, Color.BLACK);
 
 
         timelabel=new Label("TIME",new Label.LabelStyle(font,Color.WHITE)); //BLUE "#44a4c5"
-        CharacterLabel=new Label("PLAYER",new Label.LabelStyle(font, Color.YELLOW));   //
-        countdownLabel=new Label(String.format("%03d",worldTimer),new Label.LabelStyle(font, Color.YELLOW));
-        playername=new Label(playernamestring,new Label.LabelStyle(font, Color.BLACK));
-        Powertype=new Label("POWER: "+playerpowerstring,new Label.LabelStyle(font, Color.RED)); //DARK BLUE
+        CharacterLabel=new Label("PLAYER",yellowLabelStyle);
+        countdownLabel=new Label(String.format("%03d",worldTimer),yellowLabelStyle);
+        nameLabel=new Label(playername,blackLabelStyle);
         positionboardlabel=new Label("POSITION",new Label.LabelStyle(font, Color.WHITE));
-        yourposition=new Label(String.format("%01d",position),new Label.LabelStyle(font, Color.YELLOW));
-        GlobalState=new Label("World has been:",new Label.LabelStyle(font, Color.YELLOW));
-        Poweruplabel=new Label("POWER-UPs",new Label.LabelStyle(font, Color.BLACK));
-        PowerUpsLeft=new Label(String.format("%01d",nopowerups),new Label.LabelStyle(font, Color.RED)); //DARK BLUE #0681ab
+        yourposition=new Label(String.format("%01d",position),yellowLabelStyle);
+        GlobalState=new Label(String.format("%s",gameMap.globalStatus),yellowLabelStyle);
+        Poweruplabel=new Label("POWER-UPs",blackLabelStyle);
+        PowerUpsLeft=new Label(String.format("%01d",gameMap.noPowerUps),new Label.LabelStyle(font, Color.RED)); //DARK BLUE #0681ab
 
 
         scorewindow.setBackground(windowbackground);
@@ -220,12 +188,11 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
         timewindow.add(countdownLabel).expandX().align(Align.center);
         timewindow.row();
 
-
         table.add(scorewindow).expandX().align(Align.center).padTop(5f);
         table.add(GlobalState).expandX().align(Align.center).padTop(5f);
         table.add(timewindow).expandX().align(Align.center).padTop(5f);
         table.row();
-        table.add(playername).expand().align(Align.bottom);
+        table.add(nameLabel).expand().align(Align.bottom);
         table.add();
         table.add(Poweruplabel).expand().align(Align.bottom);
         table.row();
@@ -233,6 +200,7 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
         table.add();
         table.add(PowerUpsLeft).expandX().align(Align.top);
         stage.addActor(table);
+
         Gdx.input.setInputProcessor(stage);
 
 
@@ -301,16 +269,18 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
 //                       + "  : PlayerID" + entry.getKey());
 //            }
         }
-        if(count>0) {
+        //initial count down
+        if(count_initial>0) {
             stage.draw();
 
             if (timecount >= 1) {
-                count--;
-                dialoglabel.setText(String.format("%01d", count));
+                count_initial--;
+                dialoglabel.setText(String.format("%01d", count_initial));
                 dialogstart.text(dialoglabel);
                 timecount = 0;
             }
         }
+        //progress=(60-worldTimer)/60;
         else {
             dialogstart.remove();
             if (timecount >= 1&&worldTimer>0) {
@@ -319,30 +289,20 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
                 timecount = 0;
             }
         }
-       if (nopowerups == 0) {
-           if(playerLocalX/powerupdistance>=1) {
-               powerupdistance=powerupdistance+75f;
-               nopowerups=1;
-               powerup = 1f;
-               PowerUpsLeft.setText(String.format("%01d", nopowerups));
-           }
-           else{
-               powerup=playerLocalX/powerupdistance;
-               nopowerups=0;
-               PowerUpsLeft.setText(String.format("%01d", nopowerups));
-           }
-       }
-        else{
-           powerup=1f;
-           nopowerups=1;
-           PowerUpsLeft.setText(String.format("%01d", nopowerups));
 
-       }
+        PowerUpsLeft.setText(String.format("%01d", gameMap.noPowerUps)); //client's gamemap's powerups
+        if (gameMap.isFlashed()) {
+            GlobalState.setStyle(blackLabelStyle);
+        }
+        else {
+            GlobalState.setStyle(yellowLabelStyle);
+        }
+        GlobalState.setText(String.format("%s", gameMap.globalStatus)); //client's gamemap's global status
+
     }
 
     @Override
     public void create() {
-
 
     }
 
@@ -353,13 +313,6 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
 
     @Override
     public void render() {
-
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(Color.YELLOW); //DarkBlure"#0681ab"
-        shapeRenderer.rect(Gdx.graphics.getWidth()/2-90, Gdx.graphics.getHeight()*0.1f, 220, 40);
-        shapeRenderer.setColor(Color.RED); //DarkRed "#ab3c57"
-        shapeRenderer.rect(Gdx.graphics.getWidth()/2-90,  Gdx.graphics.getHeight()*0.1f, this.powerup* 220, 40);
-        shapeRenderer.end();
     }
 
     @Override

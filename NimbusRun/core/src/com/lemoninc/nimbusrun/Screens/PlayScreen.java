@@ -22,7 +22,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.utils.TimeUtils;
-import com.esotericsoftware.minlog.Log;
 import com.lemoninc.nimbusrun.Networking.Client.TapTapClient;
 import com.lemoninc.nimbusrun.Networking.Server.TapTapServer;
 import com.lemoninc.nimbusrun.NimbusRun;
@@ -69,7 +68,7 @@ public class PlayScreen implements Screen{
         this.game = game;
         this.isHost = isHost;
         this.playerName = playerName;
-        hud = new HUD(this, game.batch,playerName,gamemap,charactername);
+//        hud = new HUD(game.batch,playerName,gamemap,charactername);
         startTime = TimeUtils.millis();
 
         this.client = client;
@@ -94,8 +93,8 @@ public class PlayScreen implements Screen{
 
 
         gamemap.createEnv(); //create ground, ceiling, etc
-        Log.info(playerName + "namenamenamename");
-        hud = new HUD(this, game.batch,playerName,gamemap,charactername);
+//        Log.info(playerName + "namenamenamename");
+        hud = new HUD(game.batch,playerName,gamemap,charactername);
         gamemap.passHUD(hud);
         startTime = TimeUtils.millis();
 
@@ -109,6 +108,8 @@ public class PlayScreen implements Screen{
         if (isHost) {
             server.initPlayers();
         }
+
+        Gdx.input.setInputProcessor(gamemap.playerLocal);
     }
 
     @Override
@@ -163,7 +164,7 @@ public class PlayScreen implements Screen{
 
     @Override
     public void dispose() {
-
         music.dispose();
+        music.stop();
     }
 }
