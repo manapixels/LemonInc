@@ -81,6 +81,8 @@ public class Player extends Sprite implements InputProcessor {
     Sound jump;
     Sound attack;
 
+
+
     Vector2 previousPosition;
 
     //  Sound attacksound,jumpsound;
@@ -103,8 +105,8 @@ public class Player extends Sprite implements InputProcessor {
         CHARACTER_SIZE = 220 / NimbusRun.PPM;
         stateTime = 0f;
 
-        //  attacksound=Gdx.audio.newSound(Gdx.files.internal("Sounds/specialpowermusic.wav"));
-        // jumpsound=Gdx.audio.newSound(Gdx.files.internal("Sounds/jumpsound.mp3"));
+
+
         //debuff variables
         stunTime = 0f;
         stunned = false;
@@ -286,12 +288,10 @@ public class Player extends Sprite implements InputProcessor {
                     // TODO: attacksound.play();
                     // TODO: gauge bar for attack
                     if (mayAttack()) attack();
-                    Gdx.app.log("GDX Player", "Player " +id+" Attacked");
 
                 } else if (touches.get(1).touchX < (screenWidth / 2) && touches.get(0).touchX > (screenWidth / 2)) {
                     // TODO: attacksound.play();
                     if (mayAttack()) attack();
-                    Gdx.app.log("GDX Player", "Player " +id+" Attacked");
                 }
             }
         } else {
@@ -331,7 +331,7 @@ public class Player extends Sprite implements InputProcessor {
     }
 
     public void update(float delta) {
-        if (gameMap.getHud().count > 0){
+        if (gameMap.getHud().count_initial > 0){
             stunned = true;
             stunTime = 1f;
         } else {
@@ -381,15 +381,26 @@ public class Player extends Sprite implements InputProcessor {
     }
 
     public boolean mayAttack() {
-
         //TODO:check if player can attack
-        return true;
+
+
+
+        if (gameMap.noPowerUps > 0) {
+            gameMap.noPowerUps--;
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     public boolean attack() {
+        Gdx.app.log("GDX Player", "Player " +id+" Attacked");
         Network.PlayerAttack msgPlayerAttack = new Network.PlayerAttack(id, character);
         gameMap.playerAttacked(msgPlayerAttack);
-        //TODO: reset attack gauge bar
+
+        //decrement number of powerups
+//        gameMap.getHud().noPowerUps--;
 
         if (isLocal) {
             //attack sound
