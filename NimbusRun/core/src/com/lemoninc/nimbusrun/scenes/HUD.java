@@ -273,6 +273,7 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
                 }
                 i++;
             }
+        yourposition.setText(String.format("%01d",position));
         }
 
         if (gameOverInitiated){

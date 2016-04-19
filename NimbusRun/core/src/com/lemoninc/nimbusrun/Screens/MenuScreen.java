@@ -85,7 +85,7 @@ public class MenuScreen implements Screen {
         style.font.getData().setScale(0.7f, 0.7f);
         style.up=new TextureRegionDrawable(new TextureRegion(new Texture("1_MenuScreen/button_up.png")));
         style.down=new TextureRegionDrawable(new TextureRegion(new Texture("1_MenuScreen/button_down.png")));
-        style.over=new TextureRegionDrawable(new TextureRegion(new Texture("1_MenuScreen/button_down1.png")));
+        style.over=new TextureRegionDrawable(new TextureRegion(new Texture("1_MenuScreen/button_down.png")));
         
         camera=new PerspectiveCamera();
         viewport=new FitViewport(gameWidth,gameHeight,camera);
