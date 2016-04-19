@@ -89,7 +89,7 @@ public class PlayScreen implements Screen{
         gamemap.initPlayers(); //called before gamemap.render
         gamemap.createEnv(); //create ground, ceiling, etc
         Log.info(playerName + "namenamenamename");
-        hud = new HUD(game.batch,playerName,gamemap);
+        hud = new HUD(game.batch,playerName,gamemap,charactername);
         startTime = TimeUtils.millis();
 
         music=Gdx.audio.newMusic(Gdx.files.internal("Sounds/gamescreen.mp3"));
