@@ -339,7 +339,7 @@ public class Player extends Sprite implements InputProcessor {
         return false;
     }
 
-    private void attackSoundPlay(int character) {
+    public void attackSoundPlay(int character) {
         if (character == 1)
             buddhaSound.play();
         if (character == 2)
@@ -422,7 +422,6 @@ public class Player extends Sprite implements InputProcessor {
         Gdx.app.log("GDX Player", "Player " +id+" Attacked");
         Network.PlayerAttack msgPlayerAttack = new Network.PlayerAttack(id, character);
 
-
 //        if (character )
         gameMap.playerAttacked(msgPlayerAttack);
 
@@ -437,7 +436,7 @@ public class Player extends Sprite implements InputProcessor {
     }
 
     public boolean stun() {
-        buddhaSound.play();
+//        buddhaSound.play();
         stunned = true;
         stunTime = 150f;
         b2body.setLinearVelocity(new Vector2(0, 0));
@@ -445,21 +444,21 @@ public class Player extends Sprite implements InputProcessor {
     }
 
     public boolean poison() {
-        snakeSound.play();
+//        snakeSound.play();
         poisoned = true;
         poisonTime = 300f;
         return true;
     }
 
     public boolean reverse() {
-        kappaSound.play();
+//        kappaSound.play();
         reversed = true;
         reverseTime = 250f;
         return true;
     }
 
     public boolean terror() {
-        pontianakSound.play();
+//        pontianakSound.play();
         terrored = true;
         b2body.setLinearVelocity(0, 0);
         terrorTime = 75f;
@@ -467,14 +466,14 @@ public class Player extends Sprite implements InputProcessor {
     }
 
     public boolean flash() {
-        krishnaSound.play();
+//        krishnaSound.play();
         flashed = true;
         flashTime = 250f;
         return true;
     }
 
     public boolean confuse() {
-        gumihoSound.play();
+//        gumihoSound.play();
         confused = true;
         confuseTime = 500f;
         return true;
