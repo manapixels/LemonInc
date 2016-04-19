@@ -69,8 +69,6 @@ public class GameMap{
     private Texture bgTextureFlat, bgTextureMountain, bgTexturePit, bgTexturePlateau;
     private List<Sprite> bgPlatformSprites;
 
-    private BitmapFont font;
-
     private World world;
     private Box2DDebugRenderer b2dr;
     private Ground ground;
@@ -97,16 +95,6 @@ public class GameMap{
 
         //instantiate HUD, GameSounds, BitmapFont, Camera, SpriteBatch ...
         initCommon();
-
-        //font for player names on avatars
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("Fonts/SF Atarian System.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 10;
-        font = generator.generateFont(parameter);
-        font.setColor(Color.WHITE);
-        font.getData().setScale(0.1f, 0.1f);
-        font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        generator.dispose();
 
         //set starting pos of bgSprites after setting cam
         bgStartX = -gameport.getWorldWidth() * 1.5f;
@@ -164,7 +152,7 @@ public class GameMap{
         b2dr = new Box2DDebugRenderer();
 
         gamecam = new OrthographicCamera();
-        gameport = new FitViewport(NimbusRun.V_WIDTH * 1.5f / NimbusRun.PPM, NimbusRun.V_HEIGHT * 1.5f / NimbusRun.PPM, gamecam);
+        gameport = new FitViewport(NimbusRun.V_WIDTH * 2f / NimbusRun.PPM, NimbusRun.V_HEIGHT * 2f / NimbusRun.PPM, gamecam);
     }
 
     public void initPlayers() {
@@ -370,6 +358,7 @@ public class GameMap{
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        b2dr.render(world, gamecam.combined);
         //--------------START batch
         batch.setProjectionMatrix(gamecam.combined);
         batch.begin();
@@ -384,7 +373,6 @@ public class GameMap{
         for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {
             Player curPlayer = playerEntry.getValue();
             curPlayer.draw(batch);
-            font.draw(batch, "PlayerTest", curPlayer.getX(), curPlayer.getY());
             //  Render flashbang if flashed
             if (curPlayer.isFlashed()) {
                 Gdx.gl.glClearColor(1, 1, 1, 1);
@@ -394,7 +382,6 @@ public class GameMap{
         }
         //----------------END batch
         batch.end();
-        b2dr.render(world, gamecam.combined);
         world.step(1 / 60f, 6, 2);
     }
 
@@ -455,7 +442,6 @@ public class GameMap{
         batch.dispose();
         //dispose textures
         img.dispose();
-        font.dispose();
         //TODO:friendly players textures?
     }
 

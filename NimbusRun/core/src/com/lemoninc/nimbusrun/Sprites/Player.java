@@ -69,8 +69,8 @@ public class Player extends Sprite implements InputProcessor{
     private float stunTime, poisonTime, reverseTime, terrorTime, flashTime, confuseTime;
 
     private final float JUMPFORCE = 8f;
-    private final float MOVEFORCE = 2f;
-    private final float MOVESPEEDCAP = 5;
+    private final float MOVEFORCE = 2.5f;
+    private final float MOVESPEEDCAP = 8;
     private float factor = 1;
 
     Vector2 previousPosition;
