@@ -132,7 +132,7 @@ public class EndScreen implements Screen{
         //batch.setProjectionMatrix(gamecam.combined);
         batch.begin();
 
-        Log.info("width: " + gameport.getWorldWidth() + " " + gameport.getScreenWidth() + " " + gameport.getWorldHeight() + " " + gameport.getScreenHeight());
+//        Log.info("width: " + gameport.getWorldWidth() + " " + gameport.getScreenWidth() + " " + gameport.getWorldHeight() + " " + gameport.getScreenHeight());
 
         for (int i=0; i<rankings.size(); i++) {
             sprites.get(rankings.get(i)-1).setPosition(Gdx.graphics.getWidth() * (numPlayers - (i+1) + 1f)/(numPlayers+1f), Gdx.graphics.getHeight()/2);

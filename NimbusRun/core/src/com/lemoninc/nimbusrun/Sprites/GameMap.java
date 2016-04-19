@@ -414,6 +414,7 @@ public class GameMap{
     public World getWorld(){
         return this.world;
     }
+
     public boolean getGameMapReadyForHUD() { return gameMapReadyForHUD; }
 
     public Viewport getGameport() { return this.gameport; }
