@@ -430,14 +430,14 @@ public class Player extends Sprite implements InputProcessor {
     public boolean poison() {
         snakeSound.play();
         poisoned = true;
-        poisonTime = 400f;
+        poisonTime = 300f;
         return true;
     }
 
     public boolean reverse() {
         kappaSound.play();
         reversed = true;
-        reverseTime = 200f;
+        reverseTime = 250f;
         return true;
     }
 
@@ -452,14 +452,14 @@ public class Player extends Sprite implements InputProcessor {
     public boolean flash() {
         krishnaSound.play();
         flashed = true;
-        flashTime = 300f;
+        flashTime = 250f;
         return true;
     }
 
     public boolean confuse() {
         gumihoSound.play();
         confused = true;
-        confuseTime = 400f;
+        confuseTime = 500f;
         return true;
     }
 

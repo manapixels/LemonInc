@@ -496,14 +496,13 @@ public class GameMap{
         // Render Players
         for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {
             Player curPlayer = playerEntry.getValue();
-            curPlayer.draw(batch);
-            //font.draw(batch, "PlayerTest", curPlayer.getX(), curPlayer.getY());
             //  Render flashbang if flashed
             if (curPlayer.isFlashed()) {
                 Gdx.gl.glClearColor(1, 1, 1, 1);
                 Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            } else {
+                curPlayer.draw(batch);
             }
-            //if(curPlayer != playerLocal) curPlayer.renderNameTag(spriteBatch, fontNameTag);
         }
         //----------------END batch
         batch.end();

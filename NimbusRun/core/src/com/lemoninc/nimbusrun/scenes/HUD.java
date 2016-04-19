@@ -77,8 +77,8 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
         powerupdistance=worldLength/3;
 
 
-
-        worldTimer = 150;
+        worldTimer = 1;
+//        worldTimer = 150;
 
 
 

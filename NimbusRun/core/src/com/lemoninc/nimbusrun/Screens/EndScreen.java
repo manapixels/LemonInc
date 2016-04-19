@@ -21,6 +21,7 @@ package com.lemoninc.nimbusrun.Screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -60,6 +61,7 @@ public class EndScreen implements Screen{
     private SpriteBatch batch, winner, second, third, last;
     Music music;
     Boolean playmusic;
+    private Sound gongSound;
     private TextButton.TextButtonStyle style;
     private TextButton Continue;
     private Stage stage;
@@ -70,13 +72,13 @@ public class EndScreen implements Screen{
 
         gamecam = new OrthographicCamera();
         gameport = new FitViewport(game.V_WIDTH / game.PPM, game.V_HEIGHT / game.PPM, gamecam);
-
-        music=Gdx.audio.newMusic(Gdx.files.internal("Sounds/puppetry_comedy.mp3"));
-        music.setVolume(0.5f);                 // sets the volume to half the maximum volume
-        music.setLooping(true);
-        if(playmusic){
-            music.play();
-        }
+        gongSound = Gdx.audio.newSound(Gdx.files.internal("Sounds/chineseGong.mp3"));
+//        music=Gdx.audio.newMusic(Gdx.files.internal("Sounds/puppetry_comedy.mp3"));
+//        music.setVolume(0.5f);                 // sets the volume to half the maximum volume
+//        music.setLooping(true);
+//        if(playmusic){
+//            music.play();
+//        }
 
         stage= new Stage(new ExtendViewport(game.V_WIDTH, game.V_HEIGHT));
 
@@ -106,6 +108,7 @@ public class EndScreen implements Screen{
         // so Foxy is most right, Kappa is most left
 
         numPlayers = playerTypes.size();
+        gongSound.play();
         initChar();
 
 
