@@ -45,6 +45,7 @@ public class MenuScreen implements Screen {
 
     private Stage stage;
 
+    private TextButton buttonStory;
     private TextButton buttonCharDescr;
     private TextButton buttonChooseCharacter;
     private TextButton buttonPlay;
@@ -58,17 +59,18 @@ public class MenuScreen implements Screen {
     Sound soundclick;
 
 
-    public MenuScreen(NimbusRun game,float gameWidth,float gameHeight){
+    public MenuScreen(NimbusRun game,SpriteBatch batch, float gameWidth,float gameHeight){
+        this.game=game;
+        this.batch = batch;
         this.gameWidth=gameWidth;
         this.gameHeight=gameHeight;
-        this.game=game;
 
         playmusic=true;
 
         BUTTON_HEIGHT=75;
         BUTTON_WIDTH=120;
 
-        music = Gdx.audio.newMusic(Gdx.files.internal("Sounds/menuscreenmusic.mp3"));
+        music=Gdx.audio.newMusic(Gdx.files.internal("Sounds/menuscreenmusic.mp3"));
         music.play();
         music.setVolume(0.5f);                 // sets the volume to half the maximum volume
         music.setLooping(true);
@@ -100,7 +102,6 @@ public class MenuScreen implements Screen {
 
     @Override
     public void show() {
-        batch= new SpriteBatch();
         background= new Texture("1_MenuScreen/bg.png");
         background.setFilter(Texture.TextureFilter.Linear,Texture.TextureFilter.Linear);
         sprite=new Sprite(background);
@@ -135,7 +136,7 @@ public class MenuScreen implements Screen {
                     playmusic=false;
                 }
                 music.stop();
-                game.setScreen(new WaitScreen(game,playmusic));
+                game.setScreen(new WaitScreen(game,batch,playmusic));
 
             }
         });
@@ -144,10 +145,7 @@ public class MenuScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
               //  AssetLoader.clickSound.play(AssetLoader.VOLUME);
                 soundclick.play();
-                game.setScreen(new TutorialScreen(game, gameWidth, gameHeight));
-
-                // TODO Set to tutorial screen
-                //  gsm.set(new TutorialScreen(game, gsm));
+                game.setScreen(new TutorialScreen(game,batch,gameWidth, gameHeight));
             }
         });
 
@@ -156,6 +154,7 @@ public class MenuScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
           //      AssetLoader.clickSound.play(AssetLoader.VOLUME);
                 soundclick.play();
+                game.setScreen(new StoryLineScreen(game,batch,gameWidth,gameHeight));
                 game.setScreen(new CharDescrScreen(game, gameWidth,gameHeight));
 
                 // TODO Set to tutorial screen
@@ -221,14 +220,16 @@ public class MenuScreen implements Screen {
 
     @Override
     public void hide() {
+        dispose();
     }
 
     @Override
     public void dispose() {
         stage.dispose();
-        batch.dispose();
         music.dispose();
-        //soundclick.dispose();
+        background.dispose();
+        sprite.getTexture().dispose();
+        soundclick.dispose();
     }
 
 }

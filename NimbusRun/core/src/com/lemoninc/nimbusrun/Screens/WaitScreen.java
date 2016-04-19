@@ -45,17 +45,12 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lemoninc.nimbusrun.NimbusRun;
-
-import java.net.InetAddress;
 import java.util.Random;
 
 public class WaitScreen implements Screen{
     private NimbusRun game;
     private Camera gamecam;
     private Viewport gameport;
-
-    private long startTime;
-    private int playernumber;
 
     private float BUTTON_WIDTH;
     private float BUTTON_HEIGHT;
@@ -70,14 +65,11 @@ public class WaitScreen implements Screen{
     private TextButton.TextButtonStyle style;
     private float gameWidth;
     private float gameHeight;
-    TextField.TextFieldStyle textstyle;
-    private TextField playerIP;
     private TextField playername;
     private Random random = new Random();
     private TextButton backbutton;
 
     Label labeltitle;
-    String Ipvalue,NameValue;
     Preferences preferences;
 
     Boolean playmusic;
@@ -87,8 +79,9 @@ public class WaitScreen implements Screen{
      * This constructor instantiates the Sprites, Viewport, Camera, etc
      * @param game The Game object
      */
-    public WaitScreen(NimbusRun game,Boolean playmusic) {
+    public WaitScreen(NimbusRun game,SpriteBatch batch, Boolean playmusic) {
         this.game = game;
+        this.batch = batch;
         this.gameHeight=game.V_HEIGHT;
         this.gameWidth=game.V_WIDTH;
         this.playmusic=playmusic;
@@ -121,7 +114,6 @@ public class WaitScreen implements Screen{
         backbutton=new TextButton("Go Back",style);
 
         Gdx.app.log("GDX WaitScreen", "Finished connecting & configuring events");
-        playernumber=1;
     }
 
 
@@ -130,8 +122,6 @@ public class WaitScreen implements Screen{
      */
     @Override
     public void show() {
-
-        batch= new SpriteBatch();
 
         skin = new Skin(Gdx.files.internal("data/uiskin.json"));
 
@@ -169,10 +159,6 @@ public class WaitScreen implements Screen{
             }
         });
 
-
-
-
-
         hostbutton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -195,16 +181,12 @@ public class WaitScreen implements Screen{
             public void clicked(InputEvent event, float x, float y) {
                 // game.setScreen(new StoryLineScreen(game, gameWidth, gameHeight));
                 soundclick.play();
-                game.setScreen(new MenuScreen(game,gameWidth,gameHeight));
+                game.setScreen(new MenuScreen(game,batch,gameWidth,gameHeight));
             }
         });
 
-
         Gdx.input.setInputProcessor(stage);
     }
-
-
-
 
     public void update(float dt) {
         gamecam.update();
@@ -225,43 +207,11 @@ public class WaitScreen implements Screen{
         stage.draw();
     }
 
-    @Override
-    public void resize(int width, int height) {
-        gameport.update(width, height);
-        //gamecam.position.set(gamecam.viewportWidth / 2, gamecam.viewportHeight / 2, 0);
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-    }
-
-    @Override
-    public void dispose() {
-        Gdx.input.setInputProcessor(null);
-        skin.dispose();
-        stage.dispose();
-        batch.dispose();
-        music.stop();
-        music.dispose();
-        soundclick.dispose();
-    }
-
     /**
      * join a game room
      */
     private void joinGame(){
-        dispose();
-        game.setScreen(new CharacterSelectionScreen(game, false, getName(), playmusic));
+        game.setScreen(new CharacterSelectionScreen(game, batch, false, getName(), playmusic));
         savePrefs();
     }
 
@@ -269,8 +219,7 @@ public class WaitScreen implements Screen{
      * play game as a host
      */
     private void hostGame(){
-        dispose();
-        game.setScreen(new CharacterSelectionScreen(game, true, getName(), playmusic));
+        game.setScreen(new CharacterSelectionScreen(game, batch, true, getName(), playmusic));
         savePrefs();
     }
 
@@ -293,4 +242,36 @@ public class WaitScreen implements Screen{
         preferences.putString("name", getName());
         preferences.flush();
     }
+
+    @Override
+    public void resize(int width, int height) {
+        gameport.update(width, height);
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
+    }
+
+    @Override
+    public void hide() {
+        music.stop();
+        dispose();
+    }
+
+    @Override
+    public void dispose() {
+        Gdx.input.setInputProcessor(null);
+        skin.dispose();
+        stage.dispose();
+        music.dispose();
+        soundclick.dispose();
+    }
+
+
 }

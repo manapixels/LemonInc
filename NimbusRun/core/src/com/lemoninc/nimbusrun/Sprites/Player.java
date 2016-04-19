@@ -94,7 +94,7 @@ public class Player extends Sprite implements InputProcessor {
      * @param x
      * @param y
      */
-    public Player(GameMap gameMap, TextureAtlas img, float x, float y, boolean isLocal, int character) { //TODO: character parameter to differentiate the Player? (switch-case for attack())
+    public Player(GameMap gameMap, TextureAtlas img, float x, float y, boolean isLocal, int character) {
 
         this.gameMap = gameMap;
         this.world = gameMap.getWorld();

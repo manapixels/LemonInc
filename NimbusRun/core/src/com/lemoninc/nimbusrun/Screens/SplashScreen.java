@@ -17,7 +17,7 @@ import com.lemoninc.nimbusrun.NimbusRun;
  * Created by Nikki on 8/4/2016.
  */
 public class SplashScreen implements Screen{
-    private SpriteBatch batcher;
+    private SpriteBatch batch;
     private Sprite sprite;
     private NimbusRun game;
     private float gameWidth;
@@ -41,7 +41,7 @@ public class SplashScreen implements Screen{
 
         sprite.setPosition(0, 0);
         sprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        batcher = new SpriteBatch();
+        batch = new SpriteBatch();
         startTime = TimeUtils.millis();
     }
 
@@ -51,11 +51,11 @@ public class SplashScreen implements Screen{
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        batcher.begin();
-        sprite.draw(batcher);
-        batcher.end();
+        batch.begin();
+        sprite.draw(batch);
+        batch.end();
 
-        if (TimeUtils.millis()>(startTime+100)) game.setScreen(new MenuScreen(game,gameWidth,gameHeight));
+        if (TimeUtils.millis()>(startTime+100)) game.setScreen(new MenuScreen(game,batch,gameWidth,gameHeight));
 
     }
 

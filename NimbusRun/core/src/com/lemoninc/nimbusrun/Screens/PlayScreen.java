@@ -130,7 +130,7 @@ public class PlayScreen implements Screen{
             music.stop();
             gameOver();
             if (hud.count_final == 0){
-                dispose();
+//                dispose();
                 game.setScreen(new MenuScreen(game,NimbusRun.V_WIDTH,NimbusRun.V_HEIGHT));
             }
         }
@@ -141,7 +141,7 @@ public class PlayScreen implements Screen{
 
 
     public void gameOver() {
-        dispose();
+        //dispose();
         music.stop();
         gongSound.play();
         hud.gameOver();
@@ -161,7 +161,7 @@ public class PlayScreen implements Screen{
         client.shutdown();
         if (server != null)
             server.shutdown();
-        gamemap.dispose();
+        dispose();
     }
 
     @Override
@@ -172,6 +172,10 @@ public class PlayScreen implements Screen{
 
     @Override
     public void dispose() {
+        music.stop();
+        music.dispose();
+        gamemap.dispose();
+
         music.dispose();
         gongSound.dispose();
     }

@@ -27,7 +27,7 @@ import com.lemoninc.nimbusrun.NimbusRun;
  * Created by Nikki on 10/4/2016.
  */
 public class TutorialScreen implements Screen{
-    private SpriteBatch batcher;
+    private SpriteBatch batch;
     private Sprite sprite;
     private NimbusRun game;
     private float gameWidth;
@@ -45,10 +45,12 @@ public class TutorialScreen implements Screen{
 
 
 
-    public TutorialScreen(NimbusRun game,float gameWidth,float gameHeight){
+    public TutorialScreen(NimbusRun game,SpriteBatch batch, float gameWidth,float gameHeight){
         this.game = game;
+        this.batch = batch;
         this.gameWidth =gameWidth;
         this.gameHeight = gameHeight;
+
         camera=new PerspectiveCamera();
         viewport=new FitViewport(gameWidth,gameHeight,camera);
         stage= new Stage(new ExtendViewport(gameWidth,gameHeight));
@@ -68,13 +70,13 @@ public class TutorialScreen implements Screen{
         style.over= new TextureRegionDrawable(new TextureRegion(new Texture("2_TutorialScreen/button_down1.png")));
 
 
+
         Next= new TextButton("Next",style);
         Return = new TextButton("Return", style);
     }
 
     @Override
     public void show() {
-        batcher = new SpriteBatch();
         sprite = new Sprite(new Texture("2_TutorialScreen/Tutorials_pg1.png"));
         //   sprite.setColor(1, 1, 1, 0);
         sprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -94,7 +96,7 @@ public class TutorialScreen implements Screen{
             public void clicked(InputEvent event, float x, float y) {
                 soundclick.play();
                 //sprite.setTexture(new Texture("2_TutorialScreen/Tutorials_pg2.png"));
-                game.setScreen(new MenuScreen(game, gameWidth, gameHeight));
+                game.setScreen(new MenuScreen(game,batch, gameWidth, gameHeight));
             }
 
         });
@@ -119,9 +121,9 @@ public class TutorialScreen implements Screen{
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        batcher.begin();
-        sprite.draw(batcher);
-        batcher.end();
+        batch.begin();
+        sprite.draw(batch);
+        batch.end();
         stage.act();
         stage.draw();
     }
@@ -143,11 +145,14 @@ public class TutorialScreen implements Screen{
 
     @Override
     public void hide() {
+        dispose();
     }
 
     @Override
     public void dispose() {
-        //soundclick.dispose();
+        soundclick.dispose();
         stage.dispose();
+        sprite.getTexture().dispose();
+        style.font.dispose();
     }
 }
