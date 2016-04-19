@@ -630,6 +630,10 @@ public class GameMap{
         }
     }
 
+    public boolean isFlashed() {
+        return playerLocal.isFlashed();
+    }
+
     public Map<Integer, Player> getPlayers(){
         return players;
     }

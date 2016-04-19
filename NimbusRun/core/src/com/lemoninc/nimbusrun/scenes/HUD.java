@@ -57,6 +57,7 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
     int characternumber,position;
     Window scorewindow,timewindow;
     Label positionboardlabel, GlobalState, Poweruplabel, PowerUpsLeft,Powertype,yourposition;
+    private Label.LabelStyle yellowLabelStyle, blackLabelStyle;
     TextureRegionDrawable windowbackground;
 
     /**
@@ -148,18 +149,19 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
         // 5. PONTIANAK
         // 6. MADAME WHITE SNAKE
 
+        yellowLabelStyle = new Label.LabelStyle(font, Color.YELLOW);
+        blackLabelStyle = new Label.LabelStyle(font, Color.BLACK);
 
         timelabel=new Label("TIME",new Label.LabelStyle(font,Color.WHITE)); //BLUE "#44a4c5"
-        CharacterLabel=new Label("PLAYER",new Label.LabelStyle(font, Color.YELLOW));
-        countdownLabel=new Label(String.format("%03d",worldTimer),new Label.LabelStyle(font, Color.YELLOW));
-        nameLabel=new Label(playername,new Label.LabelStyle(font, Color.BLACK));
+        CharacterLabel=new Label("PLAYER",yellowLabelStyle);
+        countdownLabel=new Label(String.format("%03d",worldTimer),yellowLabelStyle);
+        nameLabel=new Label(playername,blackLabelStyle);
         positionboardlabel=new Label("POSITION",new Label.LabelStyle(font, Color.WHITE));
-        yourposition=new Label(String.format("%01d",position),new Label.LabelStyle(font, Color.YELLOW));
-        GlobalState=new Label(String.format("%s",gameMap.globalStatus),new Label.LabelStyle(font, Color.YELLOW));
-        Poweruplabel=new Label("POWER-UPs",new Label.LabelStyle(font, Color.BLACK));
+        yourposition=new Label(String.format("%01d",position),yellowLabelStyle);
+        GlobalState=new Label(String.format("%s",gameMap.globalStatus),yellowLabelStyle);
+        Poweruplabel=new Label("POWER-UPs",blackLabelStyle);
         PowerUpsLeft=new Label(String.format("%01d",gameMap.noPowerUps),new Label.LabelStyle(font, Color.RED)); //DARK BLUE #0681ab
 
-        
         scorewindow.setBackground(windowbackground);
         scorewindow.pad(0.001f);
         scorewindow.setResizeBorder(1);
@@ -219,8 +221,13 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
         }
 
         PowerUpsLeft.setText(String.format("%01d", gameMap.noPowerUps)); //client's gamemap's powerups
+        if (gameMap.isFlashed()) {
+            GlobalState.setStyle(blackLabelStyle);
+        }
+        else {
+            GlobalState.setStyle(yellowLabelStyle);
+        }
         GlobalState.setText(String.format("%s", gameMap.globalStatus)); //client's gamemap's global status
-        //update WOrld Status here
 
     }
 
