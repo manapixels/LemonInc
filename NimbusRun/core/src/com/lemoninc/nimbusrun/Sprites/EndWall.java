@@ -32,7 +32,7 @@ public class EndWall {
         float x1 = gameMap.getGameport().getWorldWidth()*19f;
         float y1 = 0;
         float x2 = gameMap.getGameport().getWorldWidth()*19f;
-        float y2 = gameMap.getGameport().getWorldHeight()*2f;
+        float y2 = gameMap.getGameport().getWorldHeight()*3f;
 
         FixtureDef fdef = new FixtureDef();
         EdgeShape edgeShape = new EdgeShape();

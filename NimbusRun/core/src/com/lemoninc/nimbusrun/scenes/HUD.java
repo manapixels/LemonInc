@@ -24,20 +24,14 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.esotericsoftware.minlog.Log;
 import com.lemoninc.nimbusrun.NimbusRun;
 import com.lemoninc.nimbusrun.Sprites.GameMap;
 import com.lemoninc.nimbusrun.Sprites.Player;
 
 import java.util.Map;
 
-
-/**
- * Created by Nikki on 8/4/2016.
- */
 public class HUD extends Group implements Disposable,ApplicationListener,Screen{
     TextureAtlas atlas;
-//    private Skin skin;
     public Stage stage;
     private Viewport viewport;
     public Integer worldTimer;
@@ -81,7 +75,13 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
         //worldLength = 18*gameMap.getGameport().getWorldWidth();
         Gdx.app.log("world length",String.valueOf(worldLength));
         powerupdistance=worldLength/3;
+
+
+
         worldTimer = 150;
+
+
+
         timecount=0;
         camera=new PerspectiveCamera();
         viewport=new FillViewport(NimbusRun.V_WIDTH,NimbusRun.V_HEIGHT,new OrthographicCamera());
