@@ -1,6 +1,7 @@
 package com.lemoninc.nimbusrun.Screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
@@ -22,12 +23,8 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lemoninc.nimbusrun.NimbusRun;
 
-/**
- * Created by Nikki on 10/4/2016.
- */
-public class StoryLineScreen implements Screen{
-    Texture background;
-    private SpriteBatch batch;
+public class CharDescrScreen implements Screen{
+    private SpriteBatch batcher;
     private Sprite sprite;
     private NimbusRun game;
     private float gameWidth;
@@ -39,57 +36,83 @@ public class StoryLineScreen implements Screen{
     private Stage stage;
 
     private TextButton.TextButtonStyle style;
-    private TextButton Continue;
+    private TextButton Return,Next;
     Sound soundclick;
+    int click=0;
 
 
 
-    public StoryLineScreen(NimbusRun game,float gameWidth,float gameHeight){
+    public CharDescrScreen(NimbusRun game,float gameWidth,float gameHeight){
         this.game = game;
         this.gameWidth =gameWidth;
         this.gameHeight = gameHeight;
-
-        BUTTON_WIDTH = 250;
-        BUTTON_HEIGHT = 75;
+        camera=new PerspectiveCamera();
+        viewport=new FitViewport(gameWidth,gameHeight,camera);
+        stage= new Stage(new ExtendViewport(gameWidth,gameHeight));
 
         soundclick=Gdx.audio.newSound(Gdx.files.internal("Sounds/click.mp3"));
+
+
+        BUTTON_WIDTH = 150;
+        BUTTON_HEIGHT = 75;
 
         style = new TextButton.TextButtonStyle();  //can customize
         style.font = new BitmapFont(Gdx.files.internal("Fonts/crimesFont48Black.fnt"));
         style.font.setColor(Color.BLUE);
         style.font.getData().setScale(0.65f, 0.65f);
-        style.up= new TextureRegionDrawable(new TextureRegion(new Texture("0_StorylineScreen/button_up.png")));
-        style.down= new TextureRegionDrawable(new TextureRegion(new Texture("0_StorylineScreen/button_down1.png")));
-        style.over= new TextureRegionDrawable(new TextureRegion(new Texture("0_StorylineScreen/button_down1.png")));
+        style.up= new TextureRegionDrawable(new TextureRegion(new Texture("2_TutorialScreen/button_up.png")));
+        style.down= new TextureRegionDrawable(new TextureRegion(new Texture("2_TutorialScreen/button_down1.png")));
+        style.over= new TextureRegionDrawable(new TextureRegion(new Texture("2_TutorialScreen/button_down1.png")));
 
 
-        camera=new PerspectiveCamera();
-        viewport=new FitViewport(gameWidth,gameHeight,camera);
-        stage= new Stage(new ExtendViewport(gameWidth,gameHeight));
-
-        Continue = new TextButton("Click to Return", style);
-        show();
+        Next= new TextButton("Next",style);
+        Return = new TextButton("Return", style);
     }
 
     @Override
     public void show() {
-        batch = new SpriteBatch();
-        background=new Texture("0_StorylineScreen/bg.png");
-        background.setFilter(Texture.TextureFilter.Linear,Texture.TextureFilter.Linear);
-        sprite = new Sprite(background);
+        batcher = new SpriteBatch();
+        sprite = new Sprite(new Texture("2_CharDescrScreen/TutorialScreens_Buddha.png"));
         //   sprite.setColor(1, 1, 1, 0);
         sprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        Continue.setSize(this.BUTTON_WIDTH, this.BUTTON_HEIGHT);
-        Continue.setPosition(500, 100, Align.bottomLeft);
-        stage.addActor(Continue);
+        Return.setSize(this.BUTTON_WIDTH, this.BUTTON_HEIGHT);
+        Return.pad(0.5f);
+        Return.setPosition(gameWidth * 0.75f, gameHeight * 0.2f, Align.topLeft);
 
-        Continue.addListener(new ClickListener() {
+
+        Next.setSize(this.BUTTON_WIDTH, this.BUTTON_HEIGHT);
+        Next.pad(0.5f);
+        Next.setPosition(gameWidth * 0.75f, gameHeight * 0.2f, Align.topLeft);
+        stage.addActor(Next);
+
+        Return.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 soundclick.play();
+                //sprite.setTexture(new Texture("2_TutorialScreen/Tutorials_pg2.png"));
                 game.setScreen(new MenuScreen(game, gameWidth, gameHeight));
+            }
 
+        });
+        Next.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                soundclick.play();
+                click++;
+                if(click==1)
+                    sprite.setTexture(new Texture("2_CharDescrScreen/TutorialScreens_Foxy.png"));
+                if(click==2)
+                    sprite.setTexture(new Texture("2_CharDescrScreen/TutorialScreens_Kappa.png"));
+                if (click==3)
+                    sprite.setTexture(new Texture("2_CharDescrScreen/TutorialScreens_Krishna.png"));
+                if(click==4)
+                    sprite.setTexture(new Texture("2_CharDescrScreen/TutorialScreens_Pontianak.png"));
+                if(click==5) {
+                    sprite.setTexture(new Texture("2_CharDescrScreen/TutorialScreens_WhiteSnake.png"));
+                    Next.remove();
+                    stage.addActor(Return);
+                }
             }
 
         });
@@ -102,11 +125,9 @@ public class StoryLineScreen implements Screen{
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        batch.begin();
-        sprite.draw(batch);
-        batch.end();
-
+        batcher.begin();
+        sprite.draw(batcher);
+        batcher.end();
         stage.act();
         stage.draw();
     }
@@ -132,7 +153,7 @@ public class StoryLineScreen implements Screen{
 
     @Override
     public void dispose() {
+        //soundclick.dispose();
         stage.dispose();
-       // soundclick.dispose();
     }
 }
