@@ -58,7 +58,6 @@ import java.util.Random;
  */
 public class CharacterSelectionScreen implements Screen{
     private SpriteBatch batcher;
-    private Sprite sprite;
     private final NimbusRun game;
     private float gameWidth;
     private float gameHeight;
@@ -417,7 +416,6 @@ public class CharacterSelectionScreen implements Screen{
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
-        sprite = new Sprite(new Texture("3_CharSelScreen/whiteBG.png"));
         //sprite.setColor(1, 1, 1, 0);
         playercharacter=new Sprite(skin.getSprite("bg_Buddha"));
         //sprite.setPosition(0, 0);

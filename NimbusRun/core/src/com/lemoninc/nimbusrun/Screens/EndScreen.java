@@ -59,7 +59,6 @@ public class EndScreen implements Screen{
     private int numPlayers;
 
     private SpriteBatch batch, winner, second, third, last;
-    private Sprite bg;
     Music music;
     Boolean playmusic;
     private TextButton.TextButtonStyle style;
@@ -86,10 +85,6 @@ public class EndScreen implements Screen{
         this.rankings = rankings;
 
         batch = new SpriteBatch();
-
-        bg = new Sprite(new Texture("5_EndScreen/bg.png"));
-        bg.setPosition(-game.V_WIDTH/game.PPM/2, -game.V_HEIGHT/game.PPM/2);
-        bg.setSize(game.V_WIDTH / game.PPM, game.V_HEIGHT / game.PPM);
 
         style = new TextButton.TextButtonStyle();  //can customize
         style.font = new BitmapFont(Gdx.files.internal("Fonts/crimesFont48Black.fnt"));
@@ -136,7 +131,6 @@ public class EndScreen implements Screen{
     @Override
     public void resize(int width, int height) {
         gameport.update(width, height);
-//        gamecam.position.set(gamecam.viewportWidth/2, gamecam.viewportHeight/2, 0);
     }
 
     @Override
@@ -144,7 +138,6 @@ public class EndScreen implements Screen{
 
         //batch.setProjectionMatrix(gamecam.combined);
         batch.begin();
-        bg.draw(batch);
         //Log.info("hello" + dummySprites.size() + " " + rankings.size());
 
 
@@ -166,6 +159,7 @@ public class EndScreen implements Screen{
 //        }
 
         batch.end();
+        Gdx.input.setInputProcessor(stage);
 
         stage.act();
         stage.draw();
@@ -177,7 +171,6 @@ public class EndScreen implements Screen{
 
         });
 
-        Gdx.input.setInputProcessor(stage);
     }
 
     @Override
@@ -195,7 +188,6 @@ public class EndScreen implements Screen{
 
     @Override
     public void dispose() {
-        bg.getTexture().dispose();
         //stage.dispose();
         music.dispose();
         //gameMap.getWorld().dispose();

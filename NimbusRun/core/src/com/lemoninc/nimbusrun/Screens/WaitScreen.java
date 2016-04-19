@@ -62,8 +62,6 @@ public class WaitScreen implements Screen{
     private float BUTTON_HEIGHT;
 
     private SpriteBatch batch;
-    private Texture background;
-    private Sprite sprite;
 
     private Stage stage;
     private Skin skin;
@@ -133,12 +131,10 @@ public class WaitScreen implements Screen{
     public void show() {
 
         batch= new SpriteBatch();
-        background= new Texture("3_CharSelScreen/whiteBG.png");
-        background.setFilter(Texture.TextureFilter.Linear,Texture.TextureFilter.Linear);
-        sprite=new Sprite(background);
-        sprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         skin = new Skin(Gdx.files.internal("data/uiskin.json"));
+
+        // Clear background with WHITE rather than render a white image for performance
 
         // Create UI elements
 
@@ -146,7 +142,6 @@ public class WaitScreen implements Screen{
         labeltitle.setPosition(this.gameWidth/2, this.gameHeight-this.gameHeight/4,Align.center);
         labeltitle.setSize(400, 200);
         stage.addActor(labeltitle);
-
 
         playername=new TextField(preferences.getString("name"),skin);
         playername.setSize(150, 50);
@@ -161,7 +156,6 @@ public class WaitScreen implements Screen{
         playerIP.setMessageText("Enter the host IP to join game");
         stage.getKeyboardFocus();
         stage.addActor(playerIP);
-
 
         hostbutton.setSize(this.BUTTON_WIDTH, this.BUTTON_HEIGHT);
         hostbutton.setPosition(this.gameWidth / 2, 200, Align.bottomLeft);
@@ -222,12 +216,11 @@ public class WaitScreen implements Screen{
     public void render(float delta) {
         update(delta);
 
-        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 //        batch.setProjectionMatrix(gamecam.combined);
         batch.begin();
-        sprite.draw(batch);
         batch.end();
 
         stage.act();
@@ -252,7 +245,6 @@ public class WaitScreen implements Screen{
 
     @Override
     public void hide() {
-        dispose();
     }
 
     @Override
@@ -261,7 +253,6 @@ public class WaitScreen implements Screen{
         skin.dispose();
         stage.dispose();
         batch.dispose();
-        sprite.getTexture().dispose();
         music.stop();
         music.dispose();
         soundclick.dispose();
@@ -271,6 +262,7 @@ public class WaitScreen implements Screen{
      * join a game room
      */
     private void joinGame(){
+        dispose();
         game.setScreen(new CharacterSelectionScreen(game, false, getName(), playmusic));
         savePrefs();
     }
@@ -279,6 +271,7 @@ public class WaitScreen implements Screen{
      * play game as a host
      */
     private void hostGame(){
+        dispose();
         game.setScreen(new CharacterSelectionScreen(game, true, getName(), playmusic));
         savePrefs();
     }

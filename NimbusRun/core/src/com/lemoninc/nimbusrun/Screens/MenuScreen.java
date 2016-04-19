@@ -135,6 +135,7 @@ public class MenuScreen implements Screen {
                     playmusic=false;
                 }
                 music.stop();
+                dispose();
                 game.setScreen(new WaitScreen(game,playmusic));
 
             }
@@ -144,6 +145,7 @@ public class MenuScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
               //  AssetLoader.clickSound.play(AssetLoader.VOLUME);
                 soundclick.play();
+                dispose();
                 game.setScreen(new TutorialScreen(game, gameWidth, gameHeight));
 
                 // TODO Set to tutorial screen
@@ -156,6 +158,7 @@ public class MenuScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
           //      AssetLoader.clickSound.play(AssetLoader.VOLUME);
                 soundclick.play();
+                dispose();
                 game.setScreen(new StoryLineScreen(game, gameWidth,gameHeight));
 
                 // TODO Set to tutorial screen
@@ -221,7 +224,6 @@ public class MenuScreen implements Screen {
 
     @Override
     public void hide() {
-        dispose();
     }
 
     @Override
