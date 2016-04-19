@@ -102,9 +102,6 @@ public class GameMap{
 //        Log.info(bgStartY + " y pos");
         batch = new SpriteBatch();
 
-        initCommon();
-
-
         // initialise all background sprites
         bgTexture = new Texture("4_PlayScreen/bg_dark.png");
         bgTexture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
@@ -420,7 +417,6 @@ public class GameMap{
             if (playerLocal.handleInput()) { // (arrow key has been pressed by player)
                 client.sendMessageUDP(playerLocal.getMovementState()); //send movement state to server
                 Gdx.app.log("GDX GameMap", "Sent MovementState to Server");
-
             }
 
             //gamecam constantly to follow playerLocal

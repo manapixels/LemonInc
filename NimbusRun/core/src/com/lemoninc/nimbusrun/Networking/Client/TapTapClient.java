@@ -141,6 +141,7 @@ public class TapTapClient {
             //hey map, someone moved, handle this
 
             map.playerMoved(msg);
+            
         } else if (message instanceof Network.GameRoomFull) {
             Gdx.app.log("GDX TapTapClient", "Client received GameRoomFull");
             connection.setName("gameroomfull");

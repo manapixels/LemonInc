@@ -269,17 +269,15 @@ public class Player extends Sprite implements InputProcessor {
             }
             if (touches.get(0).touched && touches.get(1).touched) {
                 if (touches.get(0).touchX < (NimbusRun.V_WIDTH / 2) && touches.get(1).touchX > (NimbusRun.V_WIDTH - (NimbusRun.V_WIDTH / 2))) {
-                    //              attacksound.play();
-                    // TODO: Implement method for attack
+                    // TODO: attacksound.play();
+                    // TODO: gauge bar for attack
                     if (mayAttack()) attack();
-                    Gdx.app.log("GDX Player", "Attacked");
+                    Gdx.app.log("GDX Player", "Player " +id+" Attacked");
 
                 } else if (touches.get(1).touchX < (NimbusRun.V_WIDTH / 2) && touches.get(0).touchX > (NimbusRun.V_WIDTH - (NimbusRun.V_WIDTH / 2))) {
-                    //            attacksound.play();
-                    //TODO: Implement method for attack
-                    //TODO: need attack() method (Player.shoot())
+                    // TODO: attacksound.play();
                     if (mayAttack()) attack();
-                    Gdx.app.log("GDX Player", "Attacked");
+                    Gdx.app.log("GDX Player", "Player " +id+" Attacked");
 
                 }
             }
