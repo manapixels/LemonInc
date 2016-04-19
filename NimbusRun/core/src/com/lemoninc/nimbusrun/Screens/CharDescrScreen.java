@@ -43,7 +43,9 @@ public class CharDescrScreen implements Screen{
 
 
     public CharDescrScreen(NimbusRun game,float gameWidth,float gameHeight){
+    public StoryLineScreen(NimbusRun game,SpriteBatch batch, float gameWidth,float gameHeight){
         this.game = game;
+        this.batch = batch;
         this.gameWidth =gameWidth;
         this.gameHeight = gameHeight;
         camera=new PerspectiveCamera();
@@ -71,7 +73,7 @@ public class CharDescrScreen implements Screen{
 
     @Override
     public void show() {
-        batcher = new SpriteBatch();
+//        batcher = new SpriteBatch();
         sprite = new Sprite(new Texture("2_CharDescrScreen/TutorialScreens_Buddha.png"));
         //   sprite.setColor(1, 1, 1, 0);
         sprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -90,9 +92,7 @@ public class CharDescrScreen implements Screen{
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 soundclick.play();
-                //sprite.setTexture(new Texture("2_TutorialScreen/Tutorials_pg2.png"));
-                game.setScreen(new MenuScreen(game, gameWidth, gameHeight));
-            }
+                game.setScreen(new MenuScreen(game,batch,gameWidth, gameHeight));
 
         });
         Next.addListener(new ClickListener() {
@@ -125,9 +125,11 @@ public class CharDescrScreen implements Screen{
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        batcher.begin();
-        sprite.draw(batcher);
-        batcher.end();
+
+        batch.begin();
+        sprite.draw(batch);
+        batch.end();
+
         stage.act();
         stage.draw();
     }
@@ -149,11 +151,16 @@ public class CharDescrScreen implements Screen{
 
     @Override
     public void hide() {
+        dispose();
     }
 
     @Override
     public void dispose() {
-        //soundclick.dispose();
         stage.dispose();
+        sprite.getTexture().dispose();
+        background.dispose();
+        soundclick.dispose();
+        style.font.dispose();
+
     }
 }

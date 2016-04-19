@@ -56,7 +56,7 @@ import java.util.Random;
  * Created by Nikki on 12/4/2016.
  */
 public class CharacterSelectionScreen implements Screen{
-    private SpriteBatch batcher;
+    public SpriteBatch batch;
     private NimbusRun game;
     private float gameWidth;
     private float gameHeight;
@@ -97,8 +97,9 @@ public class CharacterSelectionScreen implements Screen{
      * @param isHost
      * @param playerName
      */
-    public CharacterSelectionScreen(final NimbusRun game, final boolean isHost, String playerName, final Boolean playmusic){
+    public CharacterSelectionScreen(final NimbusRun game, SpriteBatch batch, final boolean isHost, String playerName, final Boolean playmusic){
         this.game = game;
+        this.batch = batch;
         this.isHost = isHost;
         this.playername = playerName;
         this.gameWidth = NimbusRun.V_WIDTH;
@@ -118,7 +119,7 @@ public class CharacterSelectionScreen implements Screen{
         soundclick=Gdx.audio.newSound(Gdx.files.internal("Sounds/click.mp3"));
 
         music=Gdx.audio.newMusic(Gdx.files.internal("Sounds/characterselectionscreen.mp3"));
-        music.setVolume(0.5f);                 // sets the volume to half the maximum volume
+        music.setVolume(0.5f);   // sets the volume to half the maximum volume
         music.setLooping(true);
         if(playmusic){
             music.play();
@@ -141,8 +142,6 @@ public class CharacterSelectionScreen implements Screen{
         style.up=skin.getDrawable("button_up");
         style.over=skin.getDrawable("button_down");
         style.down=skin.getDrawable("button_down");
-//        style.up=new TextureRegionDrawable(new TextureRegion(new Texture("button_up.png")));
-//        style.down=new TextureRegionDrawable(new TextureRegion(new Texture("button_down.png")));
 
         stage = new Stage(new ExtendViewport(gameWidth,gameHeight));
         stage.clear();
@@ -151,7 +150,6 @@ public class CharacterSelectionScreen implements Screen{
         table.right();
         table.setFillParent(true);
 
-        //Title=new Label(String.format("%03d","Choose your Avatar"),new Label.LabelStyle(new BitmapFont(Gdx.files.internal("Fonts/crime.fnt")), Color.DARK_GRAY));
         Title=new Label("Choose Your Character",new Label.LabelStyle(new BitmapFont(Gdx.files.internal("Fonts/crimesFont48Black.fnt")), Color.DARK_GRAY));
         Title.setPosition(gameWidth / 2, gameHeight - gameWidth / 20, Align.center);
         Title.setSize(gameWidth / 15, gameHeight / 15);
@@ -335,14 +333,12 @@ public class CharacterSelectionScreen implements Screen{
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 Playerability="JUMP STOP";
                 charactername=6;
-                System.out.println("touched");
             }
         });
         ponti.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 resetbuttons();
-                System.out.println("touched");
                 Gdx.app.log("Button pressed", "Ponti Button Pressed");
                 playercharacter= skin.getSprite("bg_Pontianak");
                 playercharacter.setPosition(0, 0);
@@ -390,8 +386,6 @@ public class CharacterSelectionScreen implements Screen{
         goback.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // TODO: SAVE THE LOG OF THE PLAYER ACCORDING TO THE NUMBER
-                //charactername= checkbuttonpress();
                 soundclick.play();
                 goToMenu();
                 music.stop();
@@ -407,15 +401,6 @@ public class CharacterSelectionScreen implements Screen{
     // 4. KAPPA
     // 5. PONTIANAK
     // 6. MADAME WHITE SNAKE
-//    public String checkbuttonpress(){
-//        if(Buddha.isPressed()) return ("Buddha");
-//        else if(krishna.isPressed()) return ("Krishna");
-//        else if (foxy.isPressed()) return ("Foxy");
-//        else if (kappa.isPressed()) return ("Kappa");
-//        else if (ponti.isPressed()) return ("Ponti");
-//        else if (madame.isPressed()) return ("Madame");
-//        else return ("Buddha");
-//    }
 
     @Override
     public void show() {
@@ -428,7 +413,6 @@ public class CharacterSelectionScreen implements Screen{
         style.font.getData().setScale(0.7f, 0.7f);
         style.font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         style.font.setColor(Color.DARK_GRAY);
-        batcher = new SpriteBatch();
         startTime = TimeUtils.millis();
 
 
@@ -452,7 +436,7 @@ public class CharacterSelectionScreen implements Screen{
                 Gdx.app.postRunnable(new Runnable() {
                     @Override
                     public void run() {
-                        game.setScreen(new WaitScreen(game,playmusic));
+                        game.setScreen(new WaitScreen(game, batch, playmusic));
 
                     }
                 });
@@ -470,15 +454,13 @@ public class CharacterSelectionScreen implements Screen{
                 Gdx.app.postRunnable(new Runnable() {
                     @Override
                     public void run() {
-                        game.setScreen(new WaitScreen(game,playmusic));
+                        game.setScreen(new WaitScreen(game,batch,playmusic));
 
                     }
                 });
             }
         }
-
         myIP = client.getIP();
-
     }
 
     public void resetbuttons() {
@@ -497,34 +479,28 @@ public class CharacterSelectionScreen implements Screen{
 
     public void goToMenu(){
         stage.clear();
-        game.setScreen(new MenuScreen(game, gameWidth, gameHeight));
-        //TODO: shutdown client, server
-
+        client.shutdown();
+        if (isHost) server.shutdown();
+        game.setScreen(new MenuScreen(game, batch, gameWidth, gameHeight));
     }
-    
-//    public void goPlayScreen() {
-//        game.setScreen(new PlayScreen(game, isHost, playername, client, server));
-//
-//    }
 
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(255, 255, 255, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        batcher.begin();
-       // sprite.draw(batcher);
+        batch.begin();
 
-        style.font.draw(batcher, "My Special ability is to", viewport.getScreenWidth() / 3, viewport.getScreenHeight() - 250);
-        style.font.draw(batcher, Playerability, viewport.getScreenWidth() / 3, viewport.getScreenHeight() - 275);
-        style.font.draw(batcher, "the world",viewport.getScreenWidth()/3,viewport.getScreenHeight()-300);
+        style.font.draw(batch, "My Special ability is to", viewport.getScreenWidth() / 3, viewport.getScreenHeight() - 250);
+        style.font.draw(batch, Playerability, viewport.getScreenWidth() / 3, viewport.getScreenHeight() - 275);
+        style.font.draw(batch, "the world",viewport.getScreenWidth()/3,viewport.getScreenHeight()-300);
         if (myIP != null)
-            style.font.draw(batcher, "Host IP address: " + myIP, viewport.getScreenWidth()/3,viewport.getScreenHeight()/7);
+            style.font.draw(batch, "Host IP address: " + myIP, viewport.getScreenWidth()/3,viewport.getScreenHeight()/7);
         playercharacter.setPosition(viewport.getScreenWidth()/4,viewport.getScreenHeight()/12);
         playercharacter.setSize(viewport.getScreenWidth()*0.75f,viewport.getScreenHeight()*0.75f);
 
-        playercharacter.draw(batcher);
-        batcher.end();
+        playercharacter.draw(batch);
+        batch.end();
 
         stage.act();
         stage.draw();
@@ -548,6 +524,7 @@ public class CharacterSelectionScreen implements Screen{
     @Override
     public void hide() {
         Gdx.input.setInputProcessor(null);
+        dispose();
     }
 
     @Override
@@ -556,9 +533,9 @@ public class CharacterSelectionScreen implements Screen{
         atlas2.dispose();
         stage.dispose();
         skin.dispose();
-     //   sprite.getTexture().dispose();
-        batcher.dispose();
+//        sprite.getTexture().dispose();
         music.dispose();
         soundclick.dispose();
+        playercharacter.getTexture().dispose();
     }
 }

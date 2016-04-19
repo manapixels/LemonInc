@@ -14,6 +14,7 @@ package com.lemoninc.nimbusrun.Networking.Client;
  * ********************************/
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -40,6 +41,7 @@ public class TapTapClient {
     private MenuScreen menuScreen;
     //Kryonet Stuff
     public Client client;
+
 
     /**
      * This constructor is called in CharacterSelectionScreen when the player is connecting to server
@@ -149,7 +151,7 @@ public class TapTapClient {
             Gdx.app.postRunnable(new Runnable() {
                 @Override
                 public void run() {
-                    game.setScreen(new WaitScreen(game, menuScreen.playmusic)); //CSS.hide() called, TODO: client should be closed
+                    game.setScreen(new WaitScreen(game, currentScreen.batch, menuScreen.playmusic)); //CSS.hide() called, TODO: client should be closed
                 }
             });
 
