@@ -84,8 +84,12 @@ public class GameMap{
     private DummyPlayer dummyLocal;
 
     public int noPowerUps;
+    public String globalStatus;
 
     public float powerUpDistance;
+
+    long timeStamp;
+
     /**
      * This constructor is called inside TapTapClient
      */
@@ -95,7 +99,9 @@ public class GameMap{
         this.isClient = true;
         this.mapData = mapData;
 
+        //for HUD
         noPowerUps=0;
+        globalStatus = "";
 
         float worldLength = 300f;
         powerUpDistance=worldLength/4; //distance needed to cover to have a power up
@@ -223,6 +229,47 @@ public class GameMap{
         return img;
     }
 
+    private String getCharacterSkil(int character) {
+        String characterSkill;
+
+        switch(character){
+            // 1. LAUGHING BUDDHA
+            // 2. SHESHNAH WITH KRISHNA
+            // 3. NINE-TAILED FOX
+            // 4. KAPPA
+            // 5. PONTIANAK
+            // 6. MADAME WHITE SNAKE
+            case 1: characterSkill = "stunned"; break;
+            case 2: characterSkill = "flashed"; break;
+            case 3: characterSkill = "charmed"; break;
+            case 4: characterSkill = "tide-shifted"; break;
+            case 5: characterSkill = "terror'd"; break;
+            case 6: characterSkill = "poisoned"; break;
+            default: characterSkill = "stunned"; break;
+        }
+        return characterSkill;
+    }
+
+    private String getCharacterType(int character) {
+        String type;
+        switch(character){
+            // 1. LAUGHING BUDDHA
+            // 2. SHESHNAH WITH KRISHNA
+            // 3. NINE-TAILED FOX
+            // 4. KAPPA
+            // 5. PONTIANAK
+            // 6. MADAME WHITE SNAKE
+            case 1: type = "Buddha"; break;
+            case 2: type = "Krishna"; break;
+            case 3: type = "Foxy"; break;
+            case 4: type = "Kappa"; break;
+            case 5: type = "Pontianak"; break;
+            case 6: type = "Madame"; break;
+            default: type = "Buddha"; break;
+        }
+        return type;
+    }
+
     public Network.MapDataPacket getMapDataPacket() {
         return new Network.MapDataPacket(mapData);
     }
@@ -341,7 +388,7 @@ public class GameMap{
     }
 
     public boolean onPlayerAttack(Network.PlayerAttack msg) {
-        //hud displays msg.id casted _____ <- switch-case (character = 1, String value = Laughing ..._)
+
 
         Player player = getPlayerById(msg.id);
 
@@ -351,6 +398,8 @@ public class GameMap{
         if (player != null) {
             if (player.attack()) {
                 if (client != null) { //only for client
+                    timeStamp = System.currentTimeMillis();
+                    globalStatus = getCharacterType(msg.character)+" "+player.getName()+" "+getCharacterSkil(msg.character)+" you";
                     playerLocal.attackSoundPlay(msg.character); //playerlocal is called just  to borrow its method
                 }
                 return true;
@@ -468,6 +517,7 @@ public class GameMap{
             gamecam.position.set(playerLocal.getX(), playerLocal.getY(), 0);
             gamecam.update();
 
+            //update client's number of power ups
             if(playerLocal.getX()/powerUpDistance>=1) { //player's x position is beyond the power up distance
                 powerUpDistance=powerUpDistance+75f;
                 if (noPowerUps == 0) {
@@ -477,6 +527,12 @@ public class GameMap{
                     noPowerUps=1;
                 }
             }
+
+            //update globalStatus
+            if (System.currentTimeMillis() > timeStamp + 3000) {
+                globalStatus = "";
+            }
+
         }
 
         //Update player
@@ -486,7 +542,6 @@ public class GameMap{
             if (client!=null && curPlayer != null) {
                 curPlayer.update(delta);
             }
-            //if(curPlayer != playerLocal) curPlayer.renderNameTag(spriteBatch, fontNameTag);
         }
 
 
@@ -529,6 +584,7 @@ public class GameMap{
         if (playerLocal.isFlashed()) {
             Gdx.gl.glClearColor(1, 1, 1, 1);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
         } else {
             playerLocal.draw(batch);
         }

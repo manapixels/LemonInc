@@ -421,6 +421,8 @@ public class Player extends Sprite implements InputProcessor {
         Gdx.app.log("GDX Player", "Player " +id+" Attacked");
         Network.PlayerAttack msgPlayerAttack = new Network.PlayerAttack(id, character);
 
+        //post on HUD "Playername" casted
+
 //        if (character )
         gameMap.playerAttacked(msgPlayerAttack);
 

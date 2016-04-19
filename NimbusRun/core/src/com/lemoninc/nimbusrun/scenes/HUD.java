@@ -155,10 +155,11 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
         nameLabel=new Label(playername,new Label.LabelStyle(font, Color.BLACK));
         positionboardlabel=new Label("POSITION",new Label.LabelStyle(font, Color.WHITE));
         yourposition=new Label(String.format("%01d",position),new Label.LabelStyle(font, Color.YELLOW));
-        GlobalState=new Label("World has been:",new Label.LabelStyle(font, Color.YELLOW));
+        GlobalState=new Label(String.format("%s",gameMap.globalStatus),new Label.LabelStyle(font, Color.YELLOW));
         Poweruplabel=new Label("POWER-UPs",new Label.LabelStyle(font, Color.BLACK));
         PowerUpsLeft=new Label(String.format("%01d",gameMap.noPowerUps),new Label.LabelStyle(font, Color.RED)); //DARK BLUE #0681ab
 
+        
         scorewindow.setBackground(windowbackground);
         scorewindow.pad(0.001f);
         scorewindow.setResizeBorder(1);
@@ -218,6 +219,8 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
         }
 
         PowerUpsLeft.setText(String.format("%01d", gameMap.noPowerUps)); //client's gamemap's powerups
+        GlobalState.setText(String.format("%s", gameMap.globalStatus)); //client's gamemap's global status
+        //update WOrld Status here
 
     }
 
