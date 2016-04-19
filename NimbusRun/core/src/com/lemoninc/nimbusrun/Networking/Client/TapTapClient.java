@@ -166,6 +166,11 @@ public class TapTapClient {
                 }
             });
         }
+        else if (message instanceof Network.PlayerAttack) {
+            Gdx.app.log("GDX TapTapClient", "Client received PlayerAttack");
+            Network.PlayerAttack msg = (Network.PlayerAttack) message;
+            map.onPlayerAttack(msg);
+        }
     }
 
     private void handleDisonnect(Connection connection) {

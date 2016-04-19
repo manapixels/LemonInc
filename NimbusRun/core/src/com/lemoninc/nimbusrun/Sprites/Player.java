@@ -47,12 +47,15 @@ import com.lemoninc.nimbusrun.scenes.HUD;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Player extends Sprite implements InputProcessor{
+public class Player extends Sprite implements InputProcessor {
     public World world;
     public Body b2body;
-    public enum State { DOUBLEJUMPING, JUMPING, DEFAULT }
+
+    public enum State {DOUBLEJUMPING, JUMPING, DEFAULT}
+
     public State currentState;
     public State previousState;
+    public boolean isLocal;
 
     private GameMap gameMap;
 
@@ -63,6 +66,7 @@ public class Player extends Sprite implements InputProcessor{
 
     private int id;
     private String name;
+    public int character;
     private BitmapFont font;
 
     private boolean stunned, poisoned, reversed, terrored, flashed, confused, devMode, finished;
@@ -75,27 +79,28 @@ public class Player extends Sprite implements InputProcessor{
 
     Vector2 previousPosition;
 
-  //  Sound attacksound,jumpsound;
-    private Map<Integer,TouchInfo> touches;
+    //  Sound attacksound,jumpsound;
+    private Map<Integer, TouchInfo> touches;
 
     /**
-     *
      * @param gameMap
      * @param img
      * @param x
      * @param y
      */
-    public Player(GameMap gameMap, TextureAtlas img, float x, float y, boolean isLocal) {
+    public Player(GameMap gameMap, TextureAtlas img, float x, float y, boolean isLocal, int character) { //TODO: character parameter to differentiate the Player? (switch-case for attack())
 
         this.gameMap = gameMap;
         this.world = gameMap.getWorld();
+        this.isLocal = isLocal;
+        this.character = character;
         currentState = State.DEFAULT;
         previousState = State.DEFAULT;
         CHARACTER_SIZE = 220 / NimbusRun.PPM;
         stateTime = 0f;
 
-      //  attacksound=Gdx.audio.newSound(Gdx.files.internal("Sounds/specialpowermusic.wav"));
-       // jumpsound=Gdx.audio.newSound(Gdx.files.internal("Sounds/jumpsound.mp3"));
+        //  attacksound=Gdx.audio.newSound(Gdx.files.internal("Sounds/specialpowermusic.wav"));
+        // jumpsound=Gdx.audio.newSound(Gdx.files.internal("Sounds/jumpsound.mp3"));
         //debuff variables
         stunTime = 0f;
         stunned = false;
@@ -128,15 +133,15 @@ public class Player extends Sprite implements InputProcessor{
 
         this.img = img;
 
-        anim = new Animation(1f/40f, img.getRegions());
+        anim = new Animation(1f / 40f, img.getRegions());
 
         //only for playerLocal
         if (isLocal) {
             Gdx.input.setInputProcessor(this);
 
-            touches = new HashMap<Integer,TouchInfo>();
+            touches = new HashMap<Integer, TouchInfo>();
 
-            for(int i = 0; i < 2; i++){
+            for (int i = 0; i < 2; i++) {
                 touches.put(i, new TouchInfo());
             }
         }
@@ -148,44 +153,72 @@ public class Player extends Sprite implements InputProcessor{
         public boolean touched = false;
     }
 
-    public State getState(){
-        if(b2body.getLinearVelocity().y != 0){
-            if (previousState == State.JUMPING){
-                return State.DOUBLEJUMPING; }
-            else {
-                return State.JUMPING; }
-        }
-        else
+    public State getState() {
+        if (b2body.getLinearVelocity().y != 0) {
+            if (previousState == State.JUMPING) {
+                return State.DOUBLEJUMPING;
+            } else {
+                return State.JUMPING;
+            }
+        } else
             return State.DEFAULT;
     }
 
-    public boolean isStunned() { return stunned; }
+    public boolean isStunned() {
+        return stunned;
+    }
 
-    public boolean isPoisoned() { return poisoned; }
+    public boolean isPoisoned() {
+        return poisoned;
+    }
 
-    public boolean isReversed() { return reversed; }
+    public boolean isReversed() {
+        return reversed;
+    }
 
-    public boolean isBlackHoled() { return terrored; }
+    public boolean isBlackHoled() {
+        return terrored;
+    }
 
-    public boolean isFlashed() { return flashed; }
+    public boolean isFlashed() {
+        return flashed;
+    }
 
-    public boolean isConfused() { return confused; }
+    public boolean isConfused() {
+        return confused;
+    }
 
-    public boolean isDevMode() { return devMode; }
+    public boolean isDevMode() {
+        return devMode;
+    }
 
-    public boolean isFinished() { return finished; }
+    public boolean isFinished() {
+        return finished;
+    }
 
-    public float getStunTime() { return stunTime; }
+    public float getStunTime() {
+        return stunTime;
+    }
 
-    public float getPoisonTime() { return poisonTime; }
+    public float getPoisonTime() {
+        return poisonTime;
+    }
 
-    public float getBlackHoleTime() { return terrorTime; }
+    public float getBlackHoleTime() {
+        return terrorTime;
+    }
 
-    public float getReverseTime() { return reverseTime; }
+    public float getReverseTime() {
+        return reverseTime;
+    }
 
-    public float getFlashTime() { return flashTime ; }
+    public float getFlashTime() {
+        return flashTime;
+    }
 
-    public float getConfuseTime() { return confuseTime; }
+    public float getConfuseTime() {
+        return confuseTime;
+    }
 
     public void render(SpriteBatch spriteBatch) {
         this.draw(spriteBatch);
@@ -198,59 +231,62 @@ public class Player extends Sprite implements InputProcessor{
         }
     }
 
-    public float getX(){
+    public float getX() {
         return b2body.getPosition().x;
     }
 
-    public float getY(){
+    public float getY() {
         return b2body.getPosition().y;
     }
 
     /**
      * Player's movement
+     *
      * @return
      */
-    public boolean handleInput(){
+    public boolean handleInput() {
 
-        if(Gdx.app.getType() == Application.ApplicationType.Android){
-            if(Gdx.input.justTouched()) {
+        if (Gdx.app.getType() == Application.ApplicationType.Android) {
+            if (Gdx.input.justTouched()) {
 //                System.out.println("Points are: X=" + Gdx.input.getX() + "Y=" + Gdx.input.getY());
-                int x=Gdx.input.getX();
-                int y=Gdx.input.getY();
-                if(x>NimbusRun.V_WIDTH/2){
-                    if (isConfused()){
+                int x = Gdx.input.getX();
+                int y = Gdx.input.getY();
+                if (x > NimbusRun.V_WIDTH / 2) {
+                    if (isConfused()) {
                         return this.jump();
                     } else {
                         Gdx.app.log("GDX Player", "Moving Right");
                         return this.moveRight();
                     }
-                }
-                else{
-                    if (isConfused()){
+                } else {
+                    if (isConfused()) {
                         return this.moveRight();
                     } else {
-  //                      jumpsound.play();
+                        //                      jumpsound.play();
                         return this.jump();
                     }
                 }
             }
-            if(touches.get(0).touched&&touches.get(1).touched){
-                if(touches.get(0).touchX<(NimbusRun.V_WIDTH/2)&&touches.get(1).touchX>(NimbusRun.V_WIDTH-(NimbusRun.V_WIDTH/2))){
-      //              attacksound.play();
+            if (touches.get(0).touched && touches.get(1).touched) {
+                if (touches.get(0).touchX < (NimbusRun.V_WIDTH / 2) && touches.get(1).touchX > (NimbusRun.V_WIDTH - (NimbusRun.V_WIDTH / 2))) {
+                    //              attacksound.play();
                     // TODO: Implement method for attack
-                    //player1.attack;
-                }
-                else if(touches.get(1).touchX<(NimbusRun.V_WIDTH/2)&&touches.get(0).touchX>(NimbusRun.V_WIDTH-(NimbusRun.V_WIDTH/2))) {
-        //            attacksound.play();
+                    if (mayAttack()) attack();
+                    Gdx.app.log("GDX Player", "Attacked");
+
+                } else if (touches.get(1).touchX < (NimbusRun.V_WIDTH / 2) && touches.get(0).touchX > (NimbusRun.V_WIDTH - (NimbusRun.V_WIDTH / 2))) {
+                    //            attacksound.play();
                     //TODO: Implement method for attack
-                    //player1.attack
+                    //TODO: need attack() method (Player.shoot())
+                    if (mayAttack()) attack();
+                    Gdx.app.log("GDX Player", "Attacked");
+
                 }
             }
-        }
-        else {
+        } else {
             //for Desktop
             if (Gdx.input.isKeyJustPressed(Input.Keys.UP))
-                if (isConfused()){
+                if (isConfused()) {
                     return this.moveRight();
                 } else {
                     return this.jump();
@@ -283,7 +319,7 @@ public class Player extends Sprite implements InputProcessor{
         return false;
     }
 
-    public void update(float delta){
+    public void update(float delta) {
         recover(1f);
 //        Log.info("Player isStunned " + isStunned() + " stunTime " + getStunTime());
 //        Log.info("Player isPoisoned " + isPoisoned() + " poisonTime " + getPoisonTime());
@@ -299,34 +335,34 @@ public class Player extends Sprite implements InputProcessor{
                 finished = true;
             }
         }
-        if (isStunned()){
+        if (isStunned()) {
             stunTime -= delta;
             if (stunTime <= 0)
                 stunned = false;
         }
-            if (isPoisoned()){
+        if (isPoisoned()) {
             poisonTime -= delta;
             if (poisonTime <= 0)
                 poisoned = false;
         }
-            if (isReversed()){
+        if (isReversed()) {
             reverseTime -= delta;
             if (reverseTime <= 0)
                 reversed = false;
         }
-            if (isBlackHoled()) {
+        if (isBlackHoled()) {
             if (b2body.getLinearVelocity().x >= -MOVESPEEDCAP * 2f)
                 b2body.applyLinearImpulse(new Vector2(-MOVEFORCE, 0), b2body.getWorldCenter(), true);
             terrorTime -= delta;
             if (terrorTime <= 0)
                 terrored = false;
         }
-            if (isFlashed()){
+        if (isFlashed()) {
             flashTime -= delta;
             if (flashTime <= 0)
                 flashed = false;
         }
-            if (isConfused()){
+        if (isConfused()) {
             confuseTime -= delta;
             if (confuseTime <= 0)
                 confused = false;
@@ -334,34 +370,57 @@ public class Player extends Sprite implements InputProcessor{
         return true;
     }
 
-    public boolean stun(){
-        stunned = true;
-        stunTime = 150f;
-        b2body.setLinearVelocity(new Vector2(0,0));
+    public boolean mayAttack() {
+        //TODO:check if player can attack
         return true;
     }
-    public boolean poison(){
+
+    public boolean attack() {
+
+        Network.PlayerAttack msgPlayerAttack = new Network.PlayerAttack(id, character);
+        gameMap.playerAttacked(msgPlayerAttack);
+        //TODO: reset attack gauge bar
+
+        if (isLocal) {
+            //attack sound
+            gameMap.clientSendMessage(msgPlayerAttack);
+        }
+        return true;
+    }
+
+    public boolean stun() {
+        stunned = true;
+        stunTime = 150f;
+        b2body.setLinearVelocity(new Vector2(0, 0));
+        return true;
+    }
+
+    public boolean poison() {
         poisoned = true;
         poisonTime = 400f;
         return true;
     }
-    public boolean reverse(){
+
+    public boolean reverse() {
         reversed = true;
         reverseTime = 200f;
         return true;
     }
-    public boolean terror(){
+
+    public boolean terror() {
         terrored = true;
         b2body.setLinearVelocity(0, 0);
         terrorTime = 75f;
         return true;
     }
-    public boolean flash(){
+
+    public boolean flash() {
         flashed = true;
         flashTime = 300f;
         return true;
     }
-    public boolean confuse(){
+
+    public boolean confuse() {
         confused = true;
         confuseTime = 400f;
         return true;
@@ -384,7 +443,7 @@ public class Player extends Sprite implements InputProcessor{
 
     public boolean moveRight() {
         factor = checkCondition();
-        if (isReversed()){
+        if (isReversed()) {
             moveLeft(factor);
         } else {
             if (b2body.getLinearVelocity().x <= (MOVESPEEDCAP * factor)) {
@@ -401,16 +460,23 @@ public class Player extends Sprite implements InputProcessor{
         return true;
     }
 
-    private float checkCondition(){
+    private float checkCondition() {
         factor = 1;
-        if (isStunned() || isFinished()) { factor = factor * 0f; }
-        if (isPoisoned()) { factor = factor * 0.5f; }
-        if (isDevMode()) { factor = factor * 2.5f; }
+        if (isStunned() || isFinished()) {
+            factor = factor * 0f;
+        }
+        if (isPoisoned()) {
+            factor = factor * 0.5f;
+        }
+        if (isDevMode()) {
+            factor = factor * 2.5f;
+        }
         return factor;
     }
 
     /**
      * Get the Player's body linear Velocity wrapped in MovementState
+     *
      * @return
      */
     public Network.MovementState getMovementState() {
@@ -419,6 +485,7 @@ public class Player extends Sprite implements InputProcessor{
 
     /**
      * Set the player's linear velocity according to the received MovementState Packet
+     *
      * @param msg
      */
     public synchronized void setMovementState(Network.MovementState msg) {
@@ -428,10 +495,16 @@ public class Player extends Sprite implements InputProcessor{
         b2body.setTransform(msg.position, 0f); //this is outside the world.step call
     }
 
-    public TextureAtlas getTxtAtlas(){ return img;}
+    public TextureAtlas getTxtAtlas() {
+        return img;
+    }
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getId() {
+        return this.id;
     }
 
     public void setName(String name) {

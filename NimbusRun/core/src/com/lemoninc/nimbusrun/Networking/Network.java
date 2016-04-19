@@ -36,6 +36,8 @@ public class Network {
         kryo.register(GameReady.class);
         kryo.register(MapDataPacket.class);
         kryo.register(int[].class);
+        kryo.register(PlayerAttack.class);
+
     }
 
     static public class Login {
@@ -132,6 +134,18 @@ public class Network {
 
         public MapDataPacket(int[] mapData) {
             this.mapData = mapData;
+        }
+    }
+
+    static public class PlayerAttack {
+        public int id;
+        public int character;
+
+        public PlayerAttack() {}
+
+        public PlayerAttack(int id, int character) {
+            this.id = id;
+            this.character = character;
         }
     }
 }
