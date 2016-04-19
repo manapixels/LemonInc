@@ -23,11 +23,16 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.esotericsoftware.minlog.Log;
 import com.lemoninc.nimbusrun.NimbusRun;
+import com.lemoninc.nimbusrun.Screens.PlayScreen;
 import com.lemoninc.nimbusrun.Sprites.GameMap;
 import com.lemoninc.nimbusrun.Sprites.Player;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -60,14 +65,18 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
     private float powerupdistance;
     float playerLocalX,worldLength;
     GameMap gameMap;
+    ArrayList positioninfo;
 
     int characternumber,position;
     Window scorewindow,timewindow;
     Label positionboardlabel, GlobalState, Poweruplabel, PowerUpsLeft,Powertype,yourposition;
-    String playernamestring,playerpowerstring;
+    String playernamestring,playerpowerstring,Globalinfo;
     TextureRegionDrawable windowbackground;
 
-    public  HUD(SpriteBatch sb, String playernumber, GameMap gameMap,int characternumber){
+    private PlayScreen playScreen;
+
+    public  HUD(PlayScreen playScreen, SpriteBatch sb, String playernumber, GameMap gameMap,int characternumber){
+        this.playScreen = playScreen;
         this.characternumber=characternumber;
         this.player=playernumber;
         this.gameMap=gameMap;
@@ -226,22 +235,72 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
         stage.addActor(table);
         Gdx.input.setInputProcessor(stage);
 
+
+
     }
+//    public ArrayList<Float> playersXPositions;
+//    public ArrayList<Float> sortedXPositions;
+//    public ArrayList<Integer> sortedPlayers;
+
+
+
+    static <K,V extends Comparable<? super V>>
+    List<Map.Entry<K, V>> entriesSortedByValues(Map<K,V> map) {
+
+        List<Map.Entry<K,V>> sortedEntries = new ArrayList<Map.Entry<K,V>>(map.entrySet());
+
+        Collections.sort(sortedEntries,
+                new Comparator<Map.Entry<K, V>>() {
+                    @Override
+                    public int compare(Map.Entry<K, V> e1, Map.Entry<K, V> e2) {
+                        return e2.getValue().compareTo(e1.getValue());
+                    }
+                }
+        );
+        return sortedEntries;
+    }
+
+
+    Map<Integer,Float> XandID = new HashMap<Integer,Float>();
+
     public void update(float delta) {
         show();
         timecount += delta;
 
-        if(gameMap.getGameMapReadyForHUD()){
-            //Log.info("boom boom");
-            Map <Integer, Player> players = gameMap.getPlayers();
-            //Log.info("how many players: "+ players.size());
+        List<Integer> positions = new ArrayList<Integer>();
+
+        if(gameMap.getGameMapReadyForHUD()) {
+
+            Map<Integer, Player> players = gameMap.getPlayers();
+
             for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {
                 Player curPlayer = playerEntry.getValue();
-                Log.info("hiXpos: " + curPlayer.getX());
-                playerLocalX = curPlayer.getX();
+                XandID.put(curPlayer.getId(), curPlayer.getX());
             }
-        }
+            int i=1;
+            List<Map.Entry<Integer,Float>> sortedlist =entriesSortedByValues(XandID);
+            for (Map.Entry<Integer, Float> entry : sortedlist){
+                positions.add(entry.getKey());
+                Gdx.app.log("Local Id", String.valueOf(gameMap.playerLocal.getId()));
+                if(entry.getKey().equals(gameMap.playerLocal.getId())) {
+                    Gdx.app.log("Here", "I am here");
+                    position = i;
 
+                    Gdx.app.log("Index value:",String.valueOf(position));
+                }
+                i++;
+            }
+
+            playScreen.setRankings(positions);
+
+            yourposition.setText(String.format("%01d", position));
+            Gdx.app.log("Pos: ",String.valueOf(position));
+            Gdx.app.log("Hi",String.valueOf(entriesSortedByValues(XandID)));
+//            for (Map.Entry<Integer, Float> entry : XandID.entrySet()) {
+//               Gdx.app.log("Playerinfo: ", "PLayer POS : " + entry.getValue()
+//                       + "  : PlayerID" + entry.getKey());
+//            }
+        }
         if(count>0) {
             stage.draw();
 
@@ -252,8 +311,6 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
                 timecount = 0;
             }
         }
-
-        //progress=(60-worldTimer)/60;
         else {
             dialogstart.remove();
             if (timecount >= 1&&worldTimer>0) {

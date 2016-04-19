@@ -29,6 +29,8 @@ import com.lemoninc.nimbusrun.NimbusRun;
 import com.lemoninc.nimbusrun.Sprites.GameMap;
 import com.lemoninc.nimbusrun.scenes.HUD;
 
+import java.util.List;
+
 public class PlayScreen implements Screen{
 
     private NimbusRun game;
@@ -38,6 +40,8 @@ public class PlayScreen implements Screen{
     private final boolean isHost;
 //    private final String ipAddress;
     private String playerName;
+    private List<Integer> rankings;
+    private List<Integer> charTypes;
 
     private TapTapClient client;
     private TapTapServer server;
@@ -65,7 +69,7 @@ public class PlayScreen implements Screen{
         this.game = game;
         this.isHost = isHost;
         this.playerName = playerName;
-        hud = new HUD(game.batch,playerName,gamemap,charactername);
+        hud = new HUD(this, game.batch,playerName,gamemap,charactername);
         startTime = TimeUtils.millis();
 
         this.client = client;
@@ -87,9 +91,11 @@ public class PlayScreen implements Screen{
         //create Players from dummyPlayers
         gamemap = client.getMap();
         gamemap.initPlayers(); //called before gamemap.render
+
+
         gamemap.createEnv(); //create ground, ceiling, etc
         Log.info(playerName + "namenamenamename");
-        hud = new HUD(game.batch,playerName,gamemap,charactername);
+        hud = new HUD(this, game.batch,playerName,gamemap,charactername);
         gamemap.passHUD(hud);
         startTime = TimeUtils.millis();
 
@@ -122,10 +128,13 @@ public class PlayScreen implements Screen{
             gameOver();
         }
     }
+    public synchronized void setRankings(List<Integer> rankings){
+        this.rankings = rankings;
+    }
+
     public void gameOver() {
-        Log.info("numPlayers" + gamemap.getDummyPlayers().size());
         dispose();
-        game.setScreen(new EndScreen(game, playmusic));
+        game.setScreen(new EndScreen(game, playmusic, rankings));
     }
 
     @Override

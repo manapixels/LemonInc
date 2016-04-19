@@ -64,9 +64,10 @@ public class EndScreen implements Screen{
     private TextButton Continue;
     private Stage stage;
 
-    public EndScreen(NimbusRun game, Boolean playmusic){
+    public EndScreen(NimbusRun game, Boolean playmusic, List<Integer> rankings){
         this.playmusic = playmusic;
         this.game = game;
+        this.rankings = rankings;
 
         gamecam = new OrthographicCamera();
         gameport = new FitViewport(game.V_WIDTH / game.PPM, game.V_HEIGHT / game.PPM, gamecam);
