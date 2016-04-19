@@ -14,7 +14,7 @@ package com.lemoninc.nimbusrun.Screens;
  *       Viewport   getGamePort(()
  *       void       dispose()
  * NOTES :
- * LAST UPDATED: 8/4/2016 09:00
+ * LAST UPDATED: 19/4/2016 20:07
  *
  * ********************************/
 
@@ -41,11 +41,9 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.minlog.Log;
 import com.lemoninc.nimbusrun.NimbusRun;
 import com.lemoninc.nimbusrun.Sprites.GameMap;
-import com.lemoninc.nimbusrun.Sprites.Player;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class EndScreen implements Screen{
 
@@ -53,9 +51,11 @@ public class EndScreen implements Screen{
     private GameMap gameMap;
     private OrthographicCamera gamecam;
     private Viewport gameport;
-    private Map<Integer, Player> players;
     private List<Integer> rankings;
     private int numPlayers;
+    private List<Integer> playerTypes;
+    private List<Texture> spritesTXT;
+    private List<Sprite> sprites;
 
     private SpriteBatch batch, winner, second, third, last;
     Music music;
@@ -64,11 +64,10 @@ public class EndScreen implements Screen{
     private TextButton Continue;
     private Stage stage;
 
-    private List<Sprite> dummySprites;
-
-    public EndScreen(NimbusRun game, Boolean playmusic, Map<Integer, Player> players, List<Integer> rankings){
-        this.playmusic=playmusic;
+    public EndScreen(NimbusRun game, Boolean playmusic){
+        this.playmusic = playmusic;
         this.game = game;
+
         gamecam = new OrthographicCamera();
         gameport = new FitViewport(game.V_WIDTH / game.PPM, game.V_HEIGHT / game.PPM, gamecam);
 
@@ -80,7 +79,7 @@ public class EndScreen implements Screen{
         }
 
         stage= new Stage(new ExtendViewport(game.V_WIDTH, game.V_HEIGHT));
-        this.players = players;
+
         this.rankings = rankings;
 
         //Log.info(players.size() + " size");
@@ -96,36 +95,21 @@ public class EndScreen implements Screen{
 
         Continue = new TextButton("Click to Return", style);
         Continue.setSize(250, 75);
-        //Continue.setPosition(game.V_WIDTH/game.PPM*0.8f, game.V_HEIGHT/game.PPM*0.8f, Align.bottomLeft);
         Continue.setPosition(game.V_WIDTH / game.PPM * 0.8f, game.V_HEIGHT / game.PPM * 0.8f, Align.bottomLeft);
         stage.addActor(Continue);
 
-        /*
-        *  remove code below after removal of dummyPlayers
-         */
-        dummySprites = new ArrayList<Sprite>();
-        dummySprites.add(new Sprite(new Texture(Gdx.files.internal("5_EndScreen/btn_kappa.png"))));
-        dummySprites.add(new Sprite(new Texture(Gdx.files.internal("5_EndScreen/btn_madame.png"))));
-        dummySprites.add(new Sprite(new Texture(Gdx.files.internal("5_EndScreen/btn_kappa.png"))));
-        dummySprites.get(0).setSize(150, 150);
-        dummySprites.get(1).setSize(150, 150);
-        dummySprites.get(2).setSize(150, 150);
 
-        int i=1;
+        /* Waiting for Nikki's ranking arraylist and playerType (kappa? etc.) arraylist */
+        playerTypes = new ArrayList<Integer>();
+        playerTypes.add(0); playerTypes.add(0); playerTypes.add(1); // Laughing Buddha, Foxy, then Kappa
+        rankings = new ArrayList<Integer>();
+        rankings.add(1); rankings.add(2); rankings.add(3);
+        // player 2 is rank 1, player 1 is rank 2, player 3 is rank 3
+        // so Foxy is most right, Kappa is most left
 
-        float positionX = Gdx.graphics.getWidth() / 4;
-        Log.info("Hello" + positionX);
-        int numPlayers = dummySprites.size();
-        for (Sprite sprite : dummySprites) {
-            int ranking = i++;
+        numPlayers = playerTypes.size();
+        initChar();
 
-            // formula for setting X positions based on rankings
-            // ((numPlayers - ranking + 1)/(numPlayers+1))
-            Log.info("numplayers: "+ numPlayers + " " + ranking + " " + Gdx.graphics.getWidth());
-            sprite.setPosition(((gameport.getWorldWidth() * ((numPlayers - ranking + 1f)/(numPlayers+1f)))),gameport.getWorldHeight()/2);
-            // positionX += (Gdx.graphics.getWidth() * ((numPlayers - ranking + 1)/(numPlayers+1)));
-            Log.info("pos " + (Gdx.graphics.getWidth() * ((numPlayers - ranking + 1f)/(numPlayers+1f))));
-        }
 
     }
 
@@ -149,24 +133,13 @@ public class EndScreen implements Screen{
 
         //batch.setProjectionMatrix(gamecam.combined);
         batch.begin();
-        //Log.info("hello" + dummySprites.size() + " " + rankings.size());
 
-        for (Sprite sprite : dummySprites) {
-            sprite.draw(batch);
+        Log.info("width: " + gameport.getWorldWidth() + " " + gameport.getScreenWidth() + " " + gameport.getWorldHeight() + " " + gameport.getScreenHeight());
+
+        for (int i=0; i<rankings.size(); i++) {
+            sprites.get(rankings.get(i)-1).setPosition(Gdx.graphics.getWidth() * (numPlayers - (i+1) + 1f)/(numPlayers+1f), Gdx.graphics.getHeight()/2);
+            sprites.get(rankings.get(i)-1).draw(batch);
         }
-
-        /*
-        Use the code below to replace the dummy player sprites
-         */
-//        int numPlayers = players.size();
-//        for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {
-//            Player curPlayer = playerEntry.getValue();
-//            int ranking = rankings.indexOf(playerEntry.getKey());
-//            // formula for setting X positions based on rankings
-//            curPlayer.setX(game.V_WIDTH/game.PPM * ((numPlayers - ranking + 1)/(numPlayers+1)));
-//            Log.info("pos " + (game.V_WIDTH/game.PPM * ((numPlayers - ranking + 1)/(numPlayers+1))));
-//            curPlayer.draw(batch);
-//        }
 
         batch.end();
         Gdx.input.setInputProcessor(stage);
@@ -188,7 +161,9 @@ public class EndScreen implements Screen{
     public void resume() {    }
 
     @Override
-    public void hide() {  dispose();  }
+    public void hide() {
+        dispose();
+    }
 
     public Viewport getGamePort(){
         return gameport;
@@ -196,13 +171,43 @@ public class EndScreen implements Screen{
 
     @Override
     public void dispose() {
-        //stage.dispose();
         music.dispose();
-        //gameMap.getWorld().dispose();
+        for (Texture txt: spritesTXT) { txt.dispose(); }
         //stage.dispose();
-//        for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {
-//            playerEntry.getValue().dispose();
-//        }
-        //this.players.clear();
+    }
+
+    public void initChar() {
+
+        spritesTXT = new ArrayList<Texture>();
+
+        spritesTXT.add(new Texture("5_EndScreen/LaughingBuddha.png"));
+        spritesTXT.add(new Texture("5_EndScreen/Krishna.png"));
+        spritesTXT.add(new Texture("5_EndScreen/Foxy.png"));
+        spritesTXT.add(new Texture("5_EndScreen/Kappa.png"));
+        spritesTXT.add(new Texture("5_EndScreen/Pontianak.png"));
+        spritesTXT.add(new Texture("5_EndScreen/WhiteSnake.png"));
+
+        sprites = new ArrayList<Sprite>();
+        for (int i=0; i<numPlayers; i++) {
+            Sprite sprite;
+            switch(playerTypes.get(i)){
+                // 1. LAUGHING BUDDHA
+                // 2. SHESHNAH WITH KRISHNA
+                // 3. NINE-TAILED FOX
+                // 4. KAPPA
+                // 5. PONTIANAK
+                // 6. MADAME WHITE SNAKE
+                case 0: sprite = new Sprite(spritesTXT.get(0)); break;
+                case 1: sprite = new Sprite(spritesTXT.get(1)); break;
+                case 2: sprite = new Sprite(spritesTXT.get(2)); break;
+                case 3: sprite = new Sprite(spritesTXT.get(3)); break;
+                case 4: sprite = new Sprite(spritesTXT.get(4)); break;
+                case 5: sprite = new Sprite(spritesTXT.get(5)); break;
+                default: sprite = new Sprite(spritesTXT.get(0)); break;
+            }
+            sprite.setSize(200, 200);
+            sprites.add(sprite);
+        }
+
     }
 }
