@@ -5,7 +5,6 @@
  *
  * NOTES : The screen takes input from the waitscreen and moves to waitscreen
  * TODO: Create a waiting function for all the players to connect and wait for each other,
- * TODO: get the input in the screen a string of the host ip adress, (right now IP=string localhost)
  * TODO: The wait can be onclick of the joingame button
  * TODO: Implement the counter on the basis of the players connected
  * The function has a string name of the player it has chosen, pass this to the playscreen/player to choose the specific character.

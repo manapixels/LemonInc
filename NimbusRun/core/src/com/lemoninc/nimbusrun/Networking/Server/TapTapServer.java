@@ -154,6 +154,15 @@ public class TapTapServer {
                     server.sendToAllExceptTCP(connection.getID(), msg);
                     Gdx.app.log("GDX Server", "Let the game begin");
                 }
+                else if (message instanceof Network.PlayerAttack) {
+                    Gdx.app.log("GDX TapTapServer PlayerAttack", "PlayerAttack received");
+                    Network.PlayerAttack msg = (Network.PlayerAttack) message;
+                    //server checks if player can attack
+                    if (map.onPlayerAttack(msg)) {
+                        Gdx.app.log("GDX TapTapServer PlayerAttack", "Player can attack");
+                        server.sendToAllExceptTCP(connection.getID(), msg);
+                    }
+                }
             }
 
             //TODO: what happens here when a player is rejected cos game room is full?

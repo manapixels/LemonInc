@@ -90,7 +90,6 @@ public class GameMap{
      * This constructor is called inside TapTapClient
      */
     public GameMap(TapTapClient client, int[] mapData) {
-//TODO: how is mapdata passed into GameMap? After instantiation?
         this.client = client;
         this.isClient = true;
         this.mapData = mapData;
@@ -134,9 +133,6 @@ public class GameMap{
 
         bgPlatformSprites = new ArrayList<Sprite>();
 
-        //TODO: these are created by Server and server sends GameMapStatus to clients
-
-
 //        logInfo("GameMap initialised");
         Gdx.app.log("GDX GameMap", "GameMap instantiated in Client");
 
@@ -172,13 +168,15 @@ public class GameMap{
         for (Map.Entry<Integer, DummyPlayer> playerEntry : dummyPlayers.entrySet()) {
             DummyPlayer curPlayer = playerEntry.getValue();
             if (curPlayer.isLocal) {
-                playerLocal = new Player(this, getImg(curPlayer.character), curPlayer.x, curPlayer.y, true);
+                playerLocal = new Player(this, getImg(curPlayer.character), curPlayer.x, curPlayer.y, true, curPlayer.character);
+                playerLocal.setId(curPlayer.playerID);
                 playerLocal.setName(curPlayer.playerName);
                 players.put(curPlayer.playerID, playerLocal);
                 rankings.add(curPlayer.playerID);
             }
             else {
-                Player newPlayer= new Player(this, getImg(curPlayer.character), curPlayer.x, curPlayer.y, false);
+                Player newPlayer= new Player(this, getImg(curPlayer.character), curPlayer.x, curPlayer.y, false, curPlayer.character);
+                newPlayer.setId(curPlayer.playerID);
                 newPlayer.setName(curPlayer.playerName);
                 players.put(curPlayer.playerID, newPlayer);
 
@@ -188,7 +186,7 @@ public class GameMap{
 
     public void createEnv() {
         //add these sprites to the world
-        ground = new Ground(this, mapData, NUMPLATFORMS); //TODO: need to be created after MapData is received. At PlayScreen?
+        ground = new Ground(this, mapData, NUMPLATFORMS);
         ceiling = new Ceiling(this);
         startWall = new StartWall(this);
         endWall = new EndWall(this);
@@ -226,6 +224,93 @@ public class GameMap{
         this.mapData = mapData;
     }
 
+    public synchronized void playerMoved(Network.MovementState msg) {
+        //TODO: players should be ConcurrentHashMap?
+        Player player = players.get(msg.playerId);
+        if (player != null) {
+            Gdx.app.log("GDX GameMap", "Player "+player.getName()+" moved");
+            player.setMovementState(msg);
+        }
+    }
+
+    public void playerAttacked(Network.PlayerAttack msg) {
+        //apply effect of the attack on every other playrs
+
+        // 1. LAUGHING BUDDHA
+        // 2. SHESHNAH WITH KRISHNA
+        // 3. NINE-TAILED FOX
+        // 4. KAPPA
+        // 5. PONTIANAK
+        // 6. MADAME WHITE SNAKE
+
+//        Player attacker = getPlayerById(msg.id);
+
+        switch(msg.character) {
+            case 1: stunExceptId(msg.id); break;
+            case 2: flashExceptId(msg.id); break;
+            case 3: confuseExceptId(msg.id); break;
+            case 4: reverseExceptId(msg.id); break;
+            case 5: terrorExceptId(msg.id); break;
+            case 6: poisonExceptId(msg.id); break;
+            default: stunExceptId(msg.id); break;
+
+        }
+    }
+
+    public void stunExceptId(int id) {
+        for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {
+            Player curPlayer = playerEntry.getValue();
+            if (curPlayer.getId() != id) {
+                curPlayer.stun();
+            }
+        }
+    }
+
+    public void poisonExceptId(int id) {
+        for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {
+            Player curPlayer = playerEntry.getValue();
+            if (curPlayer.getId() != id) {
+                curPlayer.poison();
+            }
+        }
+    }
+
+    public void reverseExceptId(int id) {
+        for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {
+            Player curPlayer = playerEntry.getValue();
+            if (curPlayer.getId() != id) {
+                curPlayer.reverse();
+            }
+        }
+    }
+
+    public void terrorExceptId(int id) {
+        for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {
+            Player curPlayer = playerEntry.getValue();
+            if (curPlayer.getId() != id) {
+                curPlayer.terror();
+            }
+        }
+    }
+
+    public void flashExceptId(int id) {
+        for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {
+            Player curPlayer = playerEntry.getValue();
+            if (curPlayer.getId() != id) {
+                curPlayer.flash();
+            }
+        }
+    }
+
+    public void confuseExceptId(int id) {
+        for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {
+            Player curPlayer = playerEntry.getValue();
+            if (curPlayer.getId() != id) {
+                curPlayer.confuse();
+            }
+        }
+    }
+
     /**
      * Client receives PlayerJoinLeave from server containing player ID, name, initial x and y
      * @param msg
@@ -243,6 +328,22 @@ public class GameMap{
         }
     }
 
+    public boolean onPlayerAttack(Network.PlayerAttack msg) {
+        Gdx.app.log("GDX GameMap onPlayerAttack", "");
+
+        Player player = getPlayerById(msg.id);
+
+        if (player != null) {
+            if (!player.attack()) {
+                return false;
+            }
+        }
+        else {
+            Gdx.app.log("GDX GameMap onPlayerAttack", "player was null");
+        }
+        return true;
+    }
+
     /**
      * This method is only called in Character Selection screen
      * @param msg
@@ -256,14 +357,7 @@ public class GameMap{
 //        logInfo("Player " +msg.playerId+" added to players!");
     }
 
-    public synchronized void playerMoved(Network.MovementState msg) {
-        //TODO: players should be ConcurrentHashMap?
-        Player player = players.get(msg.playerId);
-        if (player != null) {
-            Gdx.app.log("GDX GameMap", "Player "+player.getName()+" moved");
-            player.setMovementState(msg);
-        }
-    }
+
 
     /**
      * Destroy the disconnected player's body from world
@@ -440,6 +534,10 @@ public class GameMap{
 
     public synchronized void logInfo(String string) {
        // Log.info("[GameMap]: " + (isClient ? "[Client] " : "[Server] ") + string);
+    }
+
+    public void clientSendMessage(Object msg) {
+        client.sendMessage(msg);
     }
 
     public void dispose() {
