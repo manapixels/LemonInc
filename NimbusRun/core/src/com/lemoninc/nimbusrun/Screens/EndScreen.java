@@ -14,7 +14,7 @@ package com.lemoninc.nimbusrun.Screens;
  *       Viewport   getGamePort(()
  *       void       dispose()
  * NOTES :
- * LAST UPDATED: 18/4/2016 21:37
+ * LAST UPDATED: 8/4/2016 09:00
  *
  * ********************************/
 
@@ -28,7 +28,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -84,18 +83,21 @@ public class EndScreen implements Screen{
         this.players = players;
         this.rankings = rankings;
 
+        //Log.info(players.size() + " size");
+
         batch = new SpriteBatch();
 
         style = new TextButton.TextButtonStyle();  //can customize
         style.font = new BitmapFont(Gdx.files.internal("Fonts/crimesFont48Black.fnt"));
-        style.font.setColor(Color.BLUE);
+        style.font.setColor(Color.RED);
         style.font.getData().setScale(0.65f, 0.65f);
         style.up= new TextureRegionDrawable(new TextureRegion(new Texture("5_EndScreen/button_up.png")));
-        style.down= new TextureRegionDrawable(new TextureRegion(new Texture("5_EndScreen/button_down.png")));
+        style.down= new TextureRegionDrawable(new TextureRegion(new Texture("5_EndScreen/button_down1.png")));
 
         Continue = new TextButton("Click to Return", style);
         Continue.setSize(250, 75);
-        Continue.setPosition(game.V_WIDTH / game.PPM * 0.8f, game.V_HEIGHT / game.PPM * 0.8f);
+        //Continue.setPosition(game.V_WIDTH/game.PPM*0.8f, game.V_HEIGHT/game.PPM*0.8f, Align.bottomLeft);
+        Continue.setPosition(game.V_WIDTH / game.PPM * 0.8f, game.V_HEIGHT / game.PPM * 0.8f, Align.bottomLeft);
         stage.addActor(Continue);
 
         /*
@@ -198,9 +200,9 @@ public class EndScreen implements Screen{
         music.dispose();
         //gameMap.getWorld().dispose();
         //stage.dispose();
-        for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {
-            playerEntry.getValue().dispose();
-        }
+//        for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {
+//            playerEntry.getValue().dispose();
+//        }
         //this.players.clear();
     }
 }

@@ -81,7 +81,7 @@ public class CharacterSelectionScreen implements Screen{
     Boolean playmusic;
     Music music;
     Sound soundclick;
-    private int charactername = 99;
+    public int charactername = 99;
     private String myIP;
 
     private TapTapClient client;
@@ -110,6 +110,11 @@ public class CharacterSelectionScreen implements Screen{
         BUTTON_HEIGHT=165;
         BUTTON_WIDTH=140;
 
+        //myIP=ipAddress;
+        Playerability="STUN";
+        charactername=1; //default character is Buddha
+        BUTTON_HEIGHT=150;
+        BUTTON_WIDTH=125;
         soundclick=Gdx.audio.newSound(Gdx.files.internal("Sounds/click.mp3"));
 
         music=Gdx.audio.newMusic(Gdx.files.internal("Sounds/characterselectionscreen.mp3"));
@@ -145,6 +150,7 @@ public class CharacterSelectionScreen implements Screen{
         final Table table = new Table();
         table.right();
         table.setFillParent(true);
+
 
         //Title=new Label(String.format("%03d","Choose your Avatar"),new Label.LabelStyle(new BitmapFont(Gdx.files.internal("Fonts/crime.fnt")), Color.DARK_GRAY));
         Title=new Label("Choose Your Character",new Label.LabelStyle(new BitmapFont(Gdx.files.internal("Fonts/crimesFont48Black.fnt")), Color.DARK_GRAY));
@@ -487,7 +493,7 @@ public class CharacterSelectionScreen implements Screen{
 
     public void playGame(){
         stage.clear();
-        game.setScreen(new PlayScreen(game, isHost, playername, client, server, playmusic));
+        game.setScreen(new PlayScreen(game, isHost, playername, client, server,playmusic,charactername));
     }
 
     public void goToMenu(){
@@ -496,7 +502,7 @@ public class CharacterSelectionScreen implements Screen{
         //TODO: shutdown client, server
 
     }
-
+    
 //    public void goPlayScreen() {
 //        game.setScreen(new PlayScreen(game, isHost, playername, client, server));
 //
