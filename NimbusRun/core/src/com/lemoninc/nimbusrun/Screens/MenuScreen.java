@@ -68,7 +68,7 @@ public class MenuScreen implements Screen {
         BUTTON_HEIGHT=75;
         BUTTON_WIDTH=120;
 
-        music=Gdx.audio.newMusic(Gdx.files.internal("Sounds/menuscreenmusic.mp3"));
+        music = Gdx.audio.newMusic(Gdx.files.internal("Sounds/menuscreenmusic.mp3"));
         music.play();
         music.setVolume(0.5f);                 // sets the volume to half the maximum volume
         music.setLooping(true);

@@ -73,7 +73,8 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
         gameOverInitiated = false;
         Gdx.app.log("world length",String.valueOf(worldLength));
 
-        worldTimer = 1;     //HOW LONG RACE LASTS
+        worldTimer = 150;
+        timecount=0;
 
         timecount=0;
         viewport=new FillViewport(NimbusRun.V_WIDTH,NimbusRun.V_HEIGHT,new OrthographicCamera());
