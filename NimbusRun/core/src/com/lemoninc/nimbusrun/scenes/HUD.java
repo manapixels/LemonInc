@@ -35,13 +35,13 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
     public Stage stage;
     private Viewport viewport;
     public Integer worldTimer;
-    private Label playername;
+    private Label nameLabel;
     //private float timecount;
     Label countdownLabel;
     Label timelabel;
     Label CharacterLabel;
     private Camera camera;
-    String player;
+
     private ShapeRenderer shapeRenderer;
     private float progress;
     private Map<Integer, Player> players;
@@ -63,16 +63,16 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
     int characternumber,position;
     Window scorewindow,timewindow,powerupwindow,charinfowindow;
     Label positionboardlabel, GlobalState, Poweruplabel, PowerUpsLeft,Powertype,yourposition;
-    String playernamestring,playerpowerstring;
     TextureRegionDrawable windowbackground;
 
-    public  HUD(SpriteBatch sb, String playernumber, GameMap gameMap,int characternumber){
-        this.characternumber=characternumber;
-        this.player=playernumber;
+    public HUD(SpriteBatch sb, String playername, GameMap gameMap,int characternumber){
+//        this.characternumber=characternumber;
+
         this.gameMap=gameMap;
 
         //playerLocalX =gameMap.bgStartX;
         //worldLength = 18*gameMap.getGameport().getWorldWidth();
+
         Gdx.app.log("world length",String.valueOf(worldLength));
         powerupdistance=worldLength/3;
 
@@ -83,9 +83,11 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
 
 
         timecount=0;
+
         camera=new PerspectiveCamera();
         viewport=new FillViewport(NimbusRun.V_WIDTH,NimbusRun.V_HEIGHT,new OrthographicCamera());
         shapeRenderer=new ShapeRenderer();
+
         progress=1f;
         powerup=0f;
         count=3;
@@ -160,6 +162,7 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
         table.setHeight(viewport.getScreenHeight());
         table.setWidth(viewport.getScreenWidth());
         table.setFillParent(true);
+
         // 1. LAUGHING BUDDHA
         // 2. SHESHNAH WITH KRISHNA
         // 3. NINE-TAILED FOX
@@ -167,41 +170,12 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
         // 5. PONTIANAK
         // 6. MADAME WHITE SNAKE
 
-        if(characternumber==1){
-            playernamestring="LAUGHING BUDDHA";
-            playerpowerstring="STUN";
-        }
-        else if(characternumber==2){
-            playernamestring="SHESHNAH WITH KRISHNA";
-            playerpowerstring="FLASH LIGHT";
-        }
-        else if(characternumber==3){
-            playernamestring="NINE-TAILED FOX";
-            playerpowerstring="SUCKS BACK";
-        }
-        else if(characternumber==4){
-            playernamestring=" KAPPA";
-            playerpowerstring="FREEZE";
-        }
-        else if(characternumber==5){
-            playernamestring="PONTIANAK";
-            playerpowerstring="DARKEN";
-        }
-        else if(characternumber==6){
-            playernamestring="MADAME WHITE SNAKE";
-            playerpowerstring="JUMP STOP";
-        }
-        else {
-            playernamestring="LAUGHING BUDDHA";
-            playerpowerstring="STUN";
-        }
-
 
         timelabel=new Label("TIME",new Label.LabelStyle(font,Color.WHITE)); //BLUE "#44a4c5"
         CharacterLabel=new Label("PLAYER",new Label.LabelStyle(font, Color.YELLOW));   //
         countdownLabel=new Label(String.format("%03d",worldTimer),new Label.LabelStyle(font, Color.YELLOW));
-        playername=new Label(playernamestring,new Label.LabelStyle(font, Color.BLACK));
-        Powertype=new Label("POWER: "+playerpowerstring,new Label.LabelStyle(font, Color.RED)); //DARK BLUE
+        nameLabel=new Label(playername,new Label.LabelStyle(font, Color.BLACK));
+//        Powertype=new Label("POWER: "+playerpowerstring,new Label.LabelStyle(font, Color.RED)); //DARK BLUE
         positionboardlabel=new Label("POSITION",new Label.LabelStyle(font, Color.WHITE));
         yourposition=new Label(String.format("%01d",position),new Label.LabelStyle(font, Color.YELLOW));
         GlobalState=new Label("World has been:",new Label.LabelStyle(font, Color.YELLOW));
@@ -236,7 +210,7 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
 //        table.add(powerupwindow).expand();
  //       table.layout();
         table.row();
-        table.add(playername).expand().align(Align.bottom);
+        table.add(nameLabel).expand().align(Align.bottom);
         table.add();
         table.add(Poweruplabel).expand().align(Align.bottom);
         table.row();

@@ -82,8 +82,6 @@ public class EndScreen implements Screen{
 
         this.rankings = rankings;
 
-        //Log.info(players.size() + " size");
-
         batch = new SpriteBatch();
 
         style = new TextButton.TextButtonStyle();  //can customize

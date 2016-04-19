@@ -32,6 +32,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.esotericsoftware.minlog.Log;
 import com.lemoninc.nimbusrun.Networking.Client.TapTapClient;
 import com.lemoninc.nimbusrun.Networking.Network;
 import com.lemoninc.nimbusrun.Networking.Server.TapTapServer;
@@ -79,7 +80,7 @@ public class GameMap{
     private int[] mapData;
     public static final int NUMPLATFORMS = 8;
 
-    private Player playerLocal;
+    public Player playerLocal;
     private DummyPlayer dummyLocal;
 
     private int sourceX;
@@ -96,16 +97,6 @@ public class GameMap{
         //instantiate HUD, GameSounds, BitmapFont, Camera, SpriteBatch ...
         initCommon();
         gameMapReadyForHUD = false;
-
-        //font for player names on avatars
-//        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("PlayScreen/SF Atarian System.ttf"));
-//        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-//        parameter.size = 10;
-//        font = generator.generateFont(parameter);
-//        font.setColor(Color.WHITE);
-//        font.getData().setScale(0.1f, 0.1f);
-//        font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-//        generator.dispose();
 
         //set starting pos of bgSprites after setting cam
         bgStartX = -gameport.getWorldWidth() * 1.5f;
@@ -131,7 +122,6 @@ public class GameMap{
         bgPlatformSprites = new ArrayList<Sprite>();
 
         finishLine = new Sprite(new Texture("4_PlayScreen/finishLine.png"));
-
         //TODO: these are created by Server and server sends GameMapStatus to clients
 
 //        logInfo("GameMap initialised");
@@ -346,6 +336,8 @@ public class GameMap{
     public boolean onPlayerAttack(Network.PlayerAttack msg) {
         Gdx.app.log("GDX GameMap onPlayerAttack", "");
 
+        //hud displays msg.id casted _____ <- switch-case (character = 1, String value = Laughing ..._)
+
         Player player = getPlayerById(msg.id);
 
         if (player != null) {
@@ -426,6 +418,23 @@ public class GameMap{
 
     public Viewport getGameport() { return this.gameport; }
 
+    public boolean getAllFinished(){
+        int maxPlayers = players.size();
+        for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {
+            Player curPlayer = playerEntry.getValue();
+            if (client != null && curPlayer != null) {
+                if (curPlayer.isFinished()){
+                    maxPlayers--;
+                }
+            }
+        }
+        if (maxPlayers == 0){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     /**
      * Update GameMap's state.
      * This method is only called in PlayScreen
@@ -460,9 +469,7 @@ public class GameMap{
         if (!isClient) {
 
         }
-
         //TODO: I put this in update for the server to do its calculation
-
     }
 
     /**

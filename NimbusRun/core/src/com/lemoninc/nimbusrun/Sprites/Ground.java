@@ -53,6 +53,9 @@ public class Ground {
             endX += gameMap.getGameport().getWorldWidth()*2;
         }
         makeFlatGround(startX, endX);
+        startX = endX;
+        endX += gameMap.getGameport().getWorldWidth()*2;
+        makeFlatGround(startX, endX);
     }
 
     private void makeFlatGround(float x1, float x2) {

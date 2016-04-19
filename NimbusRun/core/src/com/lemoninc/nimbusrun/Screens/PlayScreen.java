@@ -103,6 +103,8 @@ public class PlayScreen implements Screen{
         if (isHost) {
             server.initPlayers();
         }
+
+        Gdx.input.setInputProcessor(gamemap.playerLocal);
     }
 
     @Override
@@ -117,7 +119,7 @@ public class PlayScreen implements Screen{
         hud.render();
         hud.stage.draw();
 
-        if (hud.worldTimer == 0) {
+        if (hud.worldTimer == 0 || gamemap.getAllFinished()) {
             music.stop();
             gameOver();
         }
