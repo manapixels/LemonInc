@@ -80,7 +80,7 @@ public class GameMap{
     private int[] mapData;
     public static final int NUMPLATFORMS = 8;
 
-    private Player playerLocal;
+    public Player playerLocal;
     private DummyPlayer dummyLocal;
 
     private int sourceX;
@@ -335,6 +335,8 @@ public class GameMap{
 
     public boolean onPlayerAttack(Network.PlayerAttack msg) {
         Gdx.app.log("GDX GameMap onPlayerAttack", "");
+
+        //hud displays msg.id casted _____ <- switch-case (character = 1, String value = Laughing ..._)
 
         Player player = getPlayerById(msg.id);
 
