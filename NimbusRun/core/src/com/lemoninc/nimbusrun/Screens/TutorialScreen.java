@@ -103,23 +103,10 @@ public class TutorialScreen implements Screen{
             public void clicked(InputEvent event, float x, float y) {
                 soundclick.play();
                click++;
-                    if (click==1)
+                    if (click==1){
                         sprite.setTexture(new Texture("2_TutorialScreen/Tutorials_pg2.png"));
-                    if(click==2)
-                        sprite.setTexture(new Texture("2_TutorialScreen/TutorialScreens_Buddha.png"));
-                    if(click==3)
-                        sprite.setTexture(new Texture("2_TutorialScreen/TutorialScreens_Foxy.png"));
-                    if(click==4)
-                        sprite.setTexture(new Texture("2_TutorialScreen/TutorialScreens_Kappa.png"));
-                    if (click==5)
-                        sprite.setTexture(new Texture("2_TutorialScreen/TutorialScreens_Krishna.png"));
-                    if(click==6)
-                        sprite.setTexture(new Texture("2_TutorialScreen/TutorialScreens_Pontianak.png"));
-                     if(click==7) {
-                         sprite.setTexture(new Texture("2_TutorialScreen/TutorialScreens_WhiteSnake.png"));
-                         Next.remove();
-                         stage.addActor(Return);
-                     }
+                        Next.remove();
+                        stage.addActor(Return);}
             }
 
         });
