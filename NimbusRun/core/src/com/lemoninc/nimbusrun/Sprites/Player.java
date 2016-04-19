@@ -73,6 +73,8 @@ public class Player extends Sprite implements InputProcessor{
     private final float MOVESPEEDCAP = 8;
     private float factor = 1;
 
+    private float screenWidth = Gdx.graphics.getWidth();
+
     Vector2 previousPosition;
 
   //  Sound attacksound,jumpsound;
@@ -217,7 +219,7 @@ public class Player extends Sprite implements InputProcessor{
 //                System.out.println("Points are: X=" + Gdx.input.getX() + "Y=" + Gdx.input.getY());
                 int x=Gdx.input.getX();
                 int y=Gdx.input.getY();
-                if(x>NimbusRun.V_WIDTH/2){
+                if(x > screenWidth / 2){
                     if (isConfused()){
                         return this.jump();
                     } else {
@@ -235,15 +237,11 @@ public class Player extends Sprite implements InputProcessor{
                 }
             }
             if(touches.get(0).touched&&touches.get(1).touched){
-                if(touches.get(0).touchX<(NimbusRun.V_WIDTH/2)&&touches.get(1).touchX>(NimbusRun.V_WIDTH-(NimbusRun.V_WIDTH/2))){
-      //              attacksound.play();
-                    // TODO: Implement method for attack
-                    //player1.attack;
+                if(touches.get(0).touchX<(screenWidth/2)&&touches.get(1).touchX>(screenWidth-(screenWidth/2))){
+                    flash();
                 }
-                else if(touches.get(1).touchX<(NimbusRun.V_WIDTH/2)&&touches.get(0).touchX>(NimbusRun.V_WIDTH-(NimbusRun.V_WIDTH/2))) {
-        //            attacksound.play();
-                    //TODO: Implement method for attack
-                    //player1.attack
+                else if(touches.get(1).touchX<(screenWidth/2)&&touches.get(0).touchX>(screenWidth-(screenWidth/2))) {
+                    terror();
                 }
             }
         }
@@ -285,12 +283,6 @@ public class Player extends Sprite implements InputProcessor{
 
     public void update(float delta){
         recover(1f);
-//        Log.info("Player isStunned " + isStunned() + " stunTime " + getStunTime());
-//        Log.info("Player isPoisoned " + isPoisoned() + " poisonTime " + getPoisonTime());
-//        Log.info("Player isReversed " + isReversed() + " reverseTime " + getReverseTime());
-//        Log.info("Player isBlackHoled " + isBlackHoled() + " blackHoleTime " + getBlackHoleTime());
-//        Log.info("Player isFlashed " + isFlashed() + " flashTime" + getFlashTime());
-//        Log.info("Player isConfused " + isConfused() + " confuseTime " + getConfuseTime());
     }
 
     public boolean recover(float delta) {

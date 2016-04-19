@@ -69,6 +69,8 @@ public class GameMap{
     private Texture bgTextureFlat, bgTextureMountain, bgTexturePit, bgTexturePlateau;
     private List<Sprite> bgPlatformSprites;
 
+    private Sprite finishLine;
+
     private World world;
     private Box2DDebugRenderer b2dr;
     private Ground ground;
@@ -121,6 +123,8 @@ public class GameMap{
         bgTexturePit = new Texture("4_PlayScreen/platform_pit.png");
 
         bgPlatformSprites = new ArrayList<Sprite>();
+
+        finishLine = new Sprite(new Texture("4_PlayScreen/finishLine.png"));
 
         //TODO: these are created by Server and server sends GameMapStatus to clients
 
@@ -181,6 +185,12 @@ public class GameMap{
         ceiling = new Ceiling(this);
         startWall = new StartWall(this);
         endWall = new EndWall(this);
+        setFinishLine();
+    }
+
+    private void setFinishLine(){
+        finishLine.setPosition(0, 0);
+        finishLine.setSize(finishLine.getWidth() * 0.01f, finishLine.getHeight() * 0.01f);
     }
 
     private TextureAtlas getImg(int character) {
@@ -323,9 +333,7 @@ public class GameMap{
             if (playerLocal.handleInput()) { // (arrow key has been pressed by player)
                 client.sendMessageUDP(playerLocal.getMovementState()); //send movement state to server
                 Gdx.app.log("GDX GameMap", "Sent MovementState to Server");
-
             }
-
             //gamecam constantly to follow playerLocal
             gamecam.position.set(playerLocal.getX(), playerLocal.getY(), 0);
             gamecam.update();
@@ -368,7 +376,8 @@ public class GameMap{
         for (Sprite sprite : bgPlatformSprites) {
             sprite.draw(batch);
         }
-
+        // finishLine sprite rendered after background & platforms but before players
+        finishLine.draw(batch);
         // Render Players
         for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {
             Player curPlayer = playerEntry.getValue();

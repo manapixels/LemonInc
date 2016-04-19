@@ -87,8 +87,6 @@ public class PlayScreen implements Screen{
         gamemap.initPlayers(); //called before gamemap.render
         gamemap.createEnv(); //create ground, ceiling, etc
 
-
-
         music=Gdx.audio.newMusic(Gdx.files.internal("Sounds/gamescreen.mp3"));
         music.setVolume(0.5f);                 // sets the volume to half the maximum volume
         music.setLooping(true);
