@@ -105,8 +105,6 @@ public class Player extends Sprite implements InputProcessor {
         CHARACTER_SIZE = 220 / NimbusRun.PPM;
         stateTime = 0f;
 
-
-
         //debuff variables
         stunTime = 0f;
         stunned = false;
@@ -358,7 +356,8 @@ public class Player extends Sprite implements InputProcessor {
         if (gameMap.getHud().count_initial > 0){
             stunned = true;
             stunTime = 1f;
-        } else {
+        }
+        else {
             recover(1f);
         }
     }
@@ -436,7 +435,6 @@ public class Player extends Sprite implements InputProcessor {
     }
 
     public boolean stun() {
-//        buddhaSound.play();
         stunned = true;
         stunTime = 150f;
         b2body.setLinearVelocity(new Vector2(0, 0));
@@ -444,36 +442,33 @@ public class Player extends Sprite implements InputProcessor {
     }
 
     public boolean poison() {
-//        snakeSound.play();
         poisoned = true;
         poisonTime = 300f;
         return true;
     }
 
     public boolean reverse() {
-//        kappaSound.play();
         reversed = true;
         reverseTime = 250f;
         return true;
     }
 
     public boolean terror() {
-//        pontianakSound.play();
-        terrored = true;
-        b2body.setLinearVelocity(0, 0);
-        terrorTime = 75f;
+        if (!isFinished()){
+            terrored = true;
+            b2body.setLinearVelocity(0, 0);
+            terrorTime = 75f;
+        }
         return true;
     }
 
     public boolean flash() {
-//        krishnaSound.play();
         flashed = true;
         flashTime = 250f;
         return true;
     }
 
     public boolean confuse() {
-//        gumihoSound.play();
         confused = true;
         confuseTime = 500f;
         return true;
@@ -509,8 +504,10 @@ public class Player extends Sprite implements InputProcessor {
     }
 
     public boolean moveLeft(float factor) {     //NOTE: NEVER CALLED BY PLAYER INPUT, ONLY CALLED WHEN REVERSED
-        if (b2body.getLinearVelocity().x >= -MOVESPEEDCAP * factor) {
-            b2body.applyLinearImpulse(new Vector2(-MOVEFORCE * factor, 0), b2body.getWorldCenter(), true);
+        if (!isFinished()) {
+            if (b2body.getLinearVelocity().x >= -MOVESPEEDCAP * factor) {
+                b2body.applyLinearImpulse(new Vector2(-MOVEFORCE * factor, 0), b2body.getWorldCenter(), true);
+            }
         }
         return true;
     }

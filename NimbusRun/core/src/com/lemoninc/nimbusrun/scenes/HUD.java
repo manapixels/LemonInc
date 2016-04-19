@@ -70,7 +70,7 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
 
         this.gameMap=gameMap;
         Gdx.app.log("world length",String.valueOf(worldLength));
-        worldTimer = 1;
+        worldTimer = 150;
 
         timecount=0;
 
