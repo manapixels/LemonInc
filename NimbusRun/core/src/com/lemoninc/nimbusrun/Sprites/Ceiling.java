@@ -28,9 +28,9 @@ public class Ceiling {
         BodyDef bdef = new BodyDef();
         bdef.type = BodyDef.BodyType.StaticBody;
         float x1 = -gameMap.getGameport().getWorldWidth();
-        float y1 = gameMap.getGameport().getWorldHeight()*2f;
+        float y1 = gameMap.getGameport().getWorldHeight()*3f;
         float x2 = gameMap.getGameport().getWorldWidth()*19;
-        float y2 = gameMap.getGameport().getWorldHeight()*2f;
+        float y2 = gameMap.getGameport().getWorldHeight()*3f;
 
         FixtureDef fdef = new FixtureDef();
         EdgeShape edgeShape = new EdgeShape();

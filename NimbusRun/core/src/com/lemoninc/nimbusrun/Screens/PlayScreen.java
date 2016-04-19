@@ -58,13 +58,13 @@ public class PlayScreen implements Screen{
      * @param playerName
      */
 
+
     public PlayScreen(NimbusRun game, boolean isHost, String playerName, TapTapClient client, TapTapServer server,Boolean playmusic,int charactername){
         this.charactername=charactername;
         this.playmusic=playmusic;
         this.game = game;
         this.isHost = isHost;
         this.playerName = playerName;
-
         hud = new HUD(game.batch,playerName,gamemap,charactername);
         startTime = TimeUtils.millis();
 
@@ -90,17 +90,16 @@ public class PlayScreen implements Screen{
         gamemap.createEnv(); //create ground, ceiling, etc
         Log.info(playerName + "namenamenamename");
         hud = new HUD(game.batch,playerName,gamemap,charactername);
+        gamemap.passHUD(hud);
         startTime = TimeUtils.millis();
 
         music=Gdx.audio.newMusic(Gdx.files.internal("Sounds/gamescreen.mp3"));
         music.setVolume(0.5f);                 // sets the volume to half the maximum volume
         music.setLooping(true);
 
-
         if(playmusic){
             music.play();
         }
-
         if (isHost) {
             server.initPlayers();
         }
@@ -118,7 +117,7 @@ public class PlayScreen implements Screen{
         hud.render();
         hud.stage.draw();
 
-        if (hud.worldTimer == 0) {
+        if (hud.worldTimer == 0 || gamemap.getAllFinished()) {
             music.stop();
             gameOver();
         }
@@ -126,7 +125,7 @@ public class PlayScreen implements Screen{
     public void gameOver() {
         Log.info("numPlayers" + gamemap.getDummyPlayers().size());
         dispose();
-        game.setScreen(new EndScreen(game, playmusic, gamemap.getPlayers(), gamemap.getRankings()));
+        game.setScreen(new EndScreen(game, playmusic));
     }
 
     @Override
@@ -155,6 +154,7 @@ public class PlayScreen implements Screen{
 
     @Override
     public void dispose() {
+
         music.dispose();
     }
 }

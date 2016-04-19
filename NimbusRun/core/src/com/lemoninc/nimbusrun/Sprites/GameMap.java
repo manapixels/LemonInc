@@ -32,10 +32,12 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.esotericsoftware.minlog.Log;
 import com.lemoninc.nimbusrun.Networking.Client.TapTapClient;
 import com.lemoninc.nimbusrun.Networking.Network;
 import com.lemoninc.nimbusrun.Networking.Server.TapTapServer;
 import com.lemoninc.nimbusrun.NimbusRun;
+import com.lemoninc.nimbusrun.scenes.HUD;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,7 +54,7 @@ public class GameMap{
     private Map<Integer, Player> players = new HashMap<Integer, Player>(); //playerId, Player
     private Map<Integer, DummyPlayer> dummyPlayers = new HashMap<Integer, DummyPlayer>(); //playerId, Player
     private boolean gameMapReadyForHUD;
-
+    private HUD hud;
 
     private OrthographicCamera gamecam;
     private Viewport gameport;
@@ -67,6 +69,8 @@ public class GameMap{
     private Texture bgTextureFlat, bgTextureMountain, bgTexturePit, bgTexturePlateau;
     private List<Sprite> bgPlatformSprites;
 
+    private Sprite finishLine;
+
     private World world;
     private Box2DDebugRenderer b2dr;
     private Ground ground;
@@ -78,7 +82,6 @@ public class GameMap{
 
     private Player playerLocal;
     private DummyPlayer dummyLocal;
-    private List<Integer> rankings = new ArrayList<Integer>();
 
     private int sourceX;
 
@@ -94,16 +97,6 @@ public class GameMap{
         //instantiate HUD, GameSounds, BitmapFont, Camera, SpriteBatch ...
         initCommon();
         gameMapReadyForHUD = false;
-
-        //font for player names on avatars
-//        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("PlayScreen/SF Atarian System.ttf"));
-//        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-//        parameter.size = 10;
-//        font = generator.generateFont(parameter);
-//        font.setColor(Color.WHITE);
-//        font.getData().setScale(0.1f, 0.1f);
-//        font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-//        generator.dispose();
 
         //set starting pos of bgSprites after setting cam
         bgStartX = -gameport.getWorldWidth() * 1.5f;
@@ -127,6 +120,9 @@ public class GameMap{
         bgTexturePit = new Texture("4_PlayScreen/platform_pit.png");
 
         bgPlatformSprites = new ArrayList<Sprite>();
+
+        finishLine = new Sprite(new Texture("4_PlayScreen/finishLine.png"));
+        //TODO: these are created by Server and server sends GameMapStatus to clients
 
 //        logInfo("GameMap initialised");
         Gdx.app.log("GDX GameMap", "GameMap instantiated in Client");
@@ -167,18 +163,24 @@ public class GameMap{
                 playerLocal.setId(curPlayer.playerID);
                 playerLocal.setName(curPlayer.playerName);
                 players.put(curPlayer.playerID, playerLocal);
-                rankings.add(curPlayer.playerID);
+                //rankings.add(curPlayer.playerID);
             }
             else {
                 Player newPlayer= new Player(this, getImg(curPlayer.character), curPlayer.x, curPlayer.y, false, curPlayer.character);
                 newPlayer.setId(curPlayer.playerID);
                 newPlayer.setName(curPlayer.playerName);
                 players.put(curPlayer.playerID, newPlayer);
-                rankings.add(curPlayer.playerID);
+                //rankings.add(curPlayer.playerID);
 
             }
         }
         gameMapReadyForHUD = true;
+    }
+    public void passHUD(HUD hud){
+        this.hud = hud;
+    }
+    public HUD getHud(){
+        return this.hud;
     }
 
     public void createEnv() {
@@ -187,6 +189,12 @@ public class GameMap{
         ceiling = new Ceiling(this);
         startWall = new StartWall(this);
         endWall = new EndWall(this);
+        setFinishLine();
+    }
+
+    private void setFinishLine(){
+        finishLine.setPosition(gameport.getWorldWidth() * 18.5f, 0);
+        finishLine.setSize(finishLine.getWidth() * 0.01f, finishLine.getHeight() * 0.01f);
     }
 
     private TextureAtlas getImg(int character) {
@@ -317,7 +325,6 @@ public class GameMap{
         if (this.dummyLocal == null) {
             dummyLocal = new DummyPlayer(client.id, msg.name, msg.initial_x, msg.initial_y, true);
             dummyPlayers.put(dummyLocal.playerID, dummyLocal);
-            rankings.add(dummyLocal.playerID);
             //hud.setPlayerLocal(playerLocal);
             //setStatus("Connected to " + client.remoteIP);
             Gdx.app.log("GDX GameMap", "local player created at "+msg.initial_x+" "+msg.initial_y);
@@ -352,7 +359,6 @@ public class GameMap{
         DummyPlayer newDummy = new DummyPlayer(msg.playerId, msg.name, msg.initial_x, msg.initial_y, false);
 
         dummyPlayers.put(newDummy.playerID, newDummy);
-        rankings.add(newDummy.playerID);
 //        logInfo("Player " +msg.playerId+" added to players!");
     }
 
@@ -367,7 +373,6 @@ public class GameMap{
      */
     public synchronized void removePlayer(Network.PlayerJoinLeave msg) {
         dummyPlayers.remove(msg.playerId);
-        rankings.remove(rankings.indexOf(msg.playerId));
 
         if (players.get(msg.playerId) != null) {
             world.destroyBody(players.get(msg.playerId).b2body);
@@ -411,6 +416,22 @@ public class GameMap{
 
     public Viewport getGameport() { return this.gameport; }
 
+    public boolean getAllFinished(){
+        int maxPlayers = players.size();
+        for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {
+            Player curPlayer = playerEntry.getValue();
+            if (client != null && curPlayer != null) {
+                if (curPlayer.isFinished()){
+                    maxPlayers--;
+                }
+            }
+        }
+        if (maxPlayers == 0){
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     /**
      * Update GameMap's state.
@@ -427,7 +448,6 @@ public class GameMap{
                 client.sendMessageUDP(playerLocal.getMovementState()); //send movement state to server
                 Gdx.app.log("GDX GameMap", "Sent MovementState to Server");
             }
-
             //gamecam constantly to follow playerLocal
             gamecam.position.set(playerLocal.getX(), playerLocal.getY(), 0);
             gamecam.update();
@@ -447,9 +467,7 @@ public class GameMap{
         if (!isClient) {
 
         }
-
         //TODO: I put this in update for the server to do its calculation
-
     }
 
     /**
@@ -470,7 +488,8 @@ public class GameMap{
         for (Sprite sprite : bgPlatformSprites) {
             sprite.draw(batch);
         }
-
+        // finishLine sprite rendered after background & platforms but before players
+        finishLine.draw(batch);
         // Render Players
         for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {
             Player curPlayer = playerEntry.getValue();
@@ -531,9 +550,6 @@ public class GameMap{
     public Map<Integer, DummyPlayer> getDummyPlayers(){
         return dummyPlayers;
     }
-    public List<Integer> getRankings(){
-        return rankings;
-    }
 
     public synchronized void logInfo(String string) {
        // Log.info("[GameMap]: " + (isClient ? "[Client] " : "[Server] ") + string);
@@ -549,7 +565,7 @@ public class GameMap{
         batch.dispose();
         //dispose textures
         img.dispose();
-        //TODO:friendly players textures?
+        //players are disposed at endscreen
     }
 
     public void onDisconnect() {

@@ -36,7 +36,6 @@ import java.util.Map;
  */
 public class HUD extends Group implements Disposable,ApplicationListener,Screen{
     TextureAtlas atlas;
-//    private Skin skin;
     public Stage stage;
     private Viewport viewport;
     public Integer worldTimer;
@@ -52,7 +51,7 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
     private Map<Integer, Player> players;
     String PlayerCharacter;
     float timecount;
-    int count;
+    public int count;
     Label dialoglabel;
     com.badlogic.gdx.scenes.scene2d.ui.Dialog dialogstart;
     private com.badlogic.gdx.scenes.scene2d.ui.Skin skin;
@@ -61,6 +60,7 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
     private float powerupdistance;
     float playerLocalX,worldLength;
     GameMap gameMap;
+
     int characternumber,position;
     Window scorewindow,timewindow;
     Label positionboardlabel, GlobalState, Poweruplabel, PowerUpsLeft,Powertype,yourposition;
@@ -76,6 +76,9 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
         powerupdistance=worldLength/4;
         Gdx.app.log("power distance",String.valueOf(powerupdistance));
         worldTimer = 150;
+
+
+
         timecount=0;
         camera=new PerspectiveCamera();
         viewport=new FillViewport(NimbusRun.V_WIDTH,NimbusRun.V_HEIGHT,new OrthographicCamera());
@@ -227,6 +230,7 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
     public void update(float delta) {
         show();
         timecount += delta;
+
         if(gameMap.getGameMapReadyForHUD()){
             //Log.info("boom boom");
             Map <Integer, Player> players = gameMap.getPlayers();
@@ -248,6 +252,8 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
                 timecount = 0;
             }
         }
+
+        //progress=(60-worldTimer)/60;
         else {
             dialogstart.remove();
             if (timecount >= 1&&worldTimer>0) {
