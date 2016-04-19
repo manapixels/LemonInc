@@ -1,6 +1,7 @@
 package com.lemoninc.nimbusrun.Screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
@@ -40,6 +41,7 @@ public class TutorialScreen implements Screen{
     private TextButton.TextButtonStyle style;
     private TextButton Return,Next;
     Sound soundclick;
+    int click=0;
 
 
 
@@ -100,10 +102,11 @@ public class TutorialScreen implements Screen{
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 soundclick.play();
-                sprite.setTexture(new Texture("2_TutorialScreen/Tutorials_pg2.png"));
-                stage.addActor(Return);
-                Next.remove();
-                //game.setScreen(new MenuScreen(game, gameWidth, gameHeight));
+               click++;
+                    if (click==1){
+                        sprite.setTexture(new Texture("2_TutorialScreen/Tutorials_pg2.png"));
+                        Next.remove();
+                        stage.addActor(Return);}
             }
 
         });
@@ -147,5 +150,4 @@ public class TutorialScreen implements Screen{
         //soundclick.dispose();
         stage.dispose();
     }
-
 }

@@ -142,7 +142,7 @@ public class Player extends Sprite implements InputProcessor {
         //only for playerLocal
         if (isLocal) {
 
-            //create music
+            //create sounds
 
             jumpSound = Gdx.audio.newSound(Gdx.files.internal("Sounds/swoosh.wav"));
             buddhaSound = Gdx.audio.newSound(Gdx.files.internal("Sounds/Buddha.mp3"));

@@ -45,7 +45,7 @@ public class MenuScreen implements Screen {
 
     private Stage stage;
 
-    private TextButton buttonStory;
+    private TextButton buttonCharDescr;
     private TextButton buttonChooseCharacter;
     private TextButton buttonPlay;
     private TextButton buttonTutorial;
@@ -68,7 +68,7 @@ public class MenuScreen implements Screen {
         BUTTON_HEIGHT=75;
         BUTTON_WIDTH=120;
 
-        music=Gdx.audio.newMusic(Gdx.files.internal("Sounds/menuscreenmusic.mp3"));
+        music = Gdx.audio.newMusic(Gdx.files.internal("Sounds/menuscreenmusic.mp3"));
         music.play();
         music.setVolume(0.5f);                 // sets the volume to half the maximum volume
         music.setLooping(true);
@@ -90,7 +90,7 @@ public class MenuScreen implements Screen {
         stage= new Stage(new ExtendViewport(gameWidth,gameHeight));
         buttonPlay=new TextButton("Start Play",style);
         buttonTutorial=new TextButton("Tutorial",style);
-        buttonStory=new TextButton("Story", style);
+        buttonCharDescr=new TextButton("Characters", style);
 
         muteButton=new Image(new TextureRegionDrawable(new TextureRegion(new Texture("1_MenuScreen/muteButton.png"))));
         unmuteButton=new Image(new TextureRegionDrawable(new TextureRegion(new Texture("1_MenuScreen/unmuteButton.png"))));
@@ -114,9 +114,9 @@ public class MenuScreen implements Screen {
         buttonTutorial.setPosition(this.gameWidth/3*2+50, 250, Align.center);
         stage.addActor(buttonTutorial);
 
-        buttonStory.setSize(this.BUTTON_WIDTH, this.BUTTON_HEIGHT);
-        buttonStory.setPosition(this.gameWidth/3*2+50, 200, Align.center);
-        stage.addActor(buttonStory);
+        buttonCharDescr.setSize(this.BUTTON_WIDTH, this.BUTTON_HEIGHT);
+        buttonCharDescr.setPosition(this.gameWidth/3*2+50, 200, Align.center);
+        stage.addActor(buttonCharDescr);
 
         muteButton.setPosition(700, 100);
         unmuteButton.setPosition(700, 100);
@@ -151,12 +151,12 @@ public class MenuScreen implements Screen {
             }
         });
 
-        buttonStory.addListener(new ClickListener() {
+        buttonCharDescr.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
           //      AssetLoader.clickSound.play(AssetLoader.VOLUME);
                 soundclick.play();
-                game.setScreen(new StoryLineScreen(game, gameWidth,gameHeight));
+                game.setScreen(new CharDescrScreen(game, gameWidth,gameHeight));
 
                 // TODO Set to tutorial screen
                 //  gsm.set(new StoryScreen(game, gsm));
