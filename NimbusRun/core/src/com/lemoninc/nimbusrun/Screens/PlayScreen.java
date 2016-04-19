@@ -103,6 +103,8 @@ public class PlayScreen implements Screen{
         if (isHost) {
             server.initPlayers();
         }
+
+        Gdx.input.setInputProcessor(gamemap.playerLocal);
     }
 
     @Override
