@@ -21,6 +21,7 @@ package com.lemoninc.nimbusrun.Screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.esotericsoftware.minlog.Log;
 import com.lemoninc.nimbusrun.Networking.Client.TapTapClient;
@@ -45,6 +46,7 @@ public class PlayScreen implements Screen{
 
     Boolean playmusic;
     Music music;
+    private Sound gongSound;
     private long startTime;
     int charactername;
 
@@ -96,6 +98,7 @@ public class PlayScreen implements Screen{
         music=Gdx.audio.newMusic(Gdx.files.internal("Sounds/gamescreen.mp3"));
         music.setVolume(0.5f);                 // sets the volume to half the maximum volume
         music.setLooping(true);
+        gongSound = Gdx.audio.newSound(Gdx.files.internal("Sounds/chineseGong.mp3"));
 
         if(playmusic){
             music.play();
@@ -120,19 +123,24 @@ public class PlayScreen implements Screen{
         hud.stage.draw();
 
         if (hud.worldTimer == 0 || gamemap.getAllFinished()) {
-            music.stop();
             gameOver();
+            if (hud.count_final == 0){
+                dispose();
+                game.setScreen(new MenuScreen(game,NimbusRun.V_WIDTH,NimbusRun.V_HEIGHT));
+            }
         }
     }
+
     public void gameOver() {
         dispose();
-        game.setScreen(new EndScreen(game, playmusic));
+        music.stop();
+        gongSound.play();
+        hud.gameOver();
     }
 
     @Override
     public void resize(int width, int height) {
         gamemap.resize(width, height);
-
     }
 
     /**
@@ -156,6 +164,6 @@ public class PlayScreen implements Screen{
     @Override
     public void dispose() {
         music.dispose();
-        music.stop();
+        gongSound.dispose();
     }
 }

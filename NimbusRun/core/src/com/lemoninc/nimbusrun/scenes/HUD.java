@@ -45,11 +45,11 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
     private float progress;
     String PlayerCharacter;
     float timecount;
-    public int count_initial;
+    public int count_initial, count_final;
     Label dialoglabel;
-    com.badlogic.gdx.scenes.scene2d.ui.Dialog dialogstart;
+    com.badlogic.gdx.scenes.scene2d.ui.Dialog dialogstart, dialogEnd;
     private com.badlogic.gdx.scenes.scene2d.ui.Skin skin;
-
+    private boolean gameOverInitiated;
 
     float playerLocalX,worldLength;
     GameMap gameMap;
@@ -69,15 +69,18 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
     public HUD(SpriteBatch sb, String playername, GameMap gameMap,int characternumber){
 
         this.gameMap=gameMap;
+        gameOverInitiated = false;
         Gdx.app.log("world length",String.valueOf(worldLength));
-        worldTimer = 150;
+
+        worldTimer = 1;     //HOW LONG RACE LASTS
 
         timecount=0;
-
         viewport=new FillViewport(NimbusRun.V_WIDTH,NimbusRun.V_HEIGHT,new OrthographicCamera());
         shapeRenderer=new ShapeRenderer();
         progress=1f;
-        count_initial=4;
+
+        count_initial = 4;
+        count_final = 7;
 
         position=1;
         windowbackground=new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("blackbg2.png"))));
@@ -89,7 +92,7 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
         stage=new Stage(viewport,sb);
         stage.clear();
 
-        dialoglabel=new Label(String.format("%01d", count_initial),new Label.LabelStyle(new BitmapFont(Gdx.files.internal("Fonts/Baskek45.fnt")), Color.YELLOW));
+        dialoglabel=new Label(String.format("%01d", count_initial),new Label.LabelStyle(new BitmapFont(Gdx.files.internal("Fonts/Baskek45.fnt")), Color.WHITE));
         skin=new com.badlogic.gdx.scenes.scene2d.ui.Skin(Gdx.files.internal("data/uiskin.json"));
 
         dialogstart=new com.badlogic.gdx.scenes.scene2d.ui.Dialog("",skin){
@@ -135,6 +138,17 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
         dialogstart.text(dialoglabel);
         stage.addActor(dialogstart);
 
+        dialogEnd = new com.badlogic.gdx.scenes.scene2d.ui.Dialog("",skin){
+            @Override
+            public float getPrefWidth(){
+                return NimbusRun.V_WIDTH*0.6f;
+            }
+            @Override
+            public float getPrefHeight() {
+                return NimbusRun.V_HEIGHT*0.6f;
+            }
+        };
+
         Table table = new Table();
         table.top();
         table.setHeight(viewport.getScreenHeight());
@@ -158,7 +172,6 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
         GlobalState=new Label(String.format("%s",gameMap.globalStatus),new Label.LabelStyle(font, Color.YELLOW));
         Poweruplabel=new Label("POWER-UPs",new Label.LabelStyle(font, Color.BLACK));
         PowerUpsLeft=new Label(String.format("%01d",gameMap.noPowerUps),new Label.LabelStyle(font, Color.RED)); //DARK BLUE #0681ab
-
         
         scorewindow.setBackground(windowbackground);
         scorewindow.pad(0.001f);
@@ -193,14 +206,35 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
         Gdx.input.setInputProcessor(stage);
 
     }
+
+    public void gameOver(){
+        stage.addActor(dialogEnd);
+        dialogEnd.background(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("blackbg2.png")))));
+        dialogEnd.setPosition(0, 0, Align.center);
+        dialogEnd.show(stage);
+        gameOverInitiated = true;
+    }
+
     public void update(float delta) {
         show();
         timecount += delta;
+        if (gameOverInitiated){
 
+            //final count down
+            if(count_final>0) {
+                stage.draw();
+
+                if (timecount >= 1) {
+                    count_final--;
+                    dialoglabel.setText("player rankings: \n1) player1 \n2) player2 \n3) player3 \n4) player4");
+                    dialogEnd.text(dialoglabel);
+                    timecount = 0;
+                }
+            }
+        }
         //initial count down
         if(count_initial>0) {
             stage.draw();
-
             if (timecount >= 1) {
                 count_initial--;
                 dialoglabel.setText(String.format("%01d", count_initial));
@@ -266,6 +300,7 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
 
     @Override
     public void dispose() {
+        dialogEnd.remove();
         stage.dispose();
 //       skin.dispose();
         atlas.dispose();
