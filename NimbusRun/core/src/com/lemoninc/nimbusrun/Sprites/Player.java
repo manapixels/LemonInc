@@ -291,13 +291,16 @@ public class Player extends Sprite implements InputProcessor {
             }
             if (touches.get(0).touched && touches.get(1).touched) {
                 if (touches.get(0).touchX < (screenWidth / 2) && touches.get(1).touchX > (screenWidth / 2)) {
-                    // TODO: attacksound.play();
-                    // TODO: gauge bar for attack
-                    if (mayAttack()) attack();
+                    if (mayAttack()) {
+                        attackSoundPlay(character);
+                        attack();
+                    }
 
                 } else if (touches.get(1).touchX < (screenWidth / 2) && touches.get(0).touchX > (screenWidth / 2)) {
-                    // TODO: attacksound.play();
-                    if (mayAttack()) attack();
+                    if (mayAttack()) {
+                        attackSoundPlay(character);
+                        attack();
+                    }
                 }
             }
         } else {
@@ -334,6 +337,21 @@ public class Player extends Sprite implements InputProcessor {
             }
         }
         return false;
+    }
+
+    private void attackSoundPlay(int character) {
+        if (character == 1)
+            buddhaSound.play();
+        if (character == 2)
+            krishnaSound.play();
+        if (character == 3)
+            gumihoSound.play();
+        if (character == 4)
+            kappaSound.play();
+        if (character == 5)
+            pontianakSound.play();
+        if (character == 6)
+            snakeSound.play();
     }
 
     public void update(float delta) {
@@ -403,18 +421,7 @@ public class Player extends Sprite implements InputProcessor {
     public boolean attack() {
         Gdx.app.log("GDX Player", "Player " +id+" Attacked");
         Network.PlayerAttack msgPlayerAttack = new Network.PlayerAttack(id, character);
-        if (character == 1)
-            buddhaSound.play();
-        if (character == 2)
-            krishnaSound.play();
-        if (character == 3)
-            gumihoSound.play();
-        if (character == 4)
-            kappaSound.play();
-        if (character == 5)
-            pontianakSound.play();
-        if (character == 6)
-            snakeSound.play();
+
 
 //        if (character )
         gameMap.playerAttacked(msgPlayerAttack);
