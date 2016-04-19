@@ -286,9 +286,9 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
 
             playScreen.setRankings(positions);
 
-            yourposition.setText(String.format("%01d", position));
-            Gdx.app.log("Pos: ",String.valueOf(position));
-            Gdx.app.log("Hi",String.valueOf(entriesSortedByValues(XandID)));
+//            yourposition.setText(String.format("%01d", position));
+//            Gdx.app.log("Pos: ",String.valueOf(position));
+//            Gdx.app.log("Hi",String.valueOf(entriesSortedByValues(XandID)));
 //            for (Map.Entry<Integer, Float> entry : XandID.entrySet()) {
 //               Gdx.app.log("Playerinfo: ", "PLayer POS : " + entry.getValue()
 //                       + "  : PlayerID" + entry.getKey());

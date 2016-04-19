@@ -95,7 +95,7 @@ public class PlayScreen implements Screen{
 
         gamemap.createEnv(); //create ground, ceiling, etc
 //        Log.info(playerName + "namenamenamename");
-        hud = new HUD(playScreen,game.batch,playerName,gamemap,charactername);
+        hud = new HUD(this,game.batch,playerName,gamemap,charactername);
         gamemap.passHUD(hud);
         startTime = TimeUtils.millis();
 
