@@ -154,7 +154,6 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
         CharacterLabel=new Label("PLAYER",new Label.LabelStyle(font, Color.YELLOW));   //
         countdownLabel=new Label(String.format("%03d",worldTimer),new Label.LabelStyle(font, Color.YELLOW));
         nameLabel=new Label(playername,new Label.LabelStyle(font, Color.BLACK));
-//        Powertype=new Label("POWER: "+playerpowerstring,new Label.LabelStyle(font, Color.RED)); //DARK BLUE
         positionboardlabel=new Label("POSITION",new Label.LabelStyle(font, Color.WHITE));
         yourposition=new Label(String.format("%01d",position),new Label.LabelStyle(font, Color.YELLOW));
         GlobalState=new Label("World has been:",new Label.LabelStyle(font, Color.YELLOW));
@@ -205,7 +204,7 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
             //Log.info("how many players: "+ players.size());
             for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {
                 Player curPlayer = playerEntry.getValue();
-                Log.info("hiXpos: " + curPlayer.getX());
+//                Log.info("hiXpos: " + curPlayer.getX());
                 playerLocalX = curPlayer.getX();
             }
         }
