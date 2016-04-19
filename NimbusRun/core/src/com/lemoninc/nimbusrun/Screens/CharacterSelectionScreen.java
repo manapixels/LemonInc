@@ -5,7 +5,6 @@
  *
  * NOTES : The screen takes input from the waitscreen and moves to waitscreen
  * TODO: Create a waiting function for all the players to connect and wait for each other,
- * TODO: get the input in the screen a string of the host ip adress, (right now IP=string localhost)
  * TODO: The wait can be onclick of the joingame button
  * TODO: Implement the counter on the basis of the players connected
  * The function has a string name of the player it has chosen, pass this to the playscreen/player to choose the specific character.
@@ -82,7 +81,7 @@ public class CharacterSelectionScreen implements Screen{
     Boolean playmusic;
     Music music;
     Sound soundclick;
-    private int charactername = 99;
+    public int charactername = 99;
     private String myIP;
 
     private TapTapClient client;
@@ -111,6 +110,11 @@ public class CharacterSelectionScreen implements Screen{
         BUTTON_HEIGHT=165;
         BUTTON_WIDTH=140;
 
+        //myIP=ipAddress;
+        Playerability="STUN";
+        charactername=1; //default character is Buddha
+        BUTTON_HEIGHT=150;
+        BUTTON_WIDTH=125;
         soundclick=Gdx.audio.newSound(Gdx.files.internal("Sounds/click.mp3"));
 
         music=Gdx.audio.newMusic(Gdx.files.internal("Sounds/characterselectionscreen.mp3"));
@@ -146,6 +150,7 @@ public class CharacterSelectionScreen implements Screen{
         final Table table = new Table();
         table.right();
         table.setFillParent(true);
+
 
         //Title=new Label(String.format("%03d","Choose your Avatar"),new Label.LabelStyle(new BitmapFont(Gdx.files.internal("Fonts/crime.fnt")), Color.DARK_GRAY));
         Title=new Label("Choose Your Character",new Label.LabelStyle(new BitmapFont(Gdx.files.internal("Fonts/crimesFont48Black.fnt")), Color.DARK_GRAY));
@@ -488,7 +493,7 @@ public class CharacterSelectionScreen implements Screen{
 
     public void playGame(){
         stage.clear();
-        game.setScreen(new PlayScreen(game, isHost, playername, client, server, playmusic));
+        game.setScreen(new PlayScreen(game, isHost, playername, client, server,playmusic,charactername));
     }
 
     public void goToMenu(){
@@ -497,7 +502,7 @@ public class CharacterSelectionScreen implements Screen{
         //TODO: shutdown client, server
 
     }
-
+    
 //    public void goPlayScreen() {
 //        game.setScreen(new PlayScreen(game, isHost, playername, client, server));
 //

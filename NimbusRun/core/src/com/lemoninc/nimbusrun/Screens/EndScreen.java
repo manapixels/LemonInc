@@ -14,7 +14,7 @@ package com.lemoninc.nimbusrun.Screens;
  *       Viewport   getGamePort(()
  *       void       dispose()
  * NOTES :
- * LAST UPDATED: 18/4/2016 21:37
+ * LAST UPDATED: 8/4/2016 09:00
  *
  * ********************************/
 
@@ -28,7 +28,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -84,18 +83,21 @@ public class EndScreen implements Screen{
         this.players = players;
         this.rankings = rankings;
 
+        //Log.info(players.size() + " size");
+
         batch = new SpriteBatch();
 
         style = new TextButton.TextButtonStyle();  //can customize
         style.font = new BitmapFont(Gdx.files.internal("Fonts/crimesFont48Black.fnt"));
-        style.font.setColor(Color.BLUE);
+        style.font.setColor(Color.RED);
         style.font.getData().setScale(0.65f, 0.65f);
         style.up= new TextureRegionDrawable(new TextureRegion(new Texture("5_EndScreen/button_up.png")));
-        style.down= new TextureRegionDrawable(new TextureRegion(new Texture("5_EndScreen/button_down.png")));
+        style.down= new TextureRegionDrawable(new TextureRegion(new Texture("5_EndScreen/button_down1.png")));
 
         Continue = new TextButton("Click to Return", style);
         Continue.setSize(250, 75);
-        Continue.setPosition(game.V_WIDTH / game.PPM * 0.8f, game.V_HEIGHT / game.PPM * 0.8f);
+        //Continue.setPosition(game.V_WIDTH/game.PPM*0.8f, game.V_HEIGHT/game.PPM*0.8f, Align.bottomLeft);
+        Continue.setPosition(game.V_WIDTH / game.PPM * 0.8f, game.V_HEIGHT / game.PPM * 0.8f, Align.bottomLeft);
         stage.addActor(Continue);
 
         /*
@@ -103,23 +105,28 @@ public class EndScreen implements Screen{
          */
         dummySprites = new ArrayList<Sprite>();
         dummySprites.add(new Sprite(new Texture(Gdx.files.internal("5_EndScreen/btn_kappa.png"))));
+        dummySprites.add(new Sprite(new Texture(Gdx.files.internal("5_EndScreen/btn_madame.png"))));
         dummySprites.add(new Sprite(new Texture(Gdx.files.internal("5_EndScreen/btn_kappa.png"))));
         dummySprites.get(0).setSize(150, 150);
         dummySprites.get(1).setSize(150, 150);
+        dummySprites.get(2).setSize(150, 150);
 
-        int i=0;
-        float positionX = game.V_WIDTH / 8;
+        int i=1;
+
+        float positionX = Gdx.graphics.getWidth() / 4;
+        Log.info("Hello" + positionX);
         int numPlayers = dummySprites.size();
         for (Sprite sprite : dummySprites) {
             int ranking = i++;
 
             // formula for setting X positions based on rankings
             // ((numPlayers - ranking + 1)/(numPlayers+1))
-
-            sprite.setPosition(positionX, 0);
-            positionX += game.V_WIDTH / 8;
-            Log.info("pos " + (game.V_WIDTH/game.PPM * ((numPlayers - ranking + 1)/(numPlayers+1))));
+            Log.info("numplayers: "+ numPlayers + " " + ranking + " " + Gdx.graphics.getWidth());
+            sprite.setPosition(((gameport.getWorldWidth() * ((numPlayers - ranking + 1f)/(numPlayers+1f)))),gameport.getWorldHeight()/2);
+            // positionX += (Gdx.graphics.getWidth() * ((numPlayers - ranking + 1)/(numPlayers+1)));
+            Log.info("pos " + (Gdx.graphics.getWidth() * ((numPlayers - ranking + 1f)/(numPlayers+1f))));
         }
+
     }
 
     @Override
@@ -169,7 +176,7 @@ public class EndScreen implements Screen{
         Continue.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new MenuScreen(game, gamecam.viewportWidth, gamecam.viewportHeight));
+                game.setScreen(new SplashScreen(game, gamecam.viewportWidth, gamecam.viewportHeight));
             }
         });
     }
@@ -193,9 +200,9 @@ public class EndScreen implements Screen{
         music.dispose();
         //gameMap.getWorld().dispose();
         //stage.dispose();
-        for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {
-            playerEntry.getValue().dispose();
-        }
+//        for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {
+//            playerEntry.getValue().dispose();
+//        }
         //this.players.clear();
     }
 }

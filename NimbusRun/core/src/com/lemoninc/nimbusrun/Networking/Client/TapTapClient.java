@@ -141,6 +141,7 @@ public class TapTapClient {
             //hey map, someone moved, handle this
 
             map.playerMoved(msg);
+            
         } else if (message instanceof Network.GameRoomFull) {
             Gdx.app.log("GDX TapTapClient", "Client received GameRoomFull");
             connection.setName("gameroomfull");
@@ -165,6 +166,11 @@ public class TapTapClient {
                     currentScreen.playGame();
                 }
             });
+        }
+        else if (message instanceof Network.PlayerAttack) {
+            Gdx.app.log("GDX TapTapClient", "Client received PlayerAttack");
+            Network.PlayerAttack msg = (Network.PlayerAttack) message;
+            map.onPlayerAttack(msg);
         }
     }
 
