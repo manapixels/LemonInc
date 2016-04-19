@@ -8,3 +8,6 @@ eclipse.project {
 dependencies {
     compile files('libs/kryonet-2.21-all.jar')
 }
+dependencies {
+    compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+}

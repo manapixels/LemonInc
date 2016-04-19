@@ -41,12 +41,12 @@ public class PlayScreen implements Screen{
 
     private TapTapClient client;
     private TapTapServer server;
-
     private HUD hud;
 
     Boolean playmusic;
     Music music;
     private long startTime;
+    int charactername;
 
 
 
@@ -58,13 +58,15 @@ public class PlayScreen implements Screen{
      * @param playerName
      */
 
-    public PlayScreen(NimbusRun game, boolean isHost, String playerName, TapTapClient client, TapTapServer server,Boolean playmusic){
-
+    public PlayScreen(NimbusRun game, boolean isHost, String playerName, TapTapClient client, TapTapServer server,Boolean playmusic,int charactername){
+        this.charactername=charactername;
         this.playmusic=playmusic;
         this.game = game;
         this.isHost = isHost;
         this.playerName = playerName;
 
+        hud = new HUD(game.batch,playerName,gamemap,charactername);
+        startTime = TimeUtils.millis();
 
         this.client = client;
         if (isHost) {
@@ -87,7 +89,7 @@ public class PlayScreen implements Screen{
         gamemap.initPlayers(); //called before gamemap.render
         gamemap.createEnv(); //create ground, ceiling, etc
         Log.info(playerName + "namenamenamename");
-        hud = new HUD(game.batch,playerName,gamemap);
+        hud = new HUD(game.batch,playerName,gamemap,charactername);
         startTime = TimeUtils.millis();
 
         music=Gdx.audio.newMusic(Gdx.files.internal("Sounds/gamescreen.mp3"));
@@ -106,24 +108,21 @@ public class PlayScreen implements Screen{
 
     @Override
     public void render(float delta) {
-
         gamemap.update(delta);
         gamemap.render();
 
-        if(isHost){
+        if (isHost) {
             server.update(delta);
         }
         hud.update(delta);
-
         hud.render();
         hud.stage.draw();
 
         if (hud.worldTimer == 0) {
-                music.stop();
-                gameOver();
+            music.stop();
+            gameOver();
         }
     }
-    
     public void gameOver() {
         Log.info("numPlayers" + gamemap.getDummyPlayers().size());
         dispose();

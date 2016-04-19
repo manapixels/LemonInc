@@ -38,7 +38,7 @@ public class TutorialScreen implements Screen{
     private Stage stage;
 
     private TextButton.TextButtonStyle style;
-    private TextButton Return;
+    private TextButton Return,Next;
     Sound soundclick;
 
 
@@ -54,7 +54,7 @@ public class TutorialScreen implements Screen{
         soundclick=Gdx.audio.newSound(Gdx.files.internal("Sounds/click.mp3"));
 
 
-        BUTTON_WIDTH = 250;
+        BUTTON_WIDTH = 150;
         BUTTON_HEIGHT = 75;
 
         style = new TextButton.TextButtonStyle();  //can customize
@@ -62,28 +62,48 @@ public class TutorialScreen implements Screen{
         style.font.setColor(Color.BLUE);
         style.font.getData().setScale(0.65f, 0.65f);
         style.up= new TextureRegionDrawable(new TextureRegion(new Texture("2_TutorialScreen/button_up.png")));
-        style.down= new TextureRegionDrawable(new TextureRegion(new Texture("2_TutorialScreen/button_down.png")));
+        style.down= new TextureRegionDrawable(new TextureRegion(new Texture("2_TutorialScreen/button_down1.png")));
+        style.over= new TextureRegionDrawable(new TextureRegion(new Texture("2_TutorialScreen/button_down1.png")));
 
 
-        Return = new TextButton("Return to main menu", style);
+        Next= new TextButton("Next",style);
+        Return = new TextButton("Return", style);
     }
 
     @Override
     public void show() {
         batcher = new SpriteBatch();
-        sprite = new Sprite(new Texture("2_TutorialScreen/bg.png"));
+        sprite = new Sprite(new Texture("2_TutorialScreen/Tutorials_pg1.png"));
         //   sprite.setColor(1, 1, 1, 0);
         sprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         Return.setSize(this.BUTTON_WIDTH, this.BUTTON_HEIGHT);
-        Return.setPosition(500, 100, Align.bottomLeft);
-        stage.addActor(Return);
+        Return.pad(0.5f);
+        Return.setPosition(gameWidth * 0.75f, gameHeight * 0.2f, Align.topLeft);
+
+
+        Next.setSize(this.BUTTON_WIDTH, this.BUTTON_HEIGHT);
+        Next.pad(0.5f);
+        Next.setPosition(gameWidth * 0.75f, gameHeight * 0.2f, Align.topLeft);
+        stage.addActor(Next);
 
         Return.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 soundclick.play();
+                //sprite.setTexture(new Texture("2_TutorialScreen/Tutorials_pg2.png"));
                 game.setScreen(new MenuScreen(game, gameWidth, gameHeight));
+            }
+
+        });
+        Next.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                soundclick.play();
+                sprite.setTexture(new Texture("2_TutorialScreen/Tutorials_pg2.png"));
+                stage.addActor(Return);
+                Next.remove();
+                //game.setScreen(new MenuScreen(game, gameWidth, gameHeight));
             }
 
         });
