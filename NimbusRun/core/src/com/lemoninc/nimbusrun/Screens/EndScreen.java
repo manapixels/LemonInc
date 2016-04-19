@@ -103,23 +103,28 @@ public class EndScreen implements Screen{
          */
         dummySprites = new ArrayList<Sprite>();
         dummySprites.add(new Sprite(new Texture(Gdx.files.internal("5_EndScreen/btn_kappa.png"))));
+        dummySprites.add(new Sprite(new Texture(Gdx.files.internal("5_EndScreen/btn_madame.png"))));
         dummySprites.add(new Sprite(new Texture(Gdx.files.internal("5_EndScreen/btn_kappa.png"))));
         dummySprites.get(0).setSize(150, 150);
         dummySprites.get(1).setSize(150, 150);
+        dummySprites.get(2).setSize(150, 150);
 
-        int i=0;
-        float positionX = game.V_WIDTH / 8;
+        int i=1;
+
+        float positionX = Gdx.graphics.getWidth() / 4;
+        Log.info("Hello" + positionX);
         int numPlayers = dummySprites.size();
         for (Sprite sprite : dummySprites) {
             int ranking = i++;
 
             // formula for setting X positions based on rankings
             // ((numPlayers - ranking + 1)/(numPlayers+1))
-
-            sprite.setPosition(positionX, 0);
-            positionX += game.V_WIDTH / 8;
-            Log.info("pos " + (game.V_WIDTH/game.PPM * ((numPlayers - ranking + 1)/(numPlayers+1))));
+            Log.info("numplayers: "+ numPlayers + " " + ranking + " " + Gdx.graphics.getWidth());
+            sprite.setPosition(((gameport.getWorldWidth() * ((numPlayers - ranking + 1f)/(numPlayers+1f)))),gameport.getWorldHeight()/2);
+            // positionX += (Gdx.graphics.getWidth() * ((numPlayers - ranking + 1)/(numPlayers+1)));
+            Log.info("pos " + (Gdx.graphics.getWidth() * ((numPlayers - ranking + 1f)/(numPlayers+1f))));
         }
+
     }
 
     @Override
@@ -169,7 +174,7 @@ public class EndScreen implements Screen{
         Continue.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new MenuScreen(game, gamecam.viewportWidth, gamecam.viewportHeight));
+                game.setScreen(new SplashScreen(game, gamecam.viewportWidth, gamecam.viewportHeight));
             }
         });
     }

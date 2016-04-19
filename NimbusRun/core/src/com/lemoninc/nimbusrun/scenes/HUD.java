@@ -23,8 +23,12 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.esotericsoftware.minlog.Log;
 import com.lemoninc.nimbusrun.NimbusRun;
 import com.lemoninc.nimbusrun.Sprites.GameMap;
+import com.lemoninc.nimbusrun.Sprites.Player;
+
+import java.util.Map;
 
 
 /**
@@ -42,9 +46,10 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
     Label timelabel;
     Label CharacterLabel;
     private Camera camera;
-    String Player;
+    String player;
     private ShapeRenderer shapeRenderer;
     private float progress;
+    private Map<Integer, Player> players;
     String PlayerCharacter;
 //    ProgressBar.ProgressBarStyle barStyle;
 //    TextureRegionDrawable textureBar;
@@ -57,12 +62,14 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
     int nopowerups;
     private float powerupdistance;
     float playerLocalX,worldLength;
+    Map <Integer, GameMap.DummyPlayer> dummyPlayers;
     GameMap gameMap;
 
-    public  HUD(SpriteBatch sb, String playernumber, GameMap gameMap){
+    public HUD(SpriteBatch sb, String playernumber, GameMap gameMap){
 
-        this.Player=playernumber;
+        this.player=playernumber;
         this.gameMap=gameMap;
+
         //playerLocalX =gameMap.bgStartX;
         //worldLength = 18*gameMap.getGameport().getWorldWidth();
         Gdx.app.log("worled length",String.valueOf(worldLength));
@@ -118,22 +125,22 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
         // 5. PONTIANAK
         // 6. MADAME WHITE SNAKE
 
-        if(Player.equals("Player1")){
+        if(player.equals("Player1")){
             playername=new Label("LAUGHING BUDDHA",new Label.LabelStyle(new BitmapFont(Gdx.files.internal("Fonts/font20.fnt")), Color.CYAN));
         }
-        else if(Player.equals("Player2")){
+        else if(player.equals("Player2")){
             playername=new Label("SHESHNAH WITH KRISHNA",new Label.LabelStyle(new BitmapFont(Gdx.files.internal("Fonts/font20.fnt")), Color.CYAN));
         }
-        else if(Player.equals("Player3")){
+        else if(player.equals("Player3")){
             playername=new Label("NINE-TAILED FOX",new Label.LabelStyle(new BitmapFont(Gdx.files.internal("Fonts/font20.fnt")), Color.CYAN));
         }
-        else if(Player.equals("Player4")){
+        else if(player.equals("Player4")){
             playername=new Label(" KAPPA",new Label.LabelStyle(new BitmapFont(Gdx.files.internal("Fonts/font20.fnt")), Color.CYAN));
         }
-        else if(Player.equals("Player5")){
+        else if(player.equals("Player5")){
             playername=new Label("PONTIANAK",new Label.LabelStyle(new BitmapFont(Gdx.files.internal("Fonts/font20.fnt")), Color.CYAN));
         }
-        else if(Player.equals("Player6")){
+        else if(player.equals("Player6")){
             playername=new Label("MADAME WHITE SNAKE",new Label.LabelStyle(new BitmapFont(Gdx.files.internal("Fonts/font20.fnt")), Color.CYAN));
 
         }
@@ -159,6 +166,16 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
     public void update(float delta) {
         show();
         timecount += delta;
+        if(gameMap.getGameMapReadyForHUD()){
+            //Log.info("boom boom");
+            Map <Integer, Player> players = gameMap.getPlayers();
+            //Log.info("how many players: "+ players.size());
+            for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {
+                Player curPlayer = playerEntry.getValue();
+                //Log.info("hiXpos: " + curPlayer.getX());
+            }
+        }
+
         if(count>0) {
             stage.draw();
 

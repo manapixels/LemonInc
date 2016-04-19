@@ -54,7 +54,7 @@ public class GameMap{
 
     private Map<Integer, Player> players = new HashMap<Integer, Player>(); //playerId, Player
     private Map<Integer, DummyPlayer> dummyPlayers = new HashMap<Integer, DummyPlayer>(); //playerId, Player
-
+    private boolean gameMapReadyForHUD;
 
     private OrthographicCamera gamecam;
     private Viewport gameport;
@@ -94,6 +94,7 @@ public class GameMap{
 
         //instantiate HUD, GameSounds, BitmapFont, Camera, SpriteBatch ...
         initCommon();
+        gameMapReadyForHUD = false;
 
         //set starting pos of bgSprites after setting cam
         bgStartX = -gameport.getWorldWidth() * 1.5f;
@@ -171,6 +172,7 @@ public class GameMap{
 
             }
         }
+        gameMapReadyForHUD = true;
     }
 
     public void createEnv() {
@@ -384,6 +386,7 @@ public class GameMap{
                 return false;
             }
         }
+
         return true;
     }
 
@@ -398,7 +401,7 @@ public class GameMap{
     public World getWorld(){
         return this.world;
     }
-
+    public boolean getGameMapReadyForHUD() { return gameMapReadyForHUD; }
 
     public Viewport getGameport() { return this.gameport; }
 
