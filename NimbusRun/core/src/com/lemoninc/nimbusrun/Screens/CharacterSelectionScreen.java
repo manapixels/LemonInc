@@ -474,7 +474,7 @@ public class CharacterSelectionScreen implements Screen{
 
     public void playGame(){
         stage.clear();
-        game.setScreen(new PlayScreen(game, isHost, playername, client, server,playmusic,charactername));
+        game.setScreen(new PlayScreen(game, batch, isHost, playername, client, server,playmusic,charactername));
     }
 
     public void goToMenu(){

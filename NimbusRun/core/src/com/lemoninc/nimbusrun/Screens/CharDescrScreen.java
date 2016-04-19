@@ -24,7 +24,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lemoninc.nimbusrun.NimbusRun;
 
 public class CharDescrScreen implements Screen{
-    private SpriteBatch batcher;
+    private SpriteBatch batch;
     private Sprite sprite;
     private NimbusRun game;
     private float gameWidth;
@@ -42,8 +42,7 @@ public class CharDescrScreen implements Screen{
 
 
 
-    public CharDescrScreen(NimbusRun game,float gameWidth,float gameHeight){
-    public StoryLineScreen(NimbusRun game,SpriteBatch batch, float gameWidth,float gameHeight){
+    public CharDescrScreen(NimbusRun game,SpriteBatch batch, float gameWidth,float gameHeight){
         this.game = game;
         this.batch = batch;
         this.gameWidth =gameWidth;
@@ -73,9 +72,7 @@ public class CharDescrScreen implements Screen{
 
     @Override
     public void show() {
-//        batcher = new SpriteBatch();
         sprite = new Sprite(new Texture("2_CharDescrScreen/TutorialScreens_Buddha.png"));
-        //   sprite.setColor(1, 1, 1, 0);
         sprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         Return.setSize(this.BUTTON_WIDTH, this.BUTTON_HEIGHT);
@@ -92,7 +89,8 @@ public class CharDescrScreen implements Screen{
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 soundclick.play();
-                game.setScreen(new MenuScreen(game,batch,gameWidth, gameHeight));
+                game.setScreen(new MenuScreen(game, batch, gameWidth, gameHeight));
+            }
 
         });
         Next.addListener(new ClickListener() {
@@ -141,12 +139,10 @@ public class CharDescrScreen implements Screen{
 
     @Override
     public void pause() {
-
     }
 
     @Override
     public void resume() {
-
     }
 
     @Override
@@ -158,7 +154,6 @@ public class CharDescrScreen implements Screen{
     public void dispose() {
         stage.dispose();
         sprite.getTexture().dispose();
-        background.dispose();
         soundclick.dispose();
         style.font.dispose();
 

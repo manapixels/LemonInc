@@ -22,6 +22,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.esotericsoftware.minlog.Log;
 import com.lemoninc.nimbusrun.Networking.Client.TapTapClient;
@@ -33,7 +35,7 @@ import com.lemoninc.nimbusrun.scenes.HUD;
 public class PlayScreen implements Screen{
 
     private NimbusRun game;
-
+    private SpriteBatch batch;
     public GameMap gamemap;
 
     private final boolean isHost;
@@ -61,9 +63,10 @@ public class PlayScreen implements Screen{
      */
 
 
-    public PlayScreen(NimbusRun game, boolean isHost, String playerName, TapTapClient client, TapTapServer server,Boolean playmusic,int charactername){
+    public PlayScreen(NimbusRun game, SpriteBatch batch, boolean isHost, String playerName, TapTapClient client, TapTapServer server,Boolean playmusic,int charactername){
         this.charactername=charactername;
         this.playmusic=playmusic;
+        this.batch = batch;
         this.game = game;
         this.isHost = isHost;
         this.playerName = playerName;
@@ -126,7 +129,7 @@ public class PlayScreen implements Screen{
             gameOver();
             if (hud.count_final == 0){
 //                dispose();
-                game.setScreen(new MenuScreen(game,NimbusRun.V_WIDTH,NimbusRun.V_HEIGHT));
+                game.setScreen(new MenuScreen(game,batch,NimbusRun.V_WIDTH,NimbusRun.V_HEIGHT));
             }
         }
     }
@@ -163,11 +166,8 @@ public class PlayScreen implements Screen{
 
     @Override
     public void dispose() {
-        music.stop();
         music.dispose();
         gamemap.dispose();
-
-        music.dispose();
         gongSound.dispose();
     }
 }
