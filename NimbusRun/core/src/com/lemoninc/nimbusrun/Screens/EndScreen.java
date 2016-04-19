@@ -95,7 +95,7 @@ public class EndScreen implements Screen{
 
         Continue = new TextButton("Click to Return", style);
         Continue.setSize(250, 75);
-        Continue.setPosition(game.V_WIDTH/game.PPM*0.8f, game.V_HEIGHT/game.PPM*0.8f);
+        Continue.setPosition(game.V_WIDTH / game.PPM * 0.8f, game.V_HEIGHT / game.PPM * 0.8f);
         stage.addActor(Continue);
 
         /*
@@ -108,12 +108,16 @@ public class EndScreen implements Screen{
         dummySprites.get(1).setSize(150, 150);
 
         int i=0;
+        float positionX = game.V_WIDTH / 8;
         int numPlayers = dummySprites.size();
         for (Sprite sprite : dummySprites) {
             int ranking = i++;
+
             // formula for setting X positions based on rankings
             // ((numPlayers - ranking + 1)/(numPlayers+1))
-            sprite.setPosition(game.V_WIDTH / 2, 0);
+
+            sprite.setPosition(positionX, 0);
+            positionX += game.V_WIDTH / 8;
             Log.info("pos " + (game.V_WIDTH/game.PPM * ((numPlayers - ranking + 1)/(numPlayers+1))));
         }
     }
@@ -139,7 +143,6 @@ public class EndScreen implements Screen{
         //batch.setProjectionMatrix(gamecam.combined);
         batch.begin();
         //Log.info("hello" + dummySprites.size() + " " + rankings.size());
-
 
         for (Sprite sprite : dummySprites) {
             sprite.draw(batch);
@@ -168,9 +171,7 @@ public class EndScreen implements Screen{
             public void clicked(InputEvent event, float x, float y) {
                 game.setScreen(new MenuScreen(game, gamecam.viewportWidth, gamecam.viewportHeight));
             }
-
         });
-
     }
 
     @Override

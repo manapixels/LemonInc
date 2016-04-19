@@ -525,10 +525,6 @@ public class CharacterSelectionScreen implements Screen{
 
         stage.act();
         stage.draw();
-
-
-        //if (TimeUtils.millis()>(startTime+15000)) game.setScreen(new PlayScreen(game,isHost,ipAddress, playername));
-
     }
 
     @Override
