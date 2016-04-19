@@ -67,8 +67,8 @@ public class MenuScreen implements Screen {
 
         playmusic=true;
 
-        BUTTON_HEIGHT=75;
-        BUTTON_WIDTH=120;
+        BUTTON_HEIGHT=60;
+        BUTTON_WIDTH=130;
 
         music=Gdx.audio.newMusic(Gdx.files.internal("Sounds/menuscreenmusic.mp3"));
         music.play();
@@ -82,7 +82,7 @@ public class MenuScreen implements Screen {
         style=new TextButton.TextButtonStyle();
         style.font=new BitmapFont(Gdx.files.internal("Fonts/crimesFont48Black.fnt"));
         style.font.setColor(Color.RED);
-        style.font.getData().setScale(0.65f, 0.65f);
+        style.font.getData().setScale(0.7f, 0.7f);
         style.up=new TextureRegionDrawable(new TextureRegion(new Texture("1_MenuScreen/button_up.png")));
         style.down=new TextureRegionDrawable(new TextureRegion(new Texture("1_MenuScreen/button_down.png")));
         style.over=new TextureRegionDrawable(new TextureRegion(new Texture("1_MenuScreen/button_down1.png")));
@@ -94,8 +94,9 @@ public class MenuScreen implements Screen {
         buttonTutorial=new TextButton("Tutorial",style);
         buttonCharDescr=new TextButton("Characters", style);
 
-//        muteButton=new Image(new TextureRegionDrawable(new TextureRegion(new Texture("1_MenuScreen/muteButton.png"))));
-//        unmuteButton=new Image(new TextureRegionDrawable(new TextureRegion(new Texture("1_MenuScreen/unmuteButton.png"))));
+        //muteButton=new Image(new TextureRegionDrawable(new TextureRegion(new Texture("1_MenuScreen/unmuteButton.png"))));
+        //unmuteButton=new Image(new TextureRegionDrawable(new TextureRegion(new Texture("1_MenuScreen/muteButton.png"))));
+
         show();
 
     }
@@ -108,21 +109,26 @@ public class MenuScreen implements Screen {
         sprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         buttonPlay.setSize(this.BUTTON_WIDTH, this.BUTTON_HEIGHT);
-        buttonPlay.setPosition(this.gameWidth/3*2+50, 300, Align.center);
+        //buttonPlay.setPosition(this.gameWidth/3*2+50, 300, Align.center);
+        buttonPlay.setPosition(this.gameWidth*0.8f, this.gameHeight*0.50f, Align.center);
         stage.addActor(buttonPlay);
 
         buttonTutorial.setSize(this.BUTTON_WIDTH, this.BUTTON_HEIGHT);
-        buttonTutorial.setPosition(this.gameWidth/3*2+50, 250, Align.center);
+        //buttonTutorial.setPosition(this.gameWidth/3*2+50, 250, Align.center);
+        buttonTutorial.setPosition(this.gameWidth*0.8f, this.gameHeight*0.37f, Align.center);
         stage.addActor(buttonTutorial);
 
         buttonCharDescr.setSize(this.BUTTON_WIDTH, this.BUTTON_HEIGHT);
-        buttonCharDescr.setPosition(this.gameWidth/3*2+50, 200, Align.center);
+        //buttonCharDescr.setPosition(this.gameWidth/3*2+50, 200, Align.center);
+        buttonCharDescr.setPosition(this.gameWidth*0.8f, this.gameHeight*0.24f, Align.center);
         stage.addActor(buttonCharDescr);
 
-//        muteButton.setPosition(700, 100);
-//        unmuteButton.setPosition(700, 100);
-//
-//        stage.addActor(unmuteButton);
+
+
+        //muteButton.setPosition(this.gameWidth*0.90f, this.gameHeight*0.85f);
+        //unmuteButton.setPosition(this.gameWidth*0.90f, this.gameHeight*0.85f);
+
+        //stage.addActor(unmuteButton);
 
 //        if (com.lemoninc.nimbusrun.Assetloading.AssetLoader.VOLUME == 1) {
 //            stage.addActor(muteButton);
