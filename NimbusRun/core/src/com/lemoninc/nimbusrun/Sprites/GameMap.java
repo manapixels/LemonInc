@@ -83,8 +83,9 @@ public class GameMap{
     public Player playerLocal;
     private DummyPlayer dummyLocal;
 
-    private int sourceX;
+    public int noPowerUps;
 
+    public float powerUpDistance;
     /**
      * This constructor is called inside TapTapClient
      */
@@ -93,6 +94,11 @@ public class GameMap{
         this.client = client;
         this.isClient = true;
         this.mapData = mapData;
+
+        noPowerUps=0;
+
+        float worldLength = 300f;
+        powerUpDistance=worldLength/4; //distance needed to cover to have a power up
 
         //instantiate HUD, GameSounds, BitmapFont, Camera, SpriteBatch ...
         initCommon();
@@ -454,6 +460,16 @@ public class GameMap{
             //gamecam constantly to follow playerLocal
             gamecam.position.set(playerLocal.getX(), playerLocal.getY(), 0);
             gamecam.update();
+
+            if(playerLocal.getX()/powerUpDistance>=1) { //player's x position is beyond the power up distance
+                powerUpDistance=powerUpDistance+75f;
+                if (noPowerUps == 0) {
+                    noPowerUps++;
+                }
+                else{
+                    noPowerUps=1;
+                }
+            }
         }
 
         //Update player
@@ -465,6 +481,8 @@ public class GameMap{
             }
             //if(curPlayer != playerLocal) curPlayer.renderNameTag(spriteBatch, fontNameTag);
         }
+
+
 
         //Server-only logic
         if (!isClient) {

@@ -65,7 +65,7 @@ public class PlayScreen implements Screen{
         this.game = game;
         this.isHost = isHost;
         this.playerName = playerName;
-        hud = new HUD(game.batch,playerName,gamemap,charactername);
+//        hud = new HUD(game.batch,playerName,gamemap,charactername);
         startTime = TimeUtils.millis();
 
         this.client = client;
@@ -88,7 +88,7 @@ public class PlayScreen implements Screen{
         gamemap = client.getMap();
         gamemap.initPlayers(); //called before gamemap.render
         gamemap.createEnv(); //create ground, ceiling, etc
-        Log.info(playerName + "namenamenamename");
+//        Log.info(playerName + "namenamenamename");
         hud = new HUD(game.batch,playerName,gamemap,charactername);
         gamemap.passHUD(hud);
         startTime = TimeUtils.millis();
@@ -125,7 +125,7 @@ public class PlayScreen implements Screen{
         }
     }
     public void gameOver() {
-        Log.info("numPlayers" + gamemap.getDummyPlayers().size());
+//        Log.info("numPlayers" + gamemap.getDummyPlayers().size());
         dispose();
         game.setScreen(new EndScreen(game, playmusic));
     }

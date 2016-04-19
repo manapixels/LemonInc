@@ -28,7 +28,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -40,17 +39,17 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
-import com.esotericsoftware.minlog.Log;
 import com.lemoninc.nimbusrun.Networking.Network;
 import com.lemoninc.nimbusrun.NimbusRun;
-import com.lemoninc.nimbusrun.scenes.HUD;
 
 import java.util.HashMap;
 import java.util.Map;
 
+
 public class Player extends Sprite implements InputProcessor {
     public World world;
     public Body b2body;
+    public Boolean attackactivated=true;
 
     public enum State {DOUBLEJUMPING, JUMPING, DEFAULT}
 
@@ -82,6 +81,8 @@ public class Player extends Sprite implements InputProcessor {
     private Sound jumpSound;
     private Sound buddhaSound, snakeSound, kappaSound, pontianakSound, gumihoSound, krishnaSound;
 
+
+
     Vector2 previousPosition;
 
     //  Sound attacksound,jumpsound;
@@ -104,8 +105,8 @@ public class Player extends Sprite implements InputProcessor {
         CHARACTER_SIZE = 220 / NimbusRun.PPM;
         stateTime = 0f;
 
-        //  attacksound=Gdx.audio.newSound(Gdx.files.internal("Sounds/specialpowermusic.wav"));
-        // jumpsound=Gdx.audio.newSound(Gdx.files.internal("Sounds/jumpsound.mp3"));
+
+
         //debuff variables
         stunTime = 0f;
         stunned = false;
@@ -293,12 +294,10 @@ public class Player extends Sprite implements InputProcessor {
                     // TODO: attacksound.play();
                     // TODO: gauge bar for attack
                     if (mayAttack()) attack();
-                    Gdx.app.log("GDX Player", "Player " +id+" Attacked");
 
                 } else if (touches.get(1).touchX < (screenWidth / 2) && touches.get(0).touchX > (screenWidth / 2)) {
                     // TODO: attacksound.play();
                     if (mayAttack()) attack();
-                    Gdx.app.log("GDX Player", "Player " +id+" Attacked");
                 }
             }
         } else {
@@ -338,7 +337,7 @@ public class Player extends Sprite implements InputProcessor {
     }
 
     public void update(float delta) {
-        if (gameMap.getHud().count > 0){
+        if (gameMap.getHud().count_initial > 0){
             stunned = true;
             stunTime = 1f;
         } else {
@@ -389,11 +388,20 @@ public class Player extends Sprite implements InputProcessor {
 
     public boolean mayAttack() {
         //TODO:check if player can attack
-        return true;
+
+
+
+        if (gameMap.noPowerUps > 0) {
+            gameMap.noPowerUps--;
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     public boolean attack() {
-
+        Gdx.app.log("GDX Player", "Player " +id+" Attacked");
         Network.PlayerAttack msgPlayerAttack = new Network.PlayerAttack(id, character);
         if (character == 1)
             buddhaSound.play();
@@ -410,7 +418,9 @@ public class Player extends Sprite implements InputProcessor {
 
 //        if (character )
         gameMap.playerAttacked(msgPlayerAttack);
-        //TODO: reset attack gauge bar
+
+        //decrement number of powerups
+//        gameMap.getHud().noPowerUps--;
 
         if (isLocal) {
             //attack sound
