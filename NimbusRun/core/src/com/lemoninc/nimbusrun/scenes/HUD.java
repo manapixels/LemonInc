@@ -71,8 +71,8 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
 
         this.gameMap=gameMap;
         Gdx.app.log("world length",String.valueOf(worldLength));
-        worldTimer = 150;
 
+        worldTimer = 150;
         timecount=0;
 
         viewport=new FillViewport(NimbusRun.V_WIDTH,NimbusRun.V_HEIGHT,new OrthographicCamera());

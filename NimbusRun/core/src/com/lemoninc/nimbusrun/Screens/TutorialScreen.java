@@ -1,6 +1,7 @@
 package com.lemoninc.nimbusrun.Screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
@@ -40,6 +41,7 @@ public class TutorialScreen implements Screen{
     private TextButton.TextButtonStyle style;
     private TextButton Return,Next;
     Sound soundclick;
+    int click=0;
 
 
 
@@ -100,10 +102,24 @@ public class TutorialScreen implements Screen{
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 soundclick.play();
-                sprite.setTexture(new Texture("2_TutorialScreen/Tutorials_pg2.png"));
-                stage.addActor(Return);
-                Next.remove();
-                //game.setScreen(new MenuScreen(game, gameWidth, gameHeight));
+               click++;
+                    if (click==1)
+                        sprite.setTexture(new Texture("2_TutorialScreen/Tutorials_pg2.png"));
+                    if(click==2)
+                        sprite.setTexture(new Texture("2_TutorialScreen/TutorialScreens_Buddha.png"));
+                    if(click==3)
+                        sprite.setTexture(new Texture("2_TutorialScreen/TutorialScreens_Foxy.png"));
+                    if(click==4)
+                        sprite.setTexture(new Texture("2_TutorialScreen/TutorialScreens_Kappa.png"));
+                    if (click==5)
+                        sprite.setTexture(new Texture("2_TutorialScreen/TutorialScreens_Krishna.png"));
+                    if(click==6)
+                        sprite.setTexture(new Texture("2_TutorialScreen/TutorialScreens_Pontianak.png"));
+                     if(click==7) {
+                         sprite.setTexture(new Texture("2_TutorialScreen/TutorialScreens_WhiteSnake.png"));
+                         Next.remove();
+                         stage.addActor(Return);
+                     }
             }
 
         });
@@ -147,5 +163,4 @@ public class TutorialScreen implements Screen{
         //soundclick.dispose();
         stage.dispose();
     }
-
 }
