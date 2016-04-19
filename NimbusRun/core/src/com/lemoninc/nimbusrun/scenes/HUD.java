@@ -13,7 +13,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -24,6 +23,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.esotericsoftware.minlog.Log;
 import com.lemoninc.nimbusrun.NimbusRun;
 import com.lemoninc.nimbusrun.Sprites.GameMap;
 import com.lemoninc.nimbusrun.Sprites.Player;
@@ -51,8 +51,6 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
     private float progress;
     private Map<Integer, Player> players;
     String PlayerCharacter;
-//    ProgressBar.ProgressBarStyle barStyle;
-//    TextureRegionDrawable textureBar;
     float timecount;
     int count;
     Label dialoglabel;
@@ -62,10 +60,9 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
     int nopowerups;
     private float powerupdistance;
     float playerLocalX,worldLength;
-    Map<Integer, GameMap.DummyPlayer> dummyPlayers;
     GameMap gameMap;
     int characternumber,position;
-    Window scorewindow,timewindow,powerupwindow,charinfowindow;
+    Window scorewindow,timewindow;
     Label positionboardlabel, GlobalState, Poweruplabel, PowerUpsLeft,Powertype,yourposition;
     String playernamestring,playerpowerstring;
     TextureRegionDrawable windowbackground;
@@ -74,20 +71,18 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
         this.characternumber=characternumber;
         this.player=playernumber;
         this.gameMap=gameMap;
-
-        //playerLocalX =gameMap.bgStartX;
-        //worldLength = 18*gameMap.getGameport().getWorldWidth();
+        worldLength = 300f;
         Gdx.app.log("world length",String.valueOf(worldLength));
-        powerupdistance=worldLength/3;
+        powerupdistance=worldLength/4;
+        Gdx.app.log("power distance",String.valueOf(powerupdistance));
         worldTimer = 150;
         timecount=0;
         camera=new PerspectiveCamera();
         viewport=new FillViewport(NimbusRun.V_WIDTH,NimbusRun.V_HEIGHT,new OrthographicCamera());
         shapeRenderer=new ShapeRenderer();
-        progress=1f;
         powerup=0f;
         count=4;
-        nopowerups=3;
+        nopowerups=0;
         position=1;
         windowbackground=new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("blackbg2.png"))));
 
@@ -103,14 +98,10 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
         dialogstart=new com.badlogic.gdx.scenes.scene2d.ui.Dialog("",skin){
             @Override
             public float getPrefWidth(){
-                // force dialog width
-                // return Gdx.graphics.getWidth() / 2;
                 return NimbusRun.V_WIDTH*0.3f;
             }
             @Override
             public float getPrefHeight() {
-                // force dialog height
-                // return Gdx.graphics.getWidth() / 2;
                 return NimbusRun.V_HEIGHT*0.3f;
             }
         };
@@ -118,14 +109,10 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
         scorewindow=new Window("",skin){
             @Override
             public float getPrefWidth(){
-                // force dialog width
-                // return Gdx.graphics.getWidth() / 2;
                 return NimbusRun.V_WIDTH*0.25f;
             }
             @Override
             public float getPrefHeight() {
-                // force dialog height
-                // return Gdx.graphics.getWidth() / 2;
                 return NimbusRun.V_HEIGHT*0.22f;
             }
         };
@@ -133,15 +120,11 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
         timewindow=new Window("",skin) {
             @Override
             public float getPrefWidth() {
-                // force dialog width
-                // return Gdx.graphics.getWidth() / 2;
                 return NimbusRun.V_WIDTH * 0.25f;
             }
 
             @Override
             public float getPrefHeight() {
-                // force dialog height
-                // return Gdx.graphics.getWidth() / 2;
                 return NimbusRun.V_HEIGHT * 0.22f;
             }
         };
@@ -229,11 +212,6 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
         table.add(scorewindow).expandX().align(Align.center).padTop(5f);
         table.add(GlobalState).expandX().align(Align.center).padTop(5f);
         table.add(timewindow).expandX().align(Align.center).padTop(5f);
-//        table.row();
-//        table.add(charinfowindow).expand();
-//        table.add();
-//        table.add(powerupwindow).expand();
- //       table.layout();
         table.row();
         table.add(playername).expand().align(Align.bottom);
         table.add();
@@ -255,7 +233,8 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
             //Log.info("how many players: "+ players.size());
             for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {
                 Player curPlayer = playerEntry.getValue();
-                //Log.info("hiXpos: " + curPlayer.getX());
+                Log.info("hiXpos: " + curPlayer.getX());
+                playerLocalX = curPlayer.getX();
             }
         }
 
@@ -269,49 +248,38 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
                 timecount = 0;
             }
         }
-        //progress=(60-worldTimer)/60;
         else {
-
             dialogstart.remove();
-//                playerLocalX = gameMap.getPlayers().get(0).getX();
-                //gameMap.getDummyById(1).x;
-//            playerLocalX=1f;
-              //  Gdx.app.log("playerposition", String.valueOf(playerLocalX));
             if (timecount >= 1&&worldTimer>0) {
                 worldTimer--;
                 countdownLabel.setText(String.format("%03d", worldTimer));
                 timecount = 0;
             }
         }
+       if (nopowerups == 0) {
+           if(playerLocalX/powerupdistance>=1) {
+               powerupdistance=powerupdistance+75f;
+               nopowerups=1;
+               powerup = 1f;
+               PowerUpsLeft.setText(String.format("%01d", nopowerups));
+           }
+           else{
+               powerup=playerLocalX/powerupdistance;
+               nopowerups=0;
+               PowerUpsLeft.setText(String.format("%01d", nopowerups));
+           }
+       }
+        else{
+           powerup=1f;
+           nopowerups=1;
+           PowerUpsLeft.setText(String.format("%01d", nopowerups));
 
-        progress= MathUtils.lerp(progress,(worldTimer/150),0.001f);
-//        powerup=playerLocalX/powerupdistance;
-//        Gdx.app.log("Powerdistance",String.valueOf(powerupdistance));
-//       if(playerLocalX%powerupdistance==0){
-//           nopowerups--;
-//           powerup=1f;
-//       }
-       /*if player used power up, onclicklistener at Playscreen/gamemap,
-        command the power up has been used,powerup=0f)
-
-        /*
-        distancetravelledratio=(playerlocal.getx/worldwidth);
-        # of power up= 6;
-        distance for power up=worldwidth/6;
-        powerup= getx/powerupdistance
-        if(getx%powerupdistance==0)
-        #powerup--
-
-        if(powerup)
-        powerup=MathUtils.lerp(powerup,1f,0.01f);
-        */
-
-        //condition to update
-
+       }
     }
 
     @Override
     public void create() {
+
 
     }
 
@@ -327,7 +295,7 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
         shapeRenderer.setColor(Color.YELLOW); //DarkBlure"#0681ab"
         shapeRenderer.rect(Gdx.graphics.getWidth()/2-90, Gdx.graphics.getHeight()*0.1f, 220, 40);
         shapeRenderer.setColor(Color.RED); //DarkRed "#ab3c57"
-        shapeRenderer.rect(Gdx.graphics.getWidth()/2-90,  Gdx.graphics.getHeight()*0.1f, this.progress* 220, 40);
+        shapeRenderer.rect(Gdx.graphics.getWidth()/2-90,  Gdx.graphics.getHeight()*0.1f, this.powerup* 220, 40);
         shapeRenderer.end();
     }
 

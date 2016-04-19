@@ -27,7 +27,6 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -39,10 +38,8 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
-import com.esotericsoftware.minlog.Log;
 import com.lemoninc.nimbusrun.Networking.Network;
 import com.lemoninc.nimbusrun.NimbusRun;
-import com.lemoninc.nimbusrun.scenes.HUD;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -50,6 +47,7 @@ import java.util.Map;
 public class Player extends Sprite implements InputProcessor {
     public World world;
     public Body b2body;
+    public Boolean attackactivated=true;
 
     public enum State {DOUBLEJUMPING, JUMPING, DEFAULT}
 
@@ -369,12 +367,12 @@ public class Player extends Sprite implements InputProcessor {
     }
 
     public boolean mayAttack() {
+
         //TODO:check if player can attack
         return true;
     }
 
     public boolean attack() {
-
         Network.PlayerAttack msgPlayerAttack = new Network.PlayerAttack(id, character);
         gameMap.playerAttacked(msgPlayerAttack);
         //TODO: reset attack gauge bar
