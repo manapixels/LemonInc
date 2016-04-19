@@ -117,7 +117,7 @@ public class PlayScreen implements Screen{
         hud.render();
         hud.stage.draw();
 
-        if (hud.worldTimer == 0) {
+        if (hud.worldTimer == 0 || gamemap.getAllFinished()) {
             music.stop();
             gameOver();
         }
