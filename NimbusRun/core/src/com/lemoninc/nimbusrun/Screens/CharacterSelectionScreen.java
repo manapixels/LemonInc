@@ -77,7 +77,7 @@ public class CharacterSelectionScreen implements Screen{
     TextButton joingame,goback;
     TextButton.TextButtonStyle style;
     //Dialog dialog;
-    CharSequence Playerability;
+//    CharSequence Playerability;
     Boolean playmusic;
     Music music;
     Sound soundclick;
@@ -112,7 +112,6 @@ public class CharacterSelectionScreen implements Screen{
         BUTTON_WIDTH=140;
 
         //myIP=ipAddress;
-        Playerability="STUN";
         charactername=1; //default character is Buddha
         BUTTON_HEIGHT=150;
         BUTTON_WIDTH=125;
@@ -234,7 +233,6 @@ public class CharacterSelectionScreen implements Screen{
         table.addActor(ponti);
         stage.addActor(table);
 
-        Playerability = "STUN";
 
         Buddha.addListener(new InputListener() {
             @Override
@@ -250,7 +248,6 @@ public class CharacterSelectionScreen implements Screen{
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 
-                Playerability = "STUN";
                 charactername = 1;
                 System.out.println("touched");
 
@@ -273,7 +270,6 @@ public class CharacterSelectionScreen implements Screen{
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 
-                Playerability="SUCKS BACK";
                 charactername=3;
                 System.out.println("touched");
             }
@@ -293,7 +289,6 @@ public class CharacterSelectionScreen implements Screen{
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                Playerability="FREEZE";
                 charactername=4;
                 System.out.println("touched");
             }
@@ -312,7 +307,6 @@ public class CharacterSelectionScreen implements Screen{
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                Playerability="FLASH LIGHT TO";
                 charactername=2;
                 System.out.println("touched");
             }
@@ -331,7 +325,6 @@ public class CharacterSelectionScreen implements Screen{
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                Playerability="JUMP STOP";
                 charactername=6;
             }
         });
@@ -348,7 +341,7 @@ public class CharacterSelectionScreen implements Screen{
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                Playerability="DARKEN";
+
                 charactername=5;
                 System.out.println("touched");
             }
@@ -491,9 +484,6 @@ public class CharacterSelectionScreen implements Screen{
 
         batch.begin();
 
-        style.font.draw(batch, "My Special ability is to", viewport.getScreenWidth() / 3, viewport.getScreenHeight() - 250);
-        style.font.draw(batch, Playerability, viewport.getScreenWidth() / 3, viewport.getScreenHeight() - 275);
-        style.font.draw(batch, "the world",viewport.getScreenWidth()/3,viewport.getScreenHeight()-300);
         if (myIP != null)
             style.font.draw(batch, "Host IP address: " + myIP, viewport.getScreenWidth()/3,viewport.getScreenHeight()/7);
         playercharacter.setPosition(viewport.getScreenWidth()/4,viewport.getScreenHeight()/12);

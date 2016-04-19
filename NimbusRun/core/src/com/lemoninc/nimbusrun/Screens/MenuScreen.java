@@ -51,8 +51,8 @@ public class MenuScreen implements Screen {
     private TextButton buttonPlay;
     private TextButton buttonTutorial;
 
-    private Image muteButton;//if sound implemented
-    private Image unmuteButton;
+//    private Image muteButton;//if sound implemented
+//    private Image unmuteButton;
     private Music music;
     private NimbusRun game;
     public Boolean playmusic;
@@ -94,8 +94,8 @@ public class MenuScreen implements Screen {
         buttonTutorial=new TextButton("Tutorial",style);
         buttonCharDescr=new TextButton("Characters", style);
 
-        muteButton=new Image(new TextureRegionDrawable(new TextureRegion(new Texture("1_MenuScreen/muteButton.png"))));
-        unmuteButton=new Image(new TextureRegionDrawable(new TextureRegion(new Texture("1_MenuScreen/unmuteButton.png"))));
+//        muteButton=new Image(new TextureRegionDrawable(new TextureRegion(new Texture("1_MenuScreen/muteButton.png"))));
+//        unmuteButton=new Image(new TextureRegionDrawable(new TextureRegion(new Texture("1_MenuScreen/unmuteButton.png"))));
         show();
 
     }
@@ -119,10 +119,10 @@ public class MenuScreen implements Screen {
         buttonCharDescr.setPosition(this.gameWidth/3*2+50, 200, Align.center);
         stage.addActor(buttonCharDescr);
 
-        muteButton.setPosition(700, 100);
-        unmuteButton.setPosition(700, 100);
-
-        stage.addActor(unmuteButton);
+//        muteButton.setPosition(700, 100);
+//        unmuteButton.setPosition(700, 100);
+//
+//        stage.addActor(unmuteButton);
 
 //        if (com.lemoninc.nimbusrun.Assetloading.AssetLoader.VOLUME == 1) {
 //            stage.addActor(muteButton);
@@ -161,26 +161,26 @@ public class MenuScreen implements Screen {
         });
 
 
-        muteButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                music.pause();
-                muteButton.remove();
-                stage.addActor(unmuteButton);
-            }
-
-        });
-
-        unmuteButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                music.play();
-                soundclick.play();
-                unmuteButton.remove();
-                stage.addActor(muteButton);
-            }
-
-        });
+//        muteButton.addListener(new ClickListener() {
+//            @Override
+//            public void clicked(InputEvent event, float x, float y) {
+//                music.pause();
+//                muteButton.remove();
+//                stage.addActor(unmuteButton);
+//            }
+//
+//        });
+//
+//        unmuteButton.addListener(new ClickListener() {
+//            @Override
+//            public void clicked(InputEvent event, float x, float y) {
+//                music.play();
+//                soundclick.play();
+//                unmuteButton.remove();
+//                stage.addActor(muteButton);
+//            }
+//
+//        });
 
 
         Gdx.input.setInputProcessor(stage);

@@ -80,7 +80,7 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
         gameOverInitiated = false;
         Gdx.app.log("world length",String.valueOf(worldLength));
 
-        worldTimer = 1;
+        worldTimer = 120;
         timecount=0;
 
         viewport=new FillViewport(NimbusRun.V_WIDTH,NimbusRun.V_HEIGHT,new OrthographicCamera());
@@ -94,7 +94,7 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
         windowbackground=new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("blackbg2.png"))));
 
         BitmapFont font=new BitmapFont(Gdx.files.internal("Fonts/font20.fnt"));
-        font.getData().setScale(0.85f, 0.85f);
+//        font.getData().setScale(0.85f, 0.85f);
         font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
         stage=new Stage(viewport,sb);
@@ -176,11 +176,11 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
         timelabel=new Label("TIME",new Label.LabelStyle(font,Color.WHITE)); //BLUE "#44a4c5"
         CharacterLabel=new Label("PLAYER",yellowLabelStyle);
         countdownLabel=new Label(String.format("%03d",worldTimer),yellowLabelStyle);
-        nameLabel=new Label(playername,blackLabelStyle);
+        nameLabel=new Label(playername,yellowLabelStyle);
         positionboardlabel=new Label("POSITION",new Label.LabelStyle(font, Color.WHITE));
         yourposition=new Label(String.format("%01d",position),yellowLabelStyle);
         GlobalState=new Label(String.format("%s",gameMap.globalStatus),yellowLabelStyle);
-        Poweruplabel=new Label("POWER-UPs",blackLabelStyle);
+        Poweruplabel=new Label("POWER-UPs",yellowLabelStyle);
         PowerUpsLeft=new Label(String.format("%01d",gameMap.noPowerUps),new Label.LabelStyle(font, Color.RED)); //DARK BLUE #0681ab
 
         scorewindow.setBackground(windowbackground);
@@ -262,12 +262,11 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
             List<Map.Entry<Integer,Float>> sortedlist =entriesSortedByValues(XandID);
             for (Map.Entry<Integer, Float> entry : sortedlist){
                 positions.add(entry.getKey());
-                Gdx.app.log("Local Id", String.valueOf(gameMap.playerLocal.getId()));
+//                Gdx.app.log("Local Id", String.valueOf(gameMap.playerLocal.getId()));
                 if(entry.getKey().equals(gameMap.playerLocal.getId())) {
-                    Gdx.app.log("Here", "I am here");
+//                    Gdx.app.log("Here", "I am here");
                     position = i;
-
-                    Gdx.app.log("Index value:",String.valueOf(position));
+//                    Gdx.app.log("Index value:",String.valueOf(position));
                 }
                 i++;
             }
@@ -325,8 +324,12 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
                 timecount = 0;
             }
         }
+        if (gameMap.noPowerUps > 0){
+            PowerUpsLeft.setText("READY"); //client's gamemap's powerups
+        } else {
+            PowerUpsLeft.setText("NOT READY"); //client's gamemap's powerups
+        }
 
-        PowerUpsLeft.setText(String.format("%01d", gameMap.noPowerUps)); //client's gamemap's powerups
         if (gameMap.isFlashed()) {
             GlobalState.setStyle(blackLabelStyle);
         }
