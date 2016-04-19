@@ -84,13 +84,13 @@ public class EndScreen implements Screen{
         // player 2 is rank 1, player 1 is rank 2, player 3 is rank 3
         // so Foxy is most right, Kappa is most left
         numPlayers = playerTypes.size();
+
+        // camera and viewport
+        screenWidth = Gdx.graphics.getWidth();
+        screenHeight = Gdx.graphics.getHeight();
+
         gamecam = new PerspectiveCamera();
         gameport = new FitViewport(screenWidth,screenHeight,gamecam);
-        stage = new Stage(new ExtendViewport(screenWidth,screenHeight));
-
-
-
-
 
         // textbutton to return
         style = new TextButton.TextButtonStyle();  //can customize
@@ -102,23 +102,21 @@ public class EndScreen implements Screen{
 
         continueButton = new TextButton("Click to Return", style);
         continueButton.setSize(250, 75);
-        continueButton.setPosition(game.V_WIDTH / game.PPM * 0.8f, game.V_HEIGHT / game.PPM * 0.8f);
+        continueButton.setPosition(game.V_WIDTH / game.PPM * 0.8f, game.V_HEIGHT / game.PPM * 0.8f, Align.bottomLeft);
         continueButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 soundclick.play();
-                stage.clear();
                 game.setScreen(new SplashScreen(game, gamecam.viewportWidth, gamecam.viewportHeight));
 
                 //TODO: break connection from server
                 //TODO: refresh everything; dispose gameMap instance
             }
         });
-        stage.addActor(continueButton);
 
         // init sounds
         gongSound = Gdx.audio.newSound(Gdx.files.internal("Sounds/chineseGong.mp3"));
-        soundclick=Gdx.audio.newSound(Gdx.files.internal("Sounds/click.mp3"));
+        soundclick = Gdx.audio.newSound(Gdx.files.internal("Sounds/click.mp3"));
 
         gongSound.play();
         initChar();
@@ -137,11 +135,8 @@ public class EndScreen implements Screen{
             sprites.get(rankings.get(i)-1).setPosition(Gdx.graphics.getWidth() * (numPlayers - (i+1) + 1f)/(numPlayers+1f), Gdx.graphics.getHeight()/2);
             sprites.get(rankings.get(i)-1).draw(batch);
         }
-
-
+        continueButton.draw(batch, 1f);
         batch.end();
-        stage.act();
-        stage.draw();
     }
 
     @Override
@@ -174,7 +169,6 @@ public class EndScreen implements Screen{
 //        music.dispose();
         gongSound.dispose();
         for (Texture txt: spritesTXT) { txt.dispose(); }
-        stage.dispose();
     }
 
     public void initChar() {
