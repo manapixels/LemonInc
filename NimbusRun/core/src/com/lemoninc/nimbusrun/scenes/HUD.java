@@ -55,10 +55,11 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
     Label dialoglabel;
     com.badlogic.gdx.scenes.scene2d.ui.Dialog dialogstart, dialogEnd;
     private com.badlogic.gdx.scenes.scene2d.ui.Skin skin;
-    private boolean gameOverInitiated;
+    private boolean gameOverInitiated, positionsCopied;
 
     float playerLocalX,worldLength;
     GameMap gameMap;
+    String rankingsText;
 
     int characternumber,position;
     Window scorewindow,timewindow;
@@ -215,6 +216,8 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
 
         Gdx.input.setInputProcessor(stage);
 
+        rankingsText = "player rankings: ";
+
     }
 
     static <K,V extends Comparable<? super V>>
@@ -271,14 +274,6 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
                 }
                 i++;
             }
-
-//            yourposition.setText(String.format("%01d", position));
-//            Gdx.app.log("Pos: ",String.valueOf(position));
-//            Gdx.app.log("Hi",String.valueOf(entriesSortedByValues(XandID)));
-//            for (Map.Entry<Integer, Float> entry : XandID.entrySet()) {
-//               Gdx.app.log("Playerinfo: ", "PLayer POS : " + entry.getValue()
-//                       + "  : PlayerID" + entry.getKey());
-//            }
         }
 
         if (gameOverInitiated){
@@ -289,17 +284,18 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
 
                 if (timecount >= 1) {
                     count_final--;
-//                    String player1 = gameMap.getPlayers().get(positions.get(0)).getName();
-//                    String player2 = gameMap.getPlayers().get(positions.get(1)).getName();
-//                    String player3 = gameMap.getPlayers().get(positions.get(2)).getName();
-//                    String player4 = gameMap.getPlayers().get(positions.get(3)).getName();
+                    List<Integer> positionsCopy;
 
-//                    String rankingsText = "player rankings: \n1) "+player1+" \n2) "+player2+" \n3) "+player3+" \n4) "+player4;
-                    String rankingsText = "player rankings: ";
-                    for (int i = 0; i < gameMap.getPlayers().size(); i++) {
-                        String player = gameMap.getPlayerById(positions.get(i)).getName();
-                        rankingsText+="\n"+(i+1)+") "+player;
+
+                    if (!positionsCopied) {
+                        positionsCopy = Collections.unmodifiableList(positions);
+                        for (int i = 0; i < gameMap.getPlayers().size(); i++) {
+                            String player = gameMap.getPlayerById(positionsCopy.get(i)).getName();
+                            rankingsText+="\n"+(i+1)+") "+player;
+                        }
+                        positionsCopied = true;
                     }
+
                     dialoglabel.setText(rankingsText);
                     dialogEnd.text(dialoglabel);
                     timecount = 0;
