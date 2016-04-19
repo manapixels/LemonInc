@@ -18,8 +18,8 @@ import com.esotericsoftware.minlog.Log;
 
 public class Network {
 
-    public static int PORT = 8080;
-    public static int PORTUDP = 8082;
+    public static int PORT = 12080;
+    public static int PORTUDP = 12082;
     /**
      * the classes that are going to be sent over the network must be registered for both server and client
      *
@@ -34,6 +34,10 @@ public class Network {
         kryo.register(GameRoomFull.class);
         kryo.register(Ready.class);
         kryo.register(GameReady.class);
+        kryo.register(MapDataPacket.class);
+        kryo.register(int[].class);
+        kryo.register(PlayerAttack.class);
+
     }
 
     static public class Login {
@@ -93,7 +97,7 @@ public class Network {
     }
 
     private static void logInfo(String string) {
-        Log.info("[Network]: "+string);
+        Log.info("[Network]: " + string);
     }
 
     static public class GameRoomFull {
@@ -121,5 +125,27 @@ public class Network {
     static public class GameReady {
 
         public GameReady() {}
+    }
+
+    static public class MapDataPacket {
+        public int[] mapData;
+
+        public MapDataPacket() {}
+
+        public MapDataPacket(int[] mapData) {
+            this.mapData = mapData;
+        }
+    }
+
+    static public class PlayerAttack {
+        public int id;
+        public int character;
+
+        public PlayerAttack() {}
+
+        public PlayerAttack(int id, int character) {
+            this.id = id;
+            this.character = character;
+        }
     }
 }

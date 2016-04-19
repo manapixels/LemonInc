@@ -22,6 +22,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.esotericsoftware.minlog.Log;
 import com.lemoninc.nimbusrun.Networking.Client.TapTapClient;
 import com.lemoninc.nimbusrun.Networking.Server.TapTapServer;
 import com.lemoninc.nimbusrun.NimbusRun;
@@ -62,6 +63,7 @@ public class PlayScreen implements Screen{
         this.playmusic=playmusic;
         this.game = game;
         this.isHost = isHost;
+        this.playerName = playerName;
 
         hud = new HUD(game.batch,playerName,gamemap,charactername);
         startTime = TimeUtils.millis();
@@ -85,8 +87,10 @@ public class PlayScreen implements Screen{
         //create Players from dummyPlayers
         gamemap = client.getMap();
         gamemap.initPlayers(); //called before gamemap.render
-
-
+        gamemap.createEnv(); //create ground, ceiling, etc
+        Log.info(playerName + "namenamenamename");
+        hud = new HUD(game.batch,playerName,gamemap);
+        startTime = TimeUtils.millis();
 
         music=Gdx.audio.newMusic(Gdx.files.internal("Sounds/gamescreen.mp3"));
         music.setVolume(0.5f);                 // sets the volume to half the maximum volume
@@ -115,12 +119,14 @@ public class PlayScreen implements Screen{
         hud.stage.draw();
 
         if (hud.worldTimer == 0) {
-                music.stop();
-                gameOver();
-            }
+            music.stop();
+            gameOver();
         }
+    }
     public void gameOver() {
-        game.setScreen(new EndScreen(game, playmusic));
+        Log.info("numPlayers" + gamemap.getDummyPlayers().size());
+        dispose();
+        game.setScreen(new EndScreen(game, playmusic, gamemap.getPlayers(), gamemap.getRankings()));
     }
 
     @Override
@@ -150,10 +156,5 @@ public class PlayScreen implements Screen{
     @Override
     public void dispose() {
         music.dispose();
-    }
-
-    private void logInfo(String string) {
-//        Log.info("[PlayScreen]: " + string);
-//        Log.info(string);
     }
 }

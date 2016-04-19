@@ -26,6 +26,9 @@ import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lemoninc.nimbusrun.NimbusRun;
 import com.lemoninc.nimbusrun.Sprites.GameMap;
+import com.lemoninc.nimbusrun.Sprites.Player;
+
+import java.util.Map;
 
 
 /**
@@ -43,9 +46,13 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
     Label timelabel;
     Label CharacterLabel;
     private Camera camera;
-    String Player;
+    String player;
     private ShapeRenderer shapeRenderer;
     private float progress;
+    private Map<Integer, Player> players;
+    String PlayerCharacter;
+//    ProgressBar.ProgressBarStyle barStyle;
+//    TextureRegionDrawable textureBar;
     float timecount;
     int count;
     Label dialoglabel;
@@ -55,6 +62,7 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
     int nopowerups;
     private float powerupdistance;
     float playerLocalX,worldLength;
+    Map<Integer, GameMap.DummyPlayer> dummyPlayers;
     GameMap gameMap;
     int characternumber,position;
     Window scorewindow,timewindow,powerupwindow,charinfowindow;
@@ -64,8 +72,9 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
 
     public  HUD(SpriteBatch sb, String playernumber, GameMap gameMap,int characternumber){
         this.characternumber=characternumber;
-        this.Player=playernumber;
+        this.player=playernumber;
         this.gameMap=gameMap;
+
         //playerLocalX =gameMap.bgStartX;
         //worldLength = 18*gameMap.getGameport().getWorldWidth();
         Gdx.app.log("world length",String.valueOf(worldLength));
@@ -144,7 +153,7 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
         timecount=0;
         count=4;
         dialogstart.text(dialoglabel);
-
+        stage.addActor(dialogstart);
         Table table = new Table();
         table.top();
         table.setHeight(viewport.getScreenHeight());
@@ -240,6 +249,16 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
     public void update(float delta) {
         show();
         timecount += delta;
+        if(gameMap.getGameMapReadyForHUD()){
+            //Log.info("boom boom");
+            Map <Integer, Player> players = gameMap.getPlayers();
+            //Log.info("how many players: "+ players.size());
+            for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {
+                Player curPlayer = playerEntry.getValue();
+                //Log.info("hiXpos: " + curPlayer.getX());
+            }
+        }
+
         if(count>0) {
             stage.draw();
 

@@ -5,7 +5,6 @@
  *
  * NOTES : The screen takes input from the waitscreen and moves to waitscreen
  * TODO: Create a waiting function for all the players to connect and wait for each other,
- * TODO: get the input in the screen a string of the host ip adress, (right now IP=string localhost)
  * TODO: The wait can be onclick of the joingame button
  * TODO: Implement the counter on the basis of the players connected
  * The function has a string name of the player it has chosen, pass this to the playscreen/player to choose the specific character.
@@ -58,7 +57,6 @@ import java.util.Random;
  */
 public class CharacterSelectionScreen implements Screen{
     private SpriteBatch batcher;
-    private Sprite sprite;
     private final NimbusRun game;
     private float gameWidth;
     private float gameHeight;
@@ -92,26 +90,25 @@ public class CharacterSelectionScreen implements Screen{
 
     private int[] mapData;
 
-    public CharacterSelectionScreen(final NimbusRun game, final boolean isHost, String ipAddress, String playerName, final Boolean playmusic){
-
 
     /**
      *
      * @param game
      * @param isHost
-     * @param ipAddress to connect the client to the server
      * @param playerName
      */
+    public CharacterSelectionScreen(NimbusRun game, final boolean isHost, String playerName, final Boolean playmusic){
         this.game = game;
         this.isHost = isHost;
-        this.ipAddress = ipAddress;
         this.playername = playerName;
         this.gameWidth = NimbusRun.V_WIDTH;
         this.gameHeight = NimbusRun.V_HEIGHT;
         this.playmusic=playmusic;
-        this.mapData = null;
-//        myIP=ipAddress;
 
+        charactername=1; //default character is Buddha
+
+        BUTTON_HEIGHT=165;
+        BUTTON_WIDTH=140;
 
         //myIP=ipAddress;
         Playerability="STUN";
@@ -229,7 +226,6 @@ public class CharacterSelectionScreen implements Screen{
         goback.setSize(gameWidth/5,gameHeight/8);
         goback.setPosition(gameWidth * 0.85f, gameHeight * 0.75f);
 
-
         table.addActor(Title);
         table.addActor(joingame);
         table.addActor(goback);
@@ -241,12 +237,14 @@ public class CharacterSelectionScreen implements Screen{
         table.addActor(ponti);
         stage.addActor(table);
 
+        Playerability = "STUN";
+
         Buddha.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 resetbuttons();
                 System.out.println("touched");
-                Gdx.app.log("Button pressed", "Buddha Button Pressed");
+                Gdx.app.log("GDX Button pressed", "Buddha Button Pressed");
                 playercharacter = skin.getSprite("bg_Buddha");
 
                 return true;
@@ -289,7 +287,7 @@ public class CharacterSelectionScreen implements Screen{
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 resetbuttons();
                 System.out.println("touched");
-                Gdx.app.log("Button pressed", "Kappa Button Pressed");
+                Gdx.app.log("GDX Button pressed", "Kappa Button Pressed");
                 playercharacter= skin.getSprite("bg_Kappa");
                 playercharacter.setPosition(0, 0);
                 playercharacter.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -308,7 +306,7 @@ public class CharacterSelectionScreen implements Screen{
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 resetbuttons();
                 System.out.println("touched");
-                Gdx.app.log("Button pressed", "KrishnaButton Pressed");
+                Gdx.app.log("GDX Button pressed", "KrishnaButton Pressed");
                 playercharacter= skin.getSprite("bg_Krishna");
                 playercharacter.setPosition(0, 0);
                 playercharacter.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -365,29 +363,26 @@ public class CharacterSelectionScreen implements Screen{
             public void clicked(InputEvent event, float x, float y) {
                 soundclick.play();
                 music.stop();
-                Gdx.app.log("PlayerNumber", "Character " + charactername + " joined game");
-//                playGame(charactername);
-                //TODO:save the charactername, let server know player is ready to play
+                
+                Gdx.app.log("GDX CSscreen", "Character " + charactername + " selected for the player");
                 //send server charactername packet
-                if (charactername != 99) {
+                if (charactername != 99) { //if character is chosen
                     Network.Ready ready = new Network.Ready(charactername);
                     client.sendMessage(ready);
                     gamemap.declareCharacter(charactername);
-                    Gdx.app.log("CSscreen", "self declare character");
-                    //TODO: create check on CS screen
+                    Gdx.app.log("GDX CSscreen", "I declared my character to GameMap");
 
                 }
                 if (isHost) {
-                    //TODO: try to start game
                     //if received charactername from all players, play game
                     if (server.allDummyReady()) {
-                        //TODO: send all clients GameReady
+                        //send to server GameReady
                         Network.GameReady gameready = new Network.GameReady();
                         client.sendMessage(gameready);
                         playGame();
                     }
                     else {
-                        Gdx.app.log("CSscreen", "Not all dummies ready ");
+                        Gdx.app.log("GDX CSscreen", "Not all dummies ready");
                     }
                 }
             }
@@ -399,11 +394,10 @@ public class CharacterSelectionScreen implements Screen{
                 // TODO: SAVE THE LOG OF THE PLAYER ACCORDING TO THE NUMBER
                 //charactername= checkbuttonpress();
                 soundclick.play();
-                game.setScreen(new MenuScreen(game, gameWidth, gameHeight));
+                goToMenu();
                 music.stop();
             }
         });
-
 
 
     }
@@ -427,7 +421,6 @@ public class CharacterSelectionScreen implements Screen{
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
-        sprite = new Sprite(new Texture("3_CharSelScreen/whiteBG.png"));
         //sprite.setColor(1, 1, 1, 0);
         playercharacter=new Sprite(skin.getSprite("bg_Buddha"));
         //sprite.setPosition(0, 0);
@@ -438,25 +431,25 @@ public class CharacterSelectionScreen implements Screen{
         style.font.setColor(Color.DARK_GRAY);
         batcher = new SpriteBatch();
         startTime = TimeUtils.millis();
-        mapData = new int[8];
+
 
         //instnatiate server, client here
 
-        
         if (isHost) {
+            mapData = new int[GameMap.NUMPLATFORMS];
             Random rand = new Random();
             for (int i = 0; i < 8; i++){
                 mapData[i] = rand.nextInt(3);
             }
+            Gdx.app.log("GDX CSscreen", "Mapdata only created by the Host");
             client = new TapTapClient(game, this, playername, mapData);
             gamemap = client.getMap();
             //start my server and connect my client to my server
             try {
-                server = new TapTapServer();
+                server = new TapTapServer(mapData);
                 client.connect("localhost");
             } catch (IOException e) {
-                e.printStackTrace();
-//                logInfo("Can't connect to localhost server");
+                Gdx.app.log("GDX CSscreen", "Host cannot connect to server, setting to WaitScreen");
                 Gdx.app.postRunnable(new Runnable() {
                     @Override
                     public void run() {
@@ -471,9 +464,10 @@ public class CharacterSelectionScreen implements Screen{
             gamemap = client.getMap();
             //client connects to ipAddress
             try {
-                client.connect(ipAddress);
+                Gdx.app.log("GDX CSscreen", "Player connecting to LAN.");
+                client.connectLAN();
             } catch (IOException e) {
-//                logInfo("Can't connect to server: " + ipAddress);
+                Gdx.app.log("GDX CSscreen", "Player cannot connect to server");
                 Gdx.app.postRunnable(new Runnable() {
                     @Override
                     public void run() {
@@ -502,10 +496,13 @@ public class CharacterSelectionScreen implements Screen{
         game.setScreen(new PlayScreen(game, isHost, playername, client, server,playmusic,charactername));
     }
 
-    public int getCharactername(){
-        return this.charactername;
-    }
+    public void goToMenu(){
+        stage.clear();
+        game.setScreen(new MenuScreen(game, gameWidth, gameHeight));
+        //TODO: shutdown client, server
 
+    }
+    
 //    public void goPlayScreen() {
 //        game.setScreen(new PlayScreen(game, isHost, playername, client, server));
 //
@@ -515,17 +512,16 @@ public class CharacterSelectionScreen implements Screen{
     public void render(float delta) {
         Gdx.gl.glClearColor(255, 255, 255, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        //BitmapFont font=new BitmapFont(Gdx.files.internal("Fonts/crimesFont36Black"));
 
 
-        //batcher.setProjectionMatrix(camera.combined);
         batcher.begin();
        // sprite.draw(batcher);
 
         style.font.draw(batcher, "My Special ability is to", viewport.getScreenWidth() / 3, viewport.getScreenHeight() - 250);
         style.font.draw(batcher, Playerability, viewport.getScreenWidth() / 3, viewport.getScreenHeight() - 275);
         style.font.draw(batcher, "the world",viewport.getScreenWidth()/3,viewport.getScreenHeight()-300);
-        style.font.draw(batcher, "Enter IP : " + myIP, viewport.getScreenWidth()/3,viewport.getScreenHeight()/7);
+        if (myIP != null)
+            style.font.draw(batcher, "Host IP address: " + myIP, viewport.getScreenWidth()/3,viewport.getScreenHeight()/7);
         playercharacter.setPosition(viewport.getScreenWidth()/4,viewport.getScreenHeight()/12);
         playercharacter.setSize(viewport.getScreenWidth()*0.75f,viewport.getScreenHeight()*0.75f);
 
@@ -534,10 +530,6 @@ public class CharacterSelectionScreen implements Screen{
 
         stage.act();
         stage.draw();
-
-
-        //if (TimeUtils.millis()>(startTime+15000)) game.setScreen(new PlayScreen(game,isHost,ipAddress, playername));
-
     }
 
     @Override

@@ -46,9 +46,8 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lemoninc.nimbusrun.NimbusRun;
 
+import java.net.InetAddress;
 import java.util.Random;
-
-//import com.lemoninc.nimbusrun.Networking.Networking;
 
 public class WaitScreen implements Screen{
     private NimbusRun game;
@@ -62,8 +61,6 @@ public class WaitScreen implements Screen{
     private float BUTTON_HEIGHT;
 
     private SpriteBatch batch;
-    private Texture background;
-    private Sprite sprite;
 
     private Stage stage;
     private Skin skin;
@@ -95,6 +92,7 @@ public class WaitScreen implements Screen{
         this.gameHeight=game.V_HEIGHT;
         this.gameWidth=game.V_WIDTH;
         this.playmusic=playmusic;
+        //TODO: remove IP address in preferences
         preferences = Gdx.app.getPreferences("NimbusRun_Network");
         soundclick=Gdx.audio.newSound(Gdx.files.internal("Sounds/click.mp3"));
         music=Gdx.audio.newMusic(Gdx.files.internal("Sounds/waitscreen.mp3"));
@@ -122,7 +120,7 @@ public class WaitScreen implements Screen{
         clientbutton=new TextButton("Join as Client",style);
         backbutton=new TextButton("Go Back",style);
 
-        Gdx.app.log("WaitScreen", "Finished connecting & configuring events");
+        Gdx.app.log("GDX WaitScreen", "Finished connecting & configuring events");
         playernumber=1;
     }
 
@@ -134,12 +132,10 @@ public class WaitScreen implements Screen{
     public void show() {
 
         batch= new SpriteBatch();
-        background= new Texture("3_CharSelScreen/whiteBG.png");
-        background.setFilter(Texture.TextureFilter.Linear,Texture.TextureFilter.Linear);
-        sprite=new Sprite(background);
-        sprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         skin = new Skin(Gdx.files.internal("data/uiskin.json"));
+
+        // Clear background with WHITE rather than render a white image for performance
 
         // Create UI elements
 
@@ -148,21 +144,12 @@ public class WaitScreen implements Screen{
         labeltitle.setSize(400, 200);
         stage.addActor(labeltitle);
 
-
         playername=new TextField(preferences.getString("name"),skin);
         playername.setSize(150, 50);
-        playername.setPosition(this.gameWidth / 2, 375, Align.center);
+        playername.setPosition(this.gameWidth / 2, 330, Align.center);
         playername.setMessageText("Enter your name");
         stage.getKeyboardFocus();
         stage.addActor(playername);
-
-        playerIP=new TextField(preferences.getString("ip"), skin);
-        playerIP.setSize(150, 50);
-        playerIP.setPosition(this.gameWidth / 2, 300, Align.center);
-        playerIP.setMessageText("Enter the host IP to join game");
-        stage.getKeyboardFocus();
-        stage.addActor(playerIP);
-
 
         hostbutton.setSize(this.BUTTON_WIDTH, this.BUTTON_HEIGHT);
         hostbutton.setPosition(this.gameWidth / 2, 200, Align.bottomLeft);
@@ -179,18 +166,9 @@ public class WaitScreen implements Screen{
         playername.setTextFieldListener(new TextField.TextFieldListener() {
             public void keyTyped(TextField textField, char key) {
                 if (key == '\n') textField.getOnscreenKeyboard().show(false);
-//                NameValue = textField.getText();
             }
         });
-        //      System.out.println(NameValue);
 
-        playerIP.setTextFieldListener(new TextField.TextFieldListener() {
-            public void keyTyped(TextField textField, char key) {
-//                Ipvalue = textField.getText();
-                if (key == '\n') textField.getOnscreenKeyboard().show(false);
-            }
-        });
-//        System.out.println(Ipvalue);
 
 
 
@@ -201,7 +179,6 @@ public class WaitScreen implements Screen{
                 //game.setScreen(new TutorialScreen(game, gameWidth, gameHeight));
                 soundclick.play();
                 hostGame();
-
             }
         });
 
@@ -230,32 +207,19 @@ public class WaitScreen implements Screen{
 
 
     public void update(float dt) {
-        handleInput();
         gamecam.update();
-    }
-
-    protected void handleInput() {
-
-//        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
-//            playGame();
-//        }
-//        else if (Gdx.input.isKeyPressed(Input.Keys.UP)){
-//            game.setScreen(new PlayScreen(game, false, "localhost", getName()));
-//        }
     }
 
     @Override
     public void render(float delta) {
         update(delta);
 
-        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 //        batch.setProjectionMatrix(gamecam.combined);
         batch.begin();
-        sprite.draw(batch);
         batch.end();
-
 
         stage.act();
         stage.draw();
@@ -279,7 +243,6 @@ public class WaitScreen implements Screen{
 
     @Override
     public void hide() {
-        dispose();
     }
 
     @Override
@@ -288,7 +251,6 @@ public class WaitScreen implements Screen{
         skin.dispose();
         stage.dispose();
         batch.dispose();
-        sprite.getTexture().dispose();
         music.stop();
         music.dispose();
         soundclick.dispose();
@@ -298,18 +260,17 @@ public class WaitScreen implements Screen{
      * join a game room
      */
     private void joinGame(){
-        if (!playerIP.getText().equals("")) {
-            game.setScreen(new CharacterSelectionScreen(game, false, playerIP.getText(), getName(),playmusic));
-            //TODO: what if IP is blank?
-            savePrefs();
-        }
+        dispose();
+        game.setScreen(new CharacterSelectionScreen(game, false, getName(), playmusic));
+        savePrefs();
     }
 
     /**
      * play game as a host
      */
     private void hostGame(){
-        game.setScreen(new CharacterSelectionScreen(game, true, "localhost", getName(),playmusic));
+        dispose();
+        game.setScreen(new CharacterSelectionScreen(game, true, getName(), playmusic));
         savePrefs();
     }
 
@@ -330,7 +291,6 @@ public class WaitScreen implements Screen{
 
     private void savePrefs(){
         preferences.putString("name", getName());
-        preferences.putString("ip", playerIP.getText());
         preferences.flush();
     }
 }
