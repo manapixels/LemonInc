@@ -126,7 +126,6 @@ public class PlayScreen implements Screen{
     }
     public void gameOver() {
         Log.info("numPlayers" + gamemap.getDummyPlayers().size());
-        dispose();
         game.setScreen(new EndScreen(game, playmusic));
     }
 
@@ -156,7 +155,7 @@ public class PlayScreen implements Screen{
 
     @Override
     public void dispose() {
-
         music.dispose();
+        music.stop();
     }
 }
