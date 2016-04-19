@@ -79,8 +79,8 @@ public class Player extends Sprite implements InputProcessor {
     private float factor = 1;
 
     private float screenWidth = Gdx.graphics.getWidth();
-    Sound jump;
-    Sound attack;
+    private Sound jumpSound;
+    private Sound buddhaSound, snakeSound, kappaSound, pontianakSound, gumihoSound, krishnaSound;
 
     Vector2 previousPosition;
 
@@ -145,7 +145,13 @@ public class Player extends Sprite implements InputProcessor {
 
             //create music
 
-            jump = Gdx.audio.newSound(Gdx.files.internal("Sounds/swoosh.wav"));
+            jumpSound = Gdx.audio.newSound(Gdx.files.internal("Sounds/swoosh.wav"));
+            buddhaSound = Gdx.audio.newSound(Gdx.files.internal("Sounds/Buddha.mp3"));
+            snakeSound = Gdx.audio.newSound(Gdx.files.internal("Sounds/Snake.mp3"));
+            pontianakSound = Gdx.audio.newSound(Gdx.files.internal("Sounds/Pontianak.mp3"));
+            gumihoSound = Gdx.audio.newSound(Gdx.files.internal("Sounds/Gumiho.mp3"));
+            kappaSound = Gdx.audio.newSound(Gdx.files.internal("Sounds/Kappa.mp3"));
+            krishnaSound = Gdx.audio.newSound(Gdx.files.internal("Sounds/Krishna.mp3"));
 
             Gdx.input.setInputProcessor(this);
 
@@ -384,6 +390,20 @@ public class Player extends Sprite implements InputProcessor {
     public boolean attack() {
 
         Network.PlayerAttack msgPlayerAttack = new Network.PlayerAttack(id, character);
+        if (character == 1)
+            buddhaSound.play();
+        if (character == 2)
+            krishnaSound.play();
+        if (character == 3)
+            gumihoSound.play();
+        if (character == 4)
+            kappaSound.play();
+        if (character == 5)
+            pontianakSound.play();
+        if (character == 6)
+            snakeSound.play();
+
+//        if (character )
         gameMap.playerAttacked(msgPlayerAttack);
         //TODO: reset attack gauge bar
 
@@ -395,6 +415,7 @@ public class Player extends Sprite implements InputProcessor {
     }
 
     public boolean stun() {
+        buddhaSound.play();
         stunned = true;
         stunTime = 150f;
         b2body.setLinearVelocity(new Vector2(0, 0));
@@ -402,18 +423,21 @@ public class Player extends Sprite implements InputProcessor {
     }
 
     public boolean poison() {
+        snakeSound.play();
         poisoned = true;
         poisonTime = 400f;
         return true;
     }
 
     public boolean reverse() {
+        kappaSound.play();
         reversed = true;
         reverseTime = 200f;
         return true;
     }
 
     public boolean terror() {
+        pontianakSound.play();
         terrored = true;
         b2body.setLinearVelocity(0, 0);
         terrorTime = 75f;
@@ -421,12 +445,14 @@ public class Player extends Sprite implements InputProcessor {
     }
 
     public boolean flash() {
+        krishnaSound.play();
         flashed = true;
         flashTime = 300f;
         return true;
     }
 
     public boolean confuse() {
+        gumihoSound.play();
         confused = true;
         confuseTime = 400f;
         return true;
@@ -440,11 +466,11 @@ public class Player extends Sprite implements InputProcessor {
             previousState = State.JUMPING;
             currentState = State.DOUBLEJUMPING;
             b2body.applyLinearImpulse(new Vector2(0, JUMPFORCE * checkCondition()), b2body.getWorldCenter(), true);
-            jump.play();
+            jumpSound.play();
         } else {
             currentState = State.JUMPING;
             b2body.applyLinearImpulse(new Vector2(0, JUMPFORCE * checkCondition()), b2body.getWorldCenter(), true);
-            jump.play();
+            jumpSound.play();
         }
         return true;
     }
@@ -575,7 +601,13 @@ public class Player extends Sprite implements InputProcessor {
 
     public void dispose() {
         if (isLocal) {
-            jump.dispose();
+            jumpSound.dispose();
+            krishnaSound.dispose();
+            buddhaSound.dispose();
+            pontianakSound.dispose();
+            snakeSound.dispose();
+            gumihoSound.dispose();
+            kappaSound.dispose();
         }
         img.dispose();
     }
