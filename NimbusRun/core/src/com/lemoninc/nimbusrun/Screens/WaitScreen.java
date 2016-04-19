@@ -145,17 +145,10 @@ public class WaitScreen implements Screen{
 
         playername=new TextField(preferences.getString("name"),skin);
         playername.setSize(150, 50);
-        playername.setPosition(this.gameWidth / 2, 375, Align.center);
+        playername.setPosition(this.gameWidth / 2, 330, Align.center);
         playername.setMessageText("Enter your name");
         stage.getKeyboardFocus();
         stage.addActor(playername);
-
-        playerIP=new TextField(preferences.getString("ip"), skin);
-        playerIP.setSize(150, 50);
-        playerIP.setPosition(this.gameWidth / 2, 300, Align.center);
-        playerIP.setMessageText("Enter the host IP to join game");
-        stage.getKeyboardFocus();
-        stage.addActor(playerIP);
 
         hostbutton.setSize(this.BUTTON_WIDTH, this.BUTTON_HEIGHT);
         hostbutton.setPosition(this.gameWidth / 2, 200, Align.bottomLeft);
@@ -168,18 +161,9 @@ public class WaitScreen implements Screen{
         playername.setTextFieldListener(new TextField.TextFieldListener() {
             public void keyTyped(TextField textField, char key) {
                 if (key == '\n') textField.getOnscreenKeyboard().show(false);
-//                NameValue = textField.getText();
             }
         });
-        //      System.out.println(NameValue);
 
-        playerIP.setTextFieldListener(new TextField.TextFieldListener() {
-            public void keyTyped(TextField textField, char key) {
-//                Ipvalue = textField.getText();
-                if (key == '\n') textField.getOnscreenKeyboard().show(false);
-            }
-        });
-//        System.out.println(Ipvalue);
 
 
 
@@ -293,7 +277,6 @@ public class WaitScreen implements Screen{
 
     private void savePrefs(){
         preferences.putString("name", getName());
-        preferences.putString("ip", playerIP.getText());
         preferences.flush();
     }
 }
