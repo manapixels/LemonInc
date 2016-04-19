@@ -59,11 +59,12 @@ public class PlayScreen implements Screen{
 
     public PlayScreen(NimbusRun game, boolean isHost, String playerName, TapTapClient client, TapTapServer server,Boolean playmusic){
 
-        this.playmusic=playmusic;
+        this.playmusic = playmusic;
         this.game = game;
         this.isHost = isHost;
 
-        hud = new HUD(game.batch,playerName,gamemap);
+        this.hud = new HUD(game.batch,playerName,gamemap);
+
         startTime = TimeUtils.millis();
 
         this.client = client;
@@ -86,16 +87,15 @@ public class PlayScreen implements Screen{
         gamemap = client.getMap();
         gamemap.initPlayers(); //called before gamemap.render
         gamemap.createEnv(); //create ground, ceiling, etc
+        gamemap.passHUD(hud);
 
-        music=Gdx.audio.newMusic(Gdx.files.internal("Sounds/gamescreen.mp3"));
+        music = Gdx.audio.newMusic(Gdx.files.internal("Sounds/gamescreen.mp3"));
         music.setVolume(0.5f);                 // sets the volume to half the maximum volume
         music.setLooping(true);
-
 
         if(playmusic){
             music.play();
         }
-
         if (isHost) {
             server.initPlayers();
         }

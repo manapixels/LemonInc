@@ -49,7 +49,7 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
 //    ProgressBar.ProgressBarStyle barStyle;
 //    TextureRegionDrawable textureBar;
     float timecount;
-    int count;
+    public int count;
     Label dialoglabel;
     com.badlogic.gdx.scenes.scene2d.ui.Dialog dialogstart;
     private com.badlogic.gdx.scenes.scene2d.ui.Skin skin;
@@ -59,7 +59,7 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
     float playerLocalX,worldLength;
     GameMap gameMap;
 
-    public  HUD(SpriteBatch sb, String playernumber, GameMap gameMap){
+    public HUD(SpriteBatch sb, String playernumber, GameMap gameMap){
 
         this.Player=playernumber;
         this.gameMap=gameMap;
@@ -75,7 +75,7 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
         shapeRenderer=new ShapeRenderer();
         progress=1f;
         powerup=0f;
-        count=4;
+        count=3;
         nopowerups=3;
 
 
@@ -159,7 +159,7 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
     public void update(float delta) {
         show();
         timecount += delta;
-        if(count>0) {
+        if (count>0) {
             stage.draw();
 
             if (timecount >= 1) {
