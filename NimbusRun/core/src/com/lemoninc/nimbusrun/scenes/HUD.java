@@ -5,7 +5,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -22,12 +21,16 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.esotericsoftware.minlog.Log;
 import com.lemoninc.nimbusrun.NimbusRun;
+import com.lemoninc.nimbusrun.Screens.PlayScreen;
 import com.lemoninc.nimbusrun.Sprites.GameMap;
 import com.lemoninc.nimbusrun.Sprites.Player;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -44,7 +47,6 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
     Label countdownLabel;
     Label timelabel;
     Label CharacterLabel;
-
     private ShapeRenderer shapeRenderer;
     private float progress;
     String PlayerCharacter;
@@ -65,6 +67,9 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
     private Label.LabelStyle yellowLabelStyle, blackLabelStyle;
     TextureRegionDrawable windowbackground;
 
+
+    private PlayScreen playScreen;
+
     /**
      * Parameters are passed into HUD at PlayScreen after GameMap is created, initialised.
      * @param sb
@@ -72,16 +77,14 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
      * @param gameMap client's gameMap
      * @param characternumber
      */
-    public HUD(SpriteBatch sb, String playername, GameMap gameMap,int characternumber){
+    public  HUD(PlayScreen playScreen, SpriteBatch sb, String playername, GameMap gameMap,int characternumber){
 
+        this.playScreen = playScreen;
+        this.characternumber=characternumber;
         this.gameMap=gameMap;
         Gdx.app.log("world length",String.valueOf(worldLength));
         worldTimer = 150;
-
-
-
         timecount=0;
-
         viewport=new FillViewport(NimbusRun.V_WIDTH,NimbusRun.V_HEIGHT,new OrthographicCamera());
         shapeRenderer=new ShapeRenderer();
         progress=1f;

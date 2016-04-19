@@ -37,11 +37,8 @@ public class PlayScreen implements Screen{
     public GameMap gamemap;
 
     private final boolean isHost;
-//    private final String ipAddress;
     private String playerName;
     private List<Integer> rankings;
-    private List<Integer> charTypes;
-
     private TapTapClient client;
     private TapTapServer server;
     private HUD hud;
@@ -51,7 +48,7 @@ public class PlayScreen implements Screen{
     private long startTime;
     int charactername;
 
-
+    PlayScreen playScreen;
 
     /**
      *
@@ -94,7 +91,7 @@ public class PlayScreen implements Screen{
 
         gamemap.createEnv(); //create ground, ceiling, etc
 //        Log.info(playerName + "namenamenamename");
-        hud = new HUD(game.batch,playerName,gamemap,charactername);
+        hud = new HUD(playScreen,game.batch,playerName,gamemap,charactername);
         gamemap.passHUD(hud);
         startTime = TimeUtils.millis();
 
@@ -135,7 +132,7 @@ public class PlayScreen implements Screen{
 
     public void gameOver() {
         dispose();
-        game.setScreen(new EndScreen(game, playmusic, rankings));
+        game.setScreen(new SplashScreen(game,NimbusRun.V_WIDTH, NimbusRun.V_HEIGHT));
     }
 
     @Override
