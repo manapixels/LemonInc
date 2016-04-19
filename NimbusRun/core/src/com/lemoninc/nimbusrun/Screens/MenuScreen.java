@@ -122,11 +122,13 @@ public class MenuScreen implements Screen {
         muteButton.setPosition(700, 100);
         unmuteButton.setPosition(700, 100);
 
-        if (com.lemoninc.nimbusrun.Assetloading.AssetLoader.VOLUME == 1) {
-            stage.addActor(muteButton);
-        } else {
-            stage.addActor(unmuteButton);
-        }
+        stage.addActor(unmuteButton);
+
+//        if (com.lemoninc.nimbusrun.Assetloading.AssetLoader.VOLUME == 1) {
+//            stage.addActor(muteButton);
+//        } else {
+//            stage.addActor(unmuteButton);
+//        }
 
         buttonPlay.addListener(new ClickListener() {
             @Override
@@ -154,11 +156,7 @@ public class MenuScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
           //      AssetLoader.clickSound.play(AssetLoader.VOLUME);
                 soundclick.play();
-                game.setScreen(new StoryLineScreen(game,batch,gameWidth,gameHeight));
-                game.setScreen(new CharDescrScreen(game, gameWidth,gameHeight));
-
-                // TODO Set to tutorial screen
-                //  gsm.set(new StoryScreen(game, gsm));
+                game.setScreen(new CharDescrScreen(game, batch, gameWidth,gameHeight));
             }
         });
 
