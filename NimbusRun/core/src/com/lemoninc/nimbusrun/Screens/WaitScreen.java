@@ -19,7 +19,6 @@ package com.lemoninc.nimbusrun.Screens;
  * ********************************/
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
@@ -78,6 +77,7 @@ public class WaitScreen implements Screen{
     private TextField playerIP;
     private TextField playername;
     private Random random = new Random();
+    private TextButton backbutton;
 
     Label labeltitle;
     String Ipvalue,NameValue;
@@ -120,6 +120,7 @@ public class WaitScreen implements Screen{
         stage= new Stage(new ExtendViewport(gameWidth,gameHeight));
         hostbutton=new TextButton("Join as Host",style);
         clientbutton=new TextButton("Join as Client",style);
+        backbutton=new TextButton("Go Back",style);
 
         Gdx.app.log("WaitScreen", "Finished connecting & configuring events");
         playernumber=1;
@@ -143,7 +144,7 @@ public class WaitScreen implements Screen{
         // Create UI elements
 
         labeltitle=new Label("Nimbus Run",new Label.LabelStyle(new BitmapFont(Gdx.files.internal("Fonts/crimesFont48Black.fnt")), Color.DARK_GRAY));
-        labeltitle.setPosition(this.gameWidth/2, this.gameHeight-this.gameHeight/4,Align.center);
+        labeltitle.setPosition(this.gameWidth / 2, this.gameHeight - this.gameHeight / 4, Align.center);
         labeltitle.setSize(400, 200);
         stage.addActor(labeltitle);
 
@@ -170,6 +171,10 @@ public class WaitScreen implements Screen{
         clientbutton.setSize(this.BUTTON_WIDTH, this.BUTTON_HEIGHT);
         clientbutton.setPosition(this.gameWidth / 2, 200, Align.bottomRight);
         stage.addActor(clientbutton);
+
+        backbutton.setSize(this.BUTTON_WIDTH, this.BUTTON_HEIGHT);
+        backbutton.setPosition(this.gameWidth*0.8f, 150, Align.bottomRight);
+        stage.addActor(backbutton);
 
         playername.setTextFieldListener(new TextField.TextFieldListener() {
             public void keyTyped(TextField textField, char key) {
@@ -208,6 +213,15 @@ public class WaitScreen implements Screen{
                 joinGame();
             }
         });
+        backbutton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                // game.setScreen(new StoryLineScreen(game, gameWidth, gameHeight));
+                soundclick.play();
+                game.setScreen(new MenuScreen(game,gameWidth,gameHeight));
+            }
+        });
+
 
         Gdx.input.setInputProcessor(stage);
     }

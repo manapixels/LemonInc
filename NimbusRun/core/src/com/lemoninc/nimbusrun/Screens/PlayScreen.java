@@ -45,6 +45,7 @@ public class PlayScreen implements Screen{
     Boolean playmusic;
     Music music;
     private long startTime;
+    int charactername;
 
 
 
@@ -56,13 +57,13 @@ public class PlayScreen implements Screen{
      * @param playerName
      */
 
-    public PlayScreen(NimbusRun game, boolean isHost, String playerName, TapTapClient client, TapTapServer server,Boolean playmusic){
-
+    public PlayScreen(NimbusRun game, boolean isHost, String playerName, TapTapClient client, TapTapServer server,Boolean playmusic,int charactername){
+        this.charactername=charactername;
         this.playmusic=playmusic;
         this.game = game;
         this.isHost = isHost;
 
-        hud = new HUD(game.batch,playerName,gamemap);
+        hud = new HUD(game.batch,playerName,gamemap,charactername);
         startTime = TimeUtils.millis();
 
         this.client = client;

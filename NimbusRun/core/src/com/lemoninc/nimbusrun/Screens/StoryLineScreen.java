@@ -59,7 +59,9 @@ public class StoryLineScreen implements Screen{
         style.font.setColor(Color.BLUE);
         style.font.getData().setScale(0.65f, 0.65f);
         style.up= new TextureRegionDrawable(new TextureRegion(new Texture("0_StorylineScreen/button_up.png")));
-        style.down= new TextureRegionDrawable(new TextureRegion(new Texture("0_StorylineScreen/button_down.png")));
+        style.down= new TextureRegionDrawable(new TextureRegion(new Texture("0_StorylineScreen/button_down1.png")));
+        style.over= new TextureRegionDrawable(new TextureRegion(new Texture("0_StorylineScreen/button_down1.png")));
+
 
         camera=new PerspectiveCamera();
         viewport=new FitViewport(gameWidth,gameHeight,camera);

@@ -83,7 +83,7 @@ public class CharacterSelectionScreen implements Screen{
     Boolean playmusic;
     Music music;
     Sound soundclick;
-    private int charactername = 99;
+    public int charactername = 99;
     private String myIP;
 
     private TapTapClient client;
@@ -130,9 +130,9 @@ public class CharacterSelectionScreen implements Screen{
         camera=new PerspectiveCamera();
         viewport=new FitViewport(gameWidth,gameHeight,camera);
         skin=new Skin(Gdx.files.internal("data/uiskin.json"));
-        atlas1=new TextureAtlas(Gdx.files.internal("CharSelScreen/charicons.pack"));
-        atlas2=new TextureAtlas(Gdx.files.internal("CharSelScreen/zoomicons.pack"));
-        atlas3=new TextureAtlas(Gdx.files.internal("buttonsupdown.pack"));;
+        atlas1=new TextureAtlas(Gdx.files.internal("3_CharSelScreen/charicons.pack"));
+        atlas2=new TextureAtlas(Gdx.files.internal("3_CharSelScreen/zoomicons.pack"));
+        atlas3=new TextureAtlas(Gdx.files.internal("3_CharSelScreen/buttonsupdown.pack"));
         skin.addRegions(atlas1);
         skin.addRegions(atlas2);
         skin.addRegions(atlas3);
@@ -499,7 +499,11 @@ public class CharacterSelectionScreen implements Screen{
 
     public void playGame(){
         stage.clear();
-        game.setScreen(new PlayScreen(game, isHost, playername, client, server,playmusic));
+        game.setScreen(new PlayScreen(game, isHost, playername, client, server,playmusic,charactername));
+    }
+
+    public int getCharactername(){
+        return this.charactername;
     }
 
 //    public void goPlayScreen() {
