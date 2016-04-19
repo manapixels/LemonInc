@@ -27,6 +27,7 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -76,6 +77,9 @@ public class Player extends Sprite implements InputProcessor {
     private final float MOVEFORCE = 2.5f;
     private final float MOVESPEEDCAP = 8;
     private float factor = 1;
+
+    Sound jump;
+    Sound attack;
 
     Vector2 previousPosition;
 
@@ -137,6 +141,11 @@ public class Player extends Sprite implements InputProcessor {
 
         //only for playerLocal
         if (isLocal) {
+
+            //create music
+
+            jump = Gdx.audio.newSound(Gdx.files.internal("Sounds/swoosh.wav"));
+
             Gdx.input.setInputProcessor(this);
 
             touches = new HashMap<Integer, TouchInfo>();
@@ -432,9 +441,11 @@ public class Player extends Sprite implements InputProcessor {
             previousState = State.JUMPING;
             currentState = State.DOUBLEJUMPING;
             b2body.applyLinearImpulse(new Vector2(0, JUMPFORCE * checkCondition()), b2body.getWorldCenter(), true);
+            jump.play();
         } else {
             currentState = State.JUMPING;
             b2body.applyLinearImpulse(new Vector2(0, JUMPFORCE * checkCondition()), b2body.getWorldCenter(), true);
+            jump.play();
         }
         return true;
     }
@@ -563,7 +574,10 @@ public class Player extends Sprite implements InputProcessor {
         return false;
     }
 
-    public void dispose(){
+    public void dispose() {
+        if (isLocal) {
+            jump.dispose();
+        }
         img.dispose();
     }
 }

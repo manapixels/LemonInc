@@ -92,7 +92,7 @@ public class WaitScreen implements Screen{
         this.gameHeight=game.V_HEIGHT;
         this.gameWidth=game.V_WIDTH;
         this.playmusic=playmusic;
-        //TODO: remove IP address in preferences
+
         preferences = Gdx.app.getPreferences("NimbusRun_Network");
         soundclick=Gdx.audio.newSound(Gdx.files.internal("Sounds/click.mp3"));
         music=Gdx.audio.newMusic(Gdx.files.internal("Sounds/waitscreen.mp3"));

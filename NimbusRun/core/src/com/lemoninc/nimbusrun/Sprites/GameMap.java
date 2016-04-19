@@ -539,7 +539,7 @@ public class GameMap{
         batch.dispose();
         //dispose textures
         img.dispose();
-        //TODO:friendly players textures?
+        //players are disposed at endscreen
     }
 
     public void onDisconnect() {
