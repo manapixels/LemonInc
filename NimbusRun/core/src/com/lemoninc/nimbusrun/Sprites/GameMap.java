@@ -308,7 +308,8 @@ public class GameMap{
         for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {
             Player curPlayer = playerEntry.getValue();
             if (curPlayer.getId() != id) {
-                curPlayer.flash();
+                Gdx.app.log("GDX GameMap flashExceptId", "Flash on curPlayer "+curPlayer.getName());
+                curPlayer.flash(); //curPlayer does not have flash sound file
             }
         }
     }
@@ -340,14 +341,20 @@ public class GameMap{
     }
 
     public boolean onPlayerAttack(Network.PlayerAttack msg) {
-        Gdx.app.log("GDX GameMap onPlayerAttack", "");
-
         //hud displays msg.id casted _____ <- switch-case (character = 1, String value = Laughing ..._)
 
         Player player = getPlayerById(msg.id);
 
+        Gdx.app.log("GDX GameMap onPlayerAttack", "Player " + player.getName() + " attacked");
+
+
         if (player != null) {
-            if (!player.attack()) {
+            if (player.attack()) {
+                if (client != null) { //only for client
+                    playerLocal.attackSoundPlay(msg.character); //playerlocal is called just  to borrow its method
+                }
+                return true;
+            } else {
                 return false;
             }
         }
@@ -514,13 +521,16 @@ public class GameMap{
         // Render Players
         for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {
             Player curPlayer = playerEntry.getValue();
-            //  Render flashbang if flashed
-            if (curPlayer.isFlashed()) {
-                Gdx.gl.glClearColor(1, 1, 1, 1);
-                Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-            } else {
+            //  Render every other players
+            if (curPlayer.getId() != playerLocal.getId()) {
                 curPlayer.draw(batch);
             }
+        }
+        if (playerLocal.isFlashed()) {
+            Gdx.gl.glClearColor(1, 1, 1, 1);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        } else {
+            playerLocal.draw(batch);
         }
         //----------------END batch
         batch.end();
