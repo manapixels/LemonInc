@@ -652,7 +652,7 @@ public class GameMap{
     public void dispose() {
         world.dispose();
         b2dr.dispose();
-        batch.dispose();
+//        batch.dispose();
         //dispose textures
         img.dispose();
         //players are disposed at endscreen

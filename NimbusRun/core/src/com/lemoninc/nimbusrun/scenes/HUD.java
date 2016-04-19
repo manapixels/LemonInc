@@ -25,9 +25,15 @@ import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.minlog.Log;
 import com.lemoninc.nimbusrun.NimbusRun;
+import com.lemoninc.nimbusrun.Screens.PlayScreen;
 import com.lemoninc.nimbusrun.Sprites.GameMap;
 import com.lemoninc.nimbusrun.Sprites.Player;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class HUD extends Group implements Disposable,ApplicationListener,Screen{
@@ -68,15 +74,15 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
      * @param characternumber
      */
     public HUD(SpriteBatch sb, String playername, GameMap gameMap,int characternumber){
+        this.characternumber=characternumber;
 
         this.gameMap=gameMap;
         gameOverInitiated = false;
         Gdx.app.log("world length",String.valueOf(worldLength));
 
-        worldTimer = 150;
+        worldTimer = 1;
         timecount=0;
 
-        timecount=0;
         viewport=new FillViewport(NimbusRun.V_WIDTH,NimbusRun.V_HEIGHT,new OrthographicCamera());
         shapeRenderer=new ShapeRenderer();
         progress=1f;
@@ -211,6 +217,25 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
 
     }
 
+    static <K,V extends Comparable<? super V>>
+    List<Map.Entry<K, V>> entriesSortedByValues(Map<K,V> map) {
+
+        List<Map.Entry<K,V>> sortedEntries = new ArrayList<Map.Entry<K,V>>(map.entrySet());
+
+        Collections.sort(sortedEntries,
+                new Comparator<Map.Entry<K, V>>() {
+                    @Override
+                    public int compare(Map.Entry<K, V> e1, Map.Entry<K, V> e2) {
+                        return e2.getValue().compareTo(e1.getValue());
+                    }
+                }
+        );
+        return sortedEntries;
+    }
+
+    Map<Integer,Float> XandID = new HashMap<Integer,Float>();
+
+
     public void gameOver(){
         stage.addActor(dialogEnd);
         dialogEnd.background(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("blackbg2.png")))));
@@ -222,6 +247,40 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
     public void update(float delta) {
         show();
         timecount += delta;
+
+        List<Integer> positions = new ArrayList<Integer>();
+
+        if(gameMap.getGameMapReadyForHUD()) {
+
+            Map<Integer, Player> players = gameMap.getPlayers();
+
+            for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {
+                Player curPlayer = playerEntry.getValue();
+                XandID.put(curPlayer.getId(), curPlayer.getX());
+            }
+            int i=1;
+            List<Map.Entry<Integer,Float>> sortedlist =entriesSortedByValues(XandID);
+            for (Map.Entry<Integer, Float> entry : sortedlist){
+                positions.add(entry.getKey());
+                Gdx.app.log("Local Id", String.valueOf(gameMap.playerLocal.getId()));
+                if(entry.getKey().equals(gameMap.playerLocal.getId())) {
+                    Gdx.app.log("Here", "I am here");
+                    position = i;
+
+                    Gdx.app.log("Index value:",String.valueOf(position));
+                }
+                i++;
+            }
+
+//            yourposition.setText(String.format("%01d", position));
+//            Gdx.app.log("Pos: ",String.valueOf(position));
+//            Gdx.app.log("Hi",String.valueOf(entriesSortedByValues(XandID)));
+//            for (Map.Entry<Integer, Float> entry : XandID.entrySet()) {
+//               Gdx.app.log("Playerinfo: ", "PLayer POS : " + entry.getValue()
+//                       + "  : PlayerID" + entry.getKey());
+//            }
+        }
+
         if (gameOverInitiated){
 
             //final count down
@@ -230,7 +289,18 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
 
                 if (timecount >= 1) {
                     count_final--;
-                    dialoglabel.setText("player rankings: \n1) player1 \n2) player2 \n3) player3 \n4) player4");
+//                    String player1 = gameMap.getPlayers().get(positions.get(0)).getName();
+//                    String player2 = gameMap.getPlayers().get(positions.get(1)).getName();
+//                    String player3 = gameMap.getPlayers().get(positions.get(2)).getName();
+//                    String player4 = gameMap.getPlayers().get(positions.get(3)).getName();
+
+//                    String rankingsText = "player rankings: \n1) "+player1+" \n2) "+player2+" \n3) "+player3+" \n4) "+player4;
+                    String rankingsText = "player rankings: ";
+                    for (int i = 0; i < gameMap.getPlayers().size(); i++) {
+                        String player = gameMap.getPlayerById(positions.get(i)).getName();
+                        rankingsText+="\n"+(i+1)+") "+player;
+                    }
+                    dialoglabel.setText(rankingsText);
                     dialogEnd.text(dialoglabel);
                     timecount = 0;
                 }
@@ -312,7 +382,7 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
         dialogEnd.remove();
         stage.dispose();
 //       skin.dispose();
-        atlas.dispose();
+//        atlas.dispose();
 
 
     }

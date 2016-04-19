@@ -32,6 +32,8 @@ import com.lemoninc.nimbusrun.NimbusRun;
 import com.lemoninc.nimbusrun.Sprites.GameMap;
 import com.lemoninc.nimbusrun.scenes.HUD;
 
+import java.util.List;
+
 public class PlayScreen implements Screen{
 
     private NimbusRun game;
@@ -46,11 +48,15 @@ public class PlayScreen implements Screen{
     private TapTapServer server;
     private HUD hud;
 
+    private boolean gameOverCalled;
+
     Boolean playmusic;
     Music music;
     private Sound gongSound;
     private long startTime;
     int charactername;
+
+    private List<Integer> rankings;
 
 
 
@@ -72,7 +78,7 @@ public class PlayScreen implements Screen{
         this.playerName = playerName;
 //        hud = new HUD(game.batch,playerName,gamemap,charactername);
         startTime = TimeUtils.millis();
-
+        gameOverCalled = false;
         this.client = client;
         if (isHost) {
             this.server = server;
@@ -126,10 +132,14 @@ public class PlayScreen implements Screen{
         hud.stage.draw();
 
         if (hud.worldTimer == 0 || gamemap.getAllFinished()) {
-            gameOver();
+            if (!gameOverCalled){
+                gameOverCalled = true;
+                gameOver();
+            }
             if (hud.count_final == 0){
 //                dispose();
-                game.setScreen(new MenuScreen(game,batch,NimbusRun.V_WIDTH,NimbusRun.V_HEIGHT));
+                gongSound.stop();
+                game.setScreen(new MenuScreen(game, batch, NimbusRun.V_WIDTH, NimbusRun.V_HEIGHT));
             }
         }
     }
@@ -169,5 +179,6 @@ public class PlayScreen implements Screen{
         music.dispose();
         gamemap.dispose();
         gongSound.dispose();
+        hud.dispose();
     }
 }
