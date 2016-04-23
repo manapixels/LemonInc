@@ -6,7 +6,7 @@ package com.lemoninc.nimbusrun.Sprites;
  * PUBLIC FUNCTIONS :
  *       none
  * NOTES :
- * LAST UPDATED: 19/4/2016 20:16
+ * LAST UPDATED: 9/4/2016 17:00
  *
  * ********************************/
 

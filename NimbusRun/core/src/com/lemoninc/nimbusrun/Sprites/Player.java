@@ -2,72 +2,24 @@ package com.lemoninc.nimbusrun.Sprites;
 
 /*********************************
  * FILENAME : Player.java
- * DESCRIPTION : Implements keyboard and screen controls for a player.
- *               Contains boolean classes to get and set status caused by
- *               other players
+ * DESCRIPTION :
  * PUBLIC FUNCTIONS :
- *
-    --PLAYER STATUS--
- *      boolean     recover
- *      boolean     mayAttack
- *      boolean     attack
- *      void        attackSoundPlay
- *      boolean     stun
- *      boolean     poison
- *      boolean     reverse
- *      boolean     terror
- *      boolean     flash
- *      boolean     confuse
- *      State       getState
- *      boolean     isStunned
- *      boolean     isPoisoned
- *      boolean     isReversed
- *      boolean     isBlackHoled
- *      boolean     isFlashed
- *      boolean     isConfused
- *      boolean     isDevMode
- *      boolean     isFinished
- *      float       getStunTime
- *      float       getPoisonTime
- *      float       getBlackHoleTime
- *      float       getReverseTime
- *      float       getFlashTime
- *      float       getConfuseTime
-
-    --CONTROLS--
- *      boolean     handleInput
- *      MovementState getMovementState
- *      void        setMovementState
- *      boolean     keyDown
- *      boolean     keyUp
- *      boolean     keyTyped
- *      boolean     touchDown
- *      boolean     touchUp
- *      boolean     touchDragged
- *      boolean     mouseMoved
- *      boolean     scrolled
- *      boolean     jump
- *      boolean     moveRight
- *      boolean     moveLeft
- *      float       checkCondition
-
-    --GET & SET METHODS--
- *      void        setId
- *      int         getId
- *      void        setName
- *      String      getName
- *      float       getX
- *      float       getY
- *      TextureAtlas getTxtAtlas
-
-    --LIBGDX METHODS--
- *      void        update
- *      void        render
- *      void        draw
- *      void        dispose
-
+ *       State          getState()
+ *       void           render(float delta)
+ *       void           draw(SpriteBatch batch)
+ *       float          getX()
+ *       float          getY()
+ *       public boolean hasMoved()
+ *       void           update(float delta)
+ *       void           jump()
+ *       void           speed()
+ *       void           slow()
+ *       TextureAtlas   getTxtAtlas()
+ *       public void setId(int id)
+ *       public void setName(String name)
+ *       public String getName()
  * NOTES :
- * LAST UPDATED: 23/4/2016 08:51
+ * LAST UPDATED: 8/4/2016 09:00
  *
  * ********************************/
 
@@ -93,6 +45,7 @@ import com.lemoninc.nimbusrun.NimbusRun;
 import java.util.HashMap;
 import java.util.Map;
 
+
 public class Player extends Sprite implements InputProcessor {
     public World world;
     public Body b2body;
@@ -100,7 +53,8 @@ public class Player extends Sprite implements InputProcessor {
 
     public enum State {DOUBLEJUMPING, JUMPING, DEFAULT}
 
-    public State currentState, previousState;
+    public State currentState;
+    public State previousState;
     public boolean isLocal;
 
     private GameMap gameMap;
@@ -127,10 +81,19 @@ public class Player extends Sprite implements InputProcessor {
     private Sound jumpSound;
     private Sound buddhaSound, snakeSound, kappaSound, pontianakSound, gumihoSound, krishnaSound;
 
+
+
     Vector2 previousPosition;
 
+    //  Sound attacksound,jumpsound;
     private Map<Integer, TouchInfo> touches;
 
+    /**
+     * @param gameMap
+     * @param img
+     * @param x
+     * @param y
+     */
     public Player(GameMap gameMap, TextureAtlas img, float x, float y, boolean isLocal, int character) {
 
         this.gameMap = gameMap;
@@ -143,13 +106,18 @@ public class Player extends Sprite implements InputProcessor {
         stateTime = 0f;
 
         //debuff variables
-        stunTime = 0f; stunned = false;
-        poisonTime = 0f; poisoned = false;
-        reverseTime = 0f; reversed = false;
-        terrorTime = 0f; terrored = false;
-        flashTime = 0f; flashed = false;
-        confuseTime = 0f; confused = false;
-
+        stunTime = 0f;
+        stunned = false;
+        poisonTime = 0f;
+        poisoned = false;
+        reverseTime = 0f;
+        reversed = false;
+        terrorTime = 0f;
+        terrored = false;
+        flashed = false;
+        flashTime = 0f;
+        confused = false;
+        confuseTime = 0f;
         devMode = false;
         finished = false;
 
@@ -184,6 +152,8 @@ public class Player extends Sprite implements InputProcessor {
             kappaSound = Gdx.audio.newSound(Gdx.files.internal("Sounds/Kappa.mp3"));
             krishnaSound = Gdx.audio.newSound(Gdx.files.internal("Sounds/Krishna.mp3"));
 
+//            Gdx.input.setInputProcessor(this);
+
             touches = new HashMap<Integer, TouchInfo>();
 
             for (int i = 0; i < 2; i++) {
@@ -192,135 +162,16 @@ public class Player extends Sprite implements InputProcessor {
         }
     }
 
+    class TouchInfo {
+        float touchX;
+        float touchY;
+        boolean touched;
 
-
-    /*//////////////////////////////
-     //                           //
-     //    Attacks and effects    //
-     //                           //
-     /////////////////////////////*/
-
-    public boolean recover(float delta) {
-        if (b2body != null || gameMap.getGameport() != null) {
-            if (this.getX() >= gameMap.getGameport().getWorldWidth() * 18.5f) {
-                finished = true;
-            }
+        TouchInfo() {
+            touchX = 0;
+            touchY = 0;
+            touched = false;
         }
-        if (isStunned()) {
-            stunTime -= delta;
-            if (stunTime <= 0)
-                stunned = false;
-        }
-        if (isPoisoned()) {
-            poisonTime -= delta;
-            if (poisonTime <= 0)
-                poisoned = false;
-        }
-        if (isReversed()) {
-            reverseTime -= delta;
-            if (reverseTime <= 0)
-                reversed = false;
-        }
-        if (isBlackHoled()) {
-            if (b2body.getLinearVelocity().x >= -MOVESPEEDCAP * 2f)
-                b2body.applyLinearImpulse(new Vector2(-MOVEFORCE, 0), b2body.getWorldCenter(), true);
-            terrorTime -= delta;
-            if (terrorTime <= 0)
-                terrored = false;
-        }
-        if (isFlashed()) {
-            flashTime -= delta;
-            if (flashTime <= 0)
-                flashed = false;
-        }
-        if (isConfused()) {
-            confuseTime -= delta;
-            if (confuseTime <= 0)
-                confused = false;
-        }
-        return true;
-    }
-
-    public boolean mayAttack() {
-        //TODO:check if player can attack
-
-
-
-        if (gameMap.noPowerUps > 0) {
-            gameMap.noPowerUps--;
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-
-    public boolean attack() {
-        Gdx.app.log("GDX Player", "Player " +id+" Attacked");
-        Network.PlayerAttack msgPlayerAttack = new Network.PlayerAttack(id, character);
-
-        gameMap.playerAttacked(msgPlayerAttack);
-
-        if (isLocal) {
-            //attack sound
-            gameMap.clientSendMessage(msgPlayerAttack);
-        }
-        return true;
-    }
-
-    public void attackSoundPlay(int character) {
-        if (character == 1)
-            buddhaSound.play();
-        if (character == 2)
-            krishnaSound.play();
-        if (character == 3)
-            gumihoSound.play();
-        if (character == 4)
-            kappaSound.play();
-        if (character == 5)
-            pontianakSound.play();
-        if (character == 6)
-            snakeSound.play();
-    }
-
-    public boolean stun() {
-        stunned = true;
-        stunTime = 150f;
-        b2body.setLinearVelocity(new Vector2(0, 0));
-        return true;
-    }
-
-    public boolean poison() {
-        poisoned = true;
-        poisonTime = 300f;
-        return true;
-    }
-
-    public boolean reverse() {
-        reversed = true;
-        reverseTime = 250f;
-        return true;
-    }
-
-    public boolean terror() {
-        if (!isFinished()){
-            terrored = true;
-            b2body.setLinearVelocity(0, 0);
-            terrorTime = 75f;
-        }
-        return true;
-    }
-
-    public boolean flash() {
-        flashed = true;
-        flashTime = 250f;
-        return true;
-    }
-
-    public boolean confuse() {
-        confused = true;
-        confuseTime = 500f;
-        return true;
     }
 
     public State getState() {
@@ -354,11 +205,17 @@ public class Player extends Sprite implements InputProcessor {
         return flashed;
     }
 
-    public boolean isConfused() { return confused; }
+    public boolean isConfused() {
+        return confused;
+    }
 
-    public boolean isDevMode() { return devMode; }
+    public boolean isDevMode() {
+        return devMode;
+    }
 
-    public boolean isFinished() { return finished; }
+    public boolean isFinished() {
+        return finished;
+    }
 
     public float getStunTime() {
         return stunTime;
@@ -384,46 +241,35 @@ public class Player extends Sprite implements InputProcessor {
         return confuseTime;
     }
 
-    private float checkCondition() {
-        factor = 1;
-        if (isStunned() || isFinished()) {
-            factor = factor * 0f;
-        }
-        if (isPoisoned()) {
-            factor = factor * 0.5f;
-        }
-        if (isDevMode()) {
-            factor = factor * 2.5f;
-        }
-        return factor;
+    public void render(SpriteBatch spriteBatch) {
+        this.draw(spriteBatch);
     }
 
-
-
-    /*//////////////////////////////
-     //                           //
-     //      Player controls      //
-     //  keyboard and touchscreen //
-     //                           //
-     /////////////////////////////*/
-
-    class TouchInfo {
-        float touchX;
-        float touchY;
-        boolean touched;
-
-        TouchInfo() {
-            touchX = 0;
-            touchY = 0;
-            touched = false;
+    public void draw(SpriteBatch batch) {
+        if (b2body != null) {
+            stateTime += Gdx.graphics.getDeltaTime();
+            batch.draw(anim.getKeyFrame(stateTime, true), getX() - CHARACTER_SIZE / 2, getY() - CHARACTER_SIZE / 2, CHARACTER_SIZE, CHARACTER_SIZE);
         }
     }
 
+    public float getX() {
+        return b2body.getPosition().x;
+    }
+
+    public float getY() {
+        return b2body.getPosition().y;
+    }
+
+    /**
+     * Player's movement
+     *
+     * @return
+     */
     public boolean handleInput() {
 
         if (Gdx.app.getType() == Application.ApplicationType.Android) {
             if (Gdx.input.justTouched()) {
-                // System.out.println("Points are: X=" + Gdx.input.getX() + "Y=" + Gdx.input.getY());
+//                System.out.println("Points are: X=" + Gdx.input.getX() + "Y=" + Gdx.input.getY());
                 int x=Gdx.input.getX();
                 int y=Gdx.input.getY();
                 if(x > screenWidth / 2){
@@ -491,17 +337,236 @@ public class Player extends Sprite implements InputProcessor {
         return false;
     }
 
-    //Get the Player's body linear Velocity wrapped in MovementState
+    public void attackSoundPlay(int character) {
+        if (character == 1)
+            buddhaSound.play();
+        if (character == 2)
+            krishnaSound.play();
+        if (character == 3)
+            gumihoSound.play();
+        if (character == 4)
+            kappaSound.play();
+        if (character == 5)
+            pontianakSound.play();
+        if (character == 6)
+            snakeSound.play();
+    }
+
+    public void update(float delta) {
+        if (gameMap.getHud().count_initial > 0){
+            stunned = true;
+            stunTime = 1f;
+        }
+        else {
+            recover(1f);
+        }
+    }
+
+    public boolean recover(float delta) {
+        if (b2body != null || gameMap.getGameport() != null) {
+            if (this.getX() >= gameMap.getGameport().getWorldWidth() * 18.5f) {
+                finished = true;
+            }
+        }
+        if (isStunned()) {
+            stunTime -= delta;
+            if (stunTime <= 0)
+                stunned = false;
+        }
+        if (isPoisoned()) {
+            poisonTime -= delta;
+            if (poisonTime <= 0)
+                poisoned = false;
+        }
+        if (isReversed()) {
+            reverseTime -= delta;
+            if (reverseTime <= 0)
+                reversed = false;
+        }
+        if (isBlackHoled()) {
+            if (b2body.getLinearVelocity().x >= -MOVESPEEDCAP * 2f)
+                b2body.applyLinearImpulse(new Vector2(-MOVEFORCE, 0), b2body.getWorldCenter(), true);
+            terrorTime -= delta;
+            if (terrorTime <= 0)
+                terrored = false;
+        }
+        if (isFlashed()) {
+            flashTime -= delta;
+            if (flashTime <= 0)
+                flashed = false;
+        }
+        if (isConfused()) {
+            confuseTime -= delta;
+            if (confuseTime <= 0)
+                confused = false;
+        }
+        return true;
+    }
+
+    public boolean mayAttack() {
+        //TODO:check if player can attack
+
+
+
+        if (gameMap.noPowerUps > 0) {
+            gameMap.noPowerUps--;
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    public boolean attack() {
+        Gdx.app.log("GDX Player", "Player " +id+" Attacked");
+        Network.PlayerAttack msgPlayerAttack = new Network.PlayerAttack(id, character);
+
+        //post on HUD "Playername" casted
+
+//        if (character )
+        gameMap.playerAttacked(msgPlayerAttack);
+
+        //decrement number of powerups
+//        gameMap.getHud().noPowerUps--;
+
+        if (isLocal) {
+            //attack sound
+            gameMap.clientSendMessage(msgPlayerAttack);
+        }
+        return true;
+    }
+
+    public boolean stun() {
+        stunned = true;
+        stunTime = 150f;
+        b2body.setLinearVelocity(new Vector2(0, 0));
+        return true;
+    }
+
+    public boolean poison() {
+        poisoned = true;
+        poisonTime = 300f;
+        return true;
+    }
+
+    public boolean reverse() {
+        reversed = true;
+        reverseTime = 250f;
+        return true;
+    }
+
+    public boolean terror() {
+        if (!isFinished()){
+            terrored = true;
+            b2body.setLinearVelocity(0, 0);
+            terrorTime = 75f;
+        }
+        return true;
+    }
+
+    public boolean flash() {
+        flashed = true;
+        flashTime = 250f;
+        return true;
+    }
+
+    public boolean confuse() {
+        confused = true;
+        confuseTime = 500f;
+        return true;
+    }
+
+    public boolean jump() {
+        factor = checkCondition();
+        if (currentState == State.DOUBLEJUMPING) {
+            currentState = getState();
+        } else if (currentState == State.JUMPING) {
+            previousState = State.JUMPING;
+            currentState = State.DOUBLEJUMPING;
+            b2body.applyLinearImpulse(new Vector2(0, JUMPFORCE * checkCondition()), b2body.getWorldCenter(), true);
+            jumpSound.play();
+        } else {
+            currentState = State.JUMPING;
+            b2body.applyLinearImpulse(new Vector2(0, JUMPFORCE * checkCondition()), b2body.getWorldCenter(), true);
+            jumpSound.play();
+        }
+        return false;
+    }
+
+    public boolean moveRight() {
+        factor = checkCondition();
+        if (isReversed()) {
+            moveLeft(factor);
+        } else {
+            if (b2body.getLinearVelocity().x <= (MOVESPEEDCAP * factor)) {
+                b2body.applyLinearImpulse(new Vector2(MOVEFORCE * factor, 0), b2body.getWorldCenter(), true);
+            }
+        }
+        return true;
+    }
+
+    public boolean moveLeft(float factor) {     //NOTE: NEVER CALLED BY PLAYER INPUT, ONLY CALLED WHEN REVERSED
+        if (!isFinished()) {
+            if (b2body.getLinearVelocity().x >= -MOVESPEEDCAP * factor) {
+                b2body.applyLinearImpulse(new Vector2(-MOVEFORCE * factor, 0), b2body.getWorldCenter(), true);
+            }
+        }
+        return true;
+    }
+
+    private float checkCondition() {
+        factor = 1;
+        if (isStunned() || isFinished()) {
+            factor = factor * 0f;
+        }
+        if (isPoisoned()) {
+            factor = factor * 0.5f;
+        }
+        if (isDevMode()) {
+            factor = factor * 2.5f;
+        }
+        return factor;
+    }
+
+    /**
+     * Get the Player's body linear Velocity wrapped in MovementState
+     *
+     * @return
+     */
     public Network.MovementState getMovementState() {
         return new Network.MovementState(id, b2body.getPosition(), b2body.getLinearVelocity());
     }
 
-    // Set the player's linear velocity according to the received MovementState Packet
+    /**
+     * Set the player's linear velocity according to the received MovementState Packet
+     *
+     * @param msg
+     */
     public synchronized void setMovementState(Network.MovementState msg) {
         Gdx.app.log("GDX Player", "set Movement State");
 
         b2body.setLinearVelocity(msg.linearVelocity);
         b2body.setTransform(msg.position, 0f); //this is outside the world.step call
+    }
+
+    public TextureAtlas getTxtAtlas() {
+        return img;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return this.id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 
     @Override
@@ -555,105 +620,6 @@ public class Player extends Sprite implements InputProcessor {
     @Override
     public boolean scrolled(int amount) {
         return false;
-    }
-
-    public boolean jump() {
-        factor = checkCondition();
-        if (currentState == State.DOUBLEJUMPING) {
-            currentState = getState();
-        } else if (currentState == State.JUMPING) {
-            previousState = State.JUMPING;
-            currentState = State.DOUBLEJUMPING;
-            b2body.applyLinearImpulse(new Vector2(0, JUMPFORCE * checkCondition()), b2body.getWorldCenter(), true);
-            jumpSound.play();
-        } else {
-            currentState = State.JUMPING;
-            b2body.applyLinearImpulse(new Vector2(0, JUMPFORCE * checkCondition()), b2body.getWorldCenter(), true);
-            jumpSound.play();
-        }
-        return false;
-    }
-
-    public boolean moveRight() {
-        factor = checkCondition();
-        if (isReversed()) {
-            moveLeft(factor);
-        } else {
-            if (b2body.getLinearVelocity().x <= (MOVESPEEDCAP * factor)) {
-                b2body.applyLinearImpulse(new Vector2(MOVEFORCE * factor, 0), b2body.getWorldCenter(), true);
-            }
-        }
-        return true;
-    }
-
-    public boolean moveLeft(float factor) {     //NOTE: NEVER CALLED BY PLAYER INPUT, ONLY CALLED WHEN REVERSED
-        if (!isFinished()) {
-            if (b2body.getLinearVelocity().x >= -MOVESPEEDCAP * factor) {
-                b2body.applyLinearImpulse(new Vector2(-MOVEFORCE * factor, 0), b2body.getWorldCenter(), true);
-            }
-        }
-        return true;
-    }
-
-    /*//////////////////////////////
-     //                           //
-     //    Get and Set methods    //
-     //                           //
-     /////////////////////////////*/
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getId() {
-        return this.id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public float getX() { return b2body.getPosition().x; }
-
-    public float getY() {
-        return b2body.getPosition().y;
-    }
-
-    public TextureAtlas getTxtAtlas() {
-        return img;
-    }
-
-
-
-    /*//////////////////////////////
-     //                           //
-     //      libGDX methods       //
-     //                           //
-     /////////////////////////////*/
-
-    public void update(float delta) {
-        if (gameMap.getHud().count_initial > 0){
-            stunned = true;
-            stunTime = 1f;
-        }
-        else {
-            recover(1f);
-        }
-    }
-
-    public void render(SpriteBatch spriteBatch) {
-        this.draw(spriteBatch);
-    }
-
-    public void draw(SpriteBatch batch) {
-        if (b2body != null) {
-            stateTime += Gdx.graphics.getDeltaTime();
-            batch.draw(anim.getKeyFrame(stateTime, true), getX() - CHARACTER_SIZE / 2, getY() - CHARACTER_SIZE / 2, CHARACTER_SIZE, CHARACTER_SIZE);
-        }
     }
 
     public void dispose() {

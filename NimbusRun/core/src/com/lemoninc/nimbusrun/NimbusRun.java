@@ -1,17 +1,8 @@
 package com.lemoninc.nimbusrun;
 
-/*********************************
- * FILENAME : NimbusRun.java
- * DESCRIPTION : Main game class
- * PUBLIC FUNCTIONS :
- *       public     create()
- *       public     render()
- * NOTES :
- * LAST UPDATED: 23/4/2016 07:36
- *
- * ********************************/
-
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.lemoninc.nimbusrun.Screens.SplashScreen;
 
@@ -24,6 +15,7 @@ public class NimbusRun extends Game {
 	@Override()
 	public void create () {
 		batch = new SpriteBatch();
+//		Gdx.app.setLogLevel(Application.LOG_DEBUG);
 		setScreen(new SplashScreen(this, V_WIDTH, V_HEIGHT));
 	}
 

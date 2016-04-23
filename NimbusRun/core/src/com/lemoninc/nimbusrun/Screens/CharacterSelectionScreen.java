@@ -1,6 +1,5 @@
 package com.lemoninc.nimbusrun.Screens;
 
-<<<<<<< Updated upstream
 /*********************************
  * FILENAME : CharacterSelectionScreen.java
  * DESCRIPTION : Player selects his character here. The character's name will be
@@ -27,8 +26,6 @@ package com.lemoninc.nimbusrun.Screens;
  *
  * ********************************/
 
-=======
->>>>>>> Stashed changes
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;

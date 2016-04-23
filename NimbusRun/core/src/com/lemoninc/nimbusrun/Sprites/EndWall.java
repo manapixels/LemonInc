@@ -6,7 +6,7 @@ package com.lemoninc.nimbusrun.Sprites;
  * PUBLIC FUNCTIONS :
  *       none
  * NOTES :
- * LAST UPDATED: 23/4/2016 07:39
+ * LAST UPDATED: 9/4/2016 17:00
  *
  * ********************************/
 
@@ -15,10 +15,12 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.EdgeShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
+import com.lemoninc.nimbusrun.Screens.PlayScreen;
 
 public class EndWall {
     public World world;
     public Body b2body;
+    private PlayScreen screen;
     private GameMap gameMap;
 
     public EndWall(GameMap gameMap) {
