@@ -166,7 +166,6 @@ public class GameMap{
         //set starting pos of bgSprites after setting cam
         bgStartX = -gameport.getWorldWidth() * 1.5f;
         bgStartY = -gameport.getWorldHeight() * 1.5f;
-//        Log.info(bgStartY + " y pos");
         batch = new SpriteBatch();
 
         // initialise all background sprites
@@ -670,10 +669,6 @@ public class GameMap{
     public void resize(int width, int height) {
         gameport.update(width, height);
         gamecam.position.set(gamecam.viewportWidth / 2, gamecam.viewportHeight / 2, 0);
-    }
-
-    public synchronized void logInfo(String string) {
-       // Log.info("[GameMap]: " + (isClient ? "[Client] " : "[Server] ") + string);
     }
 
     public void dispose() {
