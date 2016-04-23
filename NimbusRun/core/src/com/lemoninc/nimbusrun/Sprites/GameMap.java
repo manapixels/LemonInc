@@ -89,6 +89,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class GameMap{
 
@@ -97,8 +98,8 @@ public class GameMap{
 
     private boolean isClient;
 
-    private Map<Integer, Player> players = new HashMap<Integer, Player>(); //playerId, Player
-    private Map<Integer, DummyPlayer> dummyPlayers = new HashMap<Integer, DummyPlayer>(); //playerId, Player
+    private Map<Integer, Player> players = new ConcurrentHashMap<Integer, Player>(); //playerId, Player
+    private Map<Integer, DummyPlayer> dummyPlayers = new ConcurrentHashMap<Integer, DummyPlayer>(); //playerId, Player
     private boolean gameMapReadyForHUD;
     private HUD hud;
 
@@ -185,6 +186,11 @@ public class GameMap{
         bgPlatformSprites = new ArrayList<Sprite>();
 
         finishLine = new Sprite(new Texture("4_PlayScreen/finishLine.png"));
+<<<<<<< Updated upstream
+=======
+
+        Gdx.app.log("GDX GameMap", "GameMap instantiated in Client");
+>>>>>>> Stashed changes
 
     }
 
@@ -222,6 +228,10 @@ public class GameMap{
                 newPlayer.setId(curPlayer.playerID);
                 newPlayer.setName(curPlayer.playerName);
                 players.put(curPlayer.playerID, newPlayer);
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
             }
 
         }
@@ -450,18 +460,35 @@ public class GameMap{
         return true;
     }
 
-    public synchronized void playerMoved(Network.MovementState msg) {
-        //TODO: players should be ConcurrentHashMap?
+    public void playerMoved(Network.MovementState msg) {
         Player player = players.get(msg.playerId);
         if (player != null) {
+<<<<<<< Updated upstream
             //Gdx.app.log("GDX GameMap", "Player "+player.getName()+" moved");
             player.setMovementState(msg);
+=======
+            Gdx.app.log("GDX GameMap", "Player " + player.getName() + " moved");
+            synchronized (this) {
+                player.setMovementState(msg);
+            }
+>>>>>>> Stashed changes
         }
     }
 
     public void playerAttacked(Network.PlayerAttack msg) {
+<<<<<<< Updated upstream
 
         //apply effect of the attack on every other players
+=======
+        //apply effect of the attack on every other playrs
+
+        // 1. LAUGHING BUDDHA
+        // 2. SHESHNAH WITH KRISHNA
+        // 3. NINE-TAILED FOX
+        // 4. KAPPA
+        // 5. PONTIANAK
+        // 6. MADAME WHITE SNAKE
+>>>>>>> Stashed changes
         switch(msg.character) {
             case 1: stunExceptId(msg.id); break; // 1. LAUGHING BUDDHA
             case 2: flashExceptId(msg.id); break; // 2. SHESHNAH WITH KRISHNA
@@ -526,26 +553,126 @@ public class GameMap{
             }
         }
     }
+<<<<<<< Updated upstream
     public boolean isFlashed() {
         return playerLocal.isFlashed();
+=======
+
+    /**
+     * Client receives PlayerJoinLeave from server containing player ID, name, initial x and y
+     * @param msg
+     */
+    public void onConnect(Network.PlayerJoinLeave msg) {
+
+        if (this.dummyLocal == null) {
+            dummyLocal = new DummyPlayer(client.id, msg.name, msg.initial_x, msg.initial_y, true);
+            dummyPlayers.put(dummyLocal.playerID, dummyLocal);
+            //hud.setPlayerLocal(playerLocal);
+            //setStatus("Connected to " + client.remoteIP);
+            Gdx.app.log("GDX GameMap", "local player created at "+msg.initial_x+" "+msg.initial_y);
+        } else {
+            Gdx.app.log("GDX GameMap onConnect", "setNetworkClient called twice");
+        }
+    }
+
+    public boolean onPlayerAttack(Network.PlayerAttack msg) {
+
+        Player player = getPlayerById(msg.id);
+
+        Gdx.app.log("GDX GameMap onPlayerAttack", "Player " + player.getName() + " attacked");
+
+        if (player != null) {
+            if (player.attack()) {
+                if (client != null) { //only for client
+                    timeStamp = System.currentTimeMillis();
+                    globalStatus = getCharacterType(msg.character)+" "+player.getName()+" "+getCharacterSkil(msg.character)+" you";
+                    playerLocal.attackSoundPlay(msg.character); //playerlocal is called just  to borrow its method
+                }
+                return true;
+            } else {
+                return false;
+            }
+        }
+        else {
+            Gdx.app.log("GDX GameMap onPlayerAttack", "player was null");
+        }
+        return true;
+    }
+
+    /**
+     * This method is only called in Character Selection screen
+     * @param msg
+     */
+
+    public void addPlayer(Network.PlayerJoinLeave msg) {
+        //create new player from msg
+        DummyPlayer newDummy = new DummyPlayer(msg.playerId, msg.name, msg.initial_x, msg.initial_y, false);
+
+        dummyPlayers.put(newDummy.playerID, newDummy);
+//        logInfo("Player " +msg.playerId+" added to players!");
+>>>>>>> Stashed changes
     }
 
 
 
+<<<<<<< Updated upstream
      /*//////////////////////////
      //                        //
      //      getMethods()      //
      //                        //
      ////////////////////////////*/
+=======
+    /**
+     * Destroy the disconnected player's body from world
+     * Remove disconnected player from players
+     * Can be called from both CS screen and PlayScreen
+     *
+     * @param msg
+     */
+    public void removePlayer(Network.PlayerJoinLeave msg) {
+        dummyPlayers.remove(msg.playerId);
 
-    public synchronized Player getPlayerById(int id){
+        if (players.get(msg.playerId) != null) {
+            world.destroyBody(players.get(msg.playerId).b2body);
+            players.remove(msg.playerId);
+        }
+    }
+
+>>>>>>> Stashed changes
+
+    public Player getPlayerById(int id){
         return players.get(id);
     }
+<<<<<<< Updated upstream
     public synchronized DummyPlayer getDummyById(int id) {
         return dummyPlayers.get(id);
     }
     public Map<Integer, Player> getPlayers(){
         return players;
+=======
+
+    public DummyPlayer getDummyById(int id) {
+        return dummyPlayers.get(id);
+    }
+
+    public boolean allDummyReady() {
+        for (Map.Entry<Integer, DummyPlayer> playerEntry : dummyPlayers.entrySet()) {
+            DummyPlayer curPlayer = playerEntry.getValue();
+            if (!curPlayer.isReady()) {
+                Gdx.app.log("GDX GameMap allDummyReady", "Hi from "+curPlayer.playerName);
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void declareCharacter(int charactername) {
+        dummyLocal.setCharacter(charactername);
+    }
+
+    public void setCharacter(int playerId, int charactername) {
+        dummyPlayers.get(playerId).setCharacter(charactername);
+>>>>>>> Stashed changes
     }
 
     public World getWorld(){
@@ -604,16 +731,12 @@ public class GameMap{
                     noPowerUps=1;
                 }
             }
-
             //update globalStatus
             if (System.currentTimeMillis() > timeStamp + 3000) {
                 globalStatus = "";
             }
-
         }
-
         //Update player
-        //TODO: should the box2d world be rendered here?
         for (Map.Entry<Integer, Player> playerEntry : players.entrySet()) {
             Player curPlayer = playerEntry.getValue();
             if (client!=null && curPlayer != null) {
@@ -622,7 +745,14 @@ public class GameMap{
         }
     }
 
+<<<<<<< Updated upstream
     public synchronized void render() {
+=======
+    /**
+     * Only called in PlayScreen by Clients
+     */
+    public void render() {
+>>>>>>> Stashed changes
         //clears screen first, set color to black
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -654,8 +784,14 @@ public class GameMap{
             playerLocal.draw(batch);
         }
         batch.end();
+<<<<<<< Updated upstream
 
         world.step(1 / 60f, 6, 2);
+=======
+        synchronized (this) {
+            world.step(1 / 60f, 6, 2);
+        }
+>>>>>>> Stashed changes
     }
 
     public void resize(int width, int height) {
@@ -663,8 +799,56 @@ public class GameMap{
         gamecam.position.set(gamecam.viewportWidth / 2, gamecam.viewportHeight / 2, 0);
     }
 
+<<<<<<< Updated upstream
     public synchronized void logInfo(String string) {
        // Log.info("[GameMap]: " + (isClient ? "[Client] " : "[Server] ") + string);
+=======
+    public void makePlatformsBG(float startX, float endX, char type){
+        Sprite sprite;
+        float width = endX-startX;
+        float height;
+
+        switch(type){
+            case 'F': sprite = new Sprite(bgTextureFlat);
+                height = width/1000*390;
+                sprite.setPosition(startX, -height);
+                sprite.setSize(width, height);
+                bgPlatformSprites.add(sprite); break;
+
+            case 'P': sprite = new Sprite(bgTexturePlateau);
+                height = width/1000*789;
+                sprite.setPosition(startX, -height*0.7366f);
+                sprite.setSize(width, height);
+                bgPlatformSprites.add(sprite); break;
+
+            case 'M': sprite = new Sprite(bgTextureMountain);
+                height = width/1000*869;
+                sprite.setPosition(startX, -height*0.473f);
+                sprite.setSize(width, height);
+                bgPlatformSprites.add(sprite); break;
+
+            case 'T': sprite = new Sprite(bgTexturePit);
+                height = width/1000*605;
+                sprite.setPosition(startX, -height);
+                sprite.setSize(width, height);
+                bgPlatformSprites.add(sprite); break;
+        }
+    }
+
+    public boolean isFlashed() {
+        return playerLocal.isFlashed();
+    }
+
+    public Map<Integer, Player> getPlayers(){
+        return players;
+    }
+    public Map<Integer, DummyPlayer> getDummyPlayers(){
+        return dummyPlayers;
+    }
+
+    public void clientSendMessage(Object msg) {
+        client.sendMessage(msg);
+>>>>>>> Stashed changes
     }
 
     public void dispose() {

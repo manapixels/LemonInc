@@ -35,10 +35,10 @@ public class TapTapClient {
     public int id; //Player's connection ID
     public String remoteIP;
     private GameMap map;
-    public int[] mapData;
 
     private CharacterSelectionScreen currentScreen;
     private MenuScreen menuScreen;
+
     //Kryonet Stuff
     public Client client;
 
@@ -50,6 +50,7 @@ public class TapTapClient {
         this.game = game;
         map = new GameMap(this, mapData); //create new GameMap for Client
         Gdx.app.log("GDX TapTapClient", "Client created GameMap");
+
         this.name = name;
 
         client = new Client();
@@ -99,7 +100,6 @@ public class TapTapClient {
         Network.Login clientName = new Network.Login(name);
         client.sendTCP(clientName);
         Gdx.app.log("GDX Client", "Connection handled, sent Login");
-
     }
 
     /**
@@ -114,19 +114,15 @@ public class TapTapClient {
             Gdx.app.log("GDX TapTapClient", "Client received PlayerJoinLeave");
             Network.PlayerJoinLeave msg = (Network.PlayerJoinLeave) message;
             if (msg.hasJoined) {
-//                map.setStatus(msg.name + " joined");
                 if (msg.playerId == connection.getID()) {
                     Gdx.app.log("GDX Client", "onConnect called");
                     map.onConnect(msg);
                 }
-                else {
+                else { //PlayerJoinLeave sent from another client
                     Gdx.app.log("GDX Client", "add player called");
-
                     map.addPlayer(msg);
                 }
-//                logInfo("A new player "+msg.playerId+" has joined.");
             } else {
-//                map.setStatus(msg.name + " left");
                 map.removePlayer(msg);
             }
         }
@@ -140,7 +136,6 @@ public class TapTapClient {
             Gdx.app.log("GDX TapTapClient", "Client received MovementState");
 
             Network.MovementState msg = (Network.MovementState) message;
-            //hey map, someone moved, handle this
 
             map.playerMoved(msg);
             
@@ -159,7 +154,6 @@ public class TapTapClient {
             Gdx.app.log("GDX TapTapClient", "Client received Ready");
             Network.Ready msg = (Network.Ready) message;
             map.setCharacter(msg.playerId, msg.charactername);
-            //TODO: create check on CS screen
         } else if (message instanceof Network.GameReady) {
             Gdx.app.log("GDX TapTapClient", "Client received GameReady");
             Gdx.app.postRunnable(new Runnable() {
@@ -183,7 +177,6 @@ public class TapTapClient {
 
     public void connect(String host) throws IOException{
         client.connect(5000, host, Network.PORT, Network.PORTUDP);
-        logInfo("Client " + name + " of ID: " + id + " connected to server PORT " + Network.PORT);
     }
 
     public boolean connectLAN() throws IOException{
@@ -198,14 +191,12 @@ public class TapTapClient {
     }
 
     public void sendMessage(Object message) {
-//        map.logInfo("SENT packet TCP");
         if (client.isConnected()) {
             client.sendTCP(message);
         }
     }
 
     public void sendMessageUDP(Object message) {
-//        map.logInfo("SENT packet UPD");
         if (client.isConnected()) {
             client.sendUDP(message);
             Gdx.app.log("GDX TapTapClient", "Sent packet UDP");
@@ -215,9 +206,5 @@ public class TapTapClient {
     public void shutdown() {
         client.stop();
         client.close();
-    }
-
-    private void logInfo(String string) {
-//        Log.info("[TapTapClient]: "+string);
     }
 }

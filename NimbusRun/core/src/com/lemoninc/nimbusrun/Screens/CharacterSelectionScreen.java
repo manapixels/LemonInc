@@ -1,5 +1,6 @@
 package com.lemoninc.nimbusrun.Screens;
 
+<<<<<<< Updated upstream
 /*********************************
  * FILENAME : CharacterSelectionScreen.java
  * DESCRIPTION : Player selects his character here. The character's name will be
@@ -26,6 +27,8 @@ package com.lemoninc.nimbusrun.Screens;
  *
  * ********************************/
 
+=======
+>>>>>>> Stashed changes
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
@@ -235,19 +238,13 @@ public class CharacterSelectionScreen implements Screen{
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 resetbuttons();
-                System.out.println("touched");
-                Gdx.app.log("GDX Button pressed", "Buddha Button Pressed");
                 playercharacter = skin.getSprite("bg_Buddha");
-
                 return true;
             }
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-
                 charactername = 1;
-                System.out.println("touched");
-
             }
         });
 
@@ -255,9 +252,6 @@ public class CharacterSelectionScreen implements Screen{
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 resetbuttons();
-//                Buddha.clearActions();
-//                System.out.println("touched");
-//                Gdx.app.log("Button pressed", "Foxy Button Pressed");
                 playercharacter= skin.getSprite("bg_Foxy");
                 playercharacter.setPosition(0, 0);
                 playercharacter.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -268,7 +262,6 @@ public class CharacterSelectionScreen implements Screen{
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 
                 charactername=3;
-                System.out.println("touched");
             }
         });
 
@@ -276,8 +269,6 @@ public class CharacterSelectionScreen implements Screen{
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 resetbuttons();
-                System.out.println("touched");
-                Gdx.app.log("GDX Button pressed", "Kappa Button Pressed");
                 playercharacter= skin.getSprite("bg_Kappa");
                 playercharacter.setPosition(0, 0);
                 playercharacter.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -287,15 +278,12 @@ public class CharacterSelectionScreen implements Screen{
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 charactername=4;
-                System.out.println("touched");
             }
         });
         krishna.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 resetbuttons();
-                System.out.println("touched");
-                Gdx.app.log("GDX Button pressed", "KrishnaButton Pressed");
                 playercharacter= skin.getSprite("bg_Krishna");
                 playercharacter.setPosition(0, 0);
                 playercharacter.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -305,15 +293,12 @@ public class CharacterSelectionScreen implements Screen{
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 charactername=2;
-                System.out.println("touched");
             }
         });
         madame.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 resetbuttons();
-                System.out.println("touched");
-                Gdx.app.log("Button pressed", "madame Button Pressed");
                 playercharacter= skin.getSprite("bg_Madame");
                 playercharacter.setPosition(0, 0);
                 playercharacter.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -329,7 +314,6 @@ public class CharacterSelectionScreen implements Screen{
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 resetbuttons();
-                Gdx.app.log("Button pressed", "Ponti Button Pressed");
                 playercharacter= skin.getSprite("bg_Pontianak");
                 playercharacter.setPosition(0, 0);
                 playercharacter.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -338,9 +322,7 @@ public class CharacterSelectionScreen implements Screen{
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-
                 charactername=5;
-                System.out.println("touched");
             }
         });
         joingame.addListener(new ClickListener() {
@@ -385,20 +367,10 @@ public class CharacterSelectionScreen implements Screen{
 
     }
 
-    // 1. LAUGHING BUDDHA
-    // 2. SHESHNAH WITH KRISHNA
-    // 3. NINE-TAILED FOX
-    // 4. KAPPA
-    // 5. PONTIANAK
-    // 6. MADAME WHITE SNAKE
-
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
-        //sprite.setColor(1, 1, 1, 0);
         playercharacter=new Sprite(skin.getSprite("bg_Buddha"));
-        //sprite.setPosition(0, 0);
-        //sprite.setSize(gameWidth, gameHeight);
         style.font = new BitmapFont(Gdx.files.internal("Fonts/crimesFont36Black.fnt"));
         style.font.getData().setScale(0.7f, 0.7f);
         style.font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
@@ -520,7 +492,6 @@ public class CharacterSelectionScreen implements Screen{
         atlas2.dispose();
         stage.dispose();
         skin.dispose();
-//        sprite.getTexture().dispose();
         music.dispose();
         soundclick.dispose();
         playercharacter.getTexture().dispose();
