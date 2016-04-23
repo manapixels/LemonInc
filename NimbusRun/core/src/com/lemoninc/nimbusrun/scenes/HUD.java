@@ -1,5 +1,32 @@
 package com.lemoninc.nimbusrun.scenes;
 
+/*********************************
+ * FILENAME : HUD.java
+ * DESCRIPTION : Head-up display.
+ *               Displays Timer, Position of player etc. in PlayScreen
+ * PUBLIC FUNCTIONS :
+ *
+    --SORTING OF PLAYER POSITIONS--
+ *      List<Map.Entry<K, V>> entriesSortedByValues
+ *
+    -- LIBGDX METHODS
+ *      void    gameOver
+ *      void    update
+ *      void    create
+ *      void    resize
+ *      void    render
+ *      void    show
+ *      void    render
+ *      void    pause
+ *      void    resume
+ *      void    hide
+ *      void    dispose
+
+ * NOTES :
+ * LAST UPDATED: 23/4/2016 09:15
+ *
+ * ********************************/
+
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -163,13 +190,6 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
         table.setHeight(viewport.getScreenHeight());
         table.setWidth(viewport.getScreenWidth());
         table.setFillParent(true);
-
-        // 1. LAUGHING BUDDHA
-        // 2. SHESHNAH WITH KRISHNA
-        // 3. NINE-TAILED FOX
-        // 4. KAPPA
-        // 5. PONTIANAK
-        // 6. MADAME WHITE SNAKE
 
         yellowLabelStyle = new Label.LabelStyle(font, Color.YELLOW);
         blackLabelStyle = new Label.LabelStyle(font, Color.BLACK);

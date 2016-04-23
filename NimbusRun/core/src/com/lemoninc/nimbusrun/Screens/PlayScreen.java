@@ -13,7 +13,7 @@ package com.lemoninc.nimbusrun.Screens;
  *       void     resume()
  *       void     pause()
  *       void     dispose()
- * NOTES :
+ * NOTES : Enters from CharacterSelectionScreen, exits to SplashScreen
  * LAST UPDATED: 9/4/2016 14:00
  *
  * ********************************/

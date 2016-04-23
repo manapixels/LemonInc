@@ -1,5 +1,24 @@
 package com.lemoninc.nimbusrun.Screens;
 
+/*********************************
+ * FILENAME : SplashScreen.java
+ * DESCRIPTION : Displays LemonInc company logo
+ * PUBLIC FUNCTIONS :
+ *
+    --LIBGDX METHODS--
+ *      void    show
+ *      void    render
+ *      void    resize
+ *      void    pause
+ *      void    resume
+ *      void    hide
+ *      void    dispose
+
+ * NOTES : Enters from start of the game, exits to MenuScreen
+ * LAST UPDATED: 23/4/2016 09:03
+ *
+ * ********************************/
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
@@ -13,9 +32,6 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lemoninc.nimbusrun.NimbusRun;
 
-/**
- * Created by Nikki on 8/4/2016.
- */
 public class SplashScreen implements Screen{
     private SpriteBatch batch;
     private Sprite sprite;
@@ -45,7 +61,6 @@ public class SplashScreen implements Screen{
         startTime = TimeUtils.millis();
     }
 
-
     @Override
     public void render(float delta) {
 
@@ -65,14 +80,10 @@ public class SplashScreen implements Screen{
     }
 
     @Override
-    public void pause() {
-
-    }
+    public void pause() { }
 
     @Override
-    public void resume() {
-
-    }
+    public void resume() { }
 
     @Override
     public void hide() {

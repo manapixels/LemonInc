@@ -1,19 +1,30 @@
+package com.lemoninc.nimbusrun.Screens;
+
 /*********************************
  * FILENAME : CharacterSelectionScreen.java
- * DESCRIPTION :
+ * DESCRIPTION : Player selects his character here. The character's name will be
+ *               passed to PlayScreen/Player to choose the specific character.
+ *               Consists mainly button listeners
  * PUBLIC FUNCTIONS :
  *
- * NOTES : The screen takes input from the waitscreen and moves to waitscreen
- * TODO: Create a waiting function for all the players to connect and wait for each other,
- * TODO: The wait can be onclick of the joingame button
- * TODO: Implement the counter on the basis of the players connected
- * The function has a string name of the player it has chosen, pass this to the playscreen/player to choose the specific character.
- * LAST UPDATED:
+    --SCREEN TRANSITION--
+ *      void    resetbuttons
+ *      void    playGame
+ *      void    goToMenu
+ *
+    -- LIBGDX METHODS
+ *      void    show
+ *      void    render
+ *      void    resize
+ *      void    pause
+ *      void    resume
+ *      void    hide
+ *      void    dispose
+
+ * NOTES : The screen takes input from the WaitScreen and moves to PlayScreen
+ * LAST UPDATED: 23/4/2016 09:02
  *
  * ********************************/
-
-
-package com.lemoninc.nimbusrun.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -51,15 +62,10 @@ import com.lemoninc.nimbusrun.Sprites.GameMap;
 import java.io.IOException;
 import java.util.Random;
 
-
-/**
- * Created by Nikki on 12/4/2016.
- */
 public class CharacterSelectionScreen implements Screen{
     public SpriteBatch batch;
     private NimbusRun game;
-    private float gameWidth;
-    private float gameHeight;
+    private float gameWidth, gameHeight;
     private Viewport viewport;
     private Camera camera;
     final Boolean isHost;
@@ -76,8 +82,6 @@ public class CharacterSelectionScreen implements Screen{
     Sprite playercharacter;
     TextButton joingame,goback;
     TextButton.TextButtonStyle style;
-    //Dialog dialog;
-//    CharSequence Playerability;
     Boolean playmusic;
     Music music;
     Sound soundclick;
@@ -90,13 +94,6 @@ public class CharacterSelectionScreen implements Screen{
 
     private int[] mapData;
 
-
-    /**
-     *
-     * @param game
-     * @param isHost
-     * @param playerName
-     */
     public CharacterSelectionScreen(final NimbusRun game, SpriteBatch batch, final boolean isHost, String playerName, final Boolean playmusic){
         this.game = game;
         this.batch = batch;
