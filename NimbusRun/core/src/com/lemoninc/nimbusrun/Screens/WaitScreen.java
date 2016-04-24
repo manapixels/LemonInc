@@ -171,7 +171,7 @@ public class WaitScreen implements Screen{
         clientbutton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-               // game.setScreen(new StoryLineScreen(game, gameWidth, gameHeight));
+                // game.setScreen(new StoryLineScreen(game, gameWidth, gameHeight));
                 soundclick.play();
                 joinGame();
             }

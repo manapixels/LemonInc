@@ -1,5 +1,25 @@
 package com.lemoninc.nimbusrun.Screens;
 
+/*********************************
+ * FILENAME : CharDescrScreen.java
+ * DESCRIPTION : Displays a series of images that guides players through the
+ *               abilities of each of the 6 characters
+ * PUBLIC FUNCTIONS :
+ *
+ --LIBGDX METHODS--
+ *      void    show
+ *      void    render
+ *      void    resize
+ *      void    pause
+ *      void    resume
+ *      void    hide
+ *      void    dispose
+
+ * NOTES : Enters from MenuScreen, exits to MenuScreen
+ * LAST UPDATED: 23/4/2016 09:06
+ *
+ * ********************************/
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;

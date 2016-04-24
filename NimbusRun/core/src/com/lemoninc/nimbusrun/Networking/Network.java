@@ -3,11 +3,22 @@ package com.lemoninc.nimbusrun.Networking;
 /*********************************
  * FILENAME : Network.java
  * DESCRIPTION :
- * PUBLIC FUNCTIONS :
+ * FUNCTIONS :
  *       void    registerClasses(EndPoint endPoint)
  *       private static void logInfo(String string)
+ *
+ * CLASSES :
+ *      static public class Login {}
+ *      static public class PlayerJoinLeave{}
+ *      static public class MovementState{}
+ *      static public class GameRoomFull {}
+ *      static public class Ready {}
+ *      static public class GameReady{}
+ *      static public class MapDataPacket {}
+ *      static public class PlayerAttack {}
+ *
  * NOTES :
- * LAST UPDATED: 8/4/2016 09:00
+ * LAST UPDATED: 24/4/2016 15:24
  *
  * ********************************/
 

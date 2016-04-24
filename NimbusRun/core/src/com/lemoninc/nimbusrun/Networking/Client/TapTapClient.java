@@ -3,13 +3,23 @@ package com.lemoninc.nimbusrun.Networking.Client;
 /*********************************
  * FILENAME : TapTapClient.java
  * DESCRIPTION :
- * PUBLIC FUNCTIONS :
- *       private void handleConnect(Connection connection)
- *       private void handleMessage(int playerID, Object message)
- *       void    connect(String host)
- *       void    shutdown()
+ * FUNCTIONS :
+    -- GET METHODS
+ *      GameMap getMap
+ *      String  getIP
+ *
+    -- NETWORK METHODS
+ *      void    handleConnect
+ *      void    handleMessage
+ *      void    handleDisonnect
+ *      void    connect
+ *      boolean connectLAN
+ *      void    sendMessage
+ *      void    sendMessageUDP
+ *      void    shutdown
+ *
  * NOTES :
- * LAST UPDATED: 8/4/2016 09:00
+ * LAST UPDATED: 24/4/2016 15:13
  *
  * ********************************/
 
@@ -35,7 +45,6 @@ public class TapTapClient {
     public int id; //Player's connection ID
     public String remoteIP;
     private GameMap map;
-
     private CharacterSelectionScreen currentScreen;
     private MenuScreen menuScreen;
 

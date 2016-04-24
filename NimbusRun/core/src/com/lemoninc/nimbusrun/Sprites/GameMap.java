@@ -68,7 +68,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -86,7 +85,6 @@ import com.lemoninc.nimbusrun.NimbusRun;
 import com.lemoninc.nimbusrun.scenes.HUD;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -404,7 +402,7 @@ public class GameMap{
         }
         return true;
     }
-    
+
     /**
      * This method is only called in Character Selection screen
      */
@@ -539,7 +537,7 @@ public class GameMap{
     }
 
 
-        
+
      /*//////////////////////////
      //                        //
      //      getMethods()      //
@@ -632,8 +630,8 @@ public class GameMap{
         //clears screen first, set color to black
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
         b2dr.render(world, gamecam.combined);
+
         batch.setProjectionMatrix(gamecam.combined);
         batch.begin();
 
@@ -660,7 +658,7 @@ public class GameMap{
             playerLocal.draw(batch);
         }
         batch.end();
-        
+
         synchronized (this) {
             world.step(1 / 60f, 6, 2);
         }

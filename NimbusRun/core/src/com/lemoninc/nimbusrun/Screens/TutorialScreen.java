@@ -1,7 +1,26 @@
 package com.lemoninc.nimbusrun.Screens;
 
+/*********************************
+ * FILENAME : TutorialScreen.java
+ * DESCRIPTION : Displays a series of images that guides players through the
+ *               mechanics of the game
+ * PUBLIC FUNCTIONS :
+ *
+ --LIBGDX METHODS--
+ *      void    show
+ *      void    render
+ *      void    resize
+ *      void    pause
+ *      void    resume
+ *      void    hide
+ *      void    dispose
+
+ * NOTES : Enters from MenuScreen, exits to MenuScreen
+ * LAST UPDATED: 23/4/2016 09:05
+ *
+ * ********************************/
+
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
@@ -23,9 +42,6 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lemoninc.nimbusrun.NimbusRun;
 
-/**
- * Created by Nikki on 10/4/2016.
- */
 public class TutorialScreen implements Screen{
     private SpriteBatch batch;
     private Sprite sprite;
@@ -104,11 +120,11 @@ public class TutorialScreen implements Screen{
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 soundclick.play();
-               click++;
-                    if (click==1){
-                        sprite.setTexture(new Texture("2_TutorialScreen/Tutorials_pg2.png"));
-                        Next.remove();
-                        stage.addActor(Return);}
+                click++;
+                if (click==1){
+                    sprite.setTexture(new Texture("2_TutorialScreen/Tutorials_pg2.png"));
+                    Next.remove();
+                    stage.addActor(Return);}
             }
 
         });

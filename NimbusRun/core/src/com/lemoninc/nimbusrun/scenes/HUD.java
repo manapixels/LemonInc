@@ -1,5 +1,32 @@
 package com.lemoninc.nimbusrun.scenes;
 
+/*********************************
+ * FILENAME : HUD.java
+ * DESCRIPTION : Head-up display.
+ *               Displays Timer, Position of player etc. in PlayScreen
+ * PUBLIC FUNCTIONS :
+ *
+ --SORTING OF PLAYER POSITIONS--
+ *      List<Map.Entry<K, V>> entriesSortedByValues
+ *
+ -- LIBGDX METHODS
+ *      void    gameOver
+ *      void    update
+ *      void    create
+ *      void    resize
+ *      void    render
+ *      void    show
+ *      void    render
+ *      void    pause
+ *      void    resume
+ *      void    hide
+ *      void    dispose
+
+ * NOTES :
+ * LAST UPDATED: 23/4/2016 09:15
+ *
+ * ********************************/
+
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -143,7 +170,7 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
         dialogstart.setPosition(0, 0, Align.center);
         dialogstart.show(stage);
         timecount=0;
-        
+
         dialogstart.text(dialoglabel);
         stage.addActor(dialogstart);
 
@@ -163,13 +190,6 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
         table.setHeight(viewport.getScreenHeight());
         table.setWidth(viewport.getScreenWidth());
         table.setFillParent(true);
-
-        // 1. LAUGHING BUDDHA
-        // 2. SHESHNAH WITH KRISHNA
-        // 3. NINE-TAILED FOX
-        // 4. KAPPA
-        // 5. PONTIANAK
-        // 6. MADAME WHITE SNAKE
 
         yellowLabelStyle = new Label.LabelStyle(font, Color.YELLOW);
         blackLabelStyle = new Label.LabelStyle(font, Color.BLACK);
@@ -273,7 +293,7 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
                 }
                 i++;
             }
-        yourposition.setText(String.format("%01d",position));
+            yourposition.setText(String.format("%01d",position));
         }
 
         if (gameOverInitiated){
@@ -357,7 +377,7 @@ public class HUD extends Group implements Disposable,ApplicationListener,Screen{
 
     @Override
     public void render(float delta) {
-       // Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        // Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
     }
 

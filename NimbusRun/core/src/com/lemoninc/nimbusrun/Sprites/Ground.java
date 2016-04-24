@@ -7,18 +7,15 @@ package com.lemoninc.nimbusrun.Sprites;
  * PUBLIC FUNCTIONS :
  *       none
  * NOTES :
- * LAST UPDATED: 17/4/2016 14:26
+ * LAST UPDATED: 23/4/2016 08:22
  *
  * ********************************/
-
 
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.EdgeShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
-
-
 
 public class Ground {
     public World world;
@@ -39,7 +36,6 @@ public class Ground {
         startX = endX;
         endX += gameMap.getGameport().getWorldWidth()*2;
 
-        //Log.info("Each platform is " + gameMap.getGameport().getWorldWidth()*2 + " long.");
         for (int i = 0; i < numPlatforms; i++){
             int choice = mapData[i];
             if (choice == 0){
@@ -69,7 +65,6 @@ public class Ground {
         FixtureDef fdef = new FixtureDef();
         EdgeShape edgeShape = new EdgeShape();
         edgeShape.set(x1, y1, x2, y2);
-        //Log.info("Flat coordinates: (" + x1 + " " + y1 + ") and (" + + x2 + " " + y2 + ")");
         fdef.shape = edgeShape;
         b2body.createFixture(fdef);
         edgeShape.dispose();
@@ -90,7 +85,6 @@ public class Ground {
 
         //flat plain
         edgeShape.set(x1, y1, x2, y2);
-        //Log.info("Plateau p1 coordinates: (" + x1 + " " + y1 + ") and (" + + x2 + " " + y2 + ")");
         fdef.shape = edgeShape;
         b2body.createFixture(fdef);
 
@@ -98,7 +92,6 @@ public class Ground {
         x1 = x2;
         y2 += gameMap.getGameport().getWorldHeight()*0.65;
         edgeShape.set(x1, y1, x2, y2);
-        //Log.info("Plateau p2 coordinates: (" + x1 + " " + y1 + ") and (" + + x2 + " " + y2 + ")");
         fdef.shape = edgeShape;
         b2body.createFixture(fdef);
 
@@ -107,7 +100,6 @@ public class Ground {
         y1 = y2;
         x2 += segment*6;
         edgeShape.set(x1, y1, x2, y2);
-        //Log.info("Plateau p3 coordinates: (" + x1 + " " + y1 + ") and (" + + x2 + " " + y2 + ")");
         fdef.shape = edgeShape;
         b2body.createFixture(fdef);
 
@@ -115,7 +107,6 @@ public class Ground {
         x1 = x2;
         y2 -= gameMap.getGameport().getWorldHeight()*0.65f;
         edgeShape.set(x1, y1, x2, y2);
-        //Log.info("Plateau p4 coordinates: (" + x1 + " " + y1 + ") and (" + + x2 + " " + y2 + ")");
         fdef.shape = edgeShape;
         b2body.createFixture(fdef);
 
@@ -124,7 +115,6 @@ public class Ground {
         y1 = y2;
         x2 += segment;
         edgeShape.set(x1, y1, x2, y2);
-        //Log.info("Plateau p5 coordinates: (" + x1 + " " + y1 + ") and (" + + x2 + " " + y2 + ")");
         fdef.shape = edgeShape;
         b2body.createFixture(fdef);
     }
@@ -144,7 +134,6 @@ public class Ground {
 
         //flat plain
         edgeShape.set(x1, y1, x2, y2);
-        //Log.info("Mountain p1 coordinates: (" + x1 + " " + y1 + ") and (" + + x2 + " " + y2 + ")");
         fdef.shape = edgeShape;
         b2body.createFixture(fdef);
 
@@ -153,7 +142,6 @@ public class Ground {
         x2 += segment;
         y2 += gameMap.getGameport().getWorldHeight()*0.75f;
         edgeShape.set(x1, y1, x2, y2);
-        //Log.info("Mountain p2 coordinates: (" + x1 + " " + y1 + ") and (" + + x2 + " " + y2 + ")");
         fdef.shape = edgeShape;
         b2body.createFixture(fdef);
 
@@ -162,7 +150,6 @@ public class Ground {
         y1 = y2;
         x2 += segment;
         edgeShape.set(x1, y1, x2, y2);
-        //Log.info("Mountain p3 coordinates: (" + x1 + " " + y1 + ") and (" + + x2 + " " + y2 + ")");
         fdef.shape = edgeShape;
         b2body.createFixture(fdef);
 
@@ -171,7 +158,6 @@ public class Ground {
         x2 += segment;
         y2 += gameMap.getGameport().getWorldHeight()*0.75f;
         edgeShape.set(x1, y1, x2, y2);
-        //Log.info("Mountain p4 coordinates: (" + x1 + " " + y1 + ") and (" + + x2 + " " + y2 + ")");
         fdef.shape = edgeShape;
         b2body.createFixture(fdef);
 
@@ -181,7 +167,6 @@ public class Ground {
         y1 = y2;
         y2 -= gameMap.getGameport().getWorldHeight()*0.75f;
         edgeShape.set(x1, y1, x2, y2);
-        //Log.info("Mountain p5 coordinates: (" + x1 + " " + y1 + ") and (" + + x2 + " " + y2 + ")");
         fdef.shape = edgeShape;
         b2body.createFixture(fdef);
 
@@ -190,7 +175,6 @@ public class Ground {
         y1 = y2;
         x2 += segment;
         edgeShape.set(x1, y1, x2, y2);
-        //Log.info("Mountain p6 coordinates: (" + x1 + " " + y1 + ") and (" + + x2 + " " + y2 + ")");
         fdef.shape = edgeShape;
         b2body.createFixture(fdef);
 
@@ -200,7 +184,6 @@ public class Ground {
         y1 = y2;
         y2 -= gameMap.getGameport().getWorldHeight()*0.75f;
         edgeShape.set(x1, y1, x2, y2);
-        //Log.info("Mountain p7 coordinates: (" + x1 + " " + y1 + ") and (" + + x2 + " " + y2 + ")");
         fdef.shape = edgeShape;
         b2body.createFixture(fdef);
 
@@ -209,7 +192,6 @@ public class Ground {
         y1 = y2;
         x2 += segment;
         edgeShape.set(x1, y1, x2, y2);
-        //Log.info("Mountain p8 coordinates: (" + x1 + " " + y1 + ") and (" + + x2 + " " + y2 + ")");
         fdef.shape = edgeShape;
         b2body.createFixture(fdef);
 
@@ -230,7 +212,6 @@ public class Ground {
 
         //flat plain
         edgeShape.set(x1, y1, x2, y2);
-        //Log.info("Pit p1 coordinates: (" + x1 + " " + y1 + ") and (" + + x2 + " " + y2 + ")");
         fdef.shape = edgeShape;
         b2body.createFixture(fdef);
 
@@ -239,7 +220,6 @@ public class Ground {
         x2 += segment;
         y2 -= gameMap.getGameport().getWorldHeight()*.75f;
         edgeShape.set(x1, y1, x2, y2);
-        //Log.info("Pit p2 coordinates: (" + x1 + " " + y1 + ") and (" + + x2 + " " + y2 + ")");
         fdef.shape = edgeShape;
         b2body.createFixture(fdef);
 
@@ -248,7 +228,6 @@ public class Ground {
         y1 = y2;
         x2 += segment;
         edgeShape.set(x1, y1, x2, y2);
-        //Log.info("Pit p3 coordinates: (" + x1 + " " + y1 + ") and (" + + x2 + " " + y2 + ")");
         fdef.shape = edgeShape;
         b2body.createFixture(fdef);
 
@@ -256,7 +235,6 @@ public class Ground {
         x1 = x2;
         y2 -= gameMap.getGameport().getWorldHeight()*0.4f;
         edgeShape.set(x1, y1, x2, y2);
-        //Log.info("Pit p4 coordinates: (" + x1 + " " + y1 + ") and (" + + x2 + " " + y2 + ")");
         fdef.shape = edgeShape;
         b2body.createFixture(fdef);
 
@@ -265,7 +243,6 @@ public class Ground {
         y1 = y2;
         x2 += segment*2;
         edgeShape.set(x1, y1, x2, y2);
-        //Log.info("Pit p5 coordinates: (" + x1 + " " + y1 + ") and (" + + x2 + " " + y2 + ")");
         fdef.shape = edgeShape;
         b2body.createFixture(fdef);
 
@@ -273,7 +250,6 @@ public class Ground {
         x1 = x2;
         y2 += gameMap.getGameport().getWorldHeight()*0.4f;
         edgeShape.set(x1, y1, x2, y2);
-        //Log.info("Pit p6 coordinates: (" + x1 + " " + y1 + ") and (" + + x2 + " " + y2 + ")");
         fdef.shape = edgeShape;
         b2body.createFixture(fdef);
 
@@ -282,7 +258,6 @@ public class Ground {
         y1 = y2;
         x2 += segment;
         edgeShape.set(x1, y1, x2, y2);
-        //Log.info("Pit p7 coordinates: (" + x1 + " " + y1 + ") and (" + + x2 + " " + y2 + ")");
         fdef.shape = edgeShape;
         b2body.createFixture(fdef);
 
@@ -291,7 +266,6 @@ public class Ground {
         x2 += segment;
         y2 += gameMap.getGameport().getWorldHeight()*.75f;
         edgeShape.set(x1, y1, x2, y2);
-        //Log.info("Pit p8 coordinates: (" + x1 + " " + y1 + ") and (" + + x2 + " " + y2 + ")");
         fdef.shape = edgeShape;
         b2body.createFixture(fdef);
 
@@ -300,7 +274,6 @@ public class Ground {
         y1 = y2;
         x2 += segment;
         edgeShape.set(x1, y1, x2, y2);
-        //Log.info("Pit p9 coordinates: (" + x1 + " " + y1 + ") and (" + + x2 + " " + y2 + ")");
         fdef.shape = edgeShape;
         b2body.createFixture(fdef);
     }

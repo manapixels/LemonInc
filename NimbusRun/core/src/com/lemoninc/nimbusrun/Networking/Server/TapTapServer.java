@@ -3,17 +3,28 @@ package com.lemoninc.nimbusrun.Networking.Server;
 /*********************************
  * FILENAME : TapTapServer.java
  * DESCRIPTION :
- * PUBLIC FUNCTIONS :
- * void    update(float delta)
- * void    shutdown()
+ * FUNCTIONS :
+    -- GET METHODS
+ *      GameMap getMap
+ *      String  getIP
+ *
+    -- NETWORK METHODS
+ *      void    update
+ *      void    initPlayers
+ *      boolean allDummyReady
+ *      void    shutdown
+
+ *  class PlayerJoinFactory()
+
  * NOTES :
- * LAST UPDATED: 8/4/2016 09:00
+ * LAST UPDATED: 24/4/2016 15:20
  ********************************/
 
 import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
+import com.esotericsoftware.minlog.Log;
 import com.lemoninc.nimbusrun.Networking.Client.TapTapClient;
 import com.lemoninc.nimbusrun.Networking.Network;
 import com.lemoninc.nimbusrun.Sprites.GameMap;
@@ -22,9 +33,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-/**
- * Need GameMap?
- */
 public class TapTapServer {
 
     //Kryonet Server object
@@ -84,6 +92,9 @@ public class TapTapServer {
                         connection.close();
                     }
 
+                    //name this connection as the clientname
+                    connection.name = name;
+
                     synchronized (playersLock) {
                         if (PLAYERS < MAXPLAYERS) {
                             PLAYERS++;
@@ -94,13 +105,10 @@ public class TapTapServer {
                             Gdx.app.log("GDX GDX Server", "Sent a GameRoomFull");
                             return;
                         }
+                        Log.info("blingblang" + connection.getID());
                         //if the login is the first guy, send him 1st place
                         newPlayer = new PlayerJoinFactory().makePlayerJoin(connection.getID(), connection.name, PLAYERS);
                     }
-
-
-                    //name this connection as the clientname
-                    connection.name = name;
 
                     //tell the new client about mapData
                     connection.sendTCP(map.getMapDataPacket());
@@ -217,6 +225,7 @@ public class TapTapServer {
 
     private class PlayerJoinFactory{
         Network.PlayerJoinLeave makePlayerJoin(int ID, String playerName, int players) {
+            Log.info("brangbrang" + playerName);
             Network.PlayerJoinLeave msg;
             switch (players) {
                 case 1:

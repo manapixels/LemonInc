@@ -1,5 +1,25 @@
 package com.lemoninc.nimbusrun.Screens;
 
+/*********************************
+ * FILENAME : MenuScreen.java
+ * DESCRIPTION : Main page of the game. Displays buttons that connect to
+ *               WaitScreen, TutorialScreen and CharDescrScreen.
+ * PUBLIC FUNCTIONS :
+ *
+ --LIBGDX METHODS--
+ *      void    show
+ *      void    render
+ *      void    resize
+ *      void    pause
+ *      void    resume
+ *      void    hide
+ *      void    dispose
+
+ * NOTES : Enters from SplashScreen, exits to WaitScreen, TutorialScreen or CharDescrScreen
+ * LAST UPDATED: 23/4/2016 09:09
+ *
+ * ********************************/
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
@@ -23,12 +43,8 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.lemoninc.nimbusrun.Assetloading.AssetLoader;
 import com.lemoninc.nimbusrun.NimbusRun;
 
-/**
- * Created by Nikki on 8/4/2016.
- */
 public class MenuScreen implements Screen {
     private Viewport viewport;
     private Camera camera;
@@ -51,8 +67,6 @@ public class MenuScreen implements Screen {
     private TextButton buttonPlay;
     private TextButton buttonTutorial;
 
-//    private Image muteButton;//if sound implemented
-//    private Image unmuteButton;
     private Music music;
     private NimbusRun game;
     public Boolean playmusic;
@@ -94,9 +108,6 @@ public class MenuScreen implements Screen {
         buttonTutorial=new TextButton("Tutorial",style);
         buttonCharDescr=new TextButton("Characters", style);
 
-        //muteButton=new Image(new TextureRegionDrawable(new TextureRegion(new Texture("1_MenuScreen/unmuteButton.png"))));
-        //unmuteButton=new Image(new TextureRegionDrawable(new TextureRegion(new Texture("1_MenuScreen/muteButton.png"))));
-
         show();
 
     }
@@ -109,32 +120,16 @@ public class MenuScreen implements Screen {
         sprite.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         buttonPlay.setSize(this.BUTTON_WIDTH, this.BUTTON_HEIGHT);
-        //buttonPlay.setPosition(this.gameWidth/3*2+50, 300, Align.center);
         buttonPlay.setPosition(this.gameWidth*0.8f, this.gameHeight*0.50f, Align.center);
         stage.addActor(buttonPlay);
 
         buttonTutorial.setSize(this.BUTTON_WIDTH, this.BUTTON_HEIGHT);
-        //buttonTutorial.setPosition(this.gameWidth/3*2+50, 250, Align.center);
         buttonTutorial.setPosition(this.gameWidth*0.8f, this.gameHeight*0.37f, Align.center);
         stage.addActor(buttonTutorial);
 
         buttonCharDescr.setSize(this.BUTTON_WIDTH, this.BUTTON_HEIGHT);
-        //buttonCharDescr.setPosition(this.gameWidth/3*2+50, 200, Align.center);
         buttonCharDescr.setPosition(this.gameWidth*0.8f, this.gameHeight*0.24f, Align.center);
         stage.addActor(buttonCharDescr);
-
-
-
-        //muteButton.setPosition(this.gameWidth*0.90f, this.gameHeight*0.85f);
-        //unmuteButton.setPosition(this.gameWidth*0.90f, this.gameHeight*0.85f);
-
-        //stage.addActor(unmuteButton);
-
-//        if (com.lemoninc.nimbusrun.Assetloading.AssetLoader.VOLUME == 1) {
-//            stage.addActor(muteButton);
-//        } else {
-//            stage.addActor(unmuteButton);
-//        }
 
         buttonPlay.addListener(new ClickListener() {
             @Override
@@ -151,7 +146,6 @@ public class MenuScreen implements Screen {
         buttonTutorial.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-              //  AssetLoader.clickSound.play(AssetLoader.VOLUME);
                 soundclick.play();
                 game.setScreen(new TutorialScreen(game,batch,gameWidth, gameHeight));
             }
@@ -160,34 +154,10 @@ public class MenuScreen implements Screen {
         buttonCharDescr.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-          //      AssetLoader.clickSound.play(AssetLoader.VOLUME);
                 soundclick.play();
                 game.setScreen(new CharDescrScreen(game, batch, gameWidth,gameHeight));
             }
         });
-
-
-//        muteButton.addListener(new ClickListener() {
-//            @Override
-//            public void clicked(InputEvent event, float x, float y) {
-//                music.pause();
-//                muteButton.remove();
-//                stage.addActor(unmuteButton);
-//            }
-//
-//        });
-//
-//        unmuteButton.addListener(new ClickListener() {
-//            @Override
-//            public void clicked(InputEvent event, float x, float y) {
-//                music.play();
-//                soundclick.play();
-//                unmuteButton.remove();
-//                stage.addActor(muteButton);
-//            }
-//
-//        });
-
 
         Gdx.input.setInputProcessor(stage);
     }
